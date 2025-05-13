@@ -1,0 +1,83 @@
+Recommended Resources
+Prompt Engineering Course
+Learn Prompting Guide
+
+Prompt Engineering
+=========================
+
+1. Basic LLM Concepts
+What are LLMs?
+Types of LLMs
+How are LLMs Built?
+Vocabulary
+
+2. Introduction to Prompting
+Basic Prompting
+Need for Prompt Engineering
+
+
+
+
+3. Prompts
+
+3.1 Writing Good Prompts
+Use delimiters to distinguish the data from the prompt.
+Ask for structured output (e.g., JSON, XML, HTML).
+Include style information to modify the tone of output.
+Give conditions to the model and ask if they are verified.
+Provide successful examples of completing tasks, then ask.
+Specify the steps required to perform a task.
+Instruct the model to work out its own solution before giving answers.
+Iterate and refine your prompts.
+
+3.2 Prompting Techniques
+Role Prompting
+Few-Shot Prompting
+Chain of Thought Prompting
+Zero-Shot Chain of Thought
+Least to Most Prompting
+Dual Prompt Approach
+Combining Techniques
+
+3.3 Parts of a Prompt
+
+
+4 Real-World Usage Examples
+Structured Data
+Inferring
+Writing Emails
+Coding Assistance
+Study Buddy
+Designing Chatbots
+
+5. Pitfalls of LLMs
+Citing Sources
+Bias
+Hallucinations
+Math
+Prompt Hacking
+
+6. Improving Reliability
+Prompt Debasing
+Prompt Ensembling
+LLM Self-Evaluation
+Calibrating LLMs
+Math
+
+7. LLM Settings
+Temperature
+Top P
+Other Hyperparameters
+
+8. Image Prompting
+Style Modifiers
+Quality Boosters
+Weighted Terms
+Fix Deformed Generations
+
+9. Prompt Hacking
+Prompt Injection
+Prompt Leaking
+Jailbreaking
+Defensive Measures
+Offensive Measures
