@@ -1,0 +1,16 @@
+
+For subsequent units, follow the same pattern, adjusting the content focus accordingly. For each unit, you can send a separate prompt like:
+
+```markdown
+---
+**For Unit 3.1: Writing Good Prompts**
+
+Create an HTML blog post covering:
+- All listed best practices for writing good prompts
+- Multiple examples for each technique (delimiters, structured output, etc.)
+- Before/after examples showing ineffective vs effective prompts
+- Common pitfalls section
+- Practice exercises with toggle-able solutions
+- Reference cheat sheet in a sidebar-style div
+
+[HTML structure with specialized sections for each technique]
