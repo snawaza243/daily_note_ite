@@ -1,0 +1,236 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!-- Minimal with Heading -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "descending",
+  "heading": "ServiceNow Tutorials"
+}
+</script>
+<!-- Output: Heading "ServiceNow Tutorials", all ServiceNow posts in descending order, links in new tab, no pretext or numbering -->
+
+<!-- Heading with maxResults -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "ascending",
+  "maxResults": 3,
+  "heading": "Top 3 Tutorials"
+}
+</script>
+<!-- Output: Heading "Top 3 Tutorials", 3 ServiceNow posts in ascending order, links in new tab, no pretext or numbering -->
+
+<!-- Heading with openInNewTab false -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "descending",
+  "openInNewTab": false,
+  "heading": "Explore ServiceNow"
+}
+</script>
+<!-- Output: Heading "Explore ServiceNow", all ServiceNow posts in descending order, links in same tab, no pretext or numbering -->
+
+<!-- Heading with Text Pretext -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "ascending",
+  "preText": "Chapter",
+  "heading": "Chapter-wise Tutorials"
+}
+</script>
+<!-- Output: Heading "Chapter-wise Tutorials", all ServiceNow posts in ascending order, links in new tab, prefixed with "Chapter" (e.g., "Chapter PostTitle") -->
+
+<!-- Heading with Symbol Pretext -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "descending",
+  "preText": "➡️",
+  "maxResults": 5,
+  "heading": "Recent Tutorials"
+}
+</script>
+<!-- Output: Heading "Recent Tutorials", 5 ServiceNow posts in descending order, links in new tab, prefixed with "➡️" (e.g., "➡️ PostTitle") -->
+
+<!-- Heading with Numerical Numbering -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "ascending",
+  "numberingStyle": "numerical",
+  "openInNewTab": false,
+  "heading": "Numbered Lessons"
+}
+</script>
+<!-- Output: Heading "Numbered Lessons", all ServiceNow posts in ascending order, links in same tab, numbered as "1> PostTitle", "2> PostTitle", etc. -->
+
+<!-- Heading with Roman Numbering -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "descending",
+  "numberingStyle": "roman",
+  "maxResults": 4,
+  "heading": "Featured Posts"
+}
+</script>
+<!-- Output: Heading "Featured Posts", 4 ServiceNow posts in descending order, links in new tab, numbered as "I> PostTitle", "II> PostTitle", etc. -->
+
+<!-- Heading with Alphabetical Numbering -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "ascending",
+  "numberingStyle": "alphabetical",
+  "heading": "Organized Guides"
+}
+</script>
+<!-- Output: Heading "Organized Guides", all ServiceNow posts in ascending order, links in new tab, numbered as "A> PostTitle", "B> PostTitle", etc. -->
+
+<!-- Heading with Pretext and Numbering (Number Before Pretext) -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "descending",
+  "preText": "Unit",
+  "numberingStyle": "numerical",
+  "numberAfterPretext": false,
+  "heading": "Unit-wise Lessons"
+}
+</script>
+<!-- Output: Heading "Unit-wise Lessons", all ServiceNow posts in descending order, links in new tab, formatted as "1> Unit PostTitle", "2> Unit PostTitle", etc. -->
+
+<!-- Heading with Pretext and Numbering (Number After Pretext) -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "ascending",
+  "preText": "Chapter",
+  "numberingStyle": "roman",
+  "numberAfterPretext": true,
+  "maxResults": 5,
+  "heading": "Chapter-wise Guides"
+}
+</script>
+<!-- Output: Heading "Chapter-wise Guides", 5 ServiceNow posts in ascending order, links in new tab, formatted as "Chapter I> PostTitle", "Chapter II> PostTitle", etc. -->
+
+<!-- Heading with Symbol Pretext and Numbering -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "descending",
+  "preText": "👉",
+  "numberingStyle": "alphabetical",
+  "numberAfterPretext": false,
+  "openInNewTab": false,
+  "heading": "Quick Links"
+}
+</script>
+<!-- Output: Heading "Quick Links", all ServiceNow posts in descending order, links in same tab, formatted as "A> 👉 PostTitle", "B> 👉 PostTitle", etc. -->
+
+<!-- Full Configuration with Heading -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "ascending",
+  "maxResults": 3,
+  "openInNewTab": true,
+  "preText": "♥️",
+  "numberingStyle": "numerical",
+  "numberAfterPretext": true,
+  "heading": "Top Picks"
+}
+</script>
+<!-- Output: Heading "Top Picks", 3 ServiceNow posts in ascending order, links in new tab, formatted as "♥️ 1> PostTitle", "♥️ 2> PostTitle", etc. -->
+
+<!-- maxResults Set to 0 with Heading -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "descending",
+  "maxResults": 0,
+  "preText": "✍️",
+  "numberingStyle": "roman",
+  "numberAfterPretext": false,
+  "heading": "All Tutorials"
+}
+</script>
+<!-- Output: Heading "All Tutorials", all ServiceNow posts in descending order, links in new tab, formatted as "I> ✍️ PostTitle", "II> ✍️ PostTitle", etc. -->
+
+<!-- Multiple Lists with Headings -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "descending",
+  "preText": "Chapter",
+  "numberingStyle": "numerical",
+  "numberAfterPretext": true,
+  "heading": "Complete Tutorial Series"
+}
+</script>
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "ascending",
+  "maxResults": 5,
+  "preText": "➡️",
+  "numberingStyle": "roman",
+  "numberAfterPretext": false,
+  "heading": "Recent Tutorials"
+}
+</script>
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "ascending",
+  "maxResults": 0,
+  "preText": "♥️",
+  "numberingStyle": "alphabetical",
+  "numberAfterPretext": true,
+  "heading": "Organized Resources"
+}
+</script>
+<!-- Output: Three lists with headings:
+     1. "Complete Tutorial Series": All ServiceNow posts, descending, new tab, "Chapter 1> PostTitle", etc.
+     2. "Recent Tutorials": 5 ServiceNow posts, ascending, new tab, "I> ➡️ PostTitle", etc.
+     3. "Organized Resources": All ServiceNow posts, ascending, new tab, "♥️ A> PostTitle", etc. -->

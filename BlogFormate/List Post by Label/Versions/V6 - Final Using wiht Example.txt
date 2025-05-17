@@ -1,0 +1,381 @@
+<h2>Explore more posts:</h2>
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",                   
+  "sortOrder": "descending",               
+  "maxResults": 5,                         
+  "openInNewTab": false,                   
+  "preText": "Chapter",                    
+  "numberingStyle": "numerical",           
+  "numberAfterPretext": true,              
+  "heading": "Tutorial Series",            
+  "showThumbnail": true,                   
+  "notFoundThumbnail": "postLetter",       
+  "showDate": true,                        
+  "showSnippet": true,                     
+  "snippetLength": 50,                     
+  "themeMode": "adapt"                     
+}
+</script>
+
+<!-- How to use:
+  //label              - Required: The exact post label to filter posts (e.g., "ServiceNow", "Aadhaar"). Case-sensitive.
+  //sortOrder          - Required: Sort order; Options: "ascending" (oldest first), "descending" (newest first).
+  //maxResults         - Optional: Number of posts to display; 0 for all, any positive integer (e.g., 5). Default: all.
+  //openInNewTab       - Optional: Open links in new tab (true) or same tab (false). Default: true.
+  //preText            - Optional: Prefix before titles (e.g., "Chapter", "→"). Default: empty string.
+  //numberingStyle     - Optional: Numbering format; Options: "numerical" (1, 2), "roman" (I, II), "alphabetical" (A, B). Default: none.
+  //numberAfterPretext - Optional: Place number after preText (true) or before (false). Default: false.
+  //heading            - Optional: Title above the list (e.g., "Tutorial Series"). Default: none.
+  //showThumbnail      - Optional: Show 50x50px thumbnails (true) or not (false). Default: false.
+  //notFoundThumbnail  - Optional: Fallback for missing thumbnails; Options: "blank" (empty space), "fill" (gray square), "postLetter" (title’s first letter). Default: "blank".
+  //showDate           - Optional: Show publish date (e.g., "May 17, 2025") (true) or not (false). Default: false.
+  //showSnippet        - Optional: Show post summary (true) or not (false). Default: false.
+  //snippetLength      - Optional: Max characters for snippet (e.g., 50). Any positive integer. Default: 50.
+  //themeMode          - Optional: Card appearance; Options: "fixed" (white card, dark heading), "adapt" (white/light, dark/dark mode). Default: "fixed".
+-->
+
+    
+<script type='text/javascript'>
+/*<![CDATA[*/
+(function() {
+  // Helper function to convert numbers to Roman numerals
+  function toRomanNumeral(num) {
+    if (isNaN(num) || num < 1) return '';
+    const romanMap = [
+      { value: 1000, numeral: 'M' },
+      { value: 900, numeral: 'CM' },
+      { value: 500, numeral: 'D' },
+      { value: 400, numeral: 'CD' },
+      { value: 100, numeral: 'C' },
+      { value: 90, numeral: 'XC' },
+      { value: 50, numeral: 'L' },
+      { value: 40, numeral: 'XL' },
+      { value: 10, numeral: 'X' },
+      { value: 9, numeral: 'IX' },
+      { value: 5, numeral: 'V' },
+      { value: 4, numeral: 'IV' },
+      { value: 1, numeral: 'I' }
+    ];
+    let result = '';
+    for (const { value, numeral } of romanMap) {
+      while (num >= value) {
+        result += numeral;
+        num -= value;
+      }
+    }
+    return result;
+  }
+
+  // Function to format date
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  }
+
+  // Function to fetch and render posts
+  function renderPostList(config, container, index) {
+    if (!config || !config.label || !config.sortOrder) {
+      console.error('Invalid postListConfig: label and sortOrder are required.', config);
+      return;
+    }
+
+    const sortOrder = config.sortOrder.toLowerCase();
+    const openInNewTab = config.openInNewTab !== false;
+    const preText = config.preText || '';
+    const numberingStyle = config.numberingStyle ? config.numberingStyle.toLowerCase() : '';
+    const numberAfterPretext = config.numberAfterPretext || false;
+    const heading = config.heading || '';
+    const showThumbnail = config.showThumbnail || false;
+    const notFoundThumbnail = config.notFoundThumbnail || 'blank';
+    const showDate = config.showDate || false;
+    const showSnippet = config.showSnippet || false;
+    const snippetLength = config.snippetLength || 50;
+    const themeMode = config.themeMode || 'fixed'; // New parameter
+    const blogUrl = 'https://indiantechnoera.blogspot.com';
+    const maxResultsQuery = config.maxResults && config.maxResults > 0 ? `max-results=${config.maxResults}` : '';
+    const feedUrl = `${blogUrl}/feeds/posts/summary/-/${encodeURIComponent(config.label)}?${maxResultsQuery}&alt=json-in-script&callback=renderPosts_${index}`;
+
+    console.log('Fetching posts with URL:', feedUrl);
+
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'postListLoading';
+    loadingDiv.textContent = 'Loading related posts...';
+    container.appendChild(loadingDiv);
+
+    const script = document.createElement('script');
+    script.src = feedUrl;
+    script.onerror = () => {
+      loadingDiv.textContent = 'Error loading posts. Please check the label or try again later.';
+      console.error('Failed to load feed for label:', config.label, 'URL:', feedUrl);
+    };
+    document.head.appendChild(script);
+
+    window[`renderPosts_${index}`] = function(json) {
+      try {
+        const entries = json.feed.entry || [];
+        if (entries.length === 0) {
+          loadingDiv.textContent = 'No posts found for this label. Please verify the label name.';
+          return;
+        }
+
+        const postListDiv = document.createElement('div');
+        postListDiv.className = `postListDivTime theme-${themeMode}`;
+
+        if (heading) {
+          const headingElement = document.createElement('h3');
+          headingElement.className = 'postListHeading';
+          headingElement.textContent = heading;
+          postListDiv.appendChild(headingElement);
+        }
+
+        const sortedEntries = sortOrder === 'ascending' ? entries.slice().reverse() : entries;
+
+        sortedEntries.forEach((entry, idx) => {
+          const link = entry.link.find(l => l.rel === 'alternate');
+          if (!link) return;
+
+          const entryUrl = link.href;
+          const entryTitle = entry.title.$t;
+          let displayText = entryTitle;
+
+          let number = '';
+          if (numberingStyle) {
+            if (numberingStyle === 'numerical') {
+              number = `${idx + 1}. `;
+            } else if (numberingStyle === 'roman') {
+              number = `${toRomanNumeral(idx + 1)}. `;
+            } else if (numberingStyle === 'alphabetical') {
+              number = `${String.fromCharCode(65 + idx)}. `;
+            }
+          }
+
+          if (preText && number) {
+            displayText = numberAfterPretext ? `${preText} ${number}${entryTitle}` : `${number}${preText} ${entryTitle}`;
+          } else if (preText) {
+            displayText = `${preText} ${entryTitle}`;
+          } else if (number) {
+            displayText = `${number}${entryTitle}`;
+          }
+
+          if (showDate || showSnippet) {
+            displayText += ' [';
+            if (showDate) {
+              displayText += formatDate(entry.published.$t);
+            }
+            if (showDate && showSnippet) {
+              displayText += ' - ';
+            }
+            if (showSnippet && entry.summary && entry.summary.$t) {
+              const snippet = entry.summary.$t.substring(0, snippetLength) + (entry.summary.$t.length > snippetLength ? '...' : '');
+              displayText += snippet;
+            }
+            displayText += ']';
+          }
+
+          const item = document.createElement('p');
+          item.className = 'postListItem';
+
+          if (showThumbnail) {
+            if (entry.media$thumbnail && entry.media$thumbnail.url) {
+              const thumbnailUrl = entry.media$thumbnail.url.replace(/s72-c/, 's50-c');
+              const img = document.createElement('img');
+              img.src = thumbnailUrl;
+              img.className = 'postListThumbnail';
+              img.alt = `${entryTitle} thumbnail`;
+              item.appendChild(img);
+            } else {
+              if (notFoundThumbnail === 'fill') {
+                const img = document.createElement('img');
+                img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACR8e3HAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYSURBVFhH7cEBAQAAAIIg/69uSEABANu7AhcT9lRiAAAAAElFTkSuQmCC';
+                img.className = 'postListThumbnail';
+                img.alt = 'Placeholder thumbnail';
+                item.appendChild(img);
+              } else if (notFoundThumbnail === 'postLetter') {
+                const letterDiv = document.createElement('div');
+                letterDiv.className = 'postListThumbnailLetter';
+                letterDiv.textContent = entryTitle.charAt(0).toUpperCase();
+                item.appendChild(letterDiv);
+              } else { // blank
+                const placeholder = document.createElement('div');
+                placeholder.className = 'postListThumbnailPlaceholder';
+                item.appendChild(placeholder);
+              }
+            }
+          }
+
+          const linkElement = document.createElement('a');
+          linkElement.className = 'postListDivCSS';
+          linkElement.href = entryUrl;
+          linkElement.target = openInNewTab ? '_blank' : '_self';
+          linkElement.textContent = displayText;
+          item.appendChild(linkElement);
+
+          postListDiv.appendChild(item);
+        });
+
+        container.replaceChild(postListDiv, loadingDiv);
+      } catch (e) {
+        loadingDiv.textContent = 'Error rendering posts.';
+        console.error('Error processing feed:', e, 'Label:', config.label);
+      }
+    };
+  }
+
+  function initializePostLists() {
+    const scripts = document.querySelectorAll('script[type="application/json"][data-post-list-config]');
+    scripts.forEach((script, index) => {
+      try {
+        const config = JSON.parse(script.textContent);
+        const container = document.createElement('div');
+        container.id = `postListContainer_${index}`;
+        script.parentNode.insertBefore(container, script.nextSibling);
+        renderPostList(config, container, index);
+      } catch (e) {
+        console.error('Error parsing postListConfig:', e, 'Script content:', script.textContent);
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializePostLists);
+  } else {
+    initializePostLists();
+  }
+})();
+/*]]>*/
+</script>
+
+<style>
+.postListDivTime {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e8ecef;
+  max-width: 800px;
+  font-family: &#39;Arial&#39;, sans-serif;
+}
+
+.postListDivTime.theme-adapt {
+  background-color: #ffffff; /* Default for light mode */
+  border-color: #e8ecef;
+}
+
+@media (prefers-color-scheme: dark) {
+  .postListDivTime.theme-adapt {
+    background-color: #1a1a1a; /* Dark mode background */
+    border-color: #333333;
+  }
+}
+
+.postListHeading {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a !important; /* Force dark color */
+  margin: 0 0 15px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e8ecef;
+}
+
+.postListDivTime.theme-adapt .postListHeading {
+  color: #ffffff !important; /* White in dark mode for adaptive theme */
+}
+
+@media (prefers-color-scheme: dark) {
+  .postListDivTime.theme-adapt .postListHeading {
+    border-bottom-color: #333333;
+  }
+}
+
+.postListItem {
+  margin: 8px 0;
+  padding: 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 50px;
+}
+
+.postListItem:hover {
+  background-color: #f1f3f5;
+  transform: translateX(5px);
+}
+
+.postListDivTime.theme-adapt .postListItem:hover {
+  background-color: #2a2a2a;
+}
+
+.postListItem:last-child {
+  border-bottom: none;
+}
+
+.postListDivCSS {
+  color: #0052cc;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  transition: color 0.3s ease;
+  flex: 1;
+}
+
+.postListDivCSS:hover {
+  color: #003087;
+  text-decoration: underline;
+}
+
+.postListThumbnail {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.postListThumbnailPlaceholder {
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+  background-color: transparent;
+}
+
+.postListThumbnailLetter {
+  width: 50px;
+  height: 50px;
+  background-color: #e8ecef;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #1a1a1a;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.postListDivTime.theme-adapt .postListThumbnailLetter {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+.postListLoading {
+  font-style: italic;
+  color: #6c757d;
+  text-align: center;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.postListDivTime.theme-adapt .postListLoading {
+  color: #aaaaaa;
+  background-color: #2a2a2a;
+}
+</style>
+ 

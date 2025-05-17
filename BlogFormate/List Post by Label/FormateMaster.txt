@@ -1,0 +1,36 @@
+<h2>Explore more posts:</h2>
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",                   
+  "sortOrder": "descending",               
+  "maxResults": 5,                         
+  "openInNewTab": false,                   
+  "preText": "Chapter",                    
+  "numberingStyle": "numerical",           
+  "numberAfterPretext": true,              
+  "heading": "Tutorial Series",            
+  "showThumbnail": true,                   
+  "notFoundThumbnail": "postLetter",       
+  "showDate": true,                        
+  "showSnippet": true,                     
+  "snippetLength": 50,                     
+  "themeMode": "adapt"                     
+}
+</script>
+
+<!-- How to use:
+  //label              - Required: The exact post label to filter posts (e.g., "ServiceNow", "Aadhaar"). Case-sensitive.
+  //sortOrder          - Required: Sort order; Options: "ascending" (oldest first), "descending" (newest first).
+  //maxResults         - Optional: Number of posts to display; 0 for all, any positive integer (e.g., 5). Default: all.
+  //openInNewTab       - Optional: Open links in new tab (true) or same tab (false). Default: true.
+  //preText            - Optional: Prefix before titles (e.g., "Chapter", "→"). Default: empty string.
+  //numberingStyle     - Optional: Numbering format; Options: "numerical" (1, 2), "roman" (I, II), "alphabetical" (A, B). Default: none.
+  //numberAfterPretext - Optional: Place number after preText (true) or before (false). Default: false.
+  //heading            - Optional: Title above the list (e.g., "Tutorial Series"). Default: none.
+  //showThumbnail      - Optional: Show 50x50px thumbnails (true) or not (false). Default: false.
+  //notFoundThumbnail  - Optional: Fallback for missing thumbnails; Options: "blank" (empty space), "fill" (gray square), "postLetter" (title’s first letter). Default: "blank".
+  //showDate           - Optional: Show publish date (e.g., "May 17, 2025") (true) or not (false). Default: false.
+  //showSnippet        - Optional: Show post summary (true) or not (false). Default: false.
+  //snippetLength      - Optional: Max characters for snippet (e.g., 50). Any positive integer. Default: 50.
+  //themeMode          - Optional: Card appearance; Options: "fixed" (white card, dark heading), "adapt" (white/light, dark/dark mode). Default: "fixed".
+-->

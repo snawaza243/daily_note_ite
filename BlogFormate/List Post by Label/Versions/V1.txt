@@ -1,0 +1,121 @@
+includalbel is not workint but this is working "  <script type='text/javascript'>
+    /*<![CDATA[*/
+  (function() {
+  // Function to fetch and render posts
+  function renderPostList(config, container) {
+    if (!config || !config.label || !config.sortOrder) {
+      console.error('Invalid postListConfig: label and sortOrder are required.');
+      return;
+    }
+
+    const maxResults = config.maxResults || 150; // Default to 150 posts
+    const sortOrder = config.sortOrder.toLowerCase(); // 'ascending' or 'descending'
+    const blogUrl = 'https://indiantechnoera.blogspot.com'; // Your blog URL
+    const feedUrl = `${blogUrl}/feeds/posts/summary/-/${encodeURIComponent(config.label)}?max-results=${maxResults}&alt=json-in-script&callback=renderPosts`;
+
+    // Create a loading indicator
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'postListLoading';
+    loadingDiv.textContent = 'Loading posts...';
+    container.appendChild(loadingDiv);
+
+    // Dynamically load the JSON feed
+    const script = document.createElement('script');
+    script.src = feedUrl;
+    script.onerror = () => {
+      loadingDiv.textContent = 'Error loading posts. Please try again later.';
+      console.error('Failed to load feed for label:', config.label);
+    };
+    document.head.appendChild(script);
+
+    // Callback to process the JSON feed
+    window.renderPosts = function(json) {
+      try {
+        const entries = json.feed.entry || [];
+        if (entries.length === 0) {
+          loadingDiv.textContent = 'No posts found for this label.';
+          return;
+        }
+
+        // Create container for the post list
+        const postListDiv = document.createElement('div');
+        postListDiv.className = 'postListDivTime';
+
+        // Sort entries based on sortOrder
+        const sortedEntries = sortOrder === 'ascending' 
+          ? entries.slice().reverse() // Oldest first
+          : entries; // Newest first
+
+        // Render each post
+        sortedEntries.forEach(entry => {
+          const link = entry.link.find(l => l.rel === 'alternate');
+          if (!link) return;
+
+          const entryUrl = link.href;
+          const entryTitle = entry.title.$t;
+          const item = document.createElement('p');
+          item.innerHTML = `<a class='postListDivCSS' href='${entryUrl}' target='_blank'>${entryTitle}</a>`;
+          postListDiv.appendChild(item);
+        });
+
+        // Replace loading indicator with post list
+        container.replaceChild(postListDiv, loadingDiv);
+      } catch (e) {
+        loadingDiv.textContent = 'Error rendering posts.';
+        console.error('Error processing feed:', e);
+      }
+    };
+  }
+
+  // Function to find and process postListConfig objects
+  function initializePostLists() {
+    // Find all script tags with postListConfig
+    const scripts = document.querySelectorAll('script[type="application/json"][data-post-list-config]');
+    scripts.forEach(script => {
+      try {
+        const config = JSON.parse(script.textContent);
+        const container = document.createElement('div');
+        script.parentNode.insertBefore(container, script.nextSibling);
+        renderPostList(config, container);
+      } catch (e) {
+        console.error('Error parsing postListConfig:', e);
+      }
+    });
+  }
+
+  // Run after DOM is fully loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializePostLists);
+  } else {
+    initializePostLists();
+  }
+})();
+    /*]]>*/
+  </script>
+    
+    <style>
+      .postListDivTime {
+  margin: 20px 0;
+  padding: 10px;
+  border-left: 3px solid #007bff;
+  background-color: #f8f9fa;
+}
+
+.postListDivCSS {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.postListDivCSS:hover {
+  text-decoration: underline;
+}
+
+.postListLoading {
+  font-style: italic;
+  color: #666;
+}
+      
+    </style>
+    " lets do work on this make maxresult as optional if give 0 means all post that exist related to that label. else if provided that as defined,  also make another param that will deifn open post URL in same URL or new tab,  also can you give some more attractive style to the listing 

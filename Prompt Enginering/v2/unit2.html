@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 2: Introduction to Prompting - Complete Guide</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --warning-color: #dc2626;
+            --success-color: #16a34a;
+            --text-color: #1f2937;
+            --light-bg: #f9fafb;
+            --dark-bg: #111827;
+            --border-radius: 0.375rem;
+            --box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+            margin: 1.5rem 0 1rem;
+        }
+
+        h4 {
+            font-size: 1.25rem;
+            margin: 1.25rem 0 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            box-shadow: var(--box-shadow);
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f5f5f5;
+            padding: 0.2rem 0.4rem;
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+        }
+
+        pre {
+            background-color: #f8f8f8;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: var(--box-shadow);
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--accent-color);
+            padding: 0.5rem 1rem;
+            margin: 1.5rem 0;
+            background-color: #f0f7ff;
+            font-style: italic;
+        }
+
+        .toc {
+            background-color: #f0f7ff;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            box-shadow: var(--box-shadow);
+        }
+
+        .toc ul {
+            list-style-type: none;
+            padding-left: 1rem;
+        }
+
+        .toc li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc a {
+            display: block;
+            padding: 0.25rem 0;
+        }
+
+        .key-takeaways {
+            background-color: #f0fdf4;
+            border-left: 4px solid var(--success-color);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: var(--border-radius);
+        }
+
+        .key-takeaways h3 {
+            color: var(--success-color);
+            margin-top: 0;
+        }
+
+        .key-takeaways ul {
+            padding-left: 1.5rem;
+        }
+
+        .warning-box {
+            background-color: #fef2f2;
+            border-left: 4px solid var(--warning-color);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: var(--border-radius);
+        }
+
+        .warning-box h3 {
+            color: var(--warning-color);
+            margin-top: 0;
+        }
+
+        .expert-tip {
+            background-color: #eff6ff;
+            border-left: 4px solid var(--accent-color);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: var(--border-radius);
+        }
+
+        .expert-tip h3 {
+            color: var(--accent-color);
+            margin-top: 0;
+        }
+
+        .try-it-yourself {
+            background-color: #ecfdf5;
+            border: 2px dashed var(--success-color);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: var(--border-radius);
+        }
+
+        .try-it-yourself h3 {
+            color: var(--success-color);
+            margin-top: 0;
+        }
+
+        .case-study {
+            margin: 2rem 0;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .case-study-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .case-study-content {
+            padding: 1.5rem;
+            background-color: white;
+            display: none;
+        }
+
+        .case-study.expanded .case-study-content {
+            display: block;
+        }
+
+        .diagram {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .diagram img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .quiz {
+            background-color: #f5f3ff;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin: 2rem 0;
+        }
+
+        .quiz-question {
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-options {
+            margin-left: 1.5rem;
+        }
+
+        .quiz-option {
+            margin-bottom: 0.5rem;
+        }
+
+        .quiz-submit {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .quiz-submit:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted var(--text-color);
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--dark-bg);
+            color: white;
+            text-align: center;
+            border-radius: var(--border-radius);
+            padding: 0.5rem;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+                color: black;
+                font-size: 12pt;
+            }
+
+            .container {
+                padding: 0.5in;
+                max-width: 100%;
+            }
+
+            .toc, .try-it-yourself, .case-study-header {
+                page-break-inside: avoid;
+            }
+
+            a::after {
+                content: " (" attr(href) ")";
+                font-size: 0.8em;
+                font-weight: normal;
+            }
+
+            .no-print {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.75rem;
+            }
+
+            h3 {
+                font-size: 1.25rem;
+            }
+
+            pre {
+                font-size: 0.8rem;
+                padding: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Unit 2: Introduction to Prompting - Complete Guide</h1>
+            <p>Master the fundamentals of crafting effective prompts for AI systems with this comprehensive guide.</p>
+            <p>Learn basic techniques, avoid common pitfalls, and discover why prompt engineering is becoming an essential skill.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="toc" class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#basic-prompting">Basic Prompting</a></li>
+                <li><a href="#common-pitfalls">Common Pitfalls</a></li>
+                <li><a href="#need-for-prompt-engineering">Need for Prompt Engineering</a></li>
+                <li><a href="#additional-subtopics">Additional Subtopics</a></li>
+            </ul>
+        </section>
+
+        <section id="basic-prompting">
+            <h2>Basic Prompting</h2>
+            <p>Prompting is the art of crafting inputs that guide AI systems to produce desired outputs. Think of it like giving directions to a very knowledgeable but literal-minded assistant - the clearer your instructions, the better the results.</p>
+
+            <div class="expert-tip">
+                <h3>Expert Tip: The Goldilocks Principle</h3>
+                <p>A good prompt is neither too vague nor too restrictive. Aim for the "just right" level of specificity that gives the AI enough context to understand your intent without constraining its creative potential.</p>
+            </div>
+
+            <h3>Zero-shot vs Few-shot Prompting</h3>
+            <table>
+                <tr>
+                    <th>Feature</th>
+                    <th>Zero-shot Prompting</th>
+                    <th>Few-shot Prompting</th>
+                </tr>
+                <tr>
+                    <td>Definition</td>
+                    <td>Single instruction without examples</td>
+                    <td>Instruction with several examples</td>
+                </tr>
+                <tr>
+                    <td>When to use</td>
+                    <td>Simple, straightforward tasks</td>
+                    <td>Complex or nuanced tasks</td>
+                </tr>
+                <tr>
+                    <td>Advantages</td>
+                    <td>Quick, minimal setup</td>
+                    <td>Higher accuracy, better formatting</td>
+                </tr>
+                <tr>
+                    <td>Disadvantages</td>
+                    <td>May produce inconsistent results</td>
+                    <td>Requires more tokens (can be costly)</td>
+                </tr>
+            </table>
+
+            <h4>Zero-shot Examples</h4>
+            <p>Basic instruction without examples:</p>
+            <pre><code>Translate this English sentence to French: "The weather is beautiful today."</code></pre>
+
+            <p>Direct question:</p>
+            <pre><code>What is the capital of Australia?</code></pre>
+
+            <p>Simple task:</p>
+            <pre><code>Summarize this paragraph in one sentence: [paragraph text]</code></pre>
+
+            <h4>Few-shot Examples</h4>
+            <p>Classification with examples:</p>
+            <pre><code>Classify the sentiment of these tweets:
+Tweet: "I love this product! It's amazing!" Sentiment: Positive
+Tweet: "This is the worst service I've ever experienced." Sentiment: Negative
+Tweet: "The meeting was okay, nothing special." Sentiment: Neutral
+Tweet: "The new update has some good features but also bugs." Sentiment: ?</code></pre>
+
+            <p>Formatting examples:</p>
+            <pre><code>Convert these dates to YYYY-MM-DD format:
+Input: January 5, 2023 → Output: 2023-01-05
+Input: Dec 12 2022 → Output: 2022-12-12
+Input: 3/15/23 → Output: 2023-03-15
+Input: Next Tuesday → Output: ?</code></pre>
+
+            <p>Creative writing with style examples:</p>
+            <pre><code>Write a product description in the style of these examples:
+Example 1: "Sleek, powerful, and designed for those who demand excellence - the X900 redefines performance."
+Example 2: "With whisper-quiet operation and effortless efficiency, the HomeComfort system blends seamlessly into your life."
+Now write a description for: Wireless Noise-Canceling Headphones</code></pre>
+
+            <div class="diagram">
+                <h4>Prompt-Response Flow Diagram</h4>
+                <svg width="100%" height="200" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="50" y="80" width="150" height="60" rx="10" fill="#3b82f6" stroke="#1e40af" stroke-width="2"/>
+                    <text x="125" y="120" font-family="Arial" font-size="16" fill="white" text-anchor="middle">User Prompt</text>
+                    <path d="M200 110 L250 110" stroke="#1e40af" stroke-width="2" marker-end="url(#arrow)"/>
+                    <rect x="250" y="80" width="150" height="60" rx="10" fill="#10b981" stroke="#047857" stroke-width="2"/>
+                    <text x="325" y="120" font-family="Arial" font-size="16" fill="white" text-anchor="middle">AI Processing</text>
+                    <path d="M400 110 L450 110" stroke="#1e40af" stroke-width="2" marker-end="url(#arrow)"/>
+                    <rect x="450" y="80" width="150" height="60" rx="10" fill="#8b5cf6" stroke="#6d28d9" stroke-width="2"/>
+                    <text x="525" y="120" font-family="Arial" font-size="16" fill="white" text-anchor="middle">AI Response</text>
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#1e40af"/>
+                        </marker>
+                    </defs>
+                </svg>
+                <p>The basic flow of interaction with an AI system: user provides a prompt, the AI processes it using its trained knowledge, and returns a response.</p>
+            </div>
+
+            <div class="key-takeaways">
+                <h3>Key Takeaways: Basic Prompting</h3>
+                <ul>
+                    <li>Zero-shot prompting works well for simple, straightforward tasks</li>
+                    <li>Few-shot prompting provides examples to guide the AI for more complex tasks</li>
+                    <li>The quality of your prompt directly affects the quality of the AI's response</li>
+                    <li>Clear, specific prompts yield better results than vague ones</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="common-pitfalls">
+            <h2>Common Pitfalls</h2>
+            <p>Even experienced users make prompting mistakes. Being aware of these common pitfalls can dramatically improve your results.</p>
+
+            <div class="warning-box">
+                <h3>Danger Zone: Costly Mistakes</h3>
+                <p>Poor prompting can lead to wasted API calls, incorrect results implemented in production systems, or even security vulnerabilities if prompts expose sensitive information.</p>
+            </div>
+
+            <h3>Top 5 Prompting Mistakes</h3>
+            <table>
+                <tr>
+                    <th>Mistake</th>
+                    <th>Before (Bad Example)</th>
+                    <th>After (Improved Example)</th>
+                </tr>
+                <tr>
+                    <td>1. Overly vague</td>
+                    <td><code>Tell me about computers</code></td>
+                    <td><code>Explain how cloud computing works in simple terms for a non-technical audience</code></td>
+                </tr>
+                <tr>
+                    <td>2. Assuming context</td>
+                    <td><code>Fix this code</code> (no code provided)</td>
+                    <td><code>Identify and fix any bugs in this Python function: [code snippet]</code></td>
+                </tr>
+                <tr>
+                    <td>3. Contradictory instructions</td>
+                    <td><code>Give me a short, detailed explanation</code></td>
+                    <td><code>Give me a concise 2-3 sentence overview of this concept</code></td>
+                </tr>
+                <tr>
+                    <td>4. No output format</td>
+                    <td><code>List some marketing strategies</code></td>
+                    <td><code>List 5 digital marketing strategies as bullet points with 1-sentence descriptions</code></td>
+                </tr>
+                <tr>
+                    <td>5. Too many tasks</td>
+                    <td><code>Analyze this data, create a report, and suggest improvements</code></td>
+                    <td><code>First, analyze this sales data for Q3. Then we'll discuss reporting.</code></td>
+                </tr>
+            </table>
+
+            <h3>Ambiguity Examples</h3>
+            <p>Ambiguous prompts leave too much room for interpretation, leading to unpredictable results:</p>
+            
+            <div class="expert-tip">
+                <h3>Expert Tip: The 5W Rule</h3>
+                <p>For clearer prompts, consider: Who is the audience? What exactly do you want? When/Where does it apply? Why is it important? How should it be formatted?</p>
+            </div>
+
+            <p><strong>Case 1:</strong> <code>Write something about dogs</code><br>
+            Better: <code>Write a 150-word blog post introduction about the benefits of adopting rescue dogs for urban apartment dwellers</code></p>
+
+            <p><strong>Case 2:</strong> <code>Make this better</code><br>
+            Better: <code>Revise this product description to be more persuasive for luxury home buyers, emphasizing quality craftsmanship</code></p>
+
+            <p><strong>Case 3:</strong> <code>What can you tell me about this?</code><br>
+            Better: <code>Provide a 3-bullet summary of the key innovations in blockchain technology since 2020</code></p>
+
+            <h3>Vagueness Examples</h3>
+            <p>Vague prompts lack the specificity needed for useful responses:</p>
+
+            <p><strong>Case 1:</strong> <code>Help me with marketing</code><br>
+            Better: <code>Suggest 5 low-cost digital marketing tactics for a new e-commerce store selling handmade jewelry</code></p>
+
+            <p><strong>Case 2:</strong> <code>Explain this concept</code><br>
+            Better: <code>Explain quantum computing to a high school student using simple analogies</code></p>
+
+            <p><strong>Case 3:</strong> <code>Give me ideas</code><br>
+            Better: <code>Generate 10 unique content ideas for a productivity YouTube channel targeting college students</code></p>
+
+            <div class="warning-box">
+                <h3>Severe Consequences Warning</h3>
+                <p>In business applications, vague prompts can lead to:
+                <ul>
+                    <li>Legal non-compliance if generated content violates regulations</li>
+                    <li>Brand damage from inappropriate AI-generated messages</li>
+                    <li>Financial losses from incorrect data analysis</li>
+                    <li>Security breaches if prompts accidentally expose sensitive information</li>
+                </ul>
+                Always review and test prompts before deployment in production environments.</p>
+            </div>
+
+            <div class="key-takeaways">
+                <h3>Key Takeaways: Common Pitfalls</h3>
+                <ul>
+                    <li>Ambiguity leads to unpredictable and often unusable results</li>
+                    <li>Vagueness forces the AI to guess your intent</li>
+                    <li>Clear, specific prompts save time and resources</li>
+                    <li>Always specify your desired output format</li>
+                    <li>Test prompts thoroughly before relying on them for important tasks</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="need-for-prompt-engineering">
+            <h2>Need for Prompt Engineering</h2>
+            <p>Prompt engineering has emerged as a critical skill as organizations increasingly rely on AI systems. Proper prompt design can dramatically impact business outcomes.</p>
+
+            <div class="diagram">
+                <h4>Business Impact of Prompt Engineering</h4>
+                <svg width="100%" height="300" viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
+                    <!-- X-axis -->
+                    <line x1="50" y1="250" x2="750" y2="250" stroke="#1e40af" stroke-width="2"/>
+                    <!-- Y-axis -->
+                    <line x1="50" y1="250" x2="50" y2="50" stroke="#1e40af" stroke-width="2"/>
+                    <!-- Data points -->
+                    <circle cx="100" cy="200" r="5" fill="#3b82f6"/>
+                    <circle cx="200" cy="150" r="5" fill="#3b82f6"/>
+                    <circle cx="300" cy="100" r="5" fill="#3b82f6"/>
+                    <circle cx="400" cy="80" r="5" fill="#3b82f6"/>
+                    <circle cx="500" cy="70" r="5" fill="#3b82f6"/>
+                    <circle cx="600" cy="60" r="5" fill="#3b82f6"/>
+                    <!-- Connecting line -->
+                    <polyline points="100,200 200,150 300,100 400,80 500,70 600,60" fill="none" stroke="#3b82f6" stroke-width="2"/>
+                    <!-- Labels -->
+                    <text x="100" y="270" font-family="Arial" font-size="12" text-anchor="middle">Basic</text>
+                    <text x="200" y="270" font-family="Arial" font-size="12" text-anchor="middle">Clear</text>
+                    <text x="300" y="270" font-family="Arial" font-size="12" text-anchor="middle">Structured</text>
+                    <text x="400" y="270" font-family="Arial" font-size="12" text-anchor="middle">Optimized</text>
+                    <text x="500" y="270" font-family="Arial" font-size="12" text-anchor="middle">Engineered</text>
+                    <text x="600" y="270" font-family="Arial" font-size="12" text-anchor="middle">Advanced</text>
+                    <text x="30" y="150" font-family="Arial" font-size="12" text-anchor="middle" transform="rotate(-90,30,150)">Time/Resources Saved</text>
+                    <text x="400" y="30" font-family="Arial" font-size="14" text-anchor="middle">Prompt Sophistication vs. Efficiency Gains</text>
+                </svg>
+                <p>As prompt sophistication increases, the efficiency gains and resource savings grow exponentially.</p>
+            </div>
+
+            <h3>Cost Reduction Projections</h3>
+            <p>Consider these sample calculations for a mid-sized company using AI APIs:</p>
+            <table>
+                <tr>
+                    <th>Scenario</th>
+                    <th>Avg. Tokens/Prompt</th>
+                    <th>Prompts/Day</th>
+                    <th>Cost/Month*</th>
+                    <th>Optimized Cost</th>
+                    <th>Savings</th>
+                </tr>
+                <tr>
+                    <td>Unoptimized</td>
+                    <td>450</td>
+                    <td>1,000</td>
+                    <td>$1,350</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>Basic Optimization</td>
+                    <td>300</td>
+                    <td>1,000</td>
+                    <td>$900</td>
+                    <td>33% reduction</td>
+                    <td>$450</td>
+                </tr>
+                <tr>
+                    <td>Advanced Engineering</td>
+                    <td>150</td>
+                    <td>800**</td>
+                    <td>$360</td>
+                    <td>73% reduction</td>
+                    <td>$990</td>
+                </tr>
+            </table>
+            <p><small>*Assuming $0.03 per 1K tokens for input, $0.06 for output (common LLM pricing)<br>
+            **Better prompts often require fewer iterations</small></p>
+
+            <h3>Case Studies</h3>
+
+            <div class="case-study">
+                <div class="case-study-header" onclick="this.parentElement.classList.toggle('expanded')">
+                    <h4>Case Study 1: E-Commerce Content Generation</h4>
+                    <span>▼</span>
+                </div>
+                <div class="case-study-content">
+                    <p><strong>Company:</strong> FashionForward (mid-sized online retailer)</p>
+                    <p><strong>Problem:</strong> Needed to generate 500 product descriptions monthly. Initial attempts resulted in generic, unconvincing text requiring heavy editing.</p>
+                    <p><strong>Solution:</strong> Implemented a structured prompt template with:</p>
+                    <ul>
+                        <li>Brand voice guidelines</li>
+                        <li>Target audience details</li>
+                        <li>Specific product attributes to highlight</li>
+                        <li>Output format requirements</li>
+                    </ul>
+                    <p><strong>Results:</strong></p>
+                    <ul>
+                        <li>Content production time reduced by 70%</li>
+                        <li>Editing requirements dropped from 90% to 20% of descriptions</li>
+                        <li>Conversion rates increased 15% for AI-generated content vs. previous human-written versions</li>
+                        <li>Annual savings: $142,000 in content costs</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="case-study">
+                <div class="case-study-header" onclick="this.parentElement.classList.toggle('expanded')">
+                    <h4>Case Study 2: Customer Support Automation</h4>
+                    <span>▼</span>
+                </div>
+                <div class="case-study-content">
+                    <p><strong>Company:</strong> TechSolutions (B2B SaaS provider)</p>
+                    <p><strong>Problem:</strong> First-level support responses were inconsistent and often required escalation.</p>
+                    <p><strong>Solution:</strong> Developed a prompt framework that:</p>
+                    <ul>
+                        <li>Classified ticket type automatically</li>
+                        <li>Pulled relevant knowledge base articles</li>
+                        <li>Generated responses with appropriate tone (technical vs. non-technical)</li>
+                        <li>Included escalation triggers for complex issues</li>
+                    </ul>
+                    <p><strong>Results:</strong></p>
+                    <ul>
+                        <li>First-contact resolution improved from 45% to 78%</li>
+                        <li>Average handling time decreased by 40%</li>
+                        <li>Customer satisfaction scores increased from 3.8 to 4.6/5</li>
+                        <li>Reduced support staff requirements by 30% while handling 20% more tickets</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>ROI Analysis</h3>
+            <table>
+                <tr>
+                    <th>Investment Area</th>
+                    <th>Initial Cost</th>
+                    <th>Ongoing Cost</th>
+                    <th>First Year Benefit</th>
+                    <th>3-Year ROI</th>
+                </tr>
+                <tr>
+                    <td>Prompt Engineering Training</td>
+                    <td>$15,000</td>
+                    <td>$5,000/yr</td>
+                    <td>$85,000</td>
+                    <td>4.7x</td>
+                </tr>
+                <tr>
+                    <td>Prompt Library Development</td>
+                    <td>$8,000</td>
+                    <td>$2,000/yr</td>
+                    <td>$45,000</td>
+                    <td>6.2x</td>
+                </tr>
+                <tr>
+                    <td>Custom Templates</td>
+                    <td>$12,000</td>
+                    <td>$3,000/yr</td>
+                    <td>$110,000</td>
+                    <td>5.8x</td>
+                </tr>
+                <tr>
+                    <td>Total</td>
+                    <td>$35,000</td>
+                    <td>$10,000/yr</td>
+                    <td>$240,000</td>
+                    <td>5.5x</td>
+                </tr>
+            </table>
+
+            <div class="key-takeaways">
+                <h3>Key Takeaways: Need for Prompt Engineering</h3>
+                <ul>
+                    <li>Proper prompt engineering can reduce AI usage costs by 50-70%</li>
+                    <li>Well-designed prompts improve output quality and consistency</li>
+                    <li>The ROI for prompt engineering initiatives is typically 4-6x within 3 years</li>
+                    <li>Case studies show measurable improvements in efficiency, quality, and customer satisfaction</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="additional-subtopics">
+            <h2>Additional Subtopics</h2>
+
+            <h3>History of Prompting</h3>
+            <div class="diagram">
+                <svg width="100%" height="200" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Timeline -->
+                    <line x1="50" y1="100" x2="750" y2="100" stroke="#1e40af" stroke-width="2"/>
+                    <!-- Events -->
+                    <circle cx="100" cy="100" r="5" fill="#3b82f6"/>
+                    <text x="100" y="130" font-family="Arial" font-size="12" text-anchor="middle">1966: ELIZA</text>
+                    <circle cx="200" cy="100" r="5" fill="#3b82f6"/>
+                    <text x="200" y="130" font-family="Arial" font-size="12" text-anchor="middle">1995: ALICE</text>
+                    <circle cx="300" cy="100" r="5" fill="#3b82f6"/>
+                    <text x="300" y="130" font-family="Arial" font-size="12" text-anchor="middle">2011: Siri</text>
+                    <circle cx="400" cy="100" r="5" fill="#3b82f6"/>
+                    <text x="400" y="130" font-family="Arial" font-size="12" text-anchor="middle">2018: GPT-1</text>
+                    <circle cx="500" cy="100" r="5" fill="#3b82f6"/>
+                    <text x="500" y="130" font-family="Arial" font-size="12" text-anchor="middle">2020: GPT-3</text>
+                    <circle cx="600" cy="100" r="5" fill="#3b82f6"/>
+                    <text x="600" y="130" font-family="Arial" font-size="12" text-anchor="middle">2022: ChatGPT</text>
+                    <circle cx="700" cy="100" r="5" fill="#3b82f6"/>
+                    <text x="700" y="130" font-family="Arial" font-size="12" text-anchor="middle">2023: GPT-4</text>
+                </svg>
+                <p>The evolution of human-AI interaction from simple pattern matching to sophisticated language understanding.</p>
+            </div>
+
+            <h3>Psychological Principles in Prompting</h3>
+            <p>Understanding cognitive psychology can improve prompt effectiveness:</p>
+            
+            <div class="expert-tip">
+                <h3>From the Lab: Priming Effects</h3>
+                <p>Research shows that exposing the AI to certain concepts or styles before the main task (priming) can significantly influence responses. For example, priming with academic language yields more formal outputs than conversational priming.</p>
+            </div>
+
+            <p><strong>Priming:</strong> Providing initial context that influences subsequent responses.<br>
+            Example: Starting with "You are an experienced chef..." before asking for recipes.</p>
+
+            <p><strong>Framing Effect:</strong> How information presentation affects interpretation.<br>
+            Example: "Describe the benefits" vs. "Don't omit any advantages" can yield different completeness in responses.</p>
+
+            <h3>Research Findings on Phrasing Influence</h3>
+            <ol>
+                <li><strong>Specificity Matters:</strong> A Stanford study found prompts with 5+ specific details had 68% higher accuracy than vague prompts.</li>
+                <li><strong>Positioning Counts:</strong> MIT research showed placing constraints at the prompt's end improved adherence by 23%.</li>
+                <li><strong>Persona Effect:</strong> Anthropic's research demonstrated assigning AI roles ("You're a Nobel physicist") increased technical accuracy by 41%.</li>
+            </ol>
+
+            <div class="try-it-yourself">
+                <h3>Try It Yourself: Prompt Quiz</h3>
+                <p>Test your prompting skills with these scenarios:</p>
+                
+                <div class="quiz-question">
+                    <p>1. You need a summary of a complex research paper for a general audience. Which prompt is better?</p>
+                    <div class="quiz-options">
+                        <div class="quiz-option"><input type="radio" name="q1" id="q1a"> <label for="q1a">"Summarize this"</label></div>
+                        <div class="quiz-option"><input type="radio" name="q1" id="q1b"> <label for="q1b">"Provide a 3-paragraph summary of this paper for non-experts, avoiding technical jargon but preserving key findings"</label></div>
+                    </div>
+                </div>
+                
+                <div class="quiz-question">
+                    <p>2. You want creative product names for a new sports drink. Better prompt?</p>
+                    <div class="quiz-options">
+                        <div class="quiz-option"><input type="radio" name="q2" id="q2a"> <label for="q2a">"Name my drink"</label></div>
+                        <div class="quiz-option"><input type="radio" name="q2" id="q2b"> <label for="q2b">"Generate 10 energetic name ideas for a new electrolyte sports drink targeting marathon runners. Names should be short (&lt;12 chars), memorable, and evoke endurance"</label></div>
+                    </div>
+                </div>
+                
+                <div class="quiz-question">
+                    <p>3. For accurate coding help, you should:</p>
+                    <div class="quiz-options">
+                        <div class="quiz-option"><input type="radio" name="q3" id="q3a"> <label for="q3a">"Fix this code"</label></div>
+                        <div class="quiz-option"><input type="radio" name="q3" id="q3b"> <label for="q3b">"Identify any bugs in this Python function that processes user input, paying special attention to edge cases and security vulnerabilities"</label></div>
+                    </div>
+                </div>
+                
+                <button class="quiz-submit">Check Answers</button>
+            </div>
+
+            <div class="key-takeaways">
+                <h3>Key Takeaways: Additional Subtopics</h3>
+                <ul>
+                    <li>Prompting has evolved significantly with AI advancement</li>
+                    <li>Psychological principles like priming and framing can enhance prompt effectiveness</li>
+                    <li>Research shows specific, well-structured prompts yield significantly better results</li>
+                    <li>Regular practice and testing are essential for developing prompt engineering skills</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer class="container">
+        <p>© 2023 AI Prompting Guide. All rights reserved.</p>
+        <p>For educational purposes only. Not affiliated with any AI research organization.</p>
+    </footer>
+
+    <script>
+        // Simple quiz functionality
+        document.querySelector('.quiz-submit').addEventListener('click', function() {
+            const answers = {
+                q1: 'q1b',
+                q2: 'q2b',
+                q3: 'q3b'
+            };
+            
+            let score = 0;
+            
+            for (const question in answers) {
+                const selected = document.querySelector(`input[name="${question}"]:checked`);
+                if (selected && selected.id === answers[question]) {
+                    score++;
+                    selected.parentElement.style.color = 'green';
+                } else if (selected) {
+                    selected.parentElement.style.color = 'red';
+                }
+            }
+            
+            alert(`You scored ${score} out of 3! ${score === 3 ? 'Excellent!' : score > 1 ? 'Good job!' : 'Keep practicing!'}`);
+        });
+        
+        // Print functionality
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'p') {
+                e.preventDefault();
+                window.print();
+            }
+        });
+    </script>
+</body>
+</html>

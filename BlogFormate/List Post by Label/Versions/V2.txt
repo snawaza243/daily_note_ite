@@ -1,0 +1,189 @@
+
+
+<p>Your post content here...</p>
+
+<!-- List all ServiceNow posts, descending, new tab -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "descending",
+  "openInNewTab": true
+}
+</script>
+
+<!-- List 5 ServiceNow posts, ascending, same tab -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "ascending",
+  "maxResults": 5,
+  "openInNewTab": false
+}
+</script>
+
+<!-- List all ServiceNow posts with maxResults 0 -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "ascending",
+  "maxResults": 0
+}
+</script>
+
+
+
+
+<script type='text/javascript'>
+/*<![CDATA[*/
+(function() {
+  // Function to fetch and render posts
+  function renderPostList(config, container) {
+    if (!config || !config.label || !config.sortOrder) {
+      console.error('Invalid postListConfig: label and sortOrder are required.', config);
+      return;
+    }
+
+    const sortOrder = config.sortOrder.toLowerCase(); // 'ascending' or 'descending'
+    const openInNewTab = config.openInNewTab !== false; // Default to true (new tab)
+    const blogUrl = 'https://indiantechnoera.blogspot.com'; // Your blog URL
+    // Handle maxResults: omit parameter if 0 or undefined to fetch all posts
+    const maxResultsQuery = config.maxResults && config.maxResults > 0 ? `max-results=${config.maxResults}` : '';
+    const feedUrl = `${blogUrl}/feeds/posts/summary/-/${encodeURIComponent(config.label)}?${maxResultsQuery}&alt=json-in-script&callback=renderPosts`;
+
+    // Log the feed URL for debugging
+    console.log('Fetching posts with URL:', feedUrl);
+
+    // Create a loading indicator
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'postListLoading';
+    loadingDiv.textContent = 'Loading related posts...';
+    container.appendChild(loadingDiv);
+
+    // Dynamically load the JSON feed
+    const script = document.createElement('script');
+    script.src = feedUrl;
+    script.onerror = () => {
+      loadingDiv.textContent = 'Error loading posts. Please check the label or try again later.';
+      console.error('Failed to load feed for label:', config.label, 'URL:', feedUrl);
+    };
+    document.head.appendChild(script);
+
+    // Callback to process the JSON feed
+    window.renderPosts = function(json) {
+      try {
+        const entries = json.feed.entry || [];
+        if (entries.length === 0) {
+          loadingDiv.textContent = 'No posts found for this label. Please verify the label name.';
+          return;
+        }
+
+        // Create container for the post list
+        const postListDiv = document.createElement('div');
+        postListDiv.className = 'postListDivTime';
+
+        // Sort entries based on sortOrder
+        const sortedEntries = sortOrder === 'ascending' 
+          ? entries.slice().reverse() // Oldest first
+          : entries; // Newest first
+
+        // Render each post
+        sortedEntries.forEach(entry => {
+          const link = entry.link.find(l => l.rel === 'alternate');
+          if (!link) return;
+
+          const entryUrl = link.href;
+          const entryTitle = entry.title.$t;
+          const item = document.createElement('p');
+          item.className = 'postListItem';
+          item.innerHTML = `<a class='postListDivCSS' href='${entryUrl}' target='${openInNewTab ? '_blank' : '_self'}'>${entryTitle}</a>`;
+          postListDiv.appendChild(item);
+        });
+
+        // Replace loading indicator with post list
+        container.replaceChild(postListDiv, loadingDiv);
+      } catch (e) {
+        loadingDiv.textContent = 'Error rendering posts.';
+        console.error('Error processing feed:', e, 'Label:', config.label);
+      }
+    };
+  }
+
+  // Function to find and process postListConfig objects
+  function initializePostLists() {
+    // Find all script tags with postListConfig
+    const scripts = document.querySelectorAll('script[type="application/json"][data-post-list-config]');
+    scripts.forEach(script => {
+      try {
+        const config = JSON.parse(script.textContent);
+        const container = document.createElement('div');
+        script.parentNode.insertBefore(container, script.nextSibling);
+        renderPostList(config, container);
+      } catch (e) {
+        console.error('Error parsing postListConfig:', e, 'Script content:', script.textContent);
+      }
+    });
+  }
+
+  // Run after DOM is fully loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializePostLists);
+  } else {
+    initializePostLists();
+  }
+})();
+/*]]>*/
+</script>
+
+<style>
+.postListDivTime {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e8ecef;
+  max-width: 800px;
+  font-family: &#39;Arial&#39;, sans-serif;
+}
+
+.postListItem {
+  margin: 8px 0;
+  padding: 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.postListItem:hover {
+  background-color: #f1f3f5;
+  transform: translateX(5px);
+}
+
+.postListItem:last-child {
+  border-bottom: none;
+}
+
+.postListDivCSS {
+  color: #0052cc;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  display: block;
+  transition: color 0.3s ease;
+}
+
+.postListDivCSS:hover {
+  color: #003087;
+  text-decoration: underline;
+}
+
+.postListLoading {
+  font-style: italic;
+  color: #6c757d;
+  text-align: center;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  font-size: 14px;
+}
+</style>
+ 

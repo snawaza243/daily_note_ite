@@ -1,0 +1,210 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!-- Minimal Configuration with Thumbnails -->
+<p>Discover our latest tutorials:</p>
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "descending",
+  "showThumbnail": true,
+  "notFoundThumbnail": "blank"
+}
+</script>
+<!-- Output: [Thumbnail or Empty Space] PostTitle -->
+
+<!-- Basic with Heading and Fill Placeholder -->
+<p>Check out our top picks:</p>
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "ascending",
+  "maxResults": 3,
+  "heading": "Top 3 Tutorials",
+  "showThumbnail": true,
+  "notFoundThumbnail": "fill"
+}
+</script>
+<!-- Output: Heading "Top 3 Tutorials", [Thumbnail or Gray Square] PostTitle for 3 posts -->
+
+<!-- Text Pretext with Numerical Numbering and Post Letter -->
+<p>Explore our tutorial series:</p>
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "descending",
+  "preText": "Chapter",
+  "numberingStyle": "numerical",
+  "numberAfterPretext": true,
+  "heading": "Tutorial Series",
+  "showThumbnail": true,
+  "notFoundThumbnail": "postLetter"
+}
+</script>
+<!-- Output: Heading "Tutorial Series", [Thumbnail or Letter Box] Chapter 1> PostTitle -->
+
+<!-- Symbol Pretext with Roman Numbering -->
+<p>Recent guides for you:</p>
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "ascending",
+  "preText": "➡️",
+  "numberingStyle": "roman",
+  "numberAfterPretext": false,
+  "maxResults": 5,
+  "openInNewTab": false,
+  "heading": "Recent Guides",
+  "showThumbnail": true,
+  "notFoundThumbnail": "fill"
+}
+</script>
+<!-- Output: Heading "Recent Guides", [Thumbnail or Gray Square] I> ➡️ PostTitle -->
+
+<!-- Alphabetical Numbering with Symbol Pretext -->
+<p>All our resources:</p>
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "descending",
+  "maxResults": 0,
+  "openInNewTab": true,
+  "preText": "♥️",
+  "numberingStyle": "alphabetical",
+  "numberAfterPretext": true,
+  "heading": "All Resources",
+  "showThumbnail": true,
+  "notFoundThumbnail": "postLetter"
+}
+</script>
+<!-- Output: Heading "All Resources", [Thumbnail or Letter Box] ♥️ A> PostTitle -->
+
+<!-- No Thumbnails, Just Pretext and Heading -->
+<p>Learn the basics:</p>
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "ascending",
+  "preText": "Unit",
+  "numberingStyle": "numerical",
+  "numberAfterPretext": false,
+  "heading": "Beginner Lessons",
+  "showThumbnail": false
+}
+</script>
+<!-- Output: Heading "Beginner Lessons", 1> Unit PostTitle -->
+
+<!-- Minimal with Open in Same Tab -->
+<p>Quick links to tutorials:</p>
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "descending",
+  "openInNewTab": false,
+  "heading": "Quick Links",
+  "showThumbnail": true,
+  "notFoundThumbnail": "blank"
+}
+</script>
+<!-- Output: Heading "Quick Links", [Thumbnail or Empty Space] PostTitle, links in same tab -->
+
+<!-- Full Configuration with Blank Placeholder -->
+<p>Dive into our tutorials:</p>
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "ascending",
+  "maxResults": 4,
+  "openInNewTab": true,
+  "preText": "✍️",
+  "numberingStyle": "roman",
+  "numberAfterPretext": true,
+  "heading": "Featured Tutorials",
+  "showThumbnail": true,
+  "notFoundThumbnail": "blank"
+}
+</script>
+<!-- Output: Heading "Featured Tutorials", [Thumbnail or Empty Space] ✍️ I> PostTitle -->
+
+<!-- Multiple Lists in One Post -->
+<p>Complete tutorial series:</p>
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "descending",
+  "preText": "Chapter",
+  "numberingStyle": "numerical",
+  "numberAfterPretext": true,
+  "heading": "Complete Series",
+  "showThumbnail": true,
+  "notFoundThumbnail": "postLetter"
+}
+</script>
+<p>Recent tutorials:</p>
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "ascending",
+  "maxResults": 5,
+  "preText": "➡️",
+  "numberingStyle": "roman",
+  "numberAfterPretext": false,
+  "heading": "Recent Tutorials",
+  "showThumbnail": true,
+  "notFoundThumbnail": "fill"
+}
+</script>
+<p>All resources:</p>
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "ascending",
+  "maxResults": 0,
+  "preText": "♥️",
+  "numberingStyle": "alphabetical",
+  "numberAfterPretext": true,
+  "heading": "All Resources",
+  "showThumbnail": true,
+  "notFoundThumbnail": "blank"
+}
+</script>
+<!-- Output:
+     1. Heading "Complete Series", [Thumbnail or Letter Box] Chapter 1> PostTitle
+     2. Heading "Recent Tutorials", [Thumbnail or Gray Square] I> ➡️ PostTitle
+     3. Heading "All Resources", [Thumbnail or Empty Space] ♥️ A> PostTitle -->

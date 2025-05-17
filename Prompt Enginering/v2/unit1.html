@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A beginner-friendly guide to Large Language Models covering their architecture, types, training process, and practical applications with interactive examples.">
+  <title>Unit 1: Basic LLM Concepts – From Theory to Practice</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --secondary: #7c3aed;
+      --dark: #1e293b;
+      --light: #f8fafc  0.8;
+      --gray: #94a3b8;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+      color: var(--dark);
+      background-color: var(--light);
+      margin: 0;
+      padding: 0;
+    }
+    
+    article {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    
+    h1, h2, h3, h4 {
+      color: var(--dark);
+      line-height: 1.2;
+      margin-top: 2rem;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 0.5rem;
+    }
+    
+    h2 {
+      font-size: 1.8rem;
+      color: var(--primary);
+    }
+    
+    h3 {
+      font-size: 1.4rem;
+    }
+    
+    h4 {
+      font-size: 1.2rem;
+    }
+    
+    a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    
+    a:hover {
+      text-decoration: underline;
+    }
+    
+    .toc {
+      background-color: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .toc ul {
+      padding-left: 1.5rem;
+    }
+    
+    .toc li {
+      margin-bottom: 0.5rem;
+    }
+    
+    .callout {
+      padding: 1rem;
+      border-left: 4px solid;
+      background-color: white;
+      border-radius: 0 8px 8px 0;
+      margin: 1.5rem 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .callout.did-you-know {
+      border-color: var(--success);
+    }
+    
+    .callout.warning {
+      border-color: var(--warning);
+    }
+    
+    .callout.tip {
+      border-color: var(--primary);
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    th {
+      background-color: #f1f5f9;
+      font-weight: 600;
+    }
+    
+    tr:hover {
+      background-color: #f8fafc;
+    }
+    
+    pre {
+      background-color: #1e293b;
+      color: #f8fafc;
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+    
+    code {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+    }
+    
+    .interactive {
+      background-color: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .interactive h4 {
+      margin-top: 0;
+    }
+    
+    button {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    
+    button:hover {
+      background-color: #1d4ed8;
+    }
+    
+    .quiz-option {
+      display: block;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .quiz-option:hover {
+      background-color: #f1f5f9;
+    }
+    
+    .quiz-feedback {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      border-radius: 4px;
+      display: none;
+    }
+    
+    .correct {
+      background-color: rgba(16, 185, 129, 0.1);
+      border-left: 4px solid var(--success);
+    }
+    
+    .incorrect {
+      background-color: rgba(239, 68, 68, 0.1);
+      border-left: 4px solid var(--danger);
+    }
+    
+    .timeline {
+      position: relative;
+      margin: 2rem 0;
+    }
+    
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50px;
+      width: 2px;
+      background-color: var(--primary);
+    }
+    
+    .timeline-item {
+      position: relative;
+      padding-left: 80px;
+      margin-bottom: 2rem;
+    }
+    
+    .timeline-year {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 50px;
+      text-align: right;
+      padding-right: 1rem;
+      color: var(--primary);
+      font-weight: bold;
+    }
+    
+    .timeline-content {
+      background-color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .timeline-content h4 {
+      margin-top: 0;
+    }
+    
+    .faq {
+      margin: 2rem 0;
+    }
+    
+    .faq-item {
+      margin-bottom: 1rem;
+      background-color: white;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .faq-question {
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+    
+    @media (max-width: 768px) {
+      article {
+        padding: 1rem;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      h2 {
+        font-size: 1.5rem;
+      }
+    }
+    
+    @media print {
+      body {
+        background-color: white;
+        color: black;
+        font-size: 12pt;
+      }
+      
+      article {
+        max-width: 100%;
+        padding: 0;
+      }
+      
+      .callout, .interactive, .timeline-content, .faq-item {
+        break-inside: avoid;
+      }
+      
+      a::after {
+        content: " (" attr(href) ")";
+        font-size: 0.8em;
+        font-weight: normal;
+      }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+</head>
+<body>
+  <article>
+    <h1>Unit 1: Basic LLM Concepts – From Theory to Practice</h1>
+    
+    <div class="callout tip">
+      <strong>Analogy:</strong> LLMs are like librarians who've read every book but need clear questions to give good answers. They don't "understand" in the human sense, but can predict remarkably useful responses based on patterns in their training data.
+    </div>
+    
+    <div class="toc">
+      <h3>Table of Contents</h3>
+      <ul>
+        <li><a href="#what-are-llms">What are LLMs?</a></li>
+        <li><a href="#types-of-llms">Types of LLMs</a></li>
+        <li><a href="#how-are-llms-built">How are LLMs Built?</a></li>
+        <li><a href="#vocabulary-deep-dive">Vocabulary Deep Dive</a></li>
+        <li><a href="#additional-subtopics">Additional Subtopics</a></li>
+        <li><a href="#faqs">FAQs</a></li>
+      </ul>
+    </div>
+    
+    <p>Welcome to our comprehensive guide on Large Language Models (LLMs)! Whether you're a developer, business professional, or simply AI-curious, this post will walk you through everything from fundamental concepts to practical applications. We've packed this guide with interactive elements, real-world examples, and clear explanations to make complex ideas accessible.</p>
+    
+    <h2 id="what-are-llms">A. What are LLMs?</h2>
+    
+    <h3>Definition</h3>
+    <p><strong>Simple explanation:</strong> LLMs are AI systems trained on massive amounts of text data that can generate human-like text, answer questions, and perform language tasks.</p>
+    
+    <p><strong>Technical definition:</strong> Large Language Models are deep neural networks, typically based on the transformer architecture, that use autoregressive generation to predict the next token in a sequence based on the preceding context. They're trained on unsupervised objectives (like next-token prediction) and often fine-tuned with supervised learning and reinforcement learning from human feedback (RLHF).</p>
+    
+    <div class="callout did-you-know">
+      <strong>Did You Know?</strong> GPT-4's training data could fill approximately 45 million books (assuming 300 pages per book). That's more than 10 times the collection of the Library of Congress!
+    </div>
+    
+    <h3>Evolution Timeline</h3>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-year">2018</div>
+        <div class="timeline-content">
+          <h4>GPT-1</h4>
+          <p>117M parameters. Demonstrated the potential of transformer-based language models with unsupervised pre-training followed by task-specific fine-tuning.</p>
+        </div>
+      </div>
+      
+      <div class="timeline-item">
+        <div class="timeline-year">2019</div>
+        <div class="timeline-content">
+          <h4>GPT-2</h4>
+          <p>1.5B parameters. Showed impressive zero-shot capabilities but was initially considered "too dangerous" to release fully.</p>
+        </div>
+      </div>
+      
+      <div class="timeline-item">
+        <div class="timeline-year">2020</div>
+        <div class="timeline-content">
+          <h4>GPT-3</h4>
+          <p>175B parameters. Revolutionized the field with strong few-shot learning abilities, making prompt engineering crucial.</p>
+        </div>
+      </div>
+      
+      <div class="timeline-item">
+        <div class="timeline-year">2022</div>
+        <div class="timeline-content">
+          <h4>ChatGPT (GPT-3.5)</h4>
+          <p>Fine-tuned with RLHF, making it more aligned and conversational. Sparked massive public interest in LLMs.</p>
+        </div>
+      </div>
+      
+      <div class="timeline-item">
+        <div class="timeline-year">2023</div>
+        <div class="timeline-content">
+          <h4>GPT-4, Claude 2, LLaMA 2</h4>
+          <p>Multimodal capabilities, larger context windows (up to 128K tokens), and improved reasoning. Open-source models catch up (LLaMA 2, Mistral).</p>
+        </div>
+      </div>
+      
+      <div class="timeline-item">
+        <div class="timeline-year">2024</div>
+        <div class="timeline-content">
+          <h4>Gemini 1.5, GPT-4 Turbo</h4>
+          <p>Improved efficiency, longer context (1M+ tokens), and more specialized capabilities across modalities.</p>
+        </div>
+      </div>
+    </div>
+    
+    <h3>LLMs vs. Traditional NLP</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Approach</th>
+          <th>Accuracy</th>
+          <th>Flexibility</th>
+          <th>Data Needs</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Rule-based</td>
+          <td>Low (for complex tasks)</td>
+          <td>Very rigid</td>
+          <td>Manual rules</td>
+          <td>Early chatbots like ELIZA</td>
+        </tr>
+        <tr>
+          <td>Statistical Models</td>
+          <td>Medium</td>
+          <td>Task-specific</td>
+          <td>Labeled datasets</td>
+          <td>Sentiment analysis with Naive Bayes</td>
+        </tr>
+        <tr>
+          <td>LLMs</td>
+          <td>High (with proper prompting)</td>
+          <td>Extremely flexible</td>
+          <td>Massive unlabeled text + some labeled</td>
+          <td>ChatGPT answering diverse questions</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div class="callout warning">
+      <strong>Warning!</strong> LLMs don't understand meaning like humans do. They're incredibly sophisticated pattern recognizers that predict likely responses based on their training data, without true comprehension.
+    </div>
+    
+    <h2 id="types-of-llms">B. Types of LLMs</h2>
+    
+    <h3>Proprietary vs. Open-Source</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Proprietary (GPT-4, Gemini)</th>
+          <th>Open-Source (LLaMA 3, Mistral)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Cost</td>
+          <td>Pay-per-use API ($0.01-$0.12 per 1K tokens)</td>
+          <td>Free to use (hosting costs may apply)</td>
+        </tr>
+        <tr>
+          <td>Accessibility</td>
+          <td>Easy API access, no infrastructure needed</td>
+          <td>Requires technical expertise to deploy</td>
+        </tr>
+        <tr>
+          <td>Performance</td>
+          <td>State-of-the-art, highly optimized</td>
+          <td>Catching up (7B-70B parameter range)</td>
+        </tr>
+        <tr>
+          <td>Customization</td>
+          <td>Limited to API parameters</td>
+          <td>Full model access for fine-tuning</td>
+        </tr>
+        <tr>
+          <td>Use Cases</td>
+          <td>Production applications, quick prototyping</td>
+          <td>Research, privacy-sensitive applications</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <h3>Domain-Specific Models</h3>
+    
+    <h4>Med-PaLM (Medical)</h4>
+    <p>Trained on medical literature and fine-tuned for clinical accuracy. Example prompt:</p>
+    <pre>Patient presents with fatigue, weight gain, and cold intolerance. 
+TSH is elevated at 8.2 mIU/L (normal 0.4-4.0). 
+What is the most likely diagnosis and recommended treatment?</pre>
+    
+    <h4>CodeLlama (Programming)</h4>
+    <p>Specialized for code generation and explanation. Compare outputs:</p>
+    
+    <div class="interactive">
+      <h4>Generic LLM:</h4>
+      <pre>def reverse_string(s):
+    # This function reverses a string
+    return s[::-1]</pre>
+      
+      <h4>CodeLlama:</h4>
+      <pre>def reverse_string(s: str) -> str:
+    """Reverse the input string.
+    
+    Args:
+        s: Input string to be reversed
+        
+    Returns:
+        The reversed string
+        
+    Example:
+        >>> reverse_string("hello")
+        'olleh'
+    """
+    return s[::-1]</pre>
+      <p>Notice the added type hints, docstring, and example that make the code more maintainable.</p>
+    </div>
+    
+    <h3>Multimodal Models</h3>
+    
+    <h4>GPT-4 Vision (Image Analysis)</h4>
+    <p>Example prompt with image input:</p>
+    <pre>Analyze this medical scan image (shown to model). 
+Identify any abnormalities and suggest possible conditions.</pre>
+    
+    <h4>Gemini (Audio/Video)</h4>
+    <p>Use case example:</p>
+    <pre>Process this 2-minute patient interview video. 
+Summarize the key symptoms mentioned, 
+detect vocal stress patterns, 
+and flag any non-verbal cues of discomfort.</pre>
+    
+    <h2 id="how-are-llms-built">C. How are LLMs Built?</h2>
+    
+    <h3>Data Pipeline</h3>
+    <ol>
+      <li><strong>Raw Data Collection:</strong> Web pages, books, code, scientific papers (Common Crawl, Wikipedia, GitHub, etc.)</li>
+      <li><strong>Cleaning:</strong> Remove duplicates, low-quality content, sensitive information</li>
+      <li><strong>Filtering:</strong> Select domain-relevant content, balance sources</li>
+      <li><strong>Tokenization:</strong> Split text into subword units (e.g., "unhappiness" → "un", "happiness")</li>
+    </ol>
+    
+    <div class="interactive">
+      <h4>Try Tokenization</h4>
+      <p>Enter text to see how it might be tokenized:</p>
+      <input type="text" id="tokenize-input" value="LLMs tokenize text surprisingly!" style="width: 100%; padding: 0.5rem; margin-bottom: 0.5rem;">
+      <button onclick="tokenizeText()">Tokenize</button>
+      <div id="tokenize-output" style="margin-top: 1rem; padding: 0.5rem; background: #f1f5f9; border-radius: 4px;"></div>
+      <script>
+        function tokenizeText() {
+          const input = document.getElementById('tokenize-input').value;
+          // Simplified tokenization simulation
+          const tokens = input.split(/(\s+|['-]|\W)/).filter(t => t.trim().length > 0);
+          document.getElementById('tokenize-output').innerHTML = 
+            `<strong>Tokens:</strong> ${tokens.map(t => `"${t}"`).join(', ')}<br>
+            <strong>Count:</strong> ${tokens.length} tokens`;
+        }
+        tokenizeText(); // Run initially
+      </script>
+    </div>
+    
+    <h3>Training Phases</h3>
+    
+    <h4>1. Pretraining</h4>
+    <p><strong>Analogy:</strong> Like teaching a student by having them read every book in the library and constantly guessing the next word in sentences.</p>
+    <p>The model learns general language patterns through next-token prediction on massive datasets (typically 1T+ tokens).</p>
+    
+    <h4>2. Fine-tuning</h4>
+    <p><strong>Analogy:</strong> Now we take our well-read student and give them specialized training for specific tasks (like medical diagnosis or coding).</p>
+    <p>Uses smaller, high-quality datasets to adapt the model to particular use cases.</p>
+    
+    <h4>3. RLHF (Reinforcement Learning from Human Feedback)</h4>
+    <p>Humans rank model outputs to teach preferences (helpful, harmless responses). Creates a reward model that then guides further training.</p>
+    
+    <div class="callout">
+      <strong>Example RLHF Process:</strong><br>
+      1. Generate multiple responses to prompts<br>
+      2. Have humans rank responses from best to worst<br>
+      3. Train a reward model to predict human preferences<br>
+      4. Use reinforcement learning (PPO) to optimize the LLM against the reward model<br>
+      5. Iterate to improve alignment
+    </div>
+    
+    <h3>Hardware Requirements</h3>
+    <ul>
+      <li>Training LLaMA-2 (70B) required 3.3 million GPU hours on A100s</li>
+      <li>GPT-4 training likely used tens of thousands of specialized AI chips (like NVIDIA H100s)</li>
+      <li>Inference can run on smaller hardware (some models work on consumer GPUs)</li>
+    </ul>
+    
+    <h2 id="vocabulary-deep-dive">D. Vocabulary Deep Dive</h2>
+    
+    <h3>Tokenization</h3>
+    <p>LLMs don't process raw text but rather tokens (subword units). For example:</p>
+    <ul>
+      <li>"Unhappiness" → "un", "happiness" (2 tokens)</li>
+      <li>"ChatGPT" → "Chat", "G", "PT" (3 tokens in some tokenizers)</li>
+    </ul>
+    
+    <div class="callout">
+      <strong>Why it matters:</strong> Token count affects API costs (you pay per token) and context window limits (models can only handle so many tokens at once).
+    </div>
+    
+    <h3>Embeddings</h3>
+    <p>Words are converted to numerical vectors that capture semantic meaning. The famous example:</p>
+    <p><em>king - man + woman ≈ queen</em></p>
+    <p>This vector arithmetic shows how relationships between concepts are encoded mathematically.</p>
+    
+    <h3>Decoding Strategies</h3>
+    <p>How the model chooses the next token during generation:</p>
+    
+    <div class="interactive">
+      <h4>Compare Strategies</h4>
+      <p><strong>Prompt:</strong> "The future of AI will be"</p>
+      
+      <h5>Greedy Search (takes highest probability token):</h5>
+      <pre>"The future of AI will be shaped by the ability to process information more efficiently."</pre>
+      
+      <h5>Beam Search (keeps several likely paths, chooses best overall):</h5>
+      <pre>"The future of AI will be determined by our ethical frameworks as much as technical advancements."</pre>
+      
+      <h5>Temperature Sampling (adds randomness for creativity):</h5>
+      <pre>"The future of AI will be weird, wonderful, and utterly unpredictable—like teaching cats to program!"</pre>
+      
+      <div class="quiz">
+        <p><strong>Exercise:</strong> Which decoding strategy would you use for...</p>
+        <div class="quiz-option" onclick="showFeedback(this, true)">A technical documentation generator?</div>
+        <div class="quiz-option" onclick="showFeedback(this, false)">A creative poetry bot?</div>
+        <div class="quiz-option" onclick="showFeedback(this, false)">A chatbot for customer support?</div>
+        
+        <div class="quiz-feedback correct" style="display: none;">
+          <strong>Best answer:</strong> Greedy or beam search for technical accuracy in documentation.
+        </div>
+        <div class="quiz-feedback incorrect" style="display: none;">
+          For poetry, temperature sampling would work better to allow creativity.
+        </div>
+      </div>
+      <script>
+        function showFeedback(element, isCorrect) {
+          const feedback = element.parentElement.querySelector(isCorrect ? '.correct' : '.incorrect');
+          document.querySelectorAll('.quiz-feedback').forEach(el => el.style.display = 'none');
+          feedback.style.display = 'block';
+        }
+      </script>
+    </div>
+    
+    <h2 id="additional-subtopics">E. Additional Subtopics</h2>
+    
+    <h3>Environmental Impact</h3>
+    <p>Training GPT-3 emitted approximately 552 metric tons of CO₂ equivalent—similar to 120 gasoline-powered cars driven for a year. Newer models are becoming more efficient through:</p>
+    <ul>
+      <li>Sparse architectures (only activating parts of the network)</li>
+      <li>Better hardware utilization</li>
+      <li>Smaller, more capable models (e.g., Mistral 7B competes with larger models)</li>
+    </ul>
+    
+    <h3>Architectures</h3>
+    <p>Two main approaches:</p>
+    <ol>
+      <li><strong>Encoder-Decoder (e.g., T5, BERT):</strong> Processes input fully before generating output. Good for translation, summarization.</li>
+      <li><strong>Decoder-Only (e.g., GPT, LLaMA):</strong> Generates sequentially left-to-right. More common for general text generation.</li>
+    </ol>
+    
+    <div class="callout did-you-know">
+      <strong>Did You Know?</strong> The original transformer paper ("Attention is All You Need") was rejected from one conference before becoming perhaps the most influential AI paper of the last decade.
+    </div>
+    
+    <h2 id="faqs">FAQs</h2>
+    
+    <div class="faq">
+      <div class="faq-item">
+        <div class="faq-question">1. Can LLMs learn after deployment?</div>
+        <p>Generally no—they're static after training unless fine-tuned. What appears to be learning is just clever use of context within their fixed knowledge. Some systems combine LLMs with external databases or retrieval systems for up-to-date information.</p>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">2. Why do LLMs sometimes "hallucinate" wrong information?</div>
+        <p>Because they're trained to generate plausible text, not fact-check. There's no internal mechanism to verify truth—they predict what words likely come next based on patterns. This is why domain-specific models with constrained outputs are valuable for critical applications.</p>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">3. How long does training an LLM take?</div>
+        <p>For large models (e.g., GPT-4 scale): weeks to months using thousands of GPUs/TPUs. Smaller open-source models (7B parameters) might train in days on a few hundred GPUs. Much depends on infrastructure and optimization techniques.</p>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">4. Are bigger models always better?</div>
+        <p>Not necessarily. After a certain point, improvements diminish while costs grow. Recent trends favor smaller, specialized models (e.g., a 7B parameter model fine-tuned for medical QA might outperform a general 70B model on that specific task).</p>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">5. How can I start working with LLMs?</div>
+        <p>Begin with open-source models (Mistral, LLaMA) via platforms like Hugging Face. Use cloud APIs (OpenAI, Anthropic) for quick prototyping. Focus on: prompt engineering, retrieval-augmented generation (RAG), and fine-tuning small models for specific tasks.</p>
+      </div>
+    </div>
+    
+    <div class="callout">
+      <p><strong>Ready for more?</strong> In Unit 2, we'll cover prompt engineering techniques, fine-tuning workflows, and deploying LLMs in production environments.</p>
+    </div>
+  </article>
+</body>
+</html>

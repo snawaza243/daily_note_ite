@@ -1,0 +1,134 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!-- Minimal with Thumbnail -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "descending",
+  "showThumbnail": true
+}
+</script>
+<!-- Output: [Thumbnail] PostTitle -->
+
+<!-- Thumbnail with Heading -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "ascending",
+  "maxResults": 3,
+  "heading": "Top Tutorials",
+  "showThumbnail": true
+}
+</script>
+<!-- Output: Heading "Top Tutorials", [Thumbnail] PostTitle for 3 posts -->
+
+<!-- Thumbnail with Pretext and Numbering -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "descending",
+  "preText": "Chapter",
+  "numberingStyle": "numerical",
+  "numberAfterPretext": true,
+  "heading": "Tutorial Series",
+  "showThumbnail": true
+}
+</script>
+<!-- Output: Heading "Tutorial Series", [Thumbnail] Chapter 1> PostTitle -->
+
+<!-- Thumbnail with Symbol Pretext -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "ascending",
+  "preText": "➡️",
+  "numberingStyle": "roman",
+  "numberAfterPretext": false,
+  "maxResults": 5,
+  "openInNewTab": false,
+  "heading": "Recent Guides",
+  "showThumbnail": true
+}
+</script>
+<!-- Output: Heading "Recent Guides", [Thumbnail] I> ➡️ PostTitle -->
+
+<!-- Full Configuration with Thumbnail -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "descending",
+  "maxResults": 0,
+  "openInNewTab": true,
+  "preText": "♥️",
+  "numberingStyle": "alphabetical",
+  "numberAfterPretext": true,
+  "heading": "All Resources",
+  "showThumbnail": true
+}
+</script>
+<!-- Output: Heading "All Resources", [Thumbnail] ♥️ A> PostTitle -->
+
+<!-- Multiple Lists with Thumbnails -->
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "descending",
+  "preText": "Chapter",
+  "numberingStyle": "numerical",
+  "numberAfterPretext": true,
+  "heading": "Complete Series",
+  "showThumbnail": true
+}
+</script>
+<script type="application/json" data-post-list-config>
+{
+  "label": "ServiceNow",
+  "sortOrder": "ascending",
+  "maxResults": 5,
+  "preText": "➡️",
+  "numberingStyle": "roman",
+  "numberAfterPretext": false,
+  "heading": "Recent Tutorials",
+  "showThumbnail": false
+}
+</script>
+<!-- Output: 
+     1. Heading "Complete Series", [Thumbnail] Chapter 1> PostTitle
+     2. Heading "Recent Tutorials", I> ➡️ PostTitle (no thumbnails) -->

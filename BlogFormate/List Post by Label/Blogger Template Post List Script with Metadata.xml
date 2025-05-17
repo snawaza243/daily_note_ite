@@ -1,0 +1,295 @@
+<script type='text/javascript'>
+/*<![CDATA[*/
+(function() {
+  // Helper function to convert numbers to Roman numerals
+  function toRomanNumeral(num) {
+    if (isNaN(num) || num < 1) return '';
+    const romanMap = [
+      { value: 1000, numeral: 'M' },
+      { value: 900, numeral: 'CM' },
+      { value: 500, numeral: 'D' },
+      { value: 400, numeral: 'CD' },
+      { value: 100, numeral: 'C' },
+      { value: 90, numeral: 'XC' },
+      { value: 50, numeral: 'L' },
+      { value: 40, numeral: 'XL' },
+      { value: 10, numeral: 'X' },
+      { value: 9, numeral: 'IX' },
+      { value: 5, numeral: 'V' },
+      { value: 4, numeral: 'IV' },
+      { value: 1, numeral: 'I' }
+    ];
+    let result = '';
+    for (const { value, numeral } of romanMap) {
+      while (num >= value) {
+        result += numeral;
+        num -= value;
+      }
+    }
+    return result;
+  }
+
+  // Function to format date
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  }
+
+  // Function to fetch and render posts
+  function renderPostList(config, container, index) {
+    if (!config || !config.label || !config.sortOrder) {
+      console.error('Invalid postListConfig: label and sortOrder are required.', config);
+      return;
+    }
+
+    const sortOrder = config.sortOrder.toLowerCase();
+    const openInNewTab = config.openInNewTab !== false;
+    const preText = config.preText || '';
+    const numberingStyle = config.numberingStyle ? config.numberingStyle.toLowerCase() : '';
+    const numberAfterPretext = config.numberAfterPretext || false;
+    const heading = config.heading || '';
+    const showThumbnail = config.showThumbnail || false;
+    const notFoundThumbnail = config.notFoundThumbnail || 'blank';
+    const showDate = config.showDate || false;
+    const showSnippet = config.showSnippet || false;
+    const snippetLength = config.snippetLength || 50;
+    const blogUrl = 'https://indiantechnoera.blogspot.com';
+    const maxResultsQuery = config.maxResults && config.maxResults > 0 ? `max-results=${config.maxResults}` : '';
+    const feedUrl = `${blogUrl}/feeds/posts/summary/-/${encodeURIComponent(config.label)}?${maxResultsQuery}&alt=json-in-script&callback=renderPosts_${index}`;
+
+    console.log('Fetching posts with URL:', feedUrl);
+
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'postListLoading';
+    loadingDiv.textContent = 'Loading related posts...';
+    container.appendChild(loadingDiv);
+
+    const script = document.createElement('script');
+    script.src = feedUrl;
+    script.onerror = () => {
+      loadingDiv.textContent = 'Error loading posts. Please check the label or try again later.';
+      console.error('Failed to load feed for label:', config.label, 'URL:', feedUrl);
+    };
+    document.head.appendChild(script);
+
+    window[`renderPosts_${index}`] = function(json) {
+      try {
+        const entries = json.feed.entry || [];
+        if (entries.length === 0) {
+          loadingDiv.textContent = 'No posts found for this label. Please verify the label name.';
+          return;
+        }
+
+        const postListDiv = document.createElement('div');
+        postListDiv.className = 'postListDivTime';
+
+        if (heading) {
+          const headingElement = document.createElement('h3');
+          headingElement.className = 'postListHeading';
+          headingElement.textContent = heading;
+          postListDiv.appendChild(headingElement);
+        }
+
+        const sortedEntries = sortOrder === 'ascending' ? entries.slice().reverse() : entries;
+
+        sortedEntries.forEach((entry, idx) => {
+          const link = entry.link.find(l => l.rel === 'alternate');
+          if (!link) return;
+
+          const entryUrl = link.href;
+          const entryTitle = entry.title.$t;
+          let displayText = entryTitle;
+
+          let number = '';
+          if (numberingStyle) {
+            if (numberingStyle === 'numerical') {
+              number = `${idx + 1}> `;
+            } else if (numberingStyle === 'roman') {
+              number = `${toRomanNumeral(idx + 1)}> `;
+            } else if (numberingStyle === 'alphabetical') {
+              number = `${String.fromCharCode(65 + idx)}> `;
+            }
+          }
+
+          if (preText && number) {
+            displayText = numberAfterPretext ? `${preText} ${number}${entryTitle}` : `${number}${preText} ${entryTitle}`;
+          } else if (preText) {
+            displayText = `${preText} ${entryTitle}`;
+          } else if (number) {
+            displayText = `${number}${entryTitle}`;
+          }
+
+          if (showDate || showSnippet) {
+            displayText += ' [';
+            if (showDate) {
+              displayText += formatDate(entry.published.$t);
+            }
+            if (showDate && showSnippet) {
+              displayText += ' - ';
+            }
+            if (showSnippet && entry.summary && entry.summary.$t) {
+              const snippet = entry.summary.$t.substring(0, snippetLength) + (entry.summary.$t.length > snippetLength ? '...' : '');
+              displayText += snippet;
+            }
+            displayText += ']';
+          }
+
+          const item = document.createElement('p');
+          item.className = 'postListItem';
+
+          if (showThumbnail) {
+            if (entry.media$thumbnail && entry.media$thumbnail.url) {
+              const thumbnailUrl = entry.media$thumbnail.url.replace(/s72-c/, 's50-c');
+              const img = document.createElement('img');
+              img.src = thumbnailUrl;
+              img.className = 'postListThumbnail';
+              img.alt = `${entryTitle} thumbnail`;
+              item.appendChild(img);
+            } else {
+              if (notFoundThumbnail === 'fill') {
+                const img = document.createElement('img');
+                img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACR8e3HAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYSURBVFhH7cEBAQAAAIIg/69uSEABANu7AhcT9lRiAAAAAElFTkSuQmCC';
+                img.className = 'postListThumbnail';
+                img.alt = 'Placeholder thumbnail';
+                item.appendChild(img);
+              } else if (notFoundThumbnail === 'postLetter') {
+                const letterDiv = document.createElement('div');
+                letterDiv.className = 'postListThumbnailLetter';
+                letterDiv.textContent = entryTitle.charAt(0).toUpperCase();
+                item.appendChild(letterDiv);
+              } else { // blank
+                const placeholder = document.createElement('div');
+                placeholder.className = 'postListThumbnailPlaceholder';
+                item.appendChild(placeholder);
+              }
+            }
+          }
+
+          const linkElement = document.createElement('a');
+          linkElement.className = 'postListDivCSS';
+          linkElement.href = entryUrl;
+          linkElement.target = openInNewTab ? '_blank' : '_self';
+          linkElement.textContent = displayText;
+          item.appendChild(linkElement);
+
+          postListDiv.appendChild(item);
+        });
+
+        container.replaceChild(postListDiv, loadingDiv);
+      } catch (e) {
+        loadingDiv.textContent = 'Error rendering posts.';
+        console.error('Error processing feed:', e, 'Label:', config.label);
+      }
+    };
+  }
+
+  function initializePostLists() {
+    const scripts = document.querySelectorAll('script[type="application/json"][data-post-list-config]');
+    scripts.forEach((script, index) => {
+      try {
+        const config = JSON.parse(script.textContent);
+        const container = document.createElement('div');
+        container.id = `postListContainer_${index}`;
+        script.parentNode.insertBefore(container, script.nextSibling);
+        renderPostList(config, container, index);
+      } catch (e) {
+        console.error('Error parsing postListConfig:', e, 'Script content:', script.textContent);
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializePostLists);
+  } else {
+    initializePostLists();
+  }
+})();
+/*]]>*/
+</script>
+
+<style>
+.postListDivTime {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e8ecef;
+  max-width: 800px;
+  font-family: 'Arial', sans-serif;
+}
+
+.postListHeading {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 15px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e8ecef;
+}
+
+.postListItem {
+  margin: 8px 0;
+  padding: 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 50px;
+}
+
+.postListItem:hover {
+  background-color: #f1f3f5;
+  transform: translateX(5px);
+}
+
+.postListItem:last-child {
+  border-bottom: none;
+}
+
+.postListDivCSS {
+  color: #0052cc;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  transition: color 0.3s ease;
+  flex: 1;
+}
+
+.postListDivCSS:hover {
+  color: #003087;
+  text-decoration: underline;
+}
+
+.postListThumbnail {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.postListThumbnailPlaceholder {
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+  background-color: transparent;
+}
+
+.postListThumbnailLetter {
+  width: 50px;
+  height: 50px;
+  background-color: #e8ecef;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #1a1a1a;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+</style>
