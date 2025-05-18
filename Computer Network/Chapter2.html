@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2: Network Models & Standards | Computer Networks: From Scratch to Mastery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Navigation -->
+    <nav class="bg-blue-800 text-white p-4 shadow-md">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <a href="index.html" class="text-xl font-bold mb-4 md:mb-0">Computer Networks: From Scratch to Mastery</a>
+            <div class="flex flex-wrap gap-4">
+                <a href="module1.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 1: Foundations</a>
+                <a href="module2.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 2: Protocols</a>
+                <a href="module3.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 3: Advanced</a>
+                <a href="module4.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 4: Applications</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-white py-12 shadow-sm">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold text-blue-800 mb-4">Chapter 2: Network Models & Standards</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">Understanding the OSI and TCP/IP models, networking standards, and data encapsulation</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <article class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+            <!-- Introduction -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Introduction</h2>
+                <p class="mb-4">Building on our introduction to computer networks, this chapter explores the conceptual models that define how networks operate. Understanding these models is essential for network design, troubleshooting, and communication between networking professionals.</p>
+                <p>By the end of this chapter, you will be able to:</p>
+                <ul class="list-disc pl-6 mt-2 mb-4 space-y-1">
+                    <li>Describe all seven layers of the OSI model and their functions</li>
+                    <li>Compare the TCP/IP model with the OSI model</li>
+                    <li>Explain the roles of IEEE and IETF standards organizations</li>
+                    <li>Understand the encapsulation and decapsulation process</li>
+                    <li>Analyze network traffic using these models</li>
+                </ul>
+            </section>
+
+            <!-- The OSI Model -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">The OSI Model: Understanding the 7 Layers</h2>
+                <p class="mb-4">The Open Systems Interconnection (OSI) model is a conceptual framework that standardizes network communication functions into seven distinct layers. Developed by ISO in 1984, it provides a universal language for networking professionals.</p>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                    <div id="osi-model" class="w-full h-96 relative">
+                        <!-- OSI model visualization will be inserted here by JavaScript -->
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Figure 1: The seven layers of the OSI model with example protocols and devices</p>
+                </div>
+
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Layer 7: Application Layer</h3>
+                <div class="grid md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <p><strong>Function:</strong> Provides network services directly to user applications</p>
+                        <p><strong>Protocols:</strong> HTTP, FTP, SMTP, DNS</p>
+                        <p><strong>Devices/Software:</strong> Web browsers, email clients</p>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded border-l-4 border-blue-500">
+                        <p class="font-medium">Example:</p>
+                        <p>When you enter a URL in your browser, the HTTP request is initiated at this layer.</p>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Layer 6: Presentation Layer</h3>
+                <div class="grid md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <p><strong>Function:</strong> Data translation, encryption, and compression</p>
+                        <p><strong>Protocols:</strong> SSL/TLS, JPEG, MPEG</p>
+                        <p><strong>Devices/Software:</strong> Encryption software, compression tools</p>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded border-l-4 border-blue-500">
+                        <p class="font-medium">Example:</p>
+                        <p>When you visit a secure website (HTTPS), TLS encryption occurs here.</p>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Layer 5: Session Layer</h3>
+                <div class="grid md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <p><strong>Function:</strong> Establishes, manages, and terminates connections</p>
+                        <p><strong>Protocols:</strong> NetBIOS, RPC</p>
+                        <p><strong>Devices/Software:</strong> Session management software</p>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded border-l-4 border-blue-500">
+                        <p class="font-medium">Example:</p>
+                        <p>When you log in to a remote server, this layer maintains your session.</p>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Layer 4: Transport Layer</h3>
+                <div class="grid md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <p><strong>Function:</strong> End-to-end communication, error recovery, and flow control</p>
+                        <p><strong>Protocols:</strong> TCP, UDP</p>
+                        <p><strong>Devices/Software:</strong> Firewalls, load balancers</p>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded border-l-4 border-blue-500">
+                        <p class="font-medium">Example:</p>
+                        <p>TCP ensures your file download arrives complete and in order.</p>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Layer 3: Network Layer</h3>
+                <div class="grid md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <p><strong>Function:</strong> Logical addressing and routing</p>
+                        <p><strong>Protocols:</strong> IP, ICMP, OSPF</p>
+                        <p><strong>Devices:</strong> Routers, layer 3 switches</p>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded border-l-4 border-blue-500">
+                        <p class="font-medium">Example:</p>
+                        <p>Your router uses IP addresses to determine where to send packets.</p>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Layer 2: Data Link Layer</h3>
+                <div class="grid md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <p><strong>Function:</strong> Physical addressing and access to media</p>
+                        <p><strong>Protocols:</strong> Ethernet, PPP, MAC</p>
+                        <p><strong>Devices:</strong> Switches, bridges, network interface cards</p>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded border-l-4 border-blue-500">
+                        <p class="font-medium">Example:</p>
+                        <p>Your switch uses MAC addresses to forward frames to the correct device.</p>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Layer 1: Physical Layer</h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <p><strong>Function:</strong> Transmission of raw bits over physical medium</p>
+                        <p><strong>Protocols:</strong> Ethernet, USB, Bluetooth physical layers</p>
+                        <p><strong>Devices:</strong> Hubs, repeaters, cables, connectors</p>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded border-l-4 border-blue-500">
+                        <p class="font-medium">Example:</p>
+                        <p>The electrical signals traveling through your Ethernet cable operate here.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TCP/IP Model -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">The TCP/IP Model: Structure and Comparison with OSI</h2>
+                <p class="mb-4">While the OSI model is theoretical, the TCP/IP model (also called the Internet Protocol Suite) is the practical implementation that powers the modern Internet. It combines some OSI layers into four broader categories:</p>
+                
+                <div class="overflow-x-auto mb-6">
+                    <table class="min-w-full bg-white border border-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="py-2 px-4 border-b">TCP/IP Layer</th>
+                                <th class="py-2 px-4 border-b">OSI Layers</th>
+                                <th class="py-2 px-4 border-b">Key Protocols</th>
+                                <th class="py-2 px-4 border-b">Function</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="py-2 px-4 border-b">Application</td>
+                                <td class="py-2 px-4 border-b">Application, Presentation, Session</td>
+                                <td class="py-2 px-4 border-b">HTTP, FTP, DNS, SMTP</td>
+                                <td class="py-2 px-4 border-b">End-user services</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border-b">Transport</td>
+                                <td class="py-2 px-4 border-b">Transport</td>
+                                <td class="py-2 px-4 border-b">TCP, UDP</td>
+                                <td class="py-2 px-4 border-b">End-to-end communication</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">Internet</td>
+                                <td class="py-2 px-4 border-b">Network</td>
+                                <td class="py-2 px-4 border-b">IP, ICMP, ARP</td>
+                                <td class="py-2 px-4 border-b">Logical addressing and routing</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border-b">Network Access</td>
+                                <td class="py-2 px-4 border-b">Data Link, Physical</td>
+                                <td class="py-2 px-4 border-b">Ethernet, Wi-Fi</td>
+                                <td class="py-2 px-4 border-b">Physical transmission</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Key Differences Between OSI and TCP/IP</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-red-50 p-4 rounded-lg border-l-4 border-red-500">
+                        <h4 class="font-semibold text-red-700 mb-2">OSI Model</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>7 distinct layers</li>
+                            <li>More theoretical framework</li>
+                            <li>Clear separation between presentation and session functions</li>
+                            <li>Developed by ISO as a universal standard</li>
+                        </ul>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+                        <h4 class="font-semibold text-green-700 mb-2">TCP/IP Model</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>4 combined layers</li>
+                            <li>Practical implementation</li>
+                            <li>No formal session or presentation layers</li>
+                            <li>Evolved from ARPANET research</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-6">
+                    <h3 class="text-lg font-medium text-yellow-800 mb-2">Common Pitfall</h3>
+                    <p>Many beginners confuse the layers between models. Remember that TCP/IP's Application layer encompasses three OSI layers, while its Network Access layer combines two OSI layers.</p>
+                </div>
+            </section>
+
+            <!-- IEEE and IETF Standards -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">IEEE and IETF Standards: Shaping Network Protocols</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">IEEE Standards</h3>
+                        <p>The Institute of Electrical and Electronics Engineers (IEEE) develops standards primarily for the physical and data link layers:</p>
+                        <ul class="list-disc pl-6 mt-2 space-y-1">
+                            <li><strong>IEEE 802.3:</strong> Ethernet (wired networking)</li>
+                            <li><strong>IEEE 802.11:</strong> Wi-Fi (wireless networking)</li>
+                            <li><strong>IEEE 802.1Q:</strong> VLAN tagging</li>
+                            <li><strong>IEEE 802.1X:</strong> Network access control</li>
+                        </ul>
+                        <p class="mt-3">IEEE standards ensure hardware interoperability. For example, an 802.11ac Wi-Fi router will work with any 802.11ac-compatible device.</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">IETF Standards</h3>
+                        <p>The Internet Engineering Task Force (IETF) develops Internet standards through Request for Comments (RFC) documents:</p>
+                        <ul class="list-disc pl-6 mt-2 space-y-1">
+                            <li><strong>RFC 791:</strong> Internet Protocol (IP)</li>
+                            <li><strong>RFC 793:</strong> Transmission Control Protocol (TCP)</li>
+                            <li><strong>RFC 826:</strong> Address Resolution Protocol (ARP)</li>
+                            <li><strong>RFC 2616:</strong> Hypertext Transfer Protocol (HTTP/1.1)</li>
+                        </ul>
+                        <p class="mt-3">IETF standards evolve through community consensus, with new RFCs updating or obsoleting previous ones.</p>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h3 class="text-xl font-medium text-gray-800 mb-3">Standards Development Process</h3>
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-blue-700 mb-2">IEEE Process</h4>
+                            <ol class="list-decimal pl-6 space-y-1">
+                                <li>Project authorization</li>
+                                <li>Working group formation</li>
+                                <li>Draft development</li>
+                                <li>Balloting and approval</li>
+                                <li>Publication</li>
+                            </ol>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-blue-700 mb-2">IETF Process</h4>
+                            <ol class="list-decimal pl-6 space-y-1">
+                                <li>Internet Draft submission</li>
+                                <li>Working group discussion</li>
+                                <li>RFC Editor review</li>
+                                <li>Publication as Proposed Standard</li>
+                                <li>Progression to Internet Standard</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Encapsulation and Decapsulation -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Encapsulation and Decapsulation: Data Flow Across Layers</h2>
+                
+                <p class="mb-4">As data moves through the network layers, it undergoes encapsulation (adding headers) when sending and decapsulation (removing headers) when receiving. This process ensures each layer can communicate with its peer layer on another device.</p>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                    <div id="encapsulation" class="w-full h-96 relative">
+                        <!-- Encapsulation visualization will be inserted here by JavaScript -->
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Figure 2: Data encapsulation process through the OSI model layers</p>
+                </div>
+
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Protocol Data Units (PDUs)</h3>
+                <div class="overflow-x-auto mb-6">
+                    <table class="min-w-full bg-white border border-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="py-2 px-4 border-b">OSI Layer</th>
+                                <th class="py-2 px-4 border-b">PDU Name</th>
+                                <th class="py-2 px-4 border-b">Contents</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="py-2 px-4 border-b">Application</td>
+                                <td class="py-2 px-4 border-b">Data</td>
+                                <td class="py-2 px-4 border-b">User data</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border-b">Presentation</td>
+                                <td class="py-2 px-4 border-b">Data</td>
+                                <td class="py-2 px-4 border-b">Encrypted/compressed data</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">Session</td>
+                                <td class="py-2 px-4 border-b">Data</td>
+                                <td class="py-2 px-4 border-b">Session information + data</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border-b">Transport</td>
+                                <td class="py-2 px-4 border-b">Segment (TCP) or Datagram (UDP)</td>
+                                <td class="py-2 px-4 border-b">Transport header + data</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">Network</td>
+                                <td class="py-2 px-4 border-b">Packet</td>
+                                <td class="py-2 px-4 border-b">IP header + segment</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border-b">Data Link</td>
+                                <td class="py-2 px-4 border-b">Frame</td>
+                                <td class="py-2 px-4 border-b">MAC header + packet + trailer</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">Physical</td>
+                                <td class="py-2 px-4 border-b">Bits</td>
+                                <td class="py-2 px-4 border-b">Binary transmission</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Encapsulation Example: HTTP Request</h3>
+                <ol class="list-decimal pl-6 space-y-3">
+                    <li><strong>Application:</strong> Browser creates HTTP GET request</li>
+                    <li><strong>Presentation:</strong> Data may be compressed (gzip) or encrypted (TLS)</li>
+                    <li><strong>Session:</strong> Session ID added if using cookies</li>
+                    <li><strong>Transport:</strong> TCP header added with source/destination ports</li>
+                    <li><strong>Network:</strong> IP header added with source/destination IPs</li>
+                    <li><strong>Data Link:</strong> Ethernet header added with MAC addresses</li>
+                    <li><strong>Physical:</strong> Converted to electrical/optical signals</li>
+                </ol>
+            </section>
+
+            <!-- Practical Example 1: Wireshark -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Practical Example: Analyzing Packet Flow with Wireshark</h2>
+                
+                <p class="mb-4">Wireshark is a powerful network protocol analyzer that lets us see encapsulation in action. Here's how to examine a simple HTTP request:</p>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Step 1: Capture Traffic</h3>
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>Install Wireshark from <a href="https://www.wireshark.org/" class="text-blue-600 hover:underline">wireshark.org</a></li>
+                        <li>Select your network interface (e.g., Wi-Fi or Ethernet)</li>
+                        <li>Start capturing packets</li>
+                    </ol>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Step 2: Filter HTTP Traffic</h3>
+                    <pre class="text-sm bg-gray-100 p-2 rounded overflow-x-auto"><code class="language-text">
+# In Wireshark's filter bar:
+http and ip.dst == example.com
+                    </code></pre>
+                    <p class="mt-2">This shows only HTTP traffic to example.com</p>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Step 3: Examine Layers</h3>
+                    <p>Select a packet and expand sections in the packet details pane:</p>
+                    <pre class="text-sm bg-gray-100 p-2 rounded overflow-x-auto"><code class="language-text">
+Frame (Physical layer - bits)
+Ethernet II (Data Link - MAC addresses)
+Internet Protocol Version 4 (Network - IP addresses)
+Transmission Control Protocol (Transport - ports)
+Hypertext Transfer Protocol (Application - HTTP)
+                    </code></pre>
+                </div>
+                
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                    <h3 class="text-lg font-medium text-yellow-800 mb-2">Troubleshooting Tip</h3>
+                    <p>If you can't see higher layer protocols, check if encryption is preventing inspection. For HTTPS traffic, you'll only see TCP segments unless you configure Wireshark with server keys.</p>
+                </div>
+            </section>
+
+            <!-- Practical Example 2: OSI Visualization -->
+            <section class="p-6">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Visualizing the OSI Model</h2>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                    <div id="osi-animation" class="w-full h-96 relative">
+                        <!-- OSI animation will be inserted here by JavaScript -->
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Figure 3: Interactive OSI model showing encapsulation process</p>
+                </div>
+                
+                <h3 class="text-xl font-medium text-gray-800 mb-3">How to Read This Visualization</h3>
+                <p>The animation demonstrates how data moves through the OSI model layers:</p>
+                <ul class="list-disc pl-6 mt-2 space-y-1">
+                    <li><strong>Top-down (sending):</strong> Data is encapsulated with headers at each layer</li>
+                    <li><strong>Bottom-up (receiving):</strong> Headers are removed during decapsulation</li>
+                    <li><strong>Peer communication:</strong> Each layer communicates with its counterpart on the other device</li>
+                </ul>
+            </section>
+
+            <!-- Summary -->
+            <section class="p-6 bg-blue-50 border-t border-blue-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Chapter Summary</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Key Concepts</h3>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>The OSI model's seven layers provide a framework for understanding network communication</li>
+                            <li>The TCP/IP model is the practical implementation with four layers</li>
+                            <li>IEEE standards govern physical and data link layers, while IETF RFCs define Internet protocols</li>
+                            <li>Encapsulation adds headers as data moves down the stack; decapsulation removes them</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Best Practices</h3>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>When troubleshooting, identify which layer the problem occurs at</li>
+                            <li>Use tools like Wireshark to analyze actual protocol behavior</li>
+                            <li>Refer to official IEEE and IETF standards for implementation details</li>
+                            <li>Remember that real-world networks often mix models (e.g., TCP/IP with OSI terminology)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Further Reading -->
+            <section class="p-6">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Further Reading</h2>
+                
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Books:</strong> "Computer Networking: A Top-Down Approach" by Kurose and Ross (Chapter 1)</li>
+                    <li><strong>RFCs:</strong> 
+                        <a href="https://tools.ietf.org/html/rfc791" class="text-blue-600 hover:underline">RFC 791 (IP)</a>, 
+                        <a href="https://tools.ietf.org/html/rfc793" class="text-blue-600 hover:underline">RFC 793 (TCP)</a>
+                    </li>
+                    <li><strong>IEEE Standards:</strong> 
+                        <a href="https://standards.ieee.org/standard/802_3-2018.html" class="text-blue-600 hover:underline">802.3 (Ethernet)</a>, 
+                        <a href="https://standards.ieee.org/standard/802_11-2020.html" class="text-blue-600 hover:underline">802.11 (Wi-Fi)</a>
+                    </li>
+                    <li><strong>Tools:</strong> Wireshark for packet analysis, Cisco Packet Tracer for simulation</li>
+                </ul>
+            </section>
+
+            <!-- Navigation -->
+            <section class="p-6 bg-gray-50 border-t border-gray-200">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <a href="chapter1.html" class="text-blue-600 hover:text-blue-800 mb-4 md:mb-0">← Previous Chapter: Introduction to Computer Networks</a>
+                    <a href="chapter3.html" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Next Chapter: Transmission Media & Hardware →</a>
+                </div>
+            </section>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>© 2025 Computer Networks: From Scratch to Mastery | Created by a CSE Graduate</p>
+            <p class="mt-2 text-gray-400">Content powered by AI + Human Review</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Visualizations -->
+    <script>
+        // OSI Model Visualization
+        function drawOSIModel() {
+            const container = document.getElementById('osi-model');
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+            const layerHeight = height / 7;
+            
+            // Layer names and colors
+            const layers = [
+                { name: "Application", color: "bg-purple-200", protocols: "HTTP, FTP, SMTP" },
+                { name: "Presentation", color: "bg-blue-200", protocols: "SSL, JPEG, MPEG" },
+                { name: "Session", color: "bg-green-200", protocols: "NetBIOS, RPC" },
+                { name: "Transport", color: "bg-yellow-200", protocols: "TCP, UDP" },
+                { name: "Network", color: "bg-orange-200", protocols: "IP, ICMP" },
+                { name: "Data Link", color: "bg-red-200", protocols: "Ethernet, MAC" },
+                { name: "Physical", color: "bg-gray-200", protocols: "Bits, Signals" }
+            ];
+            
+            // Draw layers
+            layers.forEach((layer, index) => {
+                const layerElement = document.createElement('div');
+                layerElement.className = `absolute border border-gray-300 ${layer.color} flex items-center justify-between px-4`;
+                layerElement.style.width = `${width}px`;
+                layerElement.style.height = `${layerHeight}px`;
+                layerElement.style.top = `${index * layerHeight}px`;
+                
+                layerElement.innerHTML = `
+                    <div class="font-bold">Layer ${7-index}: ${layer.name}</div>
+                    <div class="text-sm">${layer.protocols}</div>
+                `;
+                
+                container.appendChild(layerElement);
+            });
+        }
+        
+        // Encapsulation Visualization
+        function drawEncapsulation() {
+            const container = document.getElementById('encapsulation');
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+            
+            // Create sending and receiving stacks
+            const stackWidth = width * 0.4;
+            const stackHeight = height * 0.8;
+            const centerX = width / 2;
+            
+            // Draw sending stack
+            const sendStack = document.createElement('div');
+            sendStack.className = 'absolute border-2 border-blue-500 bg-blue-50';
+            sendStack.style.width = `${stackWidth}px`;
+            sendStack.style.height = `${stackHeight}px`;
+            sendStack.style.left = '5%';
+            sendStack.style.top = '10%';
+            container.appendChild(sendStack);
+            
+            // Draw receiving stack
+            const recvStack = document.createElement('div');
+            recvStack.className = 'absolute border-2 border-green-500 bg-green-50';
+            recvStack.style.width = `${stackWidth}px`;
+            recvStack.style.height = `${stackHeight}px`;
+            recvStack.style.right = '5%';
+            recvStack.style.top = '10%';
+            container.appendChild(recvStack);
+            
+            // Draw layers in both stacks
+            const layerHeight = stackHeight / 7;
+            const layers = [
+                "Application", "Presentation", "Session", "Transport", 
+                "Network", "Data Link", "Physical"
+            ];
+            
+            layers.forEach((layer, index) => {
+                // Sending side layer
+                const sendLayer = document.createElement('div');
+                sendLayer.className = 'absolute border-b border-blue-300 bg-blue-100 flex items-center px-2';
+                sendLayer.style.width = `${stackWidth}px`;
+                sendLayer.style.height = `${layerHeight}px`;
+                sendLayer.style.left = '5%';
+                sendLayer.style.top = `${10 + (index * layerHeight / stackHeight * 100)}%`;
+                sendLayer.textContent = layer;
+                container.appendChild(sendLayer);
+                
+                // Receiving side layer
+                const recvLayer = document.createElement('div');
+                recvLayer.className = 'absolute border-b border-green-300 bg-green-100 flex items-center px-2';
+                recvLayer.style.width = `${stackWidth}px`;
+                recvLayer.style.height = `${layerHeight}px`;
+                recvLayer.style.right = '5%';
+                recvLayer.style.top = `${10 + (index * layerHeight / stackHeight * 100)}%`;
+                recvLayer.textContent = layer;
+                container.appendChild(recvLayer);
+            });
+            
+            // Draw encapsulation arrows
+            for (let i = 0; i < 7; i++) {
+                const arrow = document.createElement('div');
+                arrow.className = 'absolute bg-gray-200';
+                arrow.style.width = '2px';
+                arrow.style.height = '20px';
+                arrow.style.left = `${centerX}px`;
+                arrow.style.top = `${15 + (i * layerHeight / stackHeight * 100)}%`;
+                container.appendChild(arrow);
+                
+                // Arrow head
+                if (i < 6) {
+                    const arrowHead = document.createElement('div');
+                    arrowHead.className = 'absolute border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-gray-400';
+                    arrowHead.style.left = `${centerX - 8}px`;
+                    arrowHead.style.top = `${15 + (i * layerHeight / stackHeight * 100) + 20}%`;
+                    container.appendChild(arrowHead);
+                }
+            }
+            
+            // Add labels
+            const sendLabel = document.createElement('div');
+            sendLabel.className = 'absolute text-sm font-bold text-blue-700';
+            sendLabel.textContent = 'Sending (Encapsulation)';
+            sendLabel.style.left = '5%';
+            sendLabel.style.top = '5%';
+            container.appendChild(sendLabel);
+            
+            const recvLabel = document.createElement('div');
+            recvLabel.className = 'absolute text-sm font-bold text-green-700';
+            recvLabel.textContent = 'Receiving (Decapsulation)';
+            recvLabel.style.right = '5%';
+            recvLabel.style.top = '5%';
+            container.appendChild(recvLabel);
+        }
+        
+        // OSI Animation
+        function animateOSI() {
+            const container = document.getElementById('osi-animation');
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+            
+            // Create canvas
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            container.appendChild(canvas);
+            const ctx = canvas.getContext('2d');
+            
+            // Layer definitions
+            const layers = [
+                { name: "Application", color: "#d8b4fe" },
+                { name: "Presentation", color: "#bfdbfe" },
+                { name: "Session", color: "#a7f3d0" },
+                { name: "Transport", color: "#fef08a" },
+                { name: "Network", color: "#fdba74" },
+                { name: "Data Link", color: "#fca5a5" },
+                { name: "Physical", color: "#e5e7eb" }
+            ];
+            
+            const layerHeight = height / layers.length;
+            let dataY = layerHeight / 2;
+            let direction = 1; // 1 for down, -1 for up
+            
+            function drawFrame() {
+                // Clear canvas
+                ctx.clearRect(0, 0, width, height);
+                
+                // Draw layers
+                layers.forEach((layer, index) => {
+                    ctx.fillStyle = layer.color;
+                    ctx.fillRect(0, index * layerHeight, width, layerHeight);
+                    
+                    ctx.strokeStyle = "#6b7280";
+                    ctx.strokeRect(0, index * layerHeight, width, layerHeight);
+                    
+                    ctx.fillStyle = "#1f2937";
+                    ctx.font = "bold 14px Arial";
+                    ctx.fillText(`Layer ${layers.length - index}: ${layer.name}`, 10, index * layerHeight + 20);
+                });
+                
+                // Draw data packet
+                ctx.fillStyle = "#4f46e5";
+                ctx.beginPath();
+                ctx.arc(width / 2, dataY, 15, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Draw header segments
+                for (let i = 0; i < 3; i++) {
+                    ctx.fillStyle = `rgba(99, 102, 241, ${0.7 - i * 0.2})`;
+                    ctx.beginPath();
+                    ctx.arc(width / 2, dataY, 15 + (i + 1) * 5, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                // Animate
+                dataY += direction * 2;
+                
+                if (dataY > height - layerHeight / 2) {
+                    direction = -1;
+                } else if (dataY < layerHeight / 2) {
+                    direction = 1;
+                }
+                
+                requestAnimationFrame(drawFrame);
+            }
+            
+            drawFrame();
+        }
+        
+        // Initialize visualizations when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            drawOSIModel();
+            drawEncapsulation();
+            animateOSI();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 1: Introduction to Computer Networks | Computer Networks: From Scratch to Mastery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Navigation -->
+    <nav class="bg-blue-800 text-white p-4 shadow-md">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <a href="index.html" class="text-xl font-bold mb-4 md:mb-0">Computer Networks: From Scratch to Mastery</a>
+            <div class="flex flex-wrap gap-4">
+                <a href="module1.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 1: Foundations</a>
+                <a href="module2.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 2: Protocols</a>
+                <a href="module3.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 3: Advanced</a>
+                <a href="module4.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 4: Applications</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-white py-12 shadow-sm">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold text-blue-800 mb-4">Chapter 1: Introduction to Computer Networks</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">Understanding the fundamental concepts, types, and topologies that form the backbone of modern networking</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <article class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+            <!-- Introduction -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Introduction</h2>
+                <p class="mb-4">Welcome to the first chapter of our comprehensive computer networking series. As a CSE graduate or professional, understanding networks is crucial in today's interconnected world. This chapter lays the foundation for all subsequent learning by introducing key concepts that every network professional must master.</p>
+                <p>By the end of this chapter, you will be able to:</p>
+                <ul class="list-disc pl-6 mt-2 mb-4 space-y-1">
+                    <li>Define what a computer network is and identify its components</li>
+                    <li>Explain the advantages of using computer networks</li>
+                    <li>Differentiate between LAN, WAN, MAN, and PAN networks</li>
+                    <li>Compare various network topologies and their applications</li>
+                    <li>Recognize real-world networking applications in IoT, cloud, and VPNs</li>
+                </ul>
+            </section>
+
+            <!-- What is a Computer Network? -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">What is a Computer Network?</h2>
+                <p class="mb-4">A <strong>computer network</strong> is a system of interconnected computing devices that can exchange data and share resources. These devices, called <strong>nodes</strong>, communicate through established <strong>communication protocols</strong> over digital connections.</p>
+                
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Key Components:</h3>
+                <div class="grid md:grid-cols-3 gap-4 mb-4">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-blue-600">Nodes</h4>
+                        <p>End devices (computers, phones, servers) or networking devices (routers, switches)</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-blue-600">Links</h4>
+                        <p>Physical (cables) or wireless connections between nodes</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-blue-600">Protocols</h4>
+                        <p>Rules governing communication (TCP/IP, HTTP, Ethernet)</p>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Purpose of Networking:</h3>
+                <p class="mb-4">Networks enable:</p>
+                <ul class="list-disc pl-6 mb-4 space-y-1">
+                    <li><strong>Resource sharing:</strong> Printers, files, applications</li>
+                    <li><strong>Communication:</strong> Email, video conferencing</li>
+                    <li><strong>Data exchange:</strong> Database access, file transfers</li>
+                    <li><strong>Remote access:</strong> Cloud services, VPNs</li>
+                </ul>
+            </section>
+
+            <!-- Advantages of Computer Networks -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Advantages of Computer Networks</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">1. Resource Sharing</h3>
+                        <p>Networks allow multiple users to share expensive resources like printers, scanners, and storage devices. For example:</p>
+                        <ul class="list-disc pl-6 mt-2 mb-2 space-y-1">
+                            <li>A single high-quality printer can serve an entire office</li>
+                            <li>Centralized file servers enable collaborative document editing</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">2. Communication Efficiency</h3>
+                        <p>Modern networks enable real-time communication through:</p>
+                        <ul class="list-disc pl-6 mt-2 mb-2 space-y-1">
+                            <li>Email and instant messaging</li>
+                            <li>Video conferencing (Zoom, Teams)</li>
+                            <li>Collaboration tools (Slack, SharePoint)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">3. Scalability</h3>
+                        <p>Networks can grow with organizational needs:</p>
+                        <ul class="list-disc pl-6 mt-2 mb-2 space-y-1">
+                            <li>Adding new users requires minimal infrastructure</li>
+                            <li>Cloud services provide on-demand scaling</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">4. Cost Savings</h3>
+                        <p>Centralized resources reduce expenses:</p>
+                        <ul class="list-disc pl-6 mt-2 mb-2 space-y-1">
+                            <li>Shared internet connections</li>
+                            <li>Reduced hardware duplication</li>
+                            <li>Lower software licensing costs</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Types of Networks -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Types of Networks</h2>
+                
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="py-2 px-4 border-b">Type</th>
+                                <th class="py-2 px-4 border-b">Scope</th>
+                                <th class="py-2 px-4 border-b">Speed</th>
+                                <th class="py-2 px-4 border-b">Example Use Cases</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="py-2 px-4 border-b">LAN (Local Area Network)</td>
+                                <td class="py-2 px-4 border-b">Single building/campus</td>
+                                <td class="py-2 px-4 border-b">1 Gbps - 10 Gbps</td>
+                                <td class="py-2 px-4 border-b">Office networks, school labs</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border-b">WAN (Wide Area Network)</td>
+                                <td class="py-2 px-4 border-b">Cities/countries</td>
+                                <td class="py-2 px-4 border-b">1 Mbps - 100 Mbps</td>
+                                <td class="py-2 px-4 border-b">Internet, corporate networks</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">MAN (Metropolitan Area Network)</td>
+                                <td class="py-2 px-4 border-b">City-wide</td>
+                                <td class="py-2 px-4 border-b">100 Mbps - 1 Gbps</td>
+                                <td class="py-2 px-4 border-b">City WiFi, cable TV networks</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border-b">PAN (Personal Area Network)</td>
+                                <td class="py-2 px-4 border-b">Personal space (10m)</td>
+                                <td class="py-2 px-4 border-b">1 Mbps - 100 Mbps</td>
+                                <td class="py-2 px-4 border-b">Bluetooth devices, smartwatches</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">LAN (Local Area Network)</h3>
+                <p class="mb-4">LANs connect devices in a limited geographical area, typically using Ethernet (IEEE 802.3) or WiFi (IEEE 802.11). Characteristics:</p>
+                <ul class="list-disc pl-6 mb-4 space-y-1">
+                    <li>High bandwidth (1Gbps+ common)</li>
+                    <li>Low latency (typically <1ms)</li>
+                    <li>Private ownership and management</li>
+                </ul>
+
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">WAN (Wide Area Network)</h3>
+                <p class="mb-4">WANs span large distances using leased lines or public infrastructure. Key aspects:</p>
+                <ul class="list-disc pl-6 mb-4 space-y-1">
+                    <li>Lower speeds due to distance limitations</li>
+                    <li>Higher latency (50-300ms typical)</li>
+                    <li>Often uses TCP/IP protocols</li>
+                </ul>
+            </section>
+
+            <!-- Network Topologies -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Network Topologies</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Star Topology</h3>
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <pre class="text-sm bg-gray-100 p-2 rounded overflow-x-auto">
+            [PC1]       [PC2]
+              \         /
+               \       /
+               [Switch]
+               /       \
+              /         \
+            [PC3]       [PC4]
+                            </pre>
+                        </div>
+                        <p class="mb-2"><strong>Advantages:</strong></p>
+                        <ul class="list-disc pl-6 mb-2 space-y-1">
+                            <li>Easy to install and manage</li>
+                            <li>Failure of one node doesn't affect others</li>
+                        </ul>
+                        <p class="mb-2"><strong>Disadvantages:</strong></p>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Central switch is a single point of failure</li>
+                            <li>Requires more cabling than bus topology</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Mesh Topology</h3>
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <pre class="text-sm bg-gray-100 p-2 rounded overflow-x-auto">
+            [PC1]──────[PC2]
+             | \      / |
+             |  \    /  |
+             |  [PC3]  |
+             |  /    \  |
+             | /      \ |
+            [PC4]──────[PC5]
+                            </pre>
+                        </div>
+                        <p class="mb-2"><strong>Advantages:</strong></p>
+                        <ul class="list-disc pl-6 mb-2 space-y-1">
+                            <li>Highly reliable - multiple paths available</li>
+                            <li>Good for critical networks</li>
+                        </ul>
+                        <p class="mb-2"><strong>Disadvantages:</strong></p>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Expensive to implement</li>
+                            <li>Complex to manage</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Bus Topology</h3>
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <pre class="text-sm bg-gray-100 p-2 rounded overflow-x-auto">
+            [PC1]──[PC2]──[PC3]──[PC4]
+             |      |      |      |
+            ========================
+                  (Backbone Cable)
+                            </pre>
+                        </div>
+                        <p class="mb-2"><strong>Advantages:</strong></p>
+                        <ul class="list-disc pl-6 mb-2 space-y-1">
+                            <li>Uses less cabling than star</li>
+                            <li>Simple to implement</li>
+                        </ul>
+                        <p class="mb-2"><strong>Disadvantages:</strong></p>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Single point of failure (backbone)</li>
+                            <li>Difficult to troubleshoot</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Ring Topology</h3>
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <pre class="text-sm bg-gray-100 p-2 rounded overflow-x-auto">
+                     _____________
+                    /             \
+            [PC1]──[PC2]      [PC4]
+                    \      /
+                     [PC3]
+                            </pre>
+                        </div>
+                        <p class="mb-2"><strong>Advantages:</strong></p>
+                        <ul class="list-disc pl-6 mb-2 space-y-1">
+                            <li>Equal network access for all nodes</li>
+                            <li>Orderly network access</li>
+                        </ul>
+                        <p class="mb-2"><strong>Disadvantages:</strong></p>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Failure of one node can break the ring</li>
+                            <li>Difficult to add/remove nodes</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Topology Selection Guide</h3>
+                <p class="mb-4">Choosing the right topology depends on:</p>
+                <ul class="list-disc pl-6 mb-4 space-y-1">
+                    <li><strong>Cost:</strong> Star requires more cabling than bus</li>
+                    <li><strong>Reliability:</strong> Mesh offers redundancy</li>
+                    <li><strong>Scalability:</strong> Star is easiest to expand</li>
+                    <li><strong>Performance:</strong> Ring provides fair access</li>
+                </ul>
+            </section>
+
+            <!-- Real-World Applications -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Real-World Applications</h2>
+                
+                <div class="grid md:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">IoT (Smart Homes)</h3>
+                        <p>Modern smart homes use PANs (Bluetooth, Zigbee) and LANs (WiFi) to connect:</p>
+                        <ul class="list-disc pl-6 mt-2 space-y-1">
+                            <li>Smart thermostats</li>
+                            <li>Security cameras</li>
+                            <li>Voice assistants</li>
+                        </ul>
+                        <p class="mt-3"><strong>Network Requirements:</strong></p>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Low power consumption</li>
+                            <li>Reliable connectivity</li>
+                            <li>Secure communication</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Cloud Computing</h3>
+                        <p>Services like AWS and Google Cloud rely on massive WANs with:</p>
+                        <ul class="list-disc pl-6 mt-2 space-y-1">
+                            <li>Global data centers</li>
+                            <li>Content delivery networks</li>
+                            <li>Virtual private clouds</li>
+                        </ul>
+                        <p class="mt-3"><strong>Network Requirements:</strong></p>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>High bandwidth</li>
+                            <li>Low latency</li>
+                            <li>Redundant connections</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">VPNs (Virtual Private Networks)</h3>
+                        <p>VPNs create secure tunnels over public networks for:</p>
+                        <ul class="list-disc pl-6 mt-2 space-y-1">
+                            <li>Remote work access</li>
+                            <li>Bypassing geo-restrictions</li>
+                            <li>Secure public WiFi usage</li>
+                        </ul>
+                        <p class="mt-3"><strong>Network Requirements:</strong></p>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Encryption protocols</li>
+                            <li>Reliable authentication</li>
+                            <li>Bandwidth optimization</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Practical Example 1: Setting Up a LAN -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Practical Example: Setting Up a Simple LAN</h2>
+                
+                <p class="mb-4">Let's walk through creating a basic LAN with 4 computers and a switch using Cisco Packet Tracer:</p>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Step 1: Add Devices</h3>
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>Drag 4 "PC" devices and 1 "Switch" (2960 model) to workspace</li>
+                        <li>Connect each PC to the switch using straight-through cables</li>
+                    </ol>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Step 2: Configure IP Addresses</h3>
+                    <p class="mb-2">Assign IP addresses in the same subnet (e.g., 192.168.1.0/24):</p>
+                    <pre class="text-sm bg-gray-100 p-2 rounded overflow-x-auto"><code class="language-text">
+PC1: 192.168.1.1/24
+PC2: 192.168.1.2/24
+PC3: 192.168.1.3/24
+PC4: 192.168.1.4/24
+                    </code></pre>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Step 3: Test Connectivity</h3>
+                    <p class="mb-2">Use the "ping" command from PC1 to verify connections:</p>
+                    <pre class="text-sm bg-gray-100 p-2 rounded overflow-x-auto"><code class="language-text">
+PC1> ping 192.168.1.2
+Pinging 192.168.1.2 with 32 bytes of data:
+Reply from 192.168.1.2: bytes=32 time=1ms TTL=128
+Reply from 192.168.1.2: bytes=32 time=1ms TTL=128
+                    </code></pre>
+                </div>
+                
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
+                    <h3 class="text-lg font-medium text-yellow-800 mb-2">Common Pitfalls</h3>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Using wrong cable types (straight-through vs crossover)</li>
+                        <li>IP addresses in different subnets</li>
+                        <li>Forgetting to turn on devices</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Practical Example 2: Visualizing Topologies -->
+            <section class="p-6">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Visualizing Network Topologies</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Star Topology Visualization</h3>
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <div id="star-topology" class="w-full h-64 relative">
+                                <!-- Nodes will be added by JavaScript -->
+                            </div>
+                        </div>
+                        <p class="mb-2">This interactive visualization shows how all devices connect to a central switch in a star topology.</p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Data Flow Animation</h3>
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <div id="data-flow" class="w-full h-64 relative">
+                                <!-- Animation will be added by JavaScript -->
+                            </div>
+                        </div>
+                        <p class="mb-2">Watch how data packets travel between nodes in a simple network.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section class="p-6 bg-blue-50 border-t border-blue-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Chapter Summary</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Key Concepts</h3>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Computer networks enable resource sharing and communication between devices</li>
+                            <li>LANs serve small areas, WANs connect large distances</li>
+                            <li>Topologies determine physical/logical layout (star, mesh, bus, ring)</li>
+                            <li>Modern applications include IoT, cloud computing, and VPNs</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Best Practices</h3>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Choose topology based on cost, reliability, and scalability needs</li>
+                            <li>Always test basic connectivity with ping</li>
+                            <li>Document network configurations thoroughly</li>
+                            <li>Plan for future growth when designing networks</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Further Reading -->
+            <section class="p-6">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Further Reading</h2>
+                
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Books:</strong> "Computer Networking: A Top-Down Approach" by Kurose and Ross</li>
+                    <li><strong>Online Courses:</strong> Cisco Networking Academy (NetAcad)</li>
+                    <li><strong>RFCs:</strong> RFC 1180 - TCP/IP Tutorial</li>
+                    <li><strong>Tools:</strong> Wireshark for network analysis, Packet Tracer for simulation</li>
+                </ul>
+            </section>
+
+            <!-- Navigation -->
+            <section class="p-6 bg-gray-50 border-t border-gray-200">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <a href="index.html" class="text-blue-600 hover:text-blue-800 mb-4 md:mb-0">← Back to Home</a>
+                    <a href="chapter2.html" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Next Chapter: Network Models & Standards →</a>
+                </div>
+            </section>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>© 2025 Computer Networks: From Scratch to Mastery | Created by a CSE Graduate</p>
+            <p class="mt-2 text-gray-400">Content powered by AI + Human Review</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Visualizations -->
+    <script>
+        // Star Topology Visualization
+        function drawStarTopology() {
+            const container = document.getElementById('star-topology');
+            const centerX = container.offsetWidth / 2;
+            const centerY = container.offsetHeight / 2;
+            const radius = Math.min(container.offsetWidth, container.offsetHeight) * 0.4;
+            
+            // Create central switch
+            const switchElement = document.createElement('div');
+            switchElement.className = 'absolute bg-blue-600 text-white rounded-full flex items-center justify-center font-bold';
+            switchElement.style.width = '60px';
+            switchElement.style.height = '60px';
+            switchElement.style.left = `${centerX - 30}px`;
+            switchElement.style.top = `${centerY - 30}px`;
+            switchElement.textContent = 'SW';
+            container.appendChild(switchElement);
+            
+            // Create PCs
+            const angles = [0, 90, 180, 270];
+            angles.forEach((angle, index) => {
+                const radian = angle * (Math.PI / 180);
+                const pcX = centerX + radius * Math.cos(radian);
+                const pcY = centerY + radius * Math.sin(radian);
+                
+                // PC
+                const pcElement = document.createElement('div');
+                pcElement.className = 'absolute bg-green-500 text-white rounded flex items-center justify-center font-medium';
+                pcElement.style.width = '40px';
+                pcElement.style.height = '40px';
+                pcElement.style.left = `${pcX - 20}px`;
+                pcElement.style.top = `${pcY - 20}px`;
+                pcElement.textContent = `PC${index + 1}`;
+                container.appendChild(pcElement);
+                
+                // Connection line
+                const lineElement = document.createElement('div');
+                lineElement.className = 'absolute bg-gray-400';
+                const length = Math.sqrt(Math.pow(pcX - centerX, 2) + Math.pow(pcY - centerY, 2));
+                lineElement.style.width = `${length}px`;
+                lineElement.style.height = '2px';
+                lineElement.style.left = `${centerX}px`;
+                lineElement.style.top = `${centerY}px`;
+                lineElement.style.transformOrigin = '0 0';
+                lineElement.style.transform = `rotate(${angle}deg)`;
+                container.insertBefore(lineElement, switchElement);
+            });
+        }
+        
+        // Data Flow Animation
+        function animateDataFlow() {
+            const container = document.getElementById('data-flow');
+            const centerX = container.offsetWidth / 2;
+            const centerY = container.offsetHeight / 2;
+            const radius = Math.min(container.offsetWidth, container.offsetHeight) * 0.3;
+            
+            // Create devices
+            const devices = [];
+            const angles = [45, 135, 225, 315];
+            angles.forEach((angle, index) => {
+                const radian = angle * (Math.PI / 180);
+                const x = centerX + radius * Math.cos(radian);
+                const y = centerY + radius * Math.sin(radian);
+                
+                const device = document.createElement('div');
+                device.className = 'absolute bg-purple-500 text-white rounded-full flex items-center justify-center font-medium';
+                device.style.width = '40px';
+                device.style.height = '40px';
+                device.style.left = `${x - 20}px`;
+                device.style.top = `${y - 20}px`;
+                device.textContent = `D${index + 1}`;
+                container.appendChild(device);
+                devices.push({element: device, x, y});
+            });
+            
+            // Animate packet
+            let currentDevice = 0;
+            const packet = document.createElement('div');
+            packet.className = 'absolute bg-red-500 rounded-full';
+            packet.style.width = '10px';
+            packet.style.height = '10px';
+            packet.style.left = `${devices[0].x - 5}px`;
+            packet.style.top = `${devices[0].y - 5}px`;
+            container.appendChild(packet);
+            
+            function movePacket() {
+                const nextDevice = (currentDevice + 1) % devices.length;
+                const startX = devices[currentDevice].x;
+                const startY = devices[currentDevice].y;
+                const endX = devices[nextDevice].x;
+                const endY = devices[nextDevice].y;
+                
+                let progress = 0;
+                const duration = 1000; // ms
+                const startTime = performance.now();
+                
+                function animate(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    progress = Math.min(elapsed / duration, 1);
+                    
+                    const x = startX + (endX - startX) * progress;
+                    const y = startY + (endY - startY) * progress;
+                    
+                    packet.style.left = `${x - 5}px`;
+                    packet.style.top = `${y - 5}px`;
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        currentDevice = nextDevice;
+                        setTimeout(movePacket, 500);
+                    }
+                }
+                
+                requestAnimationFrame(animate);
+            }
+            
+            movePacket();
+        }
+        
+        // Initialize visualizations when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            drawStarTopology();
+            animateDataFlow();
+        });
+    </script>
+</body>
+</html>

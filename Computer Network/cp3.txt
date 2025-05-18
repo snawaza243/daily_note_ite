@@ -1,0 +1,69 @@
+You are an expert in computer networks, technical writing, and web development, tasked with creating a detailed tutorial chapter for a blog series titled "Computer Networks: From Scratch to Mastery." The series is designed for CSE graduates and professionals, covering 12 chapters across 4 modules: Foundations of Networking, Protocols & Addressing, Advanced Networking, and Real-World Applications. Generate a comprehensive tutorial for Chapter 3, adhering to the following guidelines:
+
+1. **Content Requirements**:
+   - Provide an in-depth explanation of the chapter’s topics, including theoretical concepts, practical applications, and real-world examples, tailored for both beginners and advanced learners.
+   - Cover the following subtopics thoroughly:
+     - **Guided vs. Unguided Media**: Explain the difference between guided (wired) and unguided (wireless) transmission media, including their characteristics, advantages, and use cases.
+     - **Cables**: Detail the types of guided media:
+       - **Fiber Optic**: Structure (core, cladding), single-mode vs. multi-mode, applications (e.g., long-distance telecom), advantages (high bandwidth, low attenuation).
+       - **Coaxial**: Structure (core, shield), applications (e.g., cable TV, broadband), advantages (noise resistance).
+       - **UTP (Unshielded Twisted Pair)**: Categories (e.g., Cat5e, Cat6), applications (e.g., Ethernet LANs), advantages (cost-effective, flexible).
+     - **Network Devices**: Describe the roles and functionalities of:
+       - **Hubs**: Basic connectivity, broadcast issues, and obsolescence.
+       - **Switches**: Layer 2 functionality, MAC address learning, VLAN support.
+       - **Routers**: Layer 3 routing, IP address handling, inter-network connectivity.
+     - **Network Interface Cards (NICs)**: Role in connecting devices to networks, types (wired, wireless), and configuration basics.
+     - **Wireless Technologies**: Explore:
+       - **Wi-Fi**: Standards (e.g., 802.11ac, 802.11ax), frequency bands (2.4 GHz, 5 GHz), applications (e.g., home/office LANs).
+       - **Bluetooth**: Short-range communication, versions (e.g., 5.0, 5.2), applications (e.g., wireless peripherals).
+       - **5G**: Architecture, millimeter waves, applications (e.g., IoT, autonomous vehicles), advantages (low latency, high speed).
+     - **Performance Metrics**: Explain key metrics affecting transmission media and devices:
+       - **Bandwidth**: Data transfer capacity, measured in Mbps/Gbps.
+       - **Latency**: Delay in data transmission, factors affecting it.
+       - **Attenuation**: Signal loss over distance, mitigation strategies.
+     - **Encapsulation and Decapsulation Process**: Detail the process of encapsulation (data packaging from Application to Physical layer) and decapsulation (unpacking from Physical to Application layer), including headers, payloads, and protocol data units (PDUs) at each layer.
+   - Define key terms (e.g., bandwidth, NIC, attenuation) and explain their significance.
+   - Break down complex concepts into clear, beginner-friendly explanations while maintaining technical depth for advanced learners.
+   - Include at least two practical examples:
+     - A step-by-step example, such as configuring a switch or router in Cisco Packet Tracer to demonstrate device functionality.
+     - A visual example using HTML canvas or HTML elements to illustrate a concept (e.g., a canvas-based diagram comparing cable types, a network device layout, or a 5G network structure).
+   - Highlight common pitfalls (e.g., using incorrect cable categories, misconfiguring NICs), troubleshooting tips (e.g., checking cable connections, diagnosing wireless interference), and best practices (e.g., choosing fiber for high-speed links).
+   - Ensure content builds on Chapter 1 (Introduction to Computer Networks) and Chapter 2 (Network Models & Standards) and aligns with the module goal: "Understand core concepts, models, and physical infrastructure."
+
+2. **Structure**:
+   - **Introduction**: Outline the chapter’s objectives, importance in understanding transmission media and hardware, and its role in the Foundations of Networking module.
+   - **Main Sections**: Organize content into logical sections with clear headings (H2, H3 in HTML) for each subtopic:
+     - Guided vs. Unguided Media: Wired and Wireless Transmission
+     - Cables: Fiber, Coaxial, and UTP
+     - Network Devices: Hubs, Switches, and Routers
+     - Network Interface Cards (NICs): Connecting Devices to Networks
+     - Wireless Technologies: Wi-Fi, Bluetooth, and 5G
+     - Performance Metrics: Bandwidth, Latency, and Attenuation
+     - Practical Example 1: Configuring a Switch or Router in Packet Tracer
+     - Practical Example 2: Visualizing Transmission Media or Devices with HTML Canvas or HTML
+   - **Summary**: Provide key takeaways, reinforcing learning objectives and summarizing key concepts.
+   - **Further Reading**: List reputable resources (e.g., “Computer Networking: A Top-Down Approach” by Kurose and Ross, Cisco Networking Academy, IEEE 802.3 Ethernet Standard).
+   - **Navigation**: Include links to the landing page, previous chapter (Chapter 2), next chapter (Chapter 4), and all modules.
+
+3. **Technical Accuracy**:
+   - Ensure all information is factually correct and up-to-date as of May 18, 2025.
+   - Reference standard protocols and standards (e.g., IEEE 802.3 for Ethernet, IEEE 802.11 for Wi-Fi, 3GPP for 5G).
+   - Avoid outdated technologies unless relevant for context (e.g., coaxial in legacy systems).
+   - Use accurate terminology (e.g., “twisted pair” for UTP, “packet forwarding” for routers).
+
+4. **Output Format**:
+   - Generate content in valid HTML, styled exclusively with Tailwind CSS classes (CDN: https://cdn.tailwindcss.com).
+   - **Prohibit inline CSS**: Do not use inline styles (e.g., style="...") under any circumstances.
+   - Use semantic HTML tags (e.g., <section>, <article>, <h1>, <h2>, <p>, <ul>, <code>).
+   - Ensure responsiveness for desktop and mobile devices using Tailwind’s responsive classes (e.g., sm:, md:, lg:).
+   - Include a navigation bar linking to the landing page and all modules (Module 1: Foundations of Networking, Module 2: Protocols & Addressing, Module 3: Advanced Networking, Module 4: Real-World Applications).
+   - Wrap code snippets (e.g., Packet Tracer commands, JavaScript for canvas) in <pre><code> tags with appropriate language classes (e.g., language-text, language-javascript).
+   - For the canvas/HTML example, include JavaScript within a <script> tag to render a visual representation (e.g., drawing cable types as labeled lines, a network device topology, or a 5G cell structure). Use <canvas> or HTML elements (e.g., <div> or <svg> for devices) styled with Tailwind classes.
+   - Use Tailwind classes for consistent styling (e.g., bg-white, p-6, text-lg, rounded-lg, shadow-md, hover:bg-blue-700).
+   - Structure the HTML with a header, navigation bar, main content, and footer, ensuring the output is ready for direct publishing on a blog platform.
+
+5. **Canvas/HTML Example Guidelines**:
+   - Create a visual example using HTML canvas or HTML elements to illustrate a concept from the chapter (e.g., a diagram comparing fiber, coaxial, and UTP cables; a layout of hubs, switches, and routers in a network; or a 5G network with base stations and devices).
+   - For canvas: Use JavaScript to draw shapes (e.g., lines for cables, rectangles for devices, circles for wireless signals) and label them (e.g., “Fiber Optic”, “Router”).
+   - For HTML elements: Use <div> or <svg> to represent media or devices, styled with Tailwind classes for positioning and appearance.
+   - Ensure the example is visually clear, with a brief explanation of the code and its relevance to the

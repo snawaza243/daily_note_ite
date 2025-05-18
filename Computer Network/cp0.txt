@@ -1,0 +1,57 @@
+i have roadmap of computer network "Complete Learning Roadmap
+Module 1: Foundations of Networking
+Goal: Understand core concepts, models, and physical infrastructure.
+
+Chapter 1: Introduction to Computer Networks
+Definition, Advantages, Types (LAN/WAN/MAN)
+Network Topologies (Star, Mesh, Bus, Ring)
+Real-world Applications (IoT, Cloud, VPNs)
+Chapter 2: Network Models & Standards
+OSI Model (7 Layers Explained)
+TCP/IP Model (vs OSI)
+IEEE, IETF Standards
+Chapter 3: Transmission Media & Hardware
+Cables (Fiber, Coaxial, UTP)
+Network Devices (Hubs, Switches, Routers)
+Wireless Technologies (Wi-Fi, Bluetooth, 5G)
+Module 2: Protocols & Addressing
+Goal: Master IP addressing, protocols, and data flow.
+
+Chapter 4: IP Addressing Basics
+IPv4 vs IPv6
+Subnetting & Supernetting (with Examples)
+Chapter 5: Key Networking Protocols
+HTTP/HTTPS, FTP, SMTP, DNS
+TCP vs UDP (Reliability vs Speed)
+Chapter 6: Routing & Switching
+Routing Algorithms (RIP, OSPF, BGP)
+VLANs and MAC Addresses
+Module 3: Advanced Networking
+Goal: Dive into security, scalability, and modern architectures.
+
+Chapter 7: Network Security Essentials
+Firewalls, IDS/IPS
+Cryptography (SSL/TLS, AES)
+Chapter 8: Cloud & Distributed Networks
+CDNs, SDN (Software-Defined Networking)
+AWS/Azure Networking Basics
+Chapter 9: Troubleshooting & Tools
+Wireshark, Ping, Traceroute
+Common Errors & Fixes
+Module 4: Real-World Applications
+Goal: Apply knowledge to practical scenarios.
+
+Chapter 10: Building a Home Lab
+Setting Up a Router/Server
+Packet Tracer/GNS3 Tutorials
+Chapter 11: Career Preparation
+Common Interview Questions
+Certifications (CCNA, CompTIA Network+)
+Chapter 12: Emerging Trends
+IoT Networks, 6G, Quantum Networking" I need a comprehensive and detailed prompt for each chapter as I am prepare the deitlad blog on each chapter so I need a detailed detailed prompt that will giveme the content in HTML
+
+so lets from chapter .
+give me a detailed prompt for Chapter 1 "Introduction to Computer Networks
+Definition, Advantages, Types (LAN/WAN/MAN)
+Network Topologies (Star, Mesh, Bus, Ring)
+Real-world Applications (IoT, Cloud, VPNs)"  include all the related sub topics and give me an optimized prompt that will give me the detailed content in the form of the html.
