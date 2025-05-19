@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 4: IP Addressing Basics | Computer Networks: From Scratch to Mastery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Navigation -->
+    <nav class="bg-blue-800 text-white p-4 shadow-md">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <a href="index.html" class="text-xl font-bold mb-4 md:mb-0">Computer Networks: From Scratch to Mastery</a>
+            <div class="flex flex-wrap gap-4">
+                <a href="module1.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 1: Foundations</a>
+                <a href="module2.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 2: Protocols</a>
+                <a href="module3.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 3: Advanced</a>
+                <a href="module4.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 4: Applications</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-white py-12 shadow-sm">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold text-blue-800 mb-4">Chapter 4: IP Addressing Basics</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">Understanding IPv4, IPv6, subnetting, and address resolution</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <article class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+            <!-- Introduction -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Introduction</h2>
+                <p class="mb-4">IP addressing is the foundation of network communication, enabling devices to identify and locate each other. This chapter explores both IPv4 and IPv6 addressing schemes, subnetting techniques, and how devices resolve IP addresses to physical MAC addresses.</p>
+                <p>By the end of this chapter, you will be able to:</p>
+                <ul class="list-disc pl-6 mt-2 mb-4 space-y-1">
+                    <li>Compare IPv4 and IPv6 address structures</li>
+                    <li>Perform subnetting and supernetting calculations</li>
+                    <li>Differentiate between private and public IP addresses</li>
+                    <li>Explain CIDR notation and its benefits</li>
+                    <li>Describe the ARP process and its role in networking</li>
+                </ul>
+            </section>
+
+            <!-- IPv4 vs IPv6 -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">IPv4 vs IPv6: Structure and Evolution</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">IPv4 (Internet Protocol version 4)</h3>
+                        <div class="bg-blue-100 p-3 rounded mb-3 text-center font-mono">
+                            192.168.1.1
+                        </div>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li><strong>Address Size:</strong> 32 bits (4.3 billion addresses)</li>
+                            <li><strong>Format:</strong> Four 8-bit octets (0-255) in dotted decimal</li>
+                            <li><strong>Limitations:</strong> Address exhaustion, NAT dependency</li>
+                            <li><strong>Header:</strong> 20+ bytes with options, checksum</li>
+                            <li><strong>Example:</strong> 192.168.1.1 with subnet mask 255.255.255.0</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">IPv6 (Internet Protocol version 6)</h3>
+                        <div class="bg-green-100 p-3 rounded mb-3 text-center font-mono">
+                            2001:0db8:85a3:0000:0000:8a2e:0370:7334
+                        </div>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li><strong>Address Size:</strong> 128 bits (340 undecillion addresses)</li>
+                            <li><strong>Format:</strong> Eight 16-bit segments in hexadecimal</li>
+                            <li><strong>Advantages:</strong> No NAT needed, built-in security</li>
+                            <li><strong>Header:</strong> Fixed 40 bytes, no checksum</li>
+                            <li><strong>Example:</strong> 2001:db8::1 (compressed format)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                    <div id="ip-comparison" class="w-full h-64 relative">
+                        <!-- IP comparison visualization will be inserted here by JavaScript -->
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Figure 1: Structural comparison of IPv4 and IPv6 addresses</p>
+                </div>
+
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">IPv6 Transition Mechanisms</h3>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+                        <h4 class="font-semibold text-blue-700 mb-2">Dual Stack</h4>
+                        <p>Devices run both IPv4 and IPv6 simultaneously</p>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500">
+                        <h4 class="font-semibold text-purple-700 mb-2">Tunneling</h4>
+                        <p>Encapsulate IPv6 packets in IPv4 for traversal</p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+                        <h4 class="font-semibold text-green-700 mb-2">Translation</h4>
+                        <p>NAT64/DNS64 convert between protocols</p>
+                    </div>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-6">
+                    <h3 class="text-lg font-medium text-yellow-800 mb-2">Common Pitfall</h3>
+                    <p>When configuring IPv6, remember that interface identifiers (last 64 bits) can be derived from MAC addresses (EUI-64 format), potentially exposing device information. Use privacy extensions when needed.</p>
+                </div>
+            </section>
+
+            <!-- Subnetting -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Subnetting: Dividing Networks</h2>
+                
+                <p class="mb-4">Subnetting breaks large networks into smaller, manageable subnets for improved performance and security. Let's subnet 192.168.1.0/24 into 4 subnets:</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Step 1: Determine Subnet Requirements</h3>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Original network: 192.168.1.0/24 (256 addresses)</li>
+                            <li>Required subnets: 4</li>
+                            <li>Hosts per subnet: ~60 (62 usable)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Step 2: Calculate New Subnet Mask</h3>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Borrow 2 bits (2²=4 subnets)</li>
+                            <li>New prefix: /26 (255.255.255.192)</li>
+                            <li>Host bits: 6 (2⁶-2=62 hosts per subnet)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Step 3: Subnet Ranges</h3>
+                <div class="overflow-x-auto mb-6">
+                    <table class="min-w-full bg-white border border-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="py-2 px-4 border-b">Subnet</th>
+                                <th class="py-2 px-4 border-b">Network Address</th>
+                                <th class="py-2 px-4 border-b">First Host</th>
+                                <th class="py-2 px-4 border-b">Last Host</th>
+                                <th class="py-2 px-4 border-b">Broadcast</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="py-2 px-4 border-b">1</td>
+                                <td class="py-2 px-4 border-b">192.168.1.0/26</td>
+                                <td class="py-2 px-4 border-b">192.168.1.1</td>
+                                <td class="py-2 px-4 border-b">192.168.1.62</td>
+                                <td class="py-2 px-4 border-b">192.168.1.63</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border-b">2</td>
+                                <td class="py-2 px-4 border-b">192.168.1.64/26</td>
+                                <td class="py-2 px-4 border-b">192.168.1.65</td>
+                                <td class="py-2 px-4 border-b">192.168.1.126</td>
+                                <td class="py-2 px-4 border-b">192.168.1.127</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">3</td>
+                                <td class="py-2 px-4 border-b">192.168.1.128/26</td>
+                                <td class="py-2 px-4 border-b">192.168.1.129</td>
+                                <td class="py-2 px-4 border-b">192.168.1.190</td>
+                                <td class="py-2 px-4 border-b">192.168.1.191</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border-b">4</td>
+                                <td class="py-2 px-4 border-b">192.168.1.192/26</td>
+                                <td class="py-2 px-4 border-b">192.168.1.193</td>
+                                <td class="py-2 px-4 border-b">192.168.1.254</td>
+                                <td class="py-2 px-4 border-b">192.168.1.255</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                    <div id="subnet-visualization" class="w-full h-64 relative">
+                        <!-- Subnet visualization will be inserted here by JavaScript -->
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Figure 2: Visualization of a /24 network divided into four /26 subnets</p>
+                </div>
+
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h3 class="text-xl font-medium text-gray-800 mb-3">Subnetting Cheat Sheet</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white border border-gray-200">
+                            <thead class="bg-blue-100">
+                                <tr>
+                                    <th class="py-2 px-4 border-b">Prefix</th>
+                                    <th class="py-2 px-4 border-b">Mask</th>
+                                    <th class="py-2 px-4 border-b">Subnets</th>
+                                    <th class="py-2 px-4 border-b">Hosts</th>
+                                    <th class="py-2 px-4 border-b">Block Size</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="py-2 px-4 border-b">/24</td>
+                                    <td class="py-2 px-4 border-b">255.255.255.0</td>
+                                    <td class="py-2 px-4 border-b">1</td>
+                                    <td class="py-2 px-4 border-b">254</td>
+                                    <td class="py-2 px-4 border-b">256</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="py-2 px-4 border-b">/25</td>
+                                    <td class="py-2 px-4 border-b">255.255.255.128</td>
+                                    <td class="py-2 px-4 border-b">2</td>
+                                    <td class="py-2 px-4 border-b">126</td>
+                                    <td class="py-2 px-4 border-b">128</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4 border-b">/26</td>
+                                    <td class="py-2 px-4 border-b">255.255.255.192</td>
+                                    <td class="py-2 px-4 border-b">4</td>
+                                    <td class="py-2 px-4 border-b">62</td>
+                                    <td class="py-2 px-4 border-b">64</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="py-2 px-4 border-b">/27</td>
+                                    <td class="py-2 px-4 border-b">255.255.255.224</td>
+                                    <td class="py-2 px-4 border-b">8</td>
+                                    <td class="py-2 px-4 border-b">30</td>
+                                    <td class="py-2 px-4 border-b">32</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4 border-b">/28</td>
+                                    <td class="py-2 px-4 border-b">255.255.255.240</td>
+                                    <td class="py-2 px-4 border-b">16</td>
+                                    <td class="py-2 px-4 border-b">14</td>
+                                    <td class="py-2 px-4 border-b">16</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Supernetting -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Supernetting: Aggregating Routes</h2>
+                
+                <p class="mb-4">Supernetting combines contiguous networks into larger blocks to reduce routing table size. Consider these four /24 networks:</p>
+                
+                <div class="grid md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-gray-50 p-3 rounded text-center font-mono">
+                        192.168.0.0/24
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded text-center font-mono">
+                        192.168.1.0/24
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded text-center font-mono">
+                        192.168.2.0/24
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded text-center font-mono">
+                        192.168.3.0/24
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Step 1: Check Contiguity</h3>
+                <p class="mb-4">All networks are contiguous in the third octet (0-3).</p>
+                
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Step 2: Find Common Bits</h3>
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <pre class="text-sm bg-gray-100 p-2 rounded overflow-x-auto"><code class="language-text">
+192.168.0.0: 11000000.10101000.00000000.00000000
+192.168.1.0: 11000000.10101000.00000001.00000000
+192.168.2.0: 11000000.10101000.00000010.00000000
+192.168.3.0: 11000000.10101000.00000011.00000000
+                    </code></pre>
+                    <p class="mt-2">First 22 bits are identical → /22 supernet</p>
+                </div>
+                
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Resulting Supernet</h3>
+                <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-500 text-center font-mono text-lg">
+                    192.168.0.0/22 (1022 usable addresses)
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-6">
+                    <h3 class="text-lg font-medium text-yellow-800 mb-2">Troubleshooting Tip</h3>
+                    <p>When supernetting, ensure all networks are truly contiguous. Gaps (like missing 192.168.1.0/24) would require multiple routing entries.</p>
+                </div>
+            </section>
+
+            <!-- IP Address Classes -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">IP Address Classes and Private vs. Public IPs</h2>
+                
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">IPv4 Address Classes (Historical)</h3>
+                <div class="overflow-x-auto mb-6">
+                    <table class="min-w-full bg-white border border-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="py-2 px-4 border-b">Class</th>
+                                <th class="py-2 px-4 border-b">Range</th>
+                                <th class="py-2 px-4 border-b">Network/Host</th>
+                                <th class="py-2 px-4 border-b">Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="py-2 px-4 border-b">A</td>
+                                <td class="py-2 px-4 border-b">1.0.0.0 - 126.255.255.255</td>
+                                <td class="py-2 px-4 border-b">N.H.H.H</td>
+                                <td class="py-2 px-4 border-b">Large networks</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border-b">B</td>
+                                <td class="py-2 px-4 border-b">128.0.0.0 - 191.255.255.255</td>
+                                <td class="py-2 px-4 border-b">N.N.H.H</td>
+                                <td class="py-2 px-4 border-b">Medium networks</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">C</td>
+                                <td class="py-2 px-4 border-b">192.0.0.0 - 223.255.255.255</td>
+                                <td class="py-2 px-4 border-b">N.N.N.H</td>
+                                <td class="py-2 px-4 border-b">Small networks</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border-b">D</td>
+                                <td class="py-2 px-4 border-b">224.0.0.0 - 239.255.255.255</td>
+                                <td class="py-2 px-4 border-b">-</td>
+                                <td class="py-2 px-4 border-b">Multicast</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">E</td>
+                                <td class="py-2 px-4 border-b">240.0.0.0 - 255.255.255.255</td>
+                                <td class="py-2 px-4 border-b">-</td>
+                                <td class="py-2 px-4 border-b">Experimental</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Private vs. Public IP Addresses</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-blue-700 mb-2">Private IP Ranges (RFC 1918)</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>10.0.0.0/8 (16.7 million addresses)</li>
+                            <li>172.16.0.0/12 (1 million addresses)</li>
+                            <li>192.168.0.0/16 (65,536 addresses)</li>
+                            <li>Not routable on public Internet</li>
+                            <li>Used with NAT for Internet access</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-blue-700 mb-2">Public IP Ranges</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>All other IPv4 addresses</li>
+                            <li>Globally routable on Internet</li>
+                            <li>Assigned by IANA to RIRs</li>
+                            <li>Must be unique worldwide</li>
+                            <li>Example: Your web server's IP</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CIDR -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">CIDR: Modern IP Allocation</h2>
+                
+                <p class="mb-4">Classless Inter-Domain Routing (CIDR) replaced classful addressing with flexible network sizes:</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">CIDR Notation</h3>
+                        <div class="bg-gray-50 p-4 rounded-lg mb-3 text-center font-mono text-lg">
+                            192.168.1.0/26
+                        </div>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Slash notation (/24, /26, etc.)</li>
+                            <li>Prefix indicates network bits</li>
+                            <li>More efficient than fixed classes</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Benefits</h3>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Reduced routing table size</li>
+                            <li>Flexible network sizes</li>
+                            <li>Better address space utilization</li>
+                            <li>Supports VLSM (Variable Length Subnet Masking)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h3 class="text-xl font-medium text-gray-800 mb-3">CIDR Allocation Example</h3>
+                    <p>An ISP might receive 203.0.113.0/24 from their RIR, then allocate:</p>
+                    <ul class="list-disc pl-6 mt-2 space-y-1">
+                        <li>203.0.113.0/26 to Customer A (62 hosts)</li>
+                        <li>203.0.113.64/27 to Customer B (30 hosts)</li>
+                        <li>203.0.113.96/28 to Customer C (14 hosts)</li>
+                        <li>203.0.113.112/28 reserved for future use</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ARP -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Address Resolution Protocol (ARP)</h2>
+                
+                <p class="mb-4">ARP maps IP addresses to MAC addresses on local networks:</p>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                    <div id="arp-visualization" class="w-full h-64 relative">
+                        <!-- ARP visualization will be inserted here by JavaScript -->
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Figure 3: ARP request/reply process between devices on a local network</p>
+                </div>
+
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">ARP Process</h3>
+                <ol class="list-decimal pl-6 space-y-3">
+                    <li><strong>ARP Request:</strong> Broadcast "Who has 192.168.1.2?"</li>
+                    <li><strong>ARP Reply:</strong> Unicast "192.168.1.2 is at 00:1A:2B:3C:4D:5E"</li>
+                    <li><strong>Cache Update:</strong> Both devices store mapping in ARP table</li>
+                    <li><strong>Communication:</strong> Frames sent with correct MAC addresses</li>
+                </ol>
+                
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Viewing ARP Cache</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-medium mb-2">Windows</h4>
+                        <pre class="text-sm bg-gray-100 p-2 rounded overflow-x-auto"><code class="language-text">
+arp -a
+
+Interface: 192.168.1.10
+  Internet Address      Physical Address      Type
+  192.168.1.1          00-1a-2b-3c-4d-5e    dynamic
+  192.168.1.255        ff-ff-ff-ff-ff-ff    static
+                        </code></pre>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-medium mb-2">Linux/macOS</h4>
+                        <pre class="text-sm bg-gray-100 p-2 rounded overflow-x-auto"><code class="language-text">
+arp -an
+
+? (192.168.1.1) at 00:1a:2b:3c:4d:5e [ether] on eth0
+                        </code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-6">
+                    <h3 class="text-lg font-medium text-yellow-800 mb-2">Security Consideration</h3>
+                    <p>ARP spoofing attacks can redirect traffic. Mitigate with:</p>
+                    <ul class="list-disc pl-6 mt-2 space-y-1">
+                        <li>Static ARP entries for critical devices</li>
+                        <li>Port security on switches</li>
+                        <li>ARP inspection tools</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Practical Example 1: Packet Tracer -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Practical Example: Configuring IP Addresses in Packet Tracer</h2>
+                
+                <p class="mb-4">Let's configure a router interface and two PCs with IP addresses from our subnetting example:</p>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Step 1: Router Configuration</h3>
+                    <pre class="text-sm bg-gray-100 p-2 rounded overflow-x-auto"><code class="language-text">
+Router> enable
+Router# configure terminal
+Router(config)# interface gigabitEthernet 0/0
+Router(config-if)# ip address 192.168.1.1 255.255.255.192
+Router(config-if)# no shutdown
+Router(config-if)# exit
+                    </code></pre>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Step 2: PC1 Configuration</h3>
+                    <pre class="text-sm bg-gray-100 p-2 rounded overflow-x-auto"><code class="language-text">
+IP Address: 192.168.1.2
+Subnet Mask: 255.255.255.192
+Default Gateway: 192.168.1.1
+                    </code></pre>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Step 3: PC2 Configuration</h3>
+                    <pre class="text-sm bg-gray-100 p-2 rounded overflow-x-auto"><code class="language-text">
+IP Address: 192.168.1.3
+Subnet Mask: 255.255.255.192
+Default Gateway: 192.168.1.1
+                    </code></pre>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Step 4: Verify Connectivity</h3>
+                    <pre class="text-sm bg-gray-100 p-2 rounded overflow-x-auto"><code class="language-text">
+PC1> ping 192.168.1.3
+Pinging 192.168.1.3 with 32 bytes of data:
+Reply from 192.168.1.3: bytes=32 time=1ms TTL=128
+                    </code></pre>
+                </div>
+            </section>
+
+            <!-- Practical Example 2: Subnet Visualization -->
+            <section class="p-6">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Visualizing Subnet Communication</h2>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                    <div id="subnet-communication" class="w-full h-96 relative">
+                        <!-- Subnet communication visualization will be inserted here by JavaScript -->
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Figure 4: Interactive visualization of devices communicating across subnets</p>
+                </div>
+                
+                <h3 class="text-xl font-medium text-gray-800 mb-3">How This Visualization Works</h3>
+                <p>The diagram shows:</p>
+                <ul class="list-disc pl-6 mt-2 space-y-1">
+                    <li>Two subnets (192.168.1.0/26 and 192.168.1.64/26)</li>
+                    <li>A router connecting the subnets</li>
+                    <li>ARP resolution within each subnet</li>
+                    <li>Routing between subnets</li>
+                </ul>
+            </section>
+
+            <!-- Summary -->
+            <section class="p-6 bg-blue-50 border-t border-blue-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Chapter Summary</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Key Concepts</h3>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>IPv4 uses 32-bit addresses while IPv6 uses 128-bit hexadecimal addresses</li>
+                            <li>Subnetting divides networks; supernetting combines them for routing efficiency</li>
+                            <li>Private IP ranges (RFC 1918) are for internal networks only</li>
+                            <li>CIDR enables flexible network sizes and efficient address allocation</li>
+                            <li>ARP resolves IP addresses to MAC addresses on local networks</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Best Practices</h3>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Plan subnet sizes carefully to allow for growth</li>
+                            <li>Use private IPs for internal devices and NAT for Internet access</li>
+                            <li>Document your IP allocation scheme thoroughly</li>
+                            <li>Monitor ARP tables for suspicious entries</li>
+                            <li>Begin IPv6 adoption planning even if primarily using IPv4</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Further Reading -->
+            <section class="p-6">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Further Reading</h2>
+                
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>RFCs:</strong> 
+                        <a href="https://tools.ietf.org/html/rfc791" class="text-blue-600 hover:underline">RFC 791 (IPv4)</a>, 
+                        <a href="https://tools.ietf.org/html/rfc2460" class="text-blue-600 hover:underline">RFC 2460 (IPv6)</a>,
+                        <a href="https://tools.ietf.org/html/rfc1918" class="text-blue-600 hover:underline">RFC 1918 (Private Addressing)</a>,
+                        <a href="https://tools.ietf.org/html/rfc826" class="text-blue-600 hover:underline">RFC 826 (ARP)</a>
+                    </li>
+                    <li><strong>Books:</strong> "TCP/IP Illustrated, Volume 1" by W. Richard Stevens</li>
+                    <li><strong>Tools:</strong> Subnet calculators, Wireshark for ARP analysis</li>
+                    <li><strong>Practice:</strong> Cisco Packet Tracer subnetting labs</li>
+                </ul>
+            </section>
+
+            <!-- Navigation -->
+            <section class="p-6 bg-gray-50 border-t border-gray-200">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <a href="chapter3.html" class="text-blue-600 hover:text-blue-800 mb-4 md:mb-0">← Previous Chapter: Transmission Media & Hardware</a>
+                    <a href="chapter5.html" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Next Chapter: Key Networking Protocols →</a>
+                </div>
+            </section>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>© 2025 Computer Networks: From Scratch to Mastery | Created by a CSE Graduate</p>
+            <p class="mt-2 text-gray-400">Content powered by AI + Human Review</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Visualizations -->
+    <script>
+        // IP Comparison Visualization
+        function drawIPComparison() {
+            const container = document.getElementById('ip-comparison');
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+            
+            // Create canvas
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            container.appendChild(canvas);
+            const ctx = canvas.getContext('2d');
+            
+            // Draw IPv4 structure
+            ctx.fillStyle = '#93c5fd';
+            for (let i = 0; i < 4; i++) {
+                ctx.fillRect(width * 0.1 + i * 80, height * 0.2, 70, 60);
+                ctx.strokeStyle = '#1e40af';
+                ctx.strokeRect(width * 0.1 + i * 80, height * 0.2, 70, 60);
+                
+                ctx.fillStyle = '#000000';
+                ctx.font = '12px Arial';
+                ctx.fillText(`Octet ${i+1}`, width * 0.1 + i * 80 + 15, height * 0.25);
+                ctx.fillText('8 bits', width * 0.1 + i * 80 + 20, height * 0.35);
+            }
+            ctx.fillStyle = '#000000';
+            ctx.font = 'bold 16px Arial';
+            ctx.fillText('IPv4: 32 bits (4 octets)', width * 0.1, height * 0.15);
+            
+            // Draw IPv6 structure
+            ctx.fillStyle = '#86efac';
+            for (let i = 0; i < 8; i++) {
+                ctx.fillRect(width * 0.1 + i * 40, height * 0.6, 35, 30);
+                ctx.strokeStyle = '#166534';
+                ctx.strokeRect(width * 0.1 + i * 40, height * 0.6, 35, 30);
+                
+                ctx.fillStyle = '#000000';
+                ctx.font = '10px Arial';
+                ctx.fillText(`Segment ${i+1}`, width * 0.1 + i * 40 + 2, height * 0.62);
+                ctx.fillText('16 bits', width * 0.1 + i * 40 + 5, height * 0.72);
+            }
+            ctx.fillStyle = '#000000';
+            ctx.font = 'bold 16px Arial';
+            ctx.fillText('IPv6: 128 bits (8 segments)', width * 0.1, height * 0.55);
+            
+            // Add connecting lines
+            ctx.strokeStyle = '#6b7280';
+            ctx.setLineDash([5, 3]);
+            ctx.beginPath();
+            ctx.moveTo(width * 0.5, height * 0.3);
+            ctx.lineTo(width * 0.5, height * 0.5);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Add comparison text
+            ctx.font = '14px Arial';
+            ctx.fillText('IPv4 Exhaustion →', width * 0.52, height * 0.35);
+            ctx.fillText('IPv6 Adoption', width * 0.52, height * 0.4);
+        }
+        
+        // Subnet Visualization
+        function drawSubnetVisualization() {
+            const container = document.getElementById('subnet-visualization');
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+            
+            // Create main network box
+            const network = document.createElement('div');
+            network.className = 'absolute border-2 border-blue-500 bg-blue-50';
+            network.style.width = `${width * 0.8}px`;
+            network.style.height = `${height * 0.6}px`;
+            network.style.left = `${width * 0.1}px`;
+            network.style.top = `${height * 0.1}px`;
+            container.appendChild(network);
+            
+            // Add network label
+            const netLabel = document.createElement('div');
+            netLabel.className = 'absolute text-sm font-bold text-blue-700';
+            netLabel.textContent = '192.168.1.0/24';
+            netLabel.style.left = `${width * 0.1}px`;
+            netLabel.style.top = `${height * 0.05}px`;
+            container.appendChild(netLabel);
+            
+            // Create 4 subnets
+            const colors = ['bg-red-100', 'bg-green-100', 'bg-yellow-100', 'bg-purple-100'];
+            const borders = ['border-red-500', 'border-green-500', 'border-yellow-500', 'border-purple-500'];
+            const subnetLabels = ['192.168.1.0/26', '192.168.1.64/26', '192.168.1.128/26', '192.168.1.192/26'];
+            
+            for (let i = 0; i < 4; i++) {
+                const subnet = document.createElement('div');
+                subnet.className = `absolute border ${borders[i]} ${colors[i]} flex items-center justify-center text-xs`;
+                subnet.style.width = `${width * 0.35}px`;
+                subnet.style.height = `${height * 0.25}px`;
+                subnet.style.left = `${width * 0.15 + (i % 2) * width * 0.35}px`;
+                subnet.style.top = `${height * 0.15 + Math.floor(i / 2) * height * 0.3}px`;
+                subnet.textContent = subnetLabels[i];
+                container.appendChild(subnet);
+                
+                // Add sample IPs
+                const ip1 = document.createElement('div');
+                ip1.className = 'absolute text-xs';
+                ip1.textContent = `Host: 192.168.1.${i * 64 + 1}`;
+                ip1.style.left = `${width * 0.15 + (i % 2) * width * 0.35 + 5}px`;
+                ip1.style.top = `${height * 0.15 + Math.floor(i / 2) * height * 0.3 + 20}px`;
+                container.appendChild(ip1);
+                
+                const ip2 = document.createElement('div');
+                ip2.className = 'absolute text-xs';
+                ip2.textContent = `Host: 192.168.1.${i * 64 + 2}`;
+                ip2.style.left = `${width * 0.15 + (i % 2) * width * 0.35 + 5}px`;
+                ip2.style.top = `${height * 0.15 + Math.floor(i / 2) * height * 0.3 + 35}px`;
+                container.appendChild(ip2);
+            }
+        }
+        
+        // ARP Visualization
+        function drawARPVisualization() {
+            const container = document.getElementById('arp-visualization');
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+            
+            // Create devices
+            const devices = [
+                { ip: '192.168.1.1', mac: '00:1A:2B:3C:4D:5E', x: width * 0.2, y: height * 0.5, type: 'router' },
+                { ip: '192.168.1.2', mac: '00:1A:2B:3C:4D:6F', x: width * 0.5, y: height * 0.3, type: 'pc' },
+                { ip: '192.168.1.3', mac: '00:1A:2B:3C:4D:7G', x: width * 0.5, y: height * 0.7, type: 'pc' },
+                { ip: '192.168.1.4', mac: '00:1A:2B:3C:4D:8H', x: width * 0.8, y: height * 0.5, type: 'server' }
+            ];
+            
+            // Draw devices
+            devices.forEach(device => {
+                const element = document.createElement('div');
+                element.className = 'absolute rounded-full bg-blue-200 flex items-center justify-center font-bold';
+                element.style.width = '50px';
+                element.style.height = '50px';
+                element.style.left = `${device.x - 25}px`;
+                element.style.top = `${device.y - 25}px`;
+                
+                if (device.type === 'router') element.textContent = 'R';
+                else if (device.type === 'pc') element.textContent = '💻';
+                else if (device.type === 'server') element.textContent = '🖥️';
+                
+                container.appendChild(element);
+                
+                // Add labels
+                const ipLabel = document.createElement('div');
+                ipLabel.className = 'absolute text-xs font-mono';
+                ipLabel.textContent = device.ip;
+                ipLabel.style.left = `${device.x - 40}px`;
+                ipLabel.style.top = `${device.y - 40}px`;
+                ipLabel.style.width = '80px';
+                ipLabel.style.textAlign = 'center';
+                container.appendChild(ipLabel);
+                
+                const macLabel = document.createElement('div');
+                macLabel.className = 'absolute text-xs font-mono';
+                macLabel.textContent = device.mac;
+                macLabel.style.left = `${device.x - 40}px`;
+                macLabel.style.top = `${device.y + 30}px`;
+                macLabel.style.width = '80px';
+                macLabel.style.textAlign = 'center';
+                container.appendChild(macLabel);
+            });
+            
+            // Draw ARP request (broadcast)
+            const request = document.createElement('div');
+            request.className = 'absolute bg-red-100 rounded-lg p-1 text-xs';
+            request.textContent = 'ARP Request: Who has 192.168.1.2?';
+            request.style.left = `${width * 0.5 - 60}px`;
+            request.style.top = `${height * 0.5 - 20}px`;
+            request.style.width = '120px';
+            request.style.textAlign = 'center';
+            container.appendChild(request);
+            
+            // Draw arrows from request to all devices
+            devices.filter(d => d.ip !== '192.168.1.2').forEach(device => {
+                const arrow = document.createElement('div');
+                arrow.className = 'absolute border-t-2 border-r-2 border-red-500 w-4 h-4';
+                arrow.style.left = `${device.x - 2}px`;
+                arrow.style.top = `${device.y - 2}px`;
+                arrow.style.transform = `rotate(${Math.atan2(device.y - height * 0.5, device.x - width * 0.5) * 180 / Math.PI + 45}deg)`;
+                container.appendChild(arrow);
+            });
+            
+            // Draw ARP reply (unicast)
+            const reply = document.createElement('div');
+            reply.className = 'absolute bg-green-100 rounded-lg p-1 text-xs';
+            reply.textContent = 'ARP Reply: 192.168.1.2 is at 00:1A:2B:3C:4D:6F';
+            reply.style.left = `${width * 0.5 - 60}px`;
+            reply.style.top = `${height * 0.5 + 10}px`;
+            reply.style.width = '120px';
+            reply.style.textAlign = 'center';
+            container.appendChild(reply);
+            
+            // Draw arrow from reply to router
+            const arrow = document.createElement('div');
+            arrow.className = 'absolute border-t-2 border-r-2 border-green-500 w-4 h-4';
+            arrow.style.left = `${width * 0.2 - 2}px`;
+            arrow.style.top = `${height * 0.5 + 8}px`;
+            arrow.style.transform = 'rotate(225deg)';
+            container.appendChild(arrow);
+        }
+        
+        // Subnet Communication Visualization
+        function drawSubnetCommunication() {
+            const container = document.getElementById('subnet-communication');
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+            
+            // Create canvas
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            container.appendChild(canvas);
+            const ctx = canvas.getContext('2d');
+            
+            // Draw two subnets
+            ctx.fillStyle = 'rgba(147, 197, 253, 0.3)';
+            ctx.fillRect(width * 0.1, height * 0.1, width * 0.35, height * 0.8);
+            ctx.strokeStyle = '#1e40af';
+            ctx.strokeRect(width * 0.1, height * 0.1, width * 0.35, height * 0.8);
+            
+            ctx.fillStyle = 'rgba(134, 239, 172, 0.3)';
+            ctx.fillRect(width * 0.55, height * 0.1, width * 0.35, height * 0.8);
+            ctx.strokeStyle = '#166534';
+            ctx.strokeRect(width * 0.55, height * 0.1, width * 0.35, height * 0.8);
+            
+            // Add subnet labels
+            ctx.fillStyle = '#1e40af';
+            ctx.font = 'bold 14px Arial';
+            ctx.fillText('Subnet A: 192.168.1.0/26', width * 0.1, height * 0.08);
+            
+            ctx.fillStyle = '#166534';
+            ctx.fillText('Subnet B: 192.168.1.64/26', width * 0.55, height * 0.08);
+            
+            // Draw router between subnets
+            ctx.fillStyle = '#f59e0b';
+            ctx.beginPath();
+            ctx.arc(width * 0.45, height * 0.5, 30, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#92400e';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            ctx.fillStyle = '#000000';
+            ctx.font = 'bold 16px Arial';
+            ctx.fillText('R', width * 0.45 - 5, height * 0.5 + 5);
+            
+            // Draw devices in Subnet A
+            ctx.fillStyle = '#3b82f6';
+            ctx.beginPath();
+            ctx.arc(width * 0.2, height * 0.3, 20, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText('PC1', width * 0.2 - 15, height * 0.3 + 30);
+            
+            ctx.beginPath();
+            ctx.arc(width * 0.3, height * 0.7, 20, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText('PC2', width * 0.3 - 15, height * 0.7 + 30);
+            
+            // Draw devices in Subnet B
+            ctx.fillStyle = '#10b981';
+            ctx.beginPath();
+            ctx.arc(width * 0.65, height * 0.4, 20, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText('Server', width * 0.65 - 25, height * 0.4 + 30);
+            
+            ctx.beginPath();
+            ctx.arc(width * 0.75, height * 0.6, 20, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillText('Printer', width * 0.75 - 25, height * 0.6 + 30);
+            
+            // Draw connections to router
+            ctx.strokeStyle = '#6b7280';
+            ctx.lineWidth = 2;
+            
+            // Subnet A connections
+            ctx.beginPath();
+            ctx.moveTo(width * 0.2 + 20, height * 0.3);
+            ctx.lineTo(width * 0.45 - 30, height * 0.5);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(width * 0.3 + 20, height * 0.7);
+            ctx.lineTo(width * 0.45 - 30, height * 0.5);
+            ctx.stroke();
+            
+            // Subnet B connections
+            ctx.beginPath();
+            ctx.moveTo(width * 0.45 + 30, height * 0.5);
+            ctx.lineTo(width * 0.65 - 20, height * 0.4);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(width * 0.45 + 30, height * 0.5);
+            ctx.lineTo(width * 0.75 - 20, height * 0.6);
+            ctx.stroke();
+            
+            // Animate packet from PC1 to Server
+            let packetX = width * 0.2;
+            let packetY = height * 0.3;
+            let packetDest = 'server';
+            
+            function animatePacket() {
+                ctx.clearRect(0, 0, width, height);
+                
+                // Redraw static elements
+                ctx.fillStyle = 'rgba(147, 197, 253, 0.3)';
+                ctx.fillRect(width * 0.1, height * 0.1, width * 0.35, height * 0.8);
+                ctx.strokeStyle = '#1e40af';
+                ctx.strokeRect(width * 0.1, height * 0.1, width * 0.35, height * 0.8);
+                
+                ctx.fillStyle = 'rgba(134, 239, 172, 0.3)';
+                ctx.fillRect(width * 0.55, height * 0.1, width * 0.35, height * 0.8);
+                ctx.strokeStyle = '#166534';
+                ctx.strokeRect(width * 0.55, height * 0.1, width * 0.35, height * 0.8);
+                
+                ctx.fillStyle = '#1e40af';
+                ctx.font = 'bold 14px Arial';
+                ctx.fillText('Subnet A: 192.168.1.0/26', width * 0.1, height * 0.08);
+                
+                ctx.fillStyle = '#166534';
+                ctx.fillText('Subnet B: 192.168.1.64/26', width * 0.55, height * 0.08);
+                
+                // Redraw devices
+                ctx.fillStyle = '#f59e0b';
+                ctx.beginPath();
+                ctx.arc(width * 0.45, height * 0.5, 30, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#92400e';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.fillStyle = '#000000';
+                ctx.font = 'bold 16px Arial';
+                ctx.fillText('R', width * 0.45 - 5, height * 0.5 + 5);
+                
+                ctx.fillStyle = '#3b82f6';
+                ctx.beginPath();
+                ctx.arc(width * 0.2, height * 0.3, 20, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillText('PC1', width * 0.2 - 15, height * 0.3 + 30);
+                
+                ctx.beginPath();
+                ctx.arc(width * 0.3, height * 0.7, 20, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillText('PC2', width * 0.3 - 15, height * 0.7 + 30);
+                
+                ctx.fillStyle = '#10b981';
+                ctx.beginPath();
+                ctx.arc(width * 0.65, height * 0.4, 20, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillText('Server', width * 0.65 - 25, height * 0.4 + 30);
+                
+                ctx.beginPath();
+                ctx.arc(width * 0.75, height * 0.6, 20, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillText('Printer', width * 0.75 - 25, height * 0.6 + 30);
+                
+                // Redraw connections
+                ctx.strokeStyle = '#6b7280';
+                ctx.lineWidth = 2;
+                
+                ctx.beginPath();
+                ctx.moveTo(width * 0.2 + 20, height * 0.3);
+                ctx.lineTo(width * 0.45 - 30, height * 0.5);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(width * 0.3 + 20, height * 0.7);
+                ctx.lineTo(width * 0.45 - 30, height * 0.5);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(width * 0.45 + 30, height * 0.5);
+                ctx.lineTo(width * 0.65 - 20, height * 0.4);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(width * 0.45 + 30, height * 0.5);
+                ctx.lineTo(width * 0.75 - 20, height * 0.6);
+                ctx.stroke();
+                
+                // Draw packet
+                ctx.fillStyle = '#ef4444';
+                ctx.beginPath();
+                ctx.arc(packetX, packetY, 8, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Move packet
+                if (packetDest === 'server') {
+                    if (packetX < width * 0.45 - 30) {
+                        // Moving to router from PC1
+                        packetX += 1;
+                        packetY += (height * 0.5 - height * 0.3) / (width * 0.45 - 30 - width * 0.2);
+                    } else if (packetX < width * 0.65 - 20) {
+                        // Moving to server from router
+                        packetX += 1;
+                        packetY += (height * 0.4 - height * 0.5) / (width * 0.65 - 20 - width * 0.45 + 30);
+                    } else {
+                        // Reached server, start return trip
+                        packetDest = 'pc1';
+                    }
+                } else {
+                    if (packetX > width * 0.45 + 30) {
+                        // Moving to router from server
+                        packetX -= 1;
+                        packetY -= (height * 0.4 - height * 0.5) / (width * 0.65 - 20 - width * 0.45 + 30);
+                    } else if (packetX > width * 0.2) {
+                        // Moving to PC1 from router
+                        packetX -= 1;
+                        packetY -= (height * 0.5 - height * 0.3) / (width * 0.45 - 30 - width * 0.2);
+                    } else {
+                        // Reached PC1, start new trip
+                        packetDest = 'server';
+                    }
+                }
+                
+                requestAnimationFrame(animatePacket);
+            }
+            
+            animatePacket();
+        }
+        
+        // Initialize visualizations when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            drawIPComparison();
+            drawSubnetVisualization();
+            drawARPVisualization();
+            drawSubnetCommunication();
+        });
+    </script>
+</body>
+</html>

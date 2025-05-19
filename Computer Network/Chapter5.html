@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 5: Key Networking Protocols | Computer Networks: From Scratch to Mastery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-600 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <a href="#" class="text-2xl font-bold mb-4 md:mb-0">Computer Networks: From Scratch to Mastery</a>
+            <div class="flex flex-wrap gap-4">
+                <a href="#" class="hover:underline">Home</a>
+                <a href="#" class="hover:underline">Module 1</a>
+                <a href="#" class="font-bold underline">Module 2</a>
+                <a href="#" class="hover:underline">Module 3</a>
+                <a href="#" class="hover:underline">Module 4</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Chapter Navigation -->
+    <div class="container mx-auto px-4 py-2 bg-blue-50 rounded-lg my-4">
+        <div class="flex flex-wrap justify-between">
+            <a href="chapter4.html" class="text-blue-700 hover:underline">← Chapter 4: IP Addressing Basics</a>
+            <a href="chapter6.html" class="text-blue-700 hover:underline">Chapter 6: Routing and Switching →</a>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-center mb-4">Chapter 5: Key Networking Protocols</h1>
+        <p class="text-xl text-center text-gray-600 max-w-3xl mx-auto">
+            Understanding the fundamental protocols that power internet communication, including HTTP, FTP, SMTP, DNS, TCP, and UDP.
+        </p>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 pb-12">
+        <!-- Introduction -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Introduction</h2>
+            <p class="mb-4">In this chapter, we'll explore the essential networking protocols that enable communication across the internet. Building on our understanding of network models (Chapter 2) and IP addressing (Chapter 4), we'll examine how these protocols work together to facilitate data exchange.</p>
+            <p>By the end of this chapter, you will understand:</p>
+            <ul class="list-disc pl-8 mt-2 space-y-1">
+                <li>The operation of key application layer protocols (HTTP, FTP, SMTP, DNS)</li>
+                <li>The differences between TCP and UDP transport protocols</li>
+                <li>How ports identify network services</li>
+                <li>TCP connection establishment and termination</li>
+                <li>Protocol stack interactions and encapsulation</li>
+                <li>ICMP's role in network diagnostics</li>
+            </ul>
+        </section>
+
+        <!-- Application Layer Protocols -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Application Layer Protocols</h2>
+            
+            <article class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">HTTP/HTTPS</h3>
+                <p class="mb-3">The <strong>Hypertext Transfer Protocol (HTTP)</strong> is the foundation of web communication. It follows a client-server model where:</p>
+                <ul class="list-disc pl-8 mb-4 space-y-1">
+                    <li>Clients (browsers) send HTTP requests</li>
+                    <li>Servers respond with HTTP responses</li>
+                </ul>
+                
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h4 class="font-semibold mb-2">HTTP Request Example:</h4>
+                    <pre class="bg-gray-200 p-3 rounded overflow-x-auto"><code class="language-text">GET /index.html HTTP/1.1
+Host: www.example.com
+User-Agent: Mozilla/5.0
+Accept: text/html</code></pre>
+                </div>
+                
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h4 class="font-semibold mb-2">HTTP Response Example:</h4>
+                    <pre class="bg-gray-200 p-3 rounded overflow-x-auto"><code class="language-text">HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: 1234
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;...&lt;/html&gt;</code></pre>
+                </div>
+                
+                <p class="mb-3">Common HTTP status codes include:</p>
+                <ul class="list-disc pl-8 mb-4 space-y-1">
+                    <li><strong>200 OK</strong>: Successful request</li>
+                    <li><strong>301 Moved Permanently</strong>: Resource has moved</li>
+                    <li><strong>404 Not Found</strong>: Resource doesn't exist</li>
+                    <li><strong>500 Internal Server Error</strong>: Server failed to fulfill request</li>
+                </ul>
+                
+                <p class="mb-3"><strong>HTTPS</strong> adds security to HTTP using SSL/TLS encryption. Key differences:</p>
+                <ul class="list-disc pl-8 space-y-1">
+                    <li>Uses port 443 instead of HTTP's port 80</li>
+                    <li>Encrypts all communication</li>
+                    <li>Provides authentication of the website</li>
+                    <li>Protects against eavesdropping and tampering</li>
+                </ul>
+            </article>
+            
+            <article class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">FTP (File Transfer Protocol)</h3>
+                <p class="mb-3">FTP is used for transferring files between computers. It operates on two channels:</p>
+                <ul class="list-disc pl-8 mb-4 space-y-1">
+                    <li><strong>Control channel</strong> (port 21): For commands and responses</li>
+                    <li><strong>Data channel</strong>: For actual file transfer</li>
+                </ul>
+                
+                <p class="mb-3">FTP has two modes of operation:</p>
+                <ul class="list-disc pl-8 mb-4 space-y-1">
+                    <li><strong>Active mode</strong>: Client listens for server's data connection (problematic with firewalls)</li>
+                    <li><strong>Passive mode</strong>: Server listens for client's data connection (more firewall-friendly)</li>
+                </ul>
+                
+                <p class="mb-3">Security concerns with FTP:</p>
+                <ul class="list-disc pl-8 space-y-1">
+                    <li>Transmits credentials and data in clear text</li>
+                    <li>Vulnerable to eavesdropping</li>
+                    <li>Modern alternatives: SFTP (SSH File Transfer Protocol) or FTPS (FTP over SSL)</li>
+                </ul>
+            </article>
+            
+            <article class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">SMTP (Simple Mail Transfer Protocol)</h3>
+                <p class="mb-3">SMTP is the standard protocol for sending email between servers. Key characteristics:</p>
+                <ul class="list-disc pl-8 mb-4 space-y-1">
+                    <li>Uses port 25 (unencrypted) or 587 (with TLS)</li>
+                    <li>Only handles sending email, not receiving</li>
+                    <li>Works with other protocols (POP3/IMAP) for complete email functionality</li>
+                </ul>
+                
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">SMTP Communication Example:</h4>
+                    <pre class="bg-gray-200 p-3 rounded overflow-x-auto"><code class="language-text">S: 220 smtp.example.com ESMTP
+C: HELO client.example.com
+S: 250 Hello client.example.com
+C: MAIL FROM: &lt;sender@example.com&gt;
+S: 250 OK
+C: RCPT TO: &lt;recipient@example.com&gt;
+S: 250 OK
+C: DATA
+S: 354 End data with &lt;CR&gt;&lt;LF&gt;.&lt;CR&gt;&lt;LF&gt;
+C: Subject: Test message
+C: From: sender@example.com
+C: To: recipient@example.com
+C:
+C: This is a test message.
+C: .
+S: 250 OK: message accepted</code></pre>
+                </div>
+            </article>
+            
+            <article>
+                <h3 class="text-xl font-semibold mb-3">DNS (Domain Name System)</h3>
+                <p class="mb-3">DNS translates human-readable domain names (e.g., google.com) to IP addresses. The DNS hierarchy includes:</p>
+                <ul class="list-disc pl-8 mb-4 space-y-1">
+                    <li><strong>Root servers</strong>: Top of the hierarchy (13 sets worldwide)</li>
+                    <li><strong>Top-Level Domain (TLD) servers</strong>: Handle .com, .org, etc.</li>
+                    <li><strong>Authoritative servers</strong>: Store records for specific domains</li>
+                </ul>
+                
+                <p class="mb-3">Common DNS record types:</p>
+                <ul class="list-disc pl-8 mb-4 space-y-1">
+                    <li><strong>A</strong>: Maps hostname to IPv4 address</li>
+                    <li><strong>AAAA</strong>: Maps hostname to IPv6 address</li>
+                    <li><strong>CNAME</strong>: Canonical name (alias) for another domain</li>
+                    <li><strong>MX</strong>: Mail exchange record for email routing</li>
+                </ul>
+                
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">DNS Query Process:</h4>
+                    <ol class="list-decimal pl-8 space-y-1">
+                        <li>Browser checks local cache</li>
+                        <li>If not found, queries operating system</li>
+                        <li>OS queries configured DNS resolver (usually ISP or public DNS like 8.8.8.8)</li>
+                        <li>Resolver queries root server if needed</li>
+                        <li>Root directs to TLD server</li>
+                        <li>TLD directs to authoritative server</li>
+                        <li>Authoritative server returns the record</li>
+                    </ol>
+                </div>
+            </article>
+        </section>
+
+        <!-- Transport Layer Protocols -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Transport Layer Protocols: TCP vs UDP</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <article>
+                    <h3 class="text-xl font-semibold mb-3">TCP (Transmission Control Protocol)</h3>
+                    <p class="mb-3">TCP provides reliable, connection-oriented communication with these features:</p>
+                    <ul class="list-disc pl-8 mb-4 space-y-1">
+                        <li>Connection establishment (three-way handshake)</li>
+                        <li>Error checking and correction</li>
+                        <li>Flow control (window sizing)</li>
+                        <li>Congestion control</li>
+                        <li>Ordered data delivery</li>
+                    </ul>
+                    <p class="mb-3">Common TCP applications:</p>
+                    <ul class="list-disc pl-8 space-y-1">
+                        <li>Web browsing (HTTP/HTTPS)</li>
+                        <li>Email (SMTP)</li>
+                        <li>File transfer (FTP)</li>
+                        <li>Remote access (SSH)</li>
+                    </ul>
+                </article>
+                
+                <article>
+                    <h3 class="text-xl font-semibold mb-3">UDP (User Datagram Protocol)</h3>
+                    <p class="mb-3">UDP provides fast, connectionless communication with these characteristics:</p>
+                    <ul class="list-disc pl-8 mb-4 space-y-1">
+                        <li>No connection establishment</li>
+                        <li>No guaranteed delivery</li>
+                        <li>No ordering of packets</li>
+                        <li>No congestion control</li>
+                        <li>Lower overhead than TCP</li>
+                    </ul>
+                    <p class="mb-3">Common UDP applications:</p>
+                    <ul class="list-disc pl-8 space-y-1">
+                        <li>Video streaming</li>
+                        <li>Voice over IP (VoIP)</li>
+                        <li>Online gaming</li>
+                        <li>DNS queries</li>
+                    </ul>
+                </article>
+            </div>
+            
+            <div class="mt-6 bg-blue-50 p-4 rounded-lg">
+                <h4 class="font-semibold mb-2">TCP vs UDP Comparison Table</h4>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white">
+                        <thead>
+                            <tr class="bg-blue-100">
+                                <th class="py-2 px-4 border">Feature</th>
+                                <th class="py-2 px-4 border">TCP</th>
+                                <th class="py-2 px-4 border">UDP</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="py-2 px-4 border">Connection</td>
+                                <td class="py-2 px-4 border">Connection-oriented</td>
+                                <td class="py-2 px-4 border">Connectionless</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border">Reliability</td>
+                                <td class="py-2 px-4 border">Reliable (retransmits lost packets)</td>
+                                <td class="py-2 px-4 border">Unreliable (no retransmission)</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border">Ordering</td>
+                                <td class="py-2 px-4 border">Sequenced (in-order delivery)</td>
+                                <td class="py-2 px-4 border">No sequencing</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border">Speed</td>
+                                <td class="py-2 px-4 border">Slower due to overhead</td>
+                                <td class="py-2 px-4 border">Faster due to simplicity</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border">Use Cases</td>
+                                <td class="py-2 px-4 border">Web, email, file transfer</td>
+                                <td class="py-2 px-4 border">Video, VoIP, gaming</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Protocol Ports and Services -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Protocol Ports and Services</h2>
+            
+            <p class="mb-4">Ports are virtual endpoints for network communication, identified by numbers (0-65535). They enable multiplexing by allowing multiple services on a single IP address.</p>
+            
+            <div class="grid md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">Well-Known Ports (0-1023)</h4>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>20/21: FTP</li>
+                        <li>22: SSH</li>
+                        <li>25: SMTP</li>
+                        <li>53: DNS</li>
+                        <li>80: HTTP</li>
+                        <li>443: HTTPS</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">Registered Ports (1024-49151)</h4>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>1433: MS SQL Server</li>
+                        <li>3306: MySQL</li>
+                        <li>3389: RDP</li>
+                        <li>5432: PostgreSQL</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-yellow-50 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">Dynamic/Private Ports (49152-65535)</h4>
+                    <p>Used for temporary or private connections, typically assigned dynamically by the OS to client applications.</p>
+                </div>
+            </div>
+            
+            <div class="bg-gray-100 p-4 rounded-lg">
+                <h4 class="font-semibold mb-2">Common Port Commands</h4>
+                <p class="mb-2">Check listening ports on Linux:</p>
+                <pre class="bg-gray-200 p-3 rounded mb-4 overflow-x-auto"><code class="language-bash">netstat -tuln
+# Or using ss:
+ss -tuln</code></pre>
+                
+                <p class="mb-2">Check open ports on Windows:</p>
+                <pre class="bg-gray-200 p-3 rounded overflow-x-auto"><code class="language-bash">netstat -ano</code></pre>
+            </div>
+        </section>
+
+        <!-- TCP Handshake Mechanisms -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">TCP Handshake Mechanisms</h2>
+            
+            <article class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">Three-Way Handshake (Connection Establishment)</h3>
+                <p class="mb-4">TCP establishes connections using a three-way handshake:</p>
+                <ol class="list-decimal pl-8 mb-4 space-y-2">
+                    <li><strong>SYN</strong>: Client sends SYN (synchronize) packet with initial sequence number</li>
+                    <li><strong>SYN-ACK</strong>: Server responds with SYN-ACK (synchronize-acknowledge) and its own sequence number</li>
+                    <li><strong>ACK</strong>: Client sends ACK (acknowledge) to confirm the connection</li>
+                </ol>
+                
+                <!-- TCP Handshake Visualization -->
+                <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                    <h4 class="font-semibold mb-3">TCP Three-Way Handshake Visualization</h4>
+                    <div class="flex justify-center">
+                        <div id="tcp-handshake-diagram" class="w-full max-w-2xl h-64 bg-white border border-gray-300 rounded-lg"></div>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Diagram showing the three-way handshake process between client and server.</p>
+                </div>
+                
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">Sequence Numbers in Action</h4>
+                    <p class="mb-2">Each TCP segment contains:</p>
+                    <ul class="list-disc pl-8 mb-2 space-y-1">
+                        <li>Sequence number (seq): Byte position in the stream</li>
+                        <li>Acknowledgment number (ack): Next expected byte</li>
+                    </ul>
+                    <p>Initial sequence numbers are randomly chosen for security.</p>
+                </div>
+            </article>
+            
+            <article>
+                <h3 class="text-xl font-semibold mb-3">Four-Way Handshake (Connection Termination)</h3>
+                <p class="mb-4">TCP terminates connections using a four-way handshake:</p>
+                <ol class="list-decimal pl-8 space-y-2">
+                    <li><strong>FIN</strong>: One host sends FIN (finish) to close its side</li>
+                    <li><strong>ACK</strong>: Other host acknowledges the FIN</li>
+                    <li><strong>FIN</strong>: Other host sends its own FIN</li>
+                    <li><strong>ACK</strong>: Original host acknowledges the FIN</li>
+                </ol>
+                <p class="mt-4">Each side closes independently, allowing for half-closed connections where one side can continue sending data after receiving FIN.</p>
+            </article>
+        </section>
+
+        <!-- Protocol Stack Interactions -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Protocol Stack Interactions</h2>
+            
+            <p class="mb-4">Network protocols work together in layers, with each layer adding its own header (encapsulation) to the data:</p>
+            
+            <div class="bg-gray-100 p-4 rounded-lg mb-6">
+                <h4 class="font-semibold mb-2">Protocol Stack Example: HTTP over TCP over IP</h4>
+                <div class="flex flex-col items-center">
+                    <div class="w-full max-w-md">
+                        <div class="border-b border-gray-300 py-2 px-4 bg-blue-100">Application Layer (HTTP)</div>
+                        <div class="border-b border-gray-300 py-2 px-4 bg-green-100">Transport Layer (TCP)</div>
+                        <div class="border-b border-gray-300 py-2 px-4 bg-yellow-100">Network Layer (IP)</div>
+                        <div class="border-b border-gray-300 py-2 px-4 bg-red-100">Data Link Layer (Ethernet)</div>
+                        <div class="py-2 px-4 bg-purple-100">Physical Layer (Cabling)</div>
+                    </div>
+                </div>
+                <p class="mt-2 text-sm text-gray-600">Each layer adds its header to the payload from the layer above.</p>
+            </div>
+            
+            <p class="mb-4">Data encapsulation process:</p>
+            <ol class="list-decimal pl-8 mb-4 space-y-2">
+                <li>Application creates HTTP message</li>
+                <li>Transport layer adds TCP header (source/dest ports, sequence numbers)</li>
+                <li>Network layer adds IP header (source/dest IP addresses)</li>
+                <li>Data link layer adds frame header (MAC addresses) and trailer (FCS)</li>
+                <li>Physical layer converts to signals for transmission</li>
+            </ol>
+            
+            <div class="bg-blue-50 p-4 rounded-lg">
+                <h4 class="font-semibold mb-2">Protocol Dependencies</h4>
+                <ul class="list-disc pl-8 space-y-1">
+                    <li>HTTP relies on TCP for reliable delivery</li>
+                    <li>TCP relies on IP for routing</li>
+                    <li>IP relies on Ethernet/WiFi for local delivery</li>
+                    <li>DNS typically uses UDP but falls back to TCP for large responses</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ICMP -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">ICMP (Internet Control Message Protocol)</h2>
+            
+            <p class="mb-4">ICMP is a network layer protocol used for diagnostics and error reporting. Common uses:</p>
+            <ul class="list-disc pl-8 mb-6 space-y-1">
+                <li><strong>Ping</strong>: Tests host reachability (ICMP Echo Request/Reply)</li>
+                <li><strong>Traceroute</strong>: Maps path to destination</li>
+                <li>Error reporting (Destination Unreachable, Time Exceeded)</li>
+            </ul>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">Common ICMP Message Types</h3>
+                    <ul class="list-disc pl-8 space-y-1">
+                        <li>0: Echo Reply (ping response)</li>
+                        <li>3: Destination Unreachable</li>
+                        <li>8: Echo Request (ping)</li>
+                        <li>11: Time Exceeded (used in traceroute)</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">ICMP in Action</h3>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Ping Example</h4>
+                        <pre class="bg-gray-200 p-3 rounded overflow-x-auto"><code class="language-bash">$ ping google.com
+PING google.com (142.250.190.78): 56 data bytes
+64 bytes from 142.250.190.78: icmp_seq=0 ttl=117 time=12.345 ms
+64 bytes from 142.250.190.78: icmp_seq=1 ttl=117 time=11.987 ms</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Real-World Protocol Use Cases -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Real-World Protocol Use Cases</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <article class="bg-blue-50 p-4 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3">Online Banking</h3>
+                    <p class="mb-3">HTTPS secures all communication:</p>
+                    <ol class="list-decimal pl-8 space-y-1">
+                        <li>Client establishes TLS handshake with server</li>
+                        <li>All HTTP traffic encrypted</li>
+                        <li>TCP ensures reliable delivery of transactions</li>
+                        <li>DNS resolves bank's domain name to IP</li>
+                    </ol>
+                </article>
+                
+                <article class="bg-green-50 p-4 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3">Video Streaming</h3>
+                    <p class="mb-3">UDP preferred for real-time video:</p>
+                    <ul class="list-disc pl-8 space-y-1">
+                        <li>Lower latency than TCP</li>
+                        <li>No retransmission of lost packets (better to drop than delay)</li>
+                        <li>Adaptive bitrate streaming adjusts quality based on network conditions</li>
+                    </ul>
+                </article>
+                
+                <article class="bg-yellow-50 p-4 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3">Email Delivery</h3>
+                    <p class="mb-3">SMTP transfers email between servers:</p>
+                    <ol class="list-decimal pl-8 space-y-1">
+                        <li>Sender's email client submits to SMTP server</li>
+                        <li>SMTP server looks up recipient's MX record via DNS</li>
+                        <li>SMTP server connects to recipient's SMTP server</li>
+                        <li>Recipient's server delivers to mailbox (accessed via POP3/IMAP)</li>
+                    </ol>
+                </article>
+                
+                <article class="bg-purple-50 p-4 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3">Online Gaming</h3>
+                    <p class="mb-3">UDP preferred for fast-paced games:</p>
+                    <ul class="list-disc pl-8 space-y-1">
+                        <li>Lower latency crucial for real-time interaction</li>
+                        <li>Game engines handle packet loss with prediction algorithms</li>
+                        <li>TCP may be used for non-time-critical data (chat, updates)</li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+
+        <!-- Practical Examples -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Practical Examples</h2>
+            
+            <article class="mb-8">
+                <h3 class="text-xl font-semibold mb-3">Example 1: Analyzing HTTP Traffic with Wireshark</h3>
+                <p class="mb-4">Wireshark is a powerful network protocol analyzer. Let's examine HTTP traffic:</p>
+                
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h4 class="font-semibold mb-2">Steps:</h4>
+                    <ol class="list-decimal pl-8 space-y-2">
+                        <li>Install Wireshark (https://www.wireshark.org/)</li>
+                        <li>Start capture on your network interface</li>
+                        <li>Filter for HTTP traffic: <code class="bg-gray-200 px-1 rounded">http</code></li>
+                        <li>Open a website in your browser</li>
+                        <li>Examine the captured packets:
+                            <ul class="list-disc pl-8 mt-1 space-y-1">
+                                <li>TCP handshake (SYN, SYN-ACK, ACK)</li>
+                                <li>HTTP GET request</li>
+                                <li>HTTP response with status code</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+                
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">Sample Wireshark Output</h4>
+                    <pre class="bg-gray-200 p-3 rounded overflow-x-auto"><code class="language-text">No. Time        Source          Destination     Protocol Info
+1   0.000000    192.168.1.100   93.184.216.34   TCP      59834 → 80 [SYN] Seq=0
+2   0.025123    93.184.216.34   192.168.1.100   TCP      80 → 59834 [SYN, ACK] Seq=0 Ack=1
+3   0.025234    192.168.1.100   93.184.216.34   TCP      59834 → 80 [ACK] Seq=1 Ack=1
+4   0.025456    192.168.1.100   93.184.216.34   HTTP     GET / HTTP/1.1
+5   0.048765    93.184.216.34   192.168.1.100   HTTP     HTTP/1.1 200 OK (text/html)</code></pre>
+                </div>
+            </article>
+            
+            <article>
+                <h3 class="text-xl font-semibold mb-3">Example 2: Visualizing DNS Query Process</h3>
+                <p class="mb-4">This interactive diagram shows how DNS resolves a domain name:</p>
+                
+                <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                    <div id="dns-visualization" class="w-full h-96 bg-white border border-gray-300 rounded-lg flex flex-col items-center justify-center">
+                        <!-- Visualization will be rendered here by JavaScript -->
+                        <p class="text-gray-500">DNS Query Visualization Loading...</p>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Interactive diagram showing the DNS resolution process from client to root, TLD, and authoritative servers.</p>
+                </div>
+                
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">DNS Query Steps:</h4>
+                    <ol class="list-decimal pl-8 space-y-2">
+                        <li>User enters URL in browser</li>
+                        <li>OS checks local DNS cache</li>
+                        <li>If not found, queries configured DNS resolver</li>
+                        <li>Resolver queries root server for TLD information</li>
+                        <li>Root directs to appropriate TLD server (.com, .org, etc.)</li>
+                        <li>TLD server directs to domain's authoritative nameserver</li>
+                        <li>Authoritative server returns the IP address</li>
+                        <li>Resolver caches the result and returns to client</li>
+                    </ol>
+                </div>
+            </article>
+        </section>
+
+        <!-- Summary -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Summary</h2>
+            
+            <p class="mb-4">In this chapter, we've explored the fundamental protocols that power internet communication:</p>
+            
+            <ul class="list-disc pl-8 mb-6 space-y-2">
+                <li><strong>Application Layer Protocols</strong>: HTTP/HTTPS for web, FTP for file transfer, SMTP for email, and DNS for name resolution</li>
+                <li><strong>Transport Protocols</strong>: TCP for reliable communication and UDP for fast, connectionless transmission</li>
+                <li><strong>Ports</strong>: Identify services and enable multiplexing (well-known ports 0-1023)</li>
+                <li><strong>TCP Handshakes</strong>: Three-way for connection establishment, four-way for termination</li>
+                <li><strong>Protocol Stack</strong>: Layers work together with encapsulation (HTTP → TCP → IP → Ethernet)</li>
+                <li><strong>ICMP</strong>: Network diagnostics (ping, traceroute) and error reporting</li>
+            </ul>
+            
+            <div class="bg-blue-50 p-4 rounded-lg">
+                <h4 class="font-semibold mb-2">Key Takeaways</h4>
+                <ul class="list-disc pl-8 space-y-1">
+                    <li>Choose TCP when reliability is critical (web, email, file transfer)</li>
+                    <li>Choose UDP when speed is priority (video, VoIP, gaming)</li>
+                    <li>Always use HTTPS instead of HTTP for secure web communication</li>
+                    <li>DNS is a critical infrastructure that translates names to IPs</li>
+                    <li>Understanding protocols helps troubleshoot network issues</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Further Reading -->
+        <section class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold mb-4">Further Reading</h2>
+            
+            <ul class="list-disc pl-8 space-y-2">
+                <li><strong>Books</strong>:
+                    <ul class="list-disc pl-8 mt-1 space-y-1">
+                        <li>"Computer Networking: A Top-Down Approach" by Kurose and Ross</li>
+                        <li>"TCP/IP Illustrated, Volume 1" by W. Richard Stevens</li>
+                    </ul>
+                </li>
+                <li><strong>RFCs</strong>:
+                    <ul class="list-disc pl-8 mt-1 space-y-1">
+                        <li>RFC 2616: HTTP/1.1</li>
+                        <li>RFC 2818: HTTP Over TLS (HTTPS)</li>
+                        <li>RFC 793: TCP</li>
+                        <li>RFC 768: UDP</li>
+                        <li>RFC 1035: DNS</li>
+                    </ul>
+                </li>
+                <li><strong>Online Resources</strong>:
+                    <ul class="list-disc pl-8 mt-1 space-y-1">
+                        <li>Mozilla Developer Network (MDN) HTTP docs</li>
+                        <li>Cloudflare Learning Center</li>
+                        <li>Wireshark documentation and sample captures</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-4">Computer Networks: From Scratch to Mastery</h3>
+                    <p>A comprehensive tutorial series for CSE graduates and professionals.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-3">Navigation</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:underline">Home</a></li>
+                        <li><a href="#" class="hover:underline">Module 1: Foundations</a></li>
+                        <li><a href="#" class="hover:underline">Module 2: Protocols & Addressing</a></li>
+                        <li><a href="#" class="hover:underline">Module 3: Advanced Networking</a></li>
+                        <li><a href="#" class="hover:underline">Module 4: Real-World Applications</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+                <p>© 2025 Computer Networks Tutorial Series. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Visualizations -->
+    <script>
+        // TCP Handshake Diagram
+        document.addEventListener('DOMContentLoaded', function() {
+            const handshakeContainer = document.getElementById('tcp-handshake-diagram');
+            
+            if (handshakeContainer) {
+                const canvas = document.createElement('canvas');
+                canvas.width = handshakeContainer.offsetWidth;
+                canvas.height = handshakeContainer.offsetHeight;
+                handshakeContainer.appendChild(canvas);
+                
+                const ctx = canvas.getContext('2d');
+                
+                // Draw the diagram
+                ctx.font = '14px Arial';
+                
+                // Client and Server boxes
+                ctx.strokeStyle = '#333';
+                ctx.strokeRect(50, 50, 120, 60);
+                ctx.fillText('Client', 80, 80);
+                ctx.strokeRect(350, 50, 120, 60);
+                ctx.fillText('Server', 380, 80);
+                
+                // SYN arrow
+                ctx.beginPath();
+                ctx.moveTo(170, 80);
+                ctx.lineTo(270, 80);
+                ctx.lineTo(265, 75);
+                ctx.moveTo(270, 80);
+                ctx.lineTo(265, 85);
+                ctx.stroke();
+                ctx.fillText('SYN', 210, 70);
+                
+                // SYN-ACK arrow
+                ctx.beginPath();
+                ctx.moveTo(350, 100);
+                ctx.lineTo(250, 100);
+                ctx.lineTo(255, 95);
+                ctx.moveTo(250, 100);
+                ctx.lineTo(255, 105);
+                ctx.stroke();
+                ctx.fillText('SYN-ACK', 280, 120);
+                
+                // ACK arrow
+                ctx.beginPath();
+                ctx.moveTo(170, 100);
+                ctx.lineTo(270, 100);
+                ctx.lineTo(265, 95);
+                ctx.moveTo(270, 100);
+                ctx.lineTo(265, 105);
+                ctx.stroke();
+                ctx.fillText('ACK', 210, 130);
+            }
+            
+            // DNS Visualization
+            const dnsContainer = document.getElementById('dns-visualization');
+            
+            if (dnsContainer) {
+                const canvas = document.createElement('canvas');
+                canvas.width = dnsContainer.offsetWidth;
+                canvas.height = dnsContainer.offsetHeight;
+                dnsContainer.innerHTML = '';
+                dnsContainer.appendChild(canvas);
+                
+                const ctx = canvas.getContext('2d');
+                
+                // Draw the DNS resolution process
+                ctx.font = '12px Arial';
+                
+                // Elements
+                const elements = [
+                    { x: 100, y: 50, width: 80, height: 40, text: 'Client', color: '#93C5FD' },
+                    { x: 250, y: 50, width: 80, height: 40, text: 'Resolver', color: '#86EFAC' },
+                    { x: 100, y: 150, width: 80, height: 40, text: 'Root Server', color: '#FCA5A5' },
+                    { x: 250, y: 150, width: 80, height: 40, text: 'TLD Server', color: '#FCD34D' },
+                    { x: 100, y: 250, width: 80, height: 40, text: 'Auth NS', color: '#C4B5FD' }
+                ];
+                
+                // Draw elements
+                elements.forEach(el => {
+                    ctx.fillStyle = el.color;
+                    ctx.fillRect(el.x, el.y, el.width, el.height);
+                    ctx.strokeRect(el.x, el.y, el.width, el.height);
+                    ctx.fillStyle = '#000';
+                    ctx.fillText(el.text, el.x + 10, el.y + 25);
+                });
+                
+                // Draw arrows
+                const drawArrow = (x1, y1, x2, y2, label) => {
+                    ctx.beginPath();
+                    ctx.moveTo(x1, y1);
+                    ctx.lineTo(x2, y2);
+                    ctx.stroke();
+                    
+                    // Arrowhead
+                    const angle = Math.atan2(y2 - y1, x2 - x1);
+                    ctx.beginPath();
+                    ctx.moveTo(x2, y2);
+                    ctx.lineTo(x2 - 10 * Math.cos(angle - Math.PI/6), y2 - 10 * Math.sin(angle - Math.PI/6));
+                    ctx.moveTo(x2, y2);
+                    ctx.lineTo(x2 - 10 * Math.cos(angle + Math.PI/6), y2 - 10 * Math.sin(angle + Math.PI/6));
+                    ctx.stroke();
+                    
+                    // Label
+                    if (label) {
+                        ctx.fillText(label, (x1 + x2)/2 - 20, (y1 + y2)/2 - 10);
+                    }
+                };
+                
+                // Query flow
+                drawArrow(180, 70, 250, 70, 'Query');
+                drawArrow(250, 90, 180, 90, 'Response');
+                
+                // Add more arrows as needed for full DNS flow
+            }
+        });
+    </script>
+</body>
+</html>
