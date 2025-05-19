@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 3: Transmission Media & Hardware | Computer Networks: From Scratch to Mastery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Navigation -->
+    <nav class="bg-blue-800 text-white p-4 shadow-md">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <a href="index.html" class="text-xl font-bold mb-4 md:mb-0">Computer Networks: From Scratch to Mastery</a>
+            <div class="flex flex-wrap gap-4">
+                <a href="module1.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 1: Foundations</a>
+                <a href="module2.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 2: Protocols</a>
+                <a href="module3.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 3: Advanced</a>
+                <a href="module4.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 4: Applications</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-white py-12 shadow-sm">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold text-blue-800 mb-4">Chapter 3: Transmission Media & Hardware</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">Understanding the physical components that form the backbone of network communication</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <article class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+            <!-- Introduction -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Introduction</h2>
+                <p class="mb-4">Building on our understanding of network models, we now examine the physical components that enable communication. This chapter explores the transmission media that carry our data and the hardware devices that manage network traffic.</p>
+                <p>By the end of this chapter, you will be able to:</p>
+                <ul class="list-disc pl-6 mt-2 mb-4 space-y-1">
+                    <li>Differentiate between guided and unguided transmission media</li>
+                    <li>Compare various cable types and their applications</li>
+                    <li>Explain the functions of hubs, switches, and routers</li>
+                    <li>Describe wireless technologies including Wi-Fi and 5G</li>
+                    <li>Understand key performance metrics like bandwidth and latency</li>
+                </ul>
+            </section>
+
+            <!-- Guided vs Unguided Media -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Guided vs. Unguided Media</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Guided (Wired) Media</h3>
+                        <p>Signals travel through a physical path:</p>
+                        <ul class="list-disc pl-6 mt-2 space-y-1">
+                            <li><strong>Examples:</strong> Fiber optic, coaxial, twisted pair cables</li>
+                            <li><strong>Advantages:</strong> More secure, higher bandwidth, less interference</li>
+                            <li><strong>Disadvantages:</strong> Installation cost, physical constraints</li>
+                            <li><strong>Use Cases:</strong> Data centers, office networks, backbone infrastructure</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Unguided (Wireless) Media</h3>
+                        <p>Signals propagate through the air:</p>
+                        <ul class="list-disc pl-6 mt-2 space-y-1">
+                            <li><strong>Examples:</strong> Wi-Fi, Bluetooth, cellular (5G)</li>
+                            <li><strong>Advantages:</strong> Mobility, easy installation, scalability</li>
+                            <li><strong>Disadvantages:</strong> Security concerns, interference, limited bandwidth</li>
+                            <li><strong>Use Cases:</strong> Mobile devices, IoT, remote locations</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                    <div id="media-comparison" class="w-full h-64 relative">
+                        <!-- Media comparison visualization will be inserted here by JavaScript -->
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Figure 1: Comparison of guided and unguided transmission media</p>
+                </div>
+            </section>
+
+            <!-- Cables -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Cables: Fiber, Coaxial, and UTP</h2>
+                
+                <div class="grid md:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Fiber Optic</h3>
+                        <div class="flex justify-center mb-3">
+                            <div class="w-4 h-4 bg-gradient-to-r from-yellow-500 to-red-500 rounded-full"></div>
+                            <div class="w-24 h-1 bg-gray-300 self-center"></div>
+                            <div class="w-4 h-4 bg-gradient-to-r from-yellow-500 to-red-500 rounded-full"></div>
+                        </div>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li><strong>Structure:</strong> Glass core (50-62.5µm) with cladding (125µm)</li>
+                            <li><strong>Types:</strong> Single-mode (long distance) vs multi-mode (short distance)</li>
+                            <li><strong>Speed:</strong> 10Mbps to 100Gbps+</li>
+                            <li><strong>Use Cases:</strong> Backbone networks, telecom, data centers</li>
+                            <li><strong>Advantage:</strong> Immune to EMI, high bandwidth, low attenuation</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Coaxial</h3>
+                        <div class="flex justify-center mb-3">
+                            <div class="w-4 h-4 bg-blue-500 rounded-full"></div>
+                            <div class="w-24 h-4 bg-gray-200 rounded-full border-4 border-blue-500"></div>
+                            <div class="w-4 h-4 bg-blue-500 rounded-full"></div>
+                        </div>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li><strong>Structure:</strong> Central conductor with braided shield</li>
+                            <li><strong>Types:</strong> RG-6 (video), RG-8 (thick Ethernet)</li>
+                            <li><strong>Speed:</strong> 10Mbps to 1Gbps</li>
+                            <li><strong>Use Cases:</strong> Cable TV, broadband Internet</li>
+                            <li><strong>Advantage:</strong> Good noise immunity, moderate cost</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">UTP (Unshielded Twisted Pair)</h3>
+                        <div class="flex justify-center mb-3">
+                            <div class="flex space-x-1">
+                                <div class="w-3 h-3 bg-orange-400 rounded-full"></div>
+                                <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+                            </div>
+                            <div class="w-20 h-1 bg-gray-300 self-center"></div>
+                            <div class="flex space-x-1">
+                                <div class="w-3 h-3 bg-orange-400 rounded-full"></div>
+                                <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+                            </div>
+                        </div>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li><strong>Structure:</strong> 4 twisted pairs (8 wires total)</li>
+                            <li><strong>Categories:</strong> Cat5e (1Gbps), Cat6 (10Gbps), Cat6a (10Gbps/100m)</li>
+                            <li><strong>Speed:</strong> 100Mbps to 10Gbps</li>
+                            <li><strong>Use Cases:</strong> Ethernet LANs, telephone lines</li>
+                            <li><strong>Advantage:</strong> Low cost, flexible, easy installation</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="py-2 px-4 border-b">Cable Type</th>
+                                <th class="py-2 px-4 border-b">Max Distance</th>
+                                <th class="py-2 px-4 border-b">Bandwidth</th>
+                                <th class="py-2 px-4 border-b">Cost</th>
+                                <th class="py-2 px-4 border-b">Best For</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="py-2 px-4 border-b">Fiber Optic (SM)</td>
+                                <td class="py-2 px-4 border-b">40+ km</td>
+                                <td class="py-2 px-4 border-b">100Gbps+</td>
+                                <td class="py-2 px-4 border-b">High</td>
+                                <td class="py-2 px-4 border-b">Backbone, long-distance</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border-b">Fiber Optic (MM)</td>
+                                <td class="py-2 px-4 border-b">550m</td>
+                                <td class="py-2 px-4 border-b">10Gbps</td>
+                                <td class="py-2 px-4 border-b">Medium-High</td>
+                                <td class="py-2 px-4 border-b">Data centers, campus</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">Coaxial (RG-6)</td>
+                                <td class="py-2 px-4 border-b">500m</td>
+                                <td class="py-2 px-4 border-b">1Gbps</td>
+                                <td class="py-2 px-4 border-b">Medium</td>
+                                <td class="py-2 px-4 border-b">Cable TV, broadband</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border-b">UTP (Cat6)</td>
+                                <td class="py-2 px-4 border-b">100m</td>
+                                <td class="py-2 px-4 border-b">10Gbps</td>
+                                <td class="py-2 px-4 border-b">Low</td>
+                                <td class="py-2 px-4 border-b">Office networks</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-6">
+                    <h3 class="text-lg font-medium text-yellow-800 mb-2">Common Pitfall</h3>
+                    <p>Using incorrect cable categories can limit network performance. For example, using Cat5 cable for a 10Gbps connection will fail - always verify cable specifications match your speed requirements.</p>
+                </div>
+            </section>
+
+            <!-- Network Devices -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Network Devices: Hubs, Switches, and Routers</h2>
+                
+                <div class="grid md:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Hubs</h3>
+                        <div class="flex justify-center mb-3">
+                            <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-2xl">⇄</div>
+                        </div>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li><strong>Layer:</strong> Physical (Layer 1)</li>
+                            <li><strong>Function:</strong> Basic signal repeating</li>
+                            <li><strong>Operation:</strong> Broadcasts to all ports</li>
+                            <li><strong>Speed:</strong> Typically 10/100Mbps</li>
+                            <li><strong>Status:</strong> Largely obsolete</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Switches</h3>
+                        <div class="flex justify-center mb-3">
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-2xl">⇄</div>
+                        </div>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li><strong>Layer:</strong> Data Link (Layer 2)</li>
+                            <li><strong>Function:</strong> Intelligent forwarding</li>
+                            <li><strong>Operation:</strong> Learns MAC addresses</li>
+                            <li><strong>Speed:</strong> 1Gbps to 100Gbps</li>
+                            <li><strong>Features:</strong> VLANs, port security</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Routers</h3>
+                        <div class="flex justify-center mb-3">
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center text-2xl">↔</div>
+                        </div>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li><strong>Layer:</strong> Network (Layer 3)</li>
+                            <li><strong>Function:</strong> Inter-network routing</li>
+                            <li><strong>Operation:</strong> Uses IP addresses</li>
+                            <li><strong>Features:</strong> NAT, firewall, DHCP</li>
+                            <li><strong>Use Case:</strong> Connecting networks</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                    <div id="device-visualization" class="w-full h-64 relative">
+                        <!-- Device visualization will be inserted here by JavaScript -->
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Figure 2: Network device hierarchy showing how traffic flows through different devices</p>
+                </div>
+
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Device Comparison</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="py-2 px-4 border-b">Feature</th>
+                                <th class="py-2 px-4 border-b">Hub</th>
+                                <th class="py-2 px-4 border-b">Switch</th>
+                                <th class="py-2 px-4 border-b">Router</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="py-2 px-4 border-b">OSI Layer</td>
+                                <td class="py-2 px-4 border-b">1</td>
+                                <td class="py-2 px-4 border-b">2 (or 3 for multilayer)</td>
+                                <td class="py-2 px-4 border-b">3</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border-b">Address Used</td>
+                                <td class="py-2 px-4 border-b">None</td>
+                                <td class="py-2 px-4 border-b">MAC</td>
+                                <td class="py-2 px-4 border-b">IP</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">Traffic Handling</td>
+                                <td class="py-2 px-4 border-b">Broadcasts</td>
+                                <td class="py-2 px-4 border-b">Selective forwarding</td>
+                                <td class="py-2 px-4 border-b">Routing between networks</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border-b">Collision Domain</td>
+                                <td class="py-2 px-4 border-b">Single</td>
+                                <td class="py-2 px-4 border-b">Per port</td>
+                                <td class="py-2 px-4 border-b">Per interface</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">Modern Usage</td>
+                                <td class="py-2 px-4 border-b">Rare</td>
+                                <td class="py-2 px-4 border-b">Ubiquitous</td>
+                                <td class="py-2 px-4 border-b">Essential</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- NICs -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Network Interface Cards (NICs)</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">What is a NIC?</h3>
+                        <p class="mb-4">A Network Interface Card (NIC) is the hardware component that connects a device to a network. Modern computers often have NICs built into the motherboard.</p>
+                        
+                        <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Types of NICs</h3>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li><strong>Wired NICs:</strong> Ethernet ports (RJ-45) supporting various speeds (1Gbps common)</li>
+                            <li><strong>Wireless NICs:</strong> Wi-Fi adapters supporting 802.11 standards</li>
+                            <li><strong>Specialized NICs:</strong> Fiber optic, high-speed (10Gbps+), or low-latency variants</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">NIC Configuration</h3>
+                        <p>Key settings to check:</p>
+                        <ul class="list-disc pl-6 mt-2 space-y-1">
+                            <li><strong>MAC Address:</strong> Unique hardware identifier</li>
+                            <li><strong>Speed/Duplex:</strong> Auto-negotiation or manual (100Mbps/1Gbps, full/half duplex)</li>
+                            <li><strong>IP Configuration:</strong> DHCP or static IP assignment</li>
+                            <li><strong>Advanced Features:</strong> Wake-on-LAN, offloading</li>
+                        </ul>
+                        <div class="mt-4 bg-gray-100 p-3 rounded">
+                            <h4 class="font-medium mb-1">Windows: View NIC Details</h4>
+                            <pre class="text-sm bg-white p-2 rounded overflow-x-auto"><code class="language-text">
+ipconfig /all
+                            </code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                    <h3 class="text-lg font-medium text-yellow-800 mb-2">Troubleshooting Tip</h3>
+                    <p>If experiencing network issues, first verify the NIC's link light (physical connection), then check for driver updates. Mismatched duplex settings are a common cause of performance problems.</p>
+                </div>
+            </section>
+
+            <!-- Wireless Technologies -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Wireless Technologies</h2>
+                
+                <div class="grid md:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Wi-Fi (IEEE 802.11)</h3>
+                        <div class="flex justify-center mb-3">
+                            <div class="w-12 h-12 bg-blue-200 rounded-full flex items-center justify-center text-2xl">📶</div>
+                        </div>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li><strong>Standards:</strong> 802.11ac (Wi-Fi 5), 802.11ax (Wi-Fi 6)</li>
+                            <li><strong>Bands:</strong> 2.4GHz (range), 5GHz (speed), 6GHz (Wi-Fi 6E)</li>
+                            <li><strong>Speed:</strong> 150Mbps to 9.6Gbps (Wi-Fi 6)</li>
+                            <li><strong>Range:</strong> ~50m indoors, affected by obstacles</li>
+                            <li><strong>Use Cases:</strong> Home/office networks, public hotspots</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Bluetooth</h3>
+                        <div class="flex justify-center mb-3">
+                            <div class="w-12 h-12 bg-purple-200 rounded-full flex items-center justify-center text-2xl">B</div>
+                        </div>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li><strong>Versions:</strong> 5.0, 5.1, 5.2 (current as of 2025)</li>
+                            <li><strong>Range:</strong> ~10m (Class 2 devices)</li>
+                            <li><strong>Speed:</strong> 1-3Mbps (BLE), up to 50Mbps (5.2)</li>
+                            <li><strong>Features:</strong> Low energy (BLE), mesh networking</li>
+                            <li><strong>Use Cases:</strong> Peripherals, audio, IoT devices</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">5G Cellular</h3>
+                        <div class="flex justify-center mb-3">
+                            <div class="w-12 h-12 bg-green-200 rounded-full flex items-center justify-center text-2xl">5G</div>
+                        </div>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li><strong>Speeds:</strong> 100Mbps to 10Gbps (theoretical)</li>
+                            <li><strong>Latency:</strong> 1-10ms (ultra-low latency)</li>
+                            <li><strong>Bands:</strong> Sub-6GHz, mmWave (24-100GHz)</li>
+                            <li><strong>Features:</strong> Network slicing, massive MIMO</li>
+                            <li><strong>Use Cases:</strong> Mobile broadband, IoT, autonomous vehicles</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-lg mb-6 ">
+                    <div id="wireless-visualization" class="w-full h-64 relative">
+                        <!-- Wireless visualization will be inserted here by JavaScript -->
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Figure 3: Wireless technology comparison showing coverage areas and typical applications</p>
+                </div>
+
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Wi-Fi Standards Evolution</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="py-2 px-4 border-b">Standard</th>
+                                <th class="py-2 px-4 border-b">Year</th>
+                                <th class="py-2 px-4 border-b">Max Speed</th>
+                                <th class="py-2 px-4 border-b">Frequency</th>
+                                <th class="py-2 px-4 border-b">Features</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="py-2 px-4 border-b">802.11b</td>
+                                <td class="py-2 px-4 border-b">1999</td>
+                                <td class="py-2 px-4 border-b">11Mbps</td>
+                                <td class="py-2 px-4 border-b">2.4GHz</td>
+                                <td class="py-2 px-4 border-b">First widely adopted</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border-b">802.11g</td>
+                                <td class="py-2 px-4 border-b">2003</td>
+                                <td class="py-2 px-4 border-b">54Mbps</td>
+                                <td class="py-2 px-4 border-b">2.4GHz</td>
+                                <td class="py-2 px-4 border-b">OFDM modulation</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">802.11n</td>
+                                <td class="py-2 px-4 border-b">2009</td>
+                                <td class="py-2 px-4 border-b">600Mbps</td>
+                                <td class="py-2 px-4 border-b">2.4/5GHz</td>
+                                <td class="py-2 px-4 border-b">MIMO, 40MHz channels</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border-b">802.11ac</td>
+                                <td class="py-2 px-4 border-b">2013</td>
+                                <td class="py-2 px-4 border-b">3.5Gbps</td>
+                                <td class="py-2 px-4 border-b">5GHz</td>
+                                <td class="py-2 px-4 border-b">MU-MIMO, 160MHz</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">802.11ax (Wi-Fi 6)</td>
+                                <td class="py-2 px-4 border-b">2019</td>
+                                <td class="py-2 px-4 border-b">9.6Gbps</td>
+                                <td class="py-2 px-4 border-b">2.4/5/6GHz</td>
+                                <td class="py-2 px-4 border-b">OFDMA, TWT</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Performance Metrics -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Performance Metrics</h2>
+                
+                <div class="grid md:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Bandwidth</h3>
+                        <div class="h-24 flex items-center justify-center">
+                            <div class="w-full bg-gradient-to-r from-blue-100 to-blue-300 h-8 rounded-full flex items-center justify-center text-sm font-medium">
+                                Capacity
+                            </div>
+                        </div>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Maximum data transfer rate</li>
+                            <li>Measured in bits per second (bps)</li>
+                            <li>Common units: Mbps, Gbps</li>
+                            <li>Example: Cat6 cable = 10Gbps</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Latency</h3>
+                        <div class="h-24 flex items-center justify-center">
+                            <div class="w-8 h-8 bg-red-400 rounded-full animate-bounce"></div>
+                        </div>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Time for data to travel</li>
+                            <li>Measured in milliseconds (ms)</li>
+                            <li>Factors: distance, medium, processing</li>
+                            <li>Example: Fiber ≈ 5ms/1000km</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Attenuation</h3>
+                        <div class="h-24 flex items-center justify-center">
+                            <div class="w-full h-4 bg-gradient-to-r from-green-500 to-red-500 rounded-full"></div>
+                        </div>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Signal loss over distance</li>
+                            <li>Measured in decibels (dB)</li>
+                            <li>Mitigation: repeaters, amplifiers</li>
+                            <li>Example: UTP ≈ 20dB/100m</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-medium text-gray-800 mt-6 mb-3">Comparing Media Performance</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="py-2 px-4 border-b">Media Type</th>
+                                <th class="py-2 px-4 border-b">Typical Bandwidth</th>
+                                <th class="py-2 px-4 border-b">Latency</th>
+                                <th class="py-2 px-4 border-b">Attenuation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="py-2 px-4 border-b">Fiber Optic</td>
+                                <td class="py-2 px-4 border-b">10Gbps-100Gbps</td>
+                                <td class="py-2 px-4 border-b">Very Low</td>
+                                <td class="py-2 px-4 border-b">0.2dB/km</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border-b">UTP Cat6</td>
+                                <td class="py-2 px-4 border-b">10Gbps</td>
+                                <td class="py-2 px-4 border-b">Low</td>
+                                <td class="py-2 px-4 border-b">20dB/100m</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">Coaxial</td>
+                                <td class="py-2 px-4 border-b">1Gbps</td>
+                                <td class="py-2 px-4 border-b">Medium</td>
+                                <td class="py-2 px-4 border-b">10dB/100m</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border-b">Wi-Fi 6</td>
+                                <td class="py-2 px-4 border-b">9.6Gbps</td>
+                                <td class="py-2 px-4 border-b">Medium</td>
+                                <td class="py-2 px-4 border-b">High (varies)</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">5G mmWave</td>
+                                <td class="py-2 px-4 border-b">10Gbps</td>
+                                <td class="py-2 px-4 border-b">Very Low</td>
+                                <td class="py-2 px-4 border-b">Very High</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Practical Example 1: Packet Tracer -->
+            <section class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Practical Example: Configuring a Switch in Packet Tracer</h2>
+                
+                <p class="mb-4">Let's configure a basic Cisco switch with VLANs and port security:</p>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Step 1: Access CLI</h3>
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>Drag a 2960 switch to the workspace</li>
+                        <li>Connect to console port or double-click the device</li>
+                        <li>Enter privileged EXEC mode: <code class="bg-gray-100 px-1 rounded">enable</code></li>
+                    </ol>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Step 2: Basic Configuration</h3>
+                    <pre class="text-sm bg-gray-100 p-2 rounded overflow-x-auto"><code class="language-text">
+configure terminal
+hostname Office-Switch
+enable secret MySecurePassword
+service password-encryption
+                    </code></pre>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Step 3: Configure VLANs</h3>
+                    <pre class="text-sm bg-gray-100 p-2 rounded overflow-x-auto"><code class="language-text">
+vlan 10
+name Sales
+vlan 20
+name Engineering
+exit
+                    </code></pre>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Step 4: Assign Ports</h3>
+                    <pre class="text-sm bg-gray-100 p-2 rounded overflow-x-auto"><code class="language-text">
+interface range fastEthernet 0/1-12
+switchport mode access
+switchport access vlan 10
+exit
+
+interface range fastEthernet 0/13-24
+switchport mode access
+switchport access vlan 20
+exit
+                    </code></pre>
+                </div>
+                
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                    <h3 class="text-lg font-medium text-yellow-800 mb-2">Best Practice</h3>
+                    <p>Always add port security to prevent unauthorized devices from connecting:</p>
+                    <pre class="text-sm bg-yellow-100 p-2 rounded overflow-x-auto mt-2"><code class="language-text">
+interface range fastEthernet 0/1-24
+switchport port-security
+switchport port-security maximum 1
+switchport port-security violation restrict
+end
+                    </code></pre>
+                </div>
+            </section>
+
+            <!-- Practical Example 2: Cable Visualization -->
+            <section class="p-6">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Visualizing Transmission Media</h2>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                    <div id="cable-visualization" class="w-full h-96 relative">
+                        <!-- Cable visualization will be inserted here by JavaScript -->
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Figure 4: Interactive comparison of fiber optic, coaxial, and UTP cable structures</p>
+                </div>
+                
+                <h3 class="text-xl font-medium text-gray-800 mb-3">How to Read This Visualization</h3>
+                <p>The interactive diagram shows:</p>
+                <ul class="list-disc pl-6 mt-2 space-y-1">
+                    <li><strong>Fiber Optic:</strong> Core/cladding structure with light propagation</li>
+                    <li><strong>Coaxial:</strong> Central conductor with dielectric and shielding</li>
+                    <li><strong>UTP:</strong> Twisted pairs with color-coded insulation</li>
+                </ul>
+            </section>
+
+            <!-- Summary -->
+            <section class="p-6 bg-blue-50 border-t border-blue-200">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Chapter Summary</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Key Concepts</h3>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Guided media (wired) offers reliability while unguided (wireless) provides mobility</li>
+                            <li>Fiber optic provides the highest bandwidth and lowest attenuation</li>
+                            <li>Switches operate at Layer 2 (MAC) while routers work at Layer 3 (IP)</li>
+                            <li>Modern wireless technologies like Wi-Fi 6 and 5G deliver multi-gigabit speeds</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Best Practices</h3>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Use fiber for backbone connections requiring high bandwidth</li>
+                            <li>Implement VLANs on switches for network segmentation</li>
+                            <li>Choose Cat6 or higher UTP for new Ethernet installations</li>
+                            <li>For wireless, prefer 5GHz band when possible for less interference</li>
+                            <li>Regularly update NIC drivers for optimal performance</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Further Reading -->
+            <section class="p-6">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Further Reading</h2>
+                
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Books:</strong> "Computer Networks" by Andrew Tanenbaum (Chapter 4 - The Medium Access Control Sublayer)</li>
+                    <li><strong>Standards:</strong> 
+                        <a href="https://standards.ieee.org/standard/802_3-2018.html" class="text-blue-600 hover:underline">IEEE 802.3 (Ethernet)</a>, 
+                        <a href="https://standards.ieee.org/standard/802_11-2020.html" class="text-blue-600 hover:underline">IEEE 802.11 (Wi-Fi)</a>
+                    </li>
+                    <li><strong>Vendor Documentation:</strong> 
+                        <a href="https://www.cisco.com/c/en/us/support/switches/catalyst-2960-series-switches/products-installation-guides-list.html" class="text-blue-600 hover:underline">Cisco Catalyst 2960 Configuration Guides</a>
+                    </li>
+                    <li><strong>Tools:</strong> Wireshark for protocol analysis, Cisco Packet Tracer for network simulation</li>
+                </ul>
+            </section>
+
+            <!-- Navigation -->
+            <section class="p-6 bg-gray-50 border-t border-gray-200">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <a href="chapter2.html" class="text-blue-600 hover:text-blue-800 mb-4 md:mb-0">← Previous Chapter: Network Models & Standards</a>
+                    <a href="chapter4.html" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Next Chapter: IP Addressing & Subnetting →</a>
+                </div>
+            </section>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>© 2025 Computer Networks: From Scratch to Mastery | Created by a CSE Graduate</p>
+            <p class="mt-2 text-gray-400">Content powered by AI + Human Review</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Visualizations -->
+    <script>
+        // Media Comparison Visualization
+        function drawMediaComparison() {
+            const container = document.getElementById('media-comparison');
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+            
+            // Create canvas
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            container.appendChild(canvas);
+            const ctx = canvas.getContext('2d');
+            
+            // Draw guided media
+            ctx.fillStyle = '#3b82f6';
+            ctx.fillRect(width * 0.1, height * 0.2, width * 0.35, height * 0.6);
+            ctx.strokeStyle = '#1d4ed8';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(width * 0.1, height * 0.2, width * 0.35, height * 0.6);
+            
+            // Draw cables inside guided
+            // Fiber
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(width * 0.15, height * 0.3);
+            ctx.lineTo(width * 0.4, height * 0.3);
+            ctx.stroke();
+            
+            // Coaxial
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 6;
+            ctx.beginPath();
+            ctx.moveTo(width * 0.15, height * 0.5);
+            ctx.lineTo(width * 0.4, height * 0.5);
+            ctx.stroke();
+            
+            // UTP
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(width * 0.15, height * 0.7);
+            ctx.lineTo(width * 0.4, height * 0.7);
+            ctx.stroke();
+            
+            // Draw unguided media
+            ctx.fillStyle = '#ec4899';
+            ctx.beginPath();
+            ctx.arc(width * 0.7, height * 0.5, height * 0.3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#be185d';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            // Draw wireless signals
+            for (let i = 1; i <= 3; i++) {
+                ctx.strokeStyle = `rgba(255, 255, 255, ${0.8 - i * 0.2})`;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(width * 0.7, height * 0.5, height * 0.3 + i * 15, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+            
+            // Add labels
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 14px Arial';
+            ctx.fillText('Guided Media', width * 0.1, height * 0.15);
+            ctx.fillText('Unguided Media', width * 0.6, height * 0.15);
+            
+            ctx.font = '12px Arial';
+            ctx.fillText('Fiber', width * 0.15, height * 0.28);
+            ctx.fillText('Coaxial', width * 0.15, height * 0.48);
+            ctx.fillText('UTP', width * 0.15, height * 0.68);
+            ctx.fillText('Wi-Fi/5G', width * 0.65, height * 0.4);
+        }
+        
+        // Device Visualization
+        function drawDeviceVisualization() {
+            const container = document.getElementById('device-visualization');
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+            
+            // Create devices
+            const devices = [
+                { type: 'hub', x: width * 0.2, y: height * 0.3, color: 'bg-gray-400' },
+                { type: 'switch', x: width * 0.5, y: height * 0.3, color: 'bg-blue-400' },
+                { type: 'router', x: width * 0.8, y: height * 0.3, color: 'bg-green-400' },
+                { type: 'pc', x: width * 0.1, y: height * 0.7, color: 'bg-purple-300' },
+                { type: 'pc', x: width * 0.3, y: height * 0.7, color: 'bg-purple-300' },
+                { type: 'server', x: width * 0.7, y: height * 0.7, color: 'bg-yellow-400' },
+                { type: 'pc', x: width * 0.9, y: height * 0.7, color: 'bg-purple-300' }
+            ];
+            
+            // Draw devices and connections
+            devices.forEach(device => {
+                const element = document.createElement('div');
+                element.className = `absolute rounded-lg flex items-center justify-center text-white font-bold ${device.color}`;
+                element.style.width = '50px';
+                element.style.height = '50px';
+                element.style.left = `${device.x - 25}px`;
+                element.style.top = `${device.y - 25}px`;
+
+                // Set device icons
+                if (device.type === 'hub') element.textContent = '⇄';
+                else if (device.type === 'switch') element.textContent = '⇄';
+                else if (device.type === 'router') element.textContent = '↔';
+                else if (device.type === 'pc') element.textContent = '💻';
+                else if (device.type === 'server') element.textContent = '🖥️';
+
+                container.appendChild(element);
+
+                // Connect PCs to hub
+                if (device.type === 'pc' && device.x < width * 0.4) {
+                    const line = document.createElement('div');
+                    line.className = 'absolute bg-gray-300';
+                    line.style.width = `${Math.sqrt(Math.pow(device.x - width * 0.2, 2) + Math.pow(device.y - height * 0.3, 2))}px`;
+                    line.style.height = '2px';
+                    line.style.left = `${device.x}px`;
+                    line.style.top = `${device.y}px`;
+                    line.style.transformOrigin = '0 0';
+                    const angle = Math.atan2(height * 0.3 - device.y, width * 0.2 - device.x) * 180 / Math.PI;
+                    line.style.transform = `rotate(${angle}deg)`;
+
+                    container.appendChild(line);
+                }
+
+                // Connect switch to router
+                if (device.type === 'switch') {
+                    const line = document.createElement('div');
+                    line.className = 'absolute bg-gray-300';
+                    line.style.width = `${width * 0.3}px`;
+                    line.style.height = '2px';
+                    line.style.left = `${width * 0.5}px`;
+                    line.style.top = `${height * 0.3}px`;
+                    container.appendChild(line);
+                }
+
+                // Connect router to server and PC
+                if (device.type === 'router') {
+                    // To server
+                    const line1 = document.createElement('div');
+                    line1.className = 'absolute bg-gray-300';
+                    line1.style.width = `${Math.sqrt(Math.pow(width * 0.7 - width * 0.8, 2) + Math.pow(height * 0.7 - height * 0.3, 2))}px`;
+                    line1.style.height = '2px';
+                    line1.style.left = `${width * 0.8}px`;
+                    line1.style.top = `${height * 0.3}px`;
+                    line1.style.transformOrigin = '0 0';
+                    const angle1 = Math.atan2(height * 0.7 - height * 0.3, width * 0.7 - width * 0.8) * 180 / Math.PI;
+                    line1.style.transform = `rotate(${angle1}deg)`;
+                    container.appendChild(line1);
+
+                    // To far right PC
+                    const line2 = document.createElement('div');
+                    line2.className = 'absolute bg-gray-300';
+                    line2.style.width = `${Math.sqrt(Math.pow(width * 0.9 - width * 0.8, 2) + Math.pow(height * 0.7 - height * 0.3, 2))}px`;
+                    line2.style.height = '2px';
+                    line2.style.left = `${width * 0.8}px`;
+                    line2.style.top = `${height * 0.3}px`;
+                    line2.style.transformOrigin = '0 0';
+                    const angle2 = Math.atan2(height * 0.7 - height * 0.3, width * 0.9 - width * 0.8) * 180 / Math.PI;
+                    line2.style.transform = `rotate(${angle2}deg)`;
+                    container.appendChild(line2);
+                }
+            });
+
+            // Add labels
+            const labels = [
+                { text: 'Hub (Broadcasts)', x: width * 0.2, y: height * 0.15 },
+                { text: 'Switch (Selective)', x: width * 0.5, y: height * 0.15 },
+                { text: 'Router (Routes Between Networks)', x: width * 0.8, y: height * 0.15 }
+            ];
+
+            labels.forEach(label => {
+                const element = document.createElement('div');
+                element.className = 'absolute text-sm font-medium text-center';
+                element.style.left = `${label.x - 60}px`;
+                element.style.top = `${label.y}px`;
+                element.style.width = '120px';
+                element.textContent = label.text;
+                container.appendChild(element);
+            });
+        }
+
+        // Wireless Visualization
+        function drawWirelessVisualization() {
+            const container = document.getElementById('wireless-visualization');
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+
+            // Clear previous content
+            container.innerHTML = '';
+
+            // Define wireless technologies with range
+            const wirelessTech = [
+                { name: 'Wi-Fi', x: width * 0.25, y: height * 0.5, range: 80, color: 'rgba(59, 130, 246, 0.2)', border: 'border-blue-500' },
+                { name: 'Bluetooth', x: width * 0.5, y: height * 0.5, range: 40, color: 'rgba(16, 185, 129, 0.2)', border: 'border-green-500' },
+                { name: 'Cellular', x: width * 0.75, y: height * 0.5, range: 120, color: 'rgba(234, 179, 8, 0.2)', border: 'border-yellow-500' }
+            ];
+
+            wirelessTech.forEach(tech => {
+                // Coverage Circle
+                const circle = document.createElement('div');
+                circle.className = `absolute rounded-full border ${tech.border}`;
+                circle.style.width = `${tech.range * 2}px`;
+                circle.style.height = `${tech.range * 2}px`;
+                circle.style.left = `${tech.x - tech.range}px`;
+                circle.style.top = `${tech.y - tech.range}px`;
+                circle.style.backgroundColor = tech.color;
+                container.appendChild(circle);
+
+                // Central icon
+                const center = document.createElement('div');
+                center.className = `absolute w-10 h-10 flex items-center justify-center rounded-full bg-white border ${tech.border} font-bold text-sm text-gray-700`;
+                center.textContent = tech.name.charAt(0);
+                center.style.left = `${tech.x - 20}px`;
+                center.style.top = `${tech.y - 20}px`;
+                container.appendChild(center);
+
+                // Add label
+                const label = document.createElement('div');
+                label.className = 'absolute text-xs text-center text-gray-700';
+                label.style.left = `${tech.x - 40}px`;
+                label.style.top = `${tech.y + tech.range + 5}px`;
+                label.style.width = '80px';
+                label.textContent = tech.name;
+                container.appendChild(label);
+            });
+
+            // Optional: Add some sample devices inside the coverage zones
+            const devices = [
+                { emoji: '📱', x: width * 0.23, y: height * 0.5 },
+                { emoji: '🎧', x: width * 0.5, y: height * 0.48 },
+                { emoji: '📶', x: width * 0.77, y: height * 0.52 }
+            ];
+
+            devices.forEach(d => {
+                const dev = document.createElement('div');
+                dev.className = 'absolute text-xl';
+                dev.textContent = d.emoji;
+                dev.style.left = `${d.x - 10}px`;
+                dev.style.top = `${d.y - 10}px`;
+                container.appendChild(dev);
+            });
+        }
+
+        
+        // Cable Visualization
+        function drawCableVisualization() {
+            const container = document.getElementById('cable-visualization');
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+            
+            // Create canvas
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            container.appendChild(canvas);
+            const ctx = canvas.getContext('2d');
+            
+            // Draw fiber optic
+            ctx.fillStyle = '#f59e0b';
+            ctx.beginPath();
+            ctx.arc(width * 0.2, height * 0.3, 30, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#f97316';
+            ctx.beginPath();
+            ctx.arc(width * 0.2, height * 0.3, 20, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Light in fiber
+            for (let i = 0; i < 5; i++) {
+                ctx.fillStyle = `rgba(255, 255, 255, ${0.8 - i * 0.15})`;
+                ctx.beginPath();
+                ctx.arc(width * 0.2 + i * 15, height * 0.3, 5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // Draw coaxial
+            ctx.fillStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.arc(width * 0.5, height * 0.3, 30, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(width * 0.5, height * 0.3, 20, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.arc(width * 0.5, height * 0.3, 10, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Draw UTP
+            const colors = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b'];
+            for (let i = 0; i < 4; i++) {
+                ctx.strokeStyle = colors[i];
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.moveTo(width * 0.8 - 20, height * 0.3 - 15 + i * 10);
+                ctx.bezierCurveTo(
+                    width * 0.8 - 10, height * 0.3 - 20 + i * 10,
+                    width * 0.8 + 10, height * 0.3 - 20 + i * 10,
+                    width * 0.8 + 20, height * 0.3 - 15 + i * 10
+                );
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(width * 0.8 - 20, height * 0.3 + 15 - i * 10);
+                ctx.bezierCurveTo(
+                    width * 0.8 - 10, height * 0.3 + 20 - i * 10,
+                    width * 0.8 + 10, height * 0.3 + 20 - i * 10,
+                    width * 0.8 + 20, height * 0.3 + 15 - i * 10
+                );
+                ctx.stroke();
+            }
+            
+            // Add labels
+            ctx.fillStyle = '#000000';
+            ctx.font = 'bold 16px Arial';
+            ctx.fillText('Fiber Optic', width * 0.2 - 40, height * 0.6);
+            ctx.fillText('Coaxial', width * 0.5 - 30, height * 0.6);
+            ctx.fillText('UTP Cable', width * 0.8 - 30, height * 0.6);
+            
+            // Add descriptions
+            ctx.font = '12px Arial';
+            ctx.fillText('Core/Cladding', width * 0.2 - 35, height * 0.65);
+            ctx.fillText('Light Transmission', width * 0.2 - 45, height * 0.68);
+            
+            ctx.fillText('Central Conductor', width * 0.5 - 45, height * 0.65);
+            ctx.fillText('Dielectric/Shield', width * 0.5 - 45, height * 0.68);
+            
+            ctx.fillText('Twisted Pairs', width * 0.8 - 30, height * 0.65);
+            ctx.fillText('(4 pairs)', width * 0.8 - 20, height * 0.68);
+        }
+        
+        // Initialize visualizations when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            drawMediaComparison();
+            drawDeviceVisualization();
+            drawCableVisualization();
+             drawWirelessVisualization();
+        });
+    </script>
+</body>
+</html>
