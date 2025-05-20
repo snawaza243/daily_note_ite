@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 6: Routing & Switching | Computer Networks: From Scratch to Mastery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-600 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <a href="#" class="text-2xl font-bold mb-4 md:mb-0">Computer Networks: From Scratch to Mastery</a>
+            <div class="flex flex-wrap gap-4">
+                <a href="#" class="hover:underline">Home</a>
+                <a href="#" class="hover:underline">Module 1</a>
+                <a href="#" class="font-bold underline">Module 2</a>
+                <a href="#" class="hover:underline">Module 3</a>
+                <a href="#" class="hover:underline">Module 4</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Chapter Navigation -->
+    <div class="container mx-auto px-4 py-2 bg-blue-50 rounded-lg my-4">
+        <div class="flex flex-wrap justify-between">
+            <a href="chapter5.html" class="text-blue-700 hover:underline">← Chapter 5: Key Networking Protocols</a>
+            <a href="chapter7.html" class="text-blue-700 hover:underline">Chapter 7: Network Security →</a>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-center mb-4">Chapter 6: Routing & Switching</h1>
+        <p class="text-xl text-center text-gray-600 max-w-3xl mx-auto">
+            Mastering the protocols and technologies that direct traffic across networks, from routing algorithms to VLAN segmentation.
+        </p>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 pb-12">
+        <!-- Introduction -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Introduction</h2>
+            <p class="mb-4">Routing and switching form the backbone of modern network communication. Building on our understanding of IP addressing (Chapter 4) and network protocols (Chapter 5), this chapter explores how data is efficiently directed across networks.</p>
+            <p>By the end of this chapter, you will understand:</p>
+            <ul class="list-disc pl-8 mt-2 space-y-1">
+                <li>Key routing algorithms (RIP, OSPF, BGP) and their operation</li>
+                <li>VLANs for network segmentation and MAC address fundamentals</li>
+                <li>Switching techniques (Store & Forward vs Cut-through)</li>
+                <li>Static versus dynamic routing approaches</li>
+                <li>Routing table structure and function</li>
+                <li>Spanning Tree Protocol for loop prevention</li>
+                <li>Quality of Service (QoS) mechanisms</li>
+            </ul>
+        </section>
+
+        <!-- Routing Algorithms -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Routing Algorithms</h2>
+            
+            <article class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">RIP (Routing Information Protocol)</h3>
+                <p class="mb-3">RIP is a <strong>distance-vector</strong> routing protocol that uses hop count as its metric. Key characteristics:</p>
+                <ul class="list-disc pl-8 mb-4 space-y-1">
+                    <li>Maximum hop count of 15 (16 = infinity/unreachable)</li>
+                    <li>Updates routing tables every 30 seconds</li>
+                    <li>Uses Bellman-Ford algorithm</li>
+                    <li>Simple to configure but slow convergence</li>
+                </ul>
+                
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h4 class="font-semibold mb-2">RIP Version 2 Configuration (Cisco IOS)</h4>
+                    <pre class="bg-gray-200 p-3 rounded overflow-x-auto"><code class="language-text">Router(config)# router rip
+Router(config-router)# version 2
+Router(config-router)# network 192.168.1.0
+Router(config-router)# no auto-summary</code></pre>
+                </div>
+                
+                <p class="mb-3">Common issues with RIP:</p>
+                <ul class="list-disc pl-8 space-y-1">
+                    <li>Count-to-infinity problem (solved with split horizon)</li>
+                    <li>Slow convergence in large networks</li>
+                    <li>Lack of support for VLSM in RIPv1</li>
+                </ul>
+            </article>
+            
+            <article class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">OSPF (Open Shortest Path First)</h3>
+                <p class="mb-3">OSPF is a <strong>link-state</strong> routing protocol that uses Dijkstra's algorithm to calculate the shortest path. Key features:</p>
+                <ul class="list-disc pl-8 mb-4 space-y-1">
+                    <li>Uses cost as metric (based on link bandwidth)</li>
+                    <li>Fast convergence with triggered updates</li>
+                    <li>Supports hierarchical design with areas</li>
+                    <li>Requires more CPU/memory than RIP but scales better</li>
+                </ul>
+                
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <h4 class="font-semibold mb-2">OSPF Areas</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li><strong>Backbone Area (Area 0)</strong>: Connects all other areas</li>
+                            <li><strong>Regular Areas</strong>: Connect to backbone via ABRs</li>
+                            <li><strong>Stub Areas</strong>: Don't receive external routes</li>
+                        </ul>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded-lg">
+                        <h4 class="font-semibold mb-2">OSPF Configuration (Cisco IOS)</h4>
+                        <pre class="bg-white p-2 rounded overflow-x-auto"><code class="language-text">Router(config)# router ospf 1
+Router(config-router)# network 10.0.0.0 0.255.255.255 area 0</code></pre>
+                    </div>
+                </div>
+            </article>
+            
+            <article>
+                <h3 class="text-xl font-semibold mb-3">BGP (Border Gateway Protocol)</h3>
+                <p class="mb-3">BGP is the <strong>path-vector</strong> protocol that routes traffic between autonomous systems (AS) on the internet. Key aspects:</p>
+                <ul class="list-disc pl-8 mb-4 space-y-1">
+                    <li>Makes routing decisions based on paths, network policies, and rules</li>
+                    <li>Uses TCP port 179 for reliable communication</li>
+                    <li>Very scalable but complex to configure</li>
+                    <li>Primary protocol for internet backbone routing</li>
+                </ul>
+                
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">BGP Peering Configuration</h4>
+                    <pre class="bg-gray-200 p-3 rounded overflow-x-auto"><code class="language-text">Router(config)# router bgp 65001
+Router(config-router)# neighbor 203.0.113.1 remote-as 65002
+Router(config-router)# network 192.0.2.0</code></pre>
+                </div>
+            </article>
+        </section>
+
+        <!-- VLANs and MAC Addresses -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">VLANs and MAC Addresses</h2>
+            
+            <article class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">Virtual LANs (VLANs)</h3>
+                <p class="mb-3">VLANs logically segment networks at Layer 2, providing:</p>
+                <ul class="list-disc pl-8 mb-4 space-y-1">
+                    <li>Improved security through isolation</li>
+                    <li>Better performance by limiting broadcast domains</li>
+                    <li>Simplified network management</li>
+                </ul>
+                
+                <p class="mb-3">VLAN tagging (IEEE 802.1Q) adds a 4-byte tag to Ethernet frames:</p>
+                <ul class="list-disc pl-8 mb-4 space-y-1">
+                    <li>12-bit VLAN ID (supports 4094 VLANs)</li>
+                    <li>3-bit priority field for QoS</li>
+                    <li>Native VLAN (untagged traffic)</li>
+                </ul>
+                
+                <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                    <h4 class="font-semibold mb-2">VLAN Configuration (Cisco IOS)</h4>
+                    <pre class="bg-white p-3 rounded overflow-x-auto"><code class="language-text">Switch(config)# vlan 10
+Switch(config-vlan)# name Sales
+Switch(config)# interface fastEthernet 0/1
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 10</code></pre>
+                </div>
+                
+                <div class="bg-yellow-50 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">Common VLAN Issues</h4>
+                    <ul class="list-disc pl-8 space-y-1">
+                        <li>VLAN mismatch on trunk links</li>
+                        <li>Native VLAN configuration errors</li>
+                        <li>Missing VLANs on some switches</li>
+                    </ul>
+                    <p class="mt-2">Troubleshoot with: <code class="bg-gray-200 px-1 rounded">show vlan brief</code>, <code class="bg-gray-200 px-1 rounded">show interfaces trunk</code></p>
+                </div>
+            </article>
+            
+            <article>
+                <h3 class="text-xl font-semibold mb-3">MAC Addresses</h3>
+                <p class="mb-3">MAC (Media Access Control) addresses are 48-bit hardware addresses assigned to network interfaces. Key points:</p>
+                <ul class="list-disc pl-8 mb-4 space-y-1">
+                    <li>First 24 bits: OUI (Organizationally Unique Identifier)</li>
+                    <li>Last 24 bits: Device-specific identifier</li>
+                    <li>Represented in hexadecimal (e.g., 00:1A:2B:3C:4D:5E)</li>
+                    <li>Used for Layer 2 frame delivery</li>
+                </ul>
+                
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">MAC Address Table</h4>
+                        <p>Switches maintain a MAC address table that maps MAC addresses to switch ports:</p>
+                        <pre class="bg-gray-200 p-2 rounded mt-2 overflow-x-auto"><code class="language-text">Switch# show mac address-table
+          Mac Address Table
+-------------------------------------------
+Vlan    Mac Address       Type        Ports
+----    -----------       ----        -----
+ 10    001a.2b3c.4d5e    DYNAMIC     Fa0/1</code></pre>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">MAC Address Learning</h4>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>Switch receives frame on a port</li>
+                            <li>Notes source MAC address and port</li>
+                            <li>Adds entry to MAC address table</li>
+                            <li>Forwards frame based on destination MAC</li>
+                        </ol>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- Switching Techniques -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Switching Techniques</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <article class="bg-blue-50 p-4 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3">Store & Forward</h3>
+                    <p class="mb-3">The switch:</p>
+                    <ul class="list-disc pl-8 mb-4 space-y-1">
+                        <li>Receives the entire frame before forwarding</li>
+                        <li>Performs CRC error checking</li>
+                        <li>Discards frames with errors</li>
+                        <li>Higher latency but more reliable</li>
+                    </ul>
+                    <p><strong>Best for:</strong> Networks where reliability is critical</p>
+                </article>
+                
+                <article class="bg-green-50 p-4 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3">Cut-through</h3>
+                    <p class="mb-3">The switch:</p>
+                    <ul class="list-disc pl-8 mb-4 space-y-1">
+                        <li>Begins forwarding after reading destination MAC</li>
+                        <li>Doesn't store entire frame</li>
+                        <li>No error checking</li>
+                        <li>Lower latency but may forward bad frames</li>
+                    </ul>
+                    <p><strong>Best for:</strong> High-performance, low-latency networks</p>
+                </article>
+            </div>
+            
+            <div class="mt-6 bg-gray-100 p-4 rounded-lg">
+                <h4 class="font-semibold mb-2">Comparison Table</h4>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white">
+                        <thead>
+                            <tr class="bg-blue-100">
+                                <th class="py-2 px-4 border">Feature</th>
+                                <th class="py-2 px-4 border">Store & Forward</th>
+                                <th class="py-2 px-4 border">Cut-through</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="py-2 px-4 border">Latency</td>
+                                <td class="py-2 px-4 border">Higher</td>
+                                <td class="py-2 px-4 border">Lower</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border">Error Checking</td>
+                                <td class="py-2 px-4 border">Yes</td>
+                                <td class="py-2 px-4 border">No</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border">Memory Usage</td>
+                                <td class="py-2 px-4 border">More</td>
+                                <td class="py-2 px-4 border">Less</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="py-2 px-4 border">Frame Size</td>
+                                <td class="py-2 px-4 border">Stores entire frame</td>
+                                <td class="py-2 px-4 border">Only reads header</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Static vs Dynamic Routing -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Static vs Dynamic Routing</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <article class="bg-purple-50 p-4 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3">Static Routing</h3>
+                    <p class="mb-3">Manually configured routes:</p>
+                    <ul class="list-disc pl-8 mb-4 space-y-1">
+                        <li>Simple to implement</li>
+                        <li>No protocol overhead</li>
+                        <li>Requires manual updates</li>
+                        <li>Doesn't adapt to topology changes</li>
+                    </ul>
+                    <div class="bg-white p-3 rounded">
+                        <h4 class="font-semibold mb-1">Configuration Example</h4>
+                        <pre class="bg-gray-200 p-2 rounded overflow-x-auto"><code class="language-text">Router(config)# ip route 192.168.2.0 255.255.255.0 10.0.0.2</code></pre>
+                    </div>
+                </article>
+                
+                <article class="bg-yellow-50 p-4 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3">Dynamic Routing</h3>
+                    <p class="mb-3">Routes learned via routing protocols:</p>
+                    <ul class="list-disc pl-8 mb-4 space-y-1">
+                        <li>Adapts to network changes</li>
+                        <li>More complex to configure</li>
+                        <li>Protocol overhead</li>
+                        <li>Automatic updates</li>
+                    </ul>
+                    <div class="bg-white p-3 rounded">
+                        <h4 class="font-semibold mb-1">When to Use</h4>
+                        <p>Large networks, changing topologies, redundant paths</p>
+                    </div>
+                </article>
+            </div>
+            
+            <div class="bg-blue-50 p-4 rounded-lg">
+                <h4 class="font-semibold mb-2">Choosing Between Static and Dynamic</h4>
+                <ul class="list-disc pl-8 space-y-1">
+                    <li><strong>Use static routing</strong> for small networks with simple topologies</li>
+                    <li><strong>Use dynamic routing</strong> for large networks with multiple paths</li>
+                    <li><strong>Hybrid approach</strong>: Static for edge routes, dynamic for core</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Routing Tables -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Routing Tables</h2>
+            
+            <p class="mb-4">Routing tables contain the information routers use to forward packets. Key fields:</p>
+            <ul class="list-disc pl-8 mb-6 space-y-1">
+                <li><strong>Destination Network</strong>: IP address and subnet mask</li>
+                <li><strong>Next Hop</strong>: IP address of next router</li>
+                <li><strong>Interface</strong>: Outgoing interface</li>
+                <li><strong>Metric</strong>: Cost to reach destination</li>
+                <li><strong>Route Source</strong>: How route was learned (static, RIP, OSPF, etc.)</li>
+            </ul>
+            
+            <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                <h4 class="font-semibold mb-2">Sample Routing Table (Cisco IOS)</h4>
+                <pre class="bg-gray-200 p-3 rounded overflow-x-auto"><code class="language-text">Router# show ip route
+Codes: C - connected, S - static, R - RIP, O - OSPF
+
+O    192.168.2.0/24 [110/20] via 10.0.0.2, FastEthernet0/1
+C    192.168.1.0/24 is directly connected, FastEthernet0/0
+S    203.0.113.0/24 [1/0] via 198.51.100.1</code></pre>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                    <h4 class="font-semibold mb-2">Route Selection Process</h4>
+                    <ol class="list-decimal pl-8 space-y-1">
+                        <li>Longest prefix match (most specific route)</li>
+                        <li>Lowest administrative distance</li>
+                        <li>Lowest metric</li>
+                    </ol>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">Administrative Distance</h4>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Directly connected: 0</li>
+                        <li>Static route: 1</li>
+                        <li>OSPF: 110</li>
+                        <li>RIP: 120</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Spanning Tree Protocol -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Spanning Tree Protocol (STP)</h2>
+            
+            <p class="mb-4">STP (IEEE 802.1D) prevents loops in switched networks by:</p>
+            <ul class="list-disc pl-8 mb-6 space-y-1">
+                <li>Electing a root bridge</li>
+                <li>Calculating shortest paths to root</li>
+                <li>Blocking redundant paths</li>
+            </ul>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">STP Port States</h3>
+                    <ul class="list-disc pl-8 space-y-1">
+                        <li><strong>Blocking</strong>: No forwarding, listens to BPDUs</li>
+                        <li><strong>Listening</strong>: Prepares to forward but doesn't learn MACs</li>
+                        <li><strong>Learning</strong>: Learns MAC addresses but doesn't forward</li>
+                        <li><strong>Forwarding</strong>: Normal operation</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3">Root Bridge Election</h3>
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>Compare Bridge IDs (Priority + MAC address)</li>
+                        <li>Lower Bridge ID wins</li>
+                        <li>Default priority: 32768</li>
+                    </ol>
+                    <p class="mt-2">Force a root bridge:</p>
+                    <pre class="bg-white p-2 rounded mt-1 overflow-x-auto"><code class="language-text">Switch(config)# spanning-tree vlan 1 root primary</code></pre>
+                </div>
+            </div>
+            
+            <!-- STP Visualization -->
+            <div class="bg-gray-100 p-4 rounded-lg">
+                <h4 class="font-semibold mb-3">STP Topology Visualization</h4>
+                <div class="flex justify-center">
+                    <div id="stp-diagram" class="w-full max-w-2xl h-64 bg-white border border-gray-300 rounded-lg"></div>
+                </div>
+                <p class="mt-2 text-sm text-gray-600">Diagram showing root bridge, designated ports, and blocked ports in a switched network.</p>
+            </div>
+            
+            <div class="mt-6 bg-yellow-50 p-4 rounded-lg">
+                <h4 class="font-semibold mb-2">STP Variants</h4>
+                <ul class="list-disc pl-8 space-y-1">
+                    <li><strong>RSTP (802.1w)</strong>: Rapid Spanning Tree - faster convergence</li>
+                    <li><strong>MSTP (802.1s)</strong>: Multiple Spanning Tree - maps VLANs to instances</li>
+                    <li><strong>PVST+</strong>: Per-VLAN Spanning Tree (Cisco proprietary)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Quality of Service -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Quality of Service (QoS)</h2>
+            
+            <p class="mb-4">QoS mechanisms prioritize network traffic to ensure performance for critical applications:</p>
+            
+            <div class="grid md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">Classification</h4>
+                    <p>Identify traffic types (e.g., VoIP, video, data) using:</p>
+                    <ul class="list-disc pl-6 mt-1 space-y-1">
+                        <li>DSCP (Differentiated Services Code Point)</li>
+                        <li>802.1p priority bits</li>
+                        <li>ACLs</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">Queuing</h4>
+                    <p>Manage how packets are buffered:</p>
+                    <ul class="list-disc pl-6 mt-1 space-y-1">
+                        <li>Priority Queuing (PQ)</li>
+                        <li>Weighted Fair Queuing (WFQ)</li>
+                        <li>Class-Based WFQ (CBWFQ)</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-purple-50 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">Policing/Shaping</h4>
+                    <p>Control bandwidth usage:</p>
+                    <ul class="list-disc pl-6 mt-1 space-y-1">
+                        <li>Policing: Drops excess traffic</li>
+                        <li>Shaping: Buffers excess traffic</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="bg-gray-100 p-4 rounded-lg">
+                <h4 class="font-semibold mb-2">QoS Configuration Example (VoIP Priority)</h4>
+                <pre class="bg-gray-200 p-3 rounded overflow-x-auto"><code class="language-text">Switch(config)# class-map match-any VOICE
+Switch(config-cmap)# match dscp ef
+Switch(config-cmap)# match ip rtp 16384 16383
+Switch(config)# policy-map QOS-POLICY
+Switch(config-pmap)# class VOICE
+Switch(config-pmap-c)# priority percent 30
+Switch(config)# interface FastEthernet0/1
+Switch(config-if)# service-policy output QOS-POLICY</code></pre>
+            </div>
+        </section>
+
+        <!-- Practical Examples -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Practical Examples</h2>
+            
+            <article class="mb-8">
+                <h3 class="text-xl font-semibold mb-3">Example 1: Configuring OSPF in Packet Tracer</h3>
+                <p class="mb-4">Step-by-step guide to setting up a multi-area OSPF network:</p>
+                
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h4 class="font-semibold mb-2">Steps:</h4>
+                    <ol class="list-decimal pl-8 space-y-2">
+                        <li>Add three routers and connect them (serial or Ethernet links)</li>
+                        <li>Configure IP addresses on all interfaces</li>
+                        <li>Enable OSPF on each router:
+                            <pre class="bg-gray-200 p-2 rounded mt-1 overflow-x-auto"><code class="language-text">Router(config)# router ospf 1
+Router(config-router)# network 10.0.0.0 0.255.255.255 area 0
+Router(config-router)# network 192.168.1.0 0.0.0.255 area 1</code></pre>
+                        </li>
+                        <li>Verify OSPF neighbors:
+                            <pre class="bg-gray-200 p-2 rounded mt-1 overflow-x-auto"><code class="language-text">Router# show ip ospf neighbor</code></pre>
+                        </li>
+                        <li>Check routing tables to confirm OSPF routes</li>
+                    </ol>
+                </div>
+                
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">Troubleshooting Tips</h4>
+                    <ul class="list-disc pl-8 space-y-1">
+                        <li>Verify interfaces are up/up with <code class="bg-gray-200 px-1 rounded">show ip interface brief</code></li>
+                        <li>Check OSPF is enabled on correct networks</li>
+                        <li>Ensure area configurations match on connected routers</li>
+                        <li>Use <code class="bg-gray-200 px-1 rounded">debug ip ospf events</code> for detailed troubleshooting</li>
+                    </ul>
+                </div>
+            </article>
+            
+            <article>
+                <h3 class="text-xl font-semibold mb-3">Example 2: Visualizing OSPF Network with HTML Canvas</h3>
+                <p class="mb-4">Interactive diagram showing an OSPF network with areas:</p>
+                
+                <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                    <div id="ospf-visualization" class="w-full h-96 bg-white border border-gray-300 rounded-lg flex flex-col items-center justify-center">
+                        <!-- Visualization will be rendered here by JavaScript -->
+                        <p class="text-gray-500">OSPF Network Visualization Loading...</p>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Interactive diagram showing routers in different OSPF areas with link costs.</p>
+                </div>
+                
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">OSPF Network Components</h4>
+                    <ul class="list-disc pl-8 space-y-1">
+                        <li><strong>Backbone Router</strong>: In Area 0, connects to other areas</li>
+                        <li><strong>Area Border Router (ABR)</strong>: Connects Area 0 to other areas</li>
+                        <li><strong>Internal Router</strong>: All interfaces in same area</li>
+                        <li><strong>Designated Router (DR)</strong>: Elected on multi-access networks</li>
+                    </ul>
+                </div>
+            </article>
+        </section>
+
+        <!-- Summary -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Summary</h2>
+            
+            <p class="mb-4">In this chapter, we've explored the core concepts of routing and switching:</p>
+            
+            <ul class="list-disc pl-8 mb-6 space-y-2">
+                <li><strong>Routing Protocols</strong>: RIP (distance-vector), OSPF (link-state), BGP (path-vector)</li>
+                <li><strong>VLANs</strong>: Logical segmentation at Layer 2 using 802.1Q tagging</li>
+                <li><strong>Switching</strong>: Store & Forward (reliable) vs Cut-through (low latency)</li>
+                <li><strong>Routing Methods</strong>: Static (manual) vs Dynamic (protocol-based)</li>
+                <li><strong>Routing Tables</strong>: Contain destination networks, next hops, and metrics</li>
+                <li><strong>STP</strong>: Prevents loops by blocking redundant paths</li>
+                <li><strong>QoS</strong>: Prioritizes critical traffic through classification and queuing</li>
+            </ul>
+            
+            <div class="bg-blue-50 p-4 rounded-lg">
+                <h4 class="font-semibold mb-2">Key Takeaways</h4>
+                <ul class="list-disc pl-8 space-y-1">
+                    <li>Choose routing protocols based on network size and requirements</li>
+                    <li>Use VLANs to improve security and performance</li>
+                    <li>Understand how switches make forwarding decisions</li>
+                    <li>Implement STP to prevent switching loops</li>
+                    <li>Configure QoS for voice and video traffic</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Further Reading -->
+        <section class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold mb-4">Further Reading</h2>
+            
+            <ul class="list-disc pl-8 space-y-2">
+                <li><strong>Books</strong>:
+                    <ul class="list-disc pl-8 mt-1 space-y-1">
+                        <li>"Routing TCP/IP, Volume 1" by Jeff Doyle</li>
+                        <li>"LAN Switching and Wireless" by Cisco Networking Academy</li>
+                    </ul>
+                </li>
+                <li><strong>RFCs</strong>:
+                    <ul class="list-disc pl-8 mt-1 space-y-1">
+                        <li>RFC 1058: RIP Version 1</li>
+                        <li>RFC 2328: OSPF Version 2</li>
+                        <li>RFC 4271: BGP-4</li>
+                        <li>IEEE 802.1Q: VLAN Tagging</li>
+                    </ul>
+                </li>
+                <li><strong>Online Resources</strong>:
+                    <ul class="list-disc pl-8 mt-1 space-y-1">
+                        <li>Cisco's OSPF Configuration Guide</li>
+                        <li>IEEE 802.1D Standard Documentation</li>
+                        <li>Packet Tracer tutorials on Cisco Networking Academy</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-4">Computer Networks: From Scratch to Mastery</h3>
+                    <p>A comprehensive tutorial series for CSE graduates and professionals.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-3">Navigation</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:underline">Home</a></li>
+                        <li><a href="#" class="hover:underline">Module 1: Foundations</a></li>
+                        <li><a href="#" class="hover:underline">Module 2: Protocols & Addressing</a></li>
+                        <li><a href="#" class="hover:underline">Module 3: Advanced Networking</a></li>
+                        <li><a href="#" class="hover:underline">Module 4: Real-World Applications</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+                <p>© 2025 Computer Networks Tutorial Series. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Visualizations -->
+    <script>
+        // STP Diagram
+        document.addEventListener('DOMContentLoaded', function() {
+            const stpContainer = document.getElementById('stp-diagram');
+            
+            if (stpContainer) {
+                const canvas = document.createElement('canvas');
+                canvas.width = stpContainer.offsetWidth;
+                canvas.height = stpContainer.offsetHeight;
+                stpContainer.appendChild(canvas);
+                
+                const ctx = canvas.getContext('2d');
+                
+                // Draw the STP topology
+                ctx.font = '12px Arial';
+                
+                // Switches
+                ctx.fillStyle = '#93C5FD';
+                ctx.fillRect(50, 50, 80, 40);
+                ctx.strokeRect(50, 50, 80, 40);
+                ctx.fillStyle = '#000';
+                ctx.fillText('Root Bridge', 55, 75);
+                
+                ctx.fillStyle = '#86EFAC';
+                ctx.fillRect(200, 20, 80, 40);
+                ctx.strokeRect(200, 20, 80, 40);
+                ctx.fillStyle = '#000';
+                ctx.fillText('Switch A', 220, 45);
+                
+                ctx.fillStyle = '#86EFAC';
+                ctx.fillRect(200, 80, 80, 40);
+                ctx.strokeRect(200, 80, 80, 40);
+                ctx.fillStyle = '#000';
+                ctx.fillText('Switch B', 220, 105);
+                
+                // Links
+                ctx.strokeStyle = '#000';
+                ctx.beginPath();
+                ctx.moveTo(130, 70);
+                ctx.lineTo(200, 40);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(130, 70);
+                ctx.lineTo(200, 100);
+                ctx.stroke();
+                
+                // Port states
+                ctx.fillStyle = '#000';
+                ctx.fillText('DP', 165, 35);
+                ctx.fillText('DP', 165, 95);
+                ctx.fillText('RP', 165, 65);
+                
+                // Blocked port
+                ctx.strokeStyle = '#FF0000';
+                ctx.beginPath();
+                ctx.moveTo(280, 60);
+                ctx.lineTo(350, 60);
+                ctx.stroke();
+                ctx.fillStyle = '#FF0000';
+                ctx.fillText('Blocked', 300, 55);
+            }
+            
+            // OSPF Visualization
+            const ospfContainer = document.getElementById('ospf-visualization');
+            
+            if (ospfContainer) {
+                const canvas = document.createElement('canvas');
+                canvas.width = ospfContainer.offsetWidth;
+                canvas.height = ospfContainer.offsetHeight;
+                ospfContainer.innerHTML = '';
+                ospfContainer.appendChild(canvas);
+                
+                const ctx = canvas.getContext('2d');
+                
+                // Draw OSPF areas and routers
+                ctx.font = '12px Arial';
+                
+                // Area 0
+                ctx.strokeStyle = '#0000FF';
+                ctx.strokeRect(50, 50, 300, 150);
+                ctx.fillStyle = '#000';
+                ctx.fillText('Backbone Area (Area 0)', 120, 40);
+                
+                // Area 1
+                ctx.strokeStyle = '#00AA00';
+                ctx.strokeRect(400, 50, 200, 100);
+                ctx.fillStyle = '#000';
+                ctx.fillText('Area 1', 480, 40);
+                
+                // Area 2
+                ctx.strokeStyle = '#AA0000';
+                ctx.strokeRect(400, 180, 200, 100);
+                ctx.fillStyle = '#000';
+                ctx.fillText('Area 2', 480, 170);
+                
+                // Routers
+                const drawRouter = (x, y, label, color) => {
+                    ctx.fillStyle = color;
+                    ctx.beginPath();
+                    ctx.arc(x, y, 20, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+                    ctx.fillStyle = '#000';
+                    ctx.fillText(label, x - 10, y + 35);
+                };
+                
+                // Area 0 routers
+                drawRouter(100, 100, 'R1', '#FF9999');
+                drawRouter(200, 100, 'R2', '#FF9999');
+                drawRouter(300, 100, 'ABR1', '#FF9999');
+                
+                // Area 1 router
+                drawRouter(450, 100, 'R3', '#99FF99');
+                
+                // Area 2 router
+                drawRouter(450, 230, 'R4', '#9999FF');
+                
+                // Links
+                ctx.strokeStyle = '#000';
+                ctx.beginPath();
+                ctx.moveTo(120, 100);
+                ctx.lineTo(180, 100);
+                ctx.stroke();
+                ctx.fillText('Cost: 10', 140, 90);
+                
+                ctx.beginPath();
+                ctx.moveTo(220, 100);
+                ctx.lineTo(280, 100);
+                ctx.stroke();
+                ctx.fillText('Cost: 5', 240, 90);
+                
+                // ABR links
+                ctx.beginPath();
+                ctx.moveTo(300, 120);
+                ctx.lineTo(400, 120);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(300, 140);
+                ctx.lineTo(400, 180);
+                ctx.stroke();
+            }
+        });
+    </script>
+</body>
+</html>

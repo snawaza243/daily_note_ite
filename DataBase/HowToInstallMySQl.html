@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Install MySQL 8.0.40 Server and Workbench on Windows 11 | Complete Guide</title>
+    <meta name="description" content="Step-by-step guide to installing MySQL 8.0.40 Server and Workbench on Windows 11, including configuration and creating your first database.">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 25px;
+            color: #333;
+        }
+        h1 { 
+            color: #2c3e50; 
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 { 
+            color: #2980b9;
+            margin-top: 30px;
+        }
+        h3 { color: #34495e; }
+        img { 
+            max-width: 100%; 
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+        }
+        .intro { 
+            font-size: 1.1em;
+            color: #555;
+        }
+        .conclusion { 
+            background: #f8f9fa; 
+            padding: 20px; 
+            border-left: 4px solid #3498db;
+            border-radius: 0 4px 4px 0;
+        }
+        .code-block {
+            background: #f4f4f4;
+            padding: 15px;
+            border-left: 3px solid #3498db;
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            overflow-x: auto;
+        }
+        .step {
+            background: #e8f4fc;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .note {
+            background: #fffde7;
+            padding: 10px;
+            border-left: 3px solid #ffd600;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <article>
+        <header>
+            <h1>How to Install MySQL 8.0.40 Server and Workbench on Windows 11</h1>
+            <p class="intro">This comprehensive guide walks you through the complete installation process of MySQL 8.0.40 Server and MySQL Workbench on Windows 11, including configuration, environment setup, and creating your first database.</p>
+        </header>
+        
+        <section>
+            <h2>Prerequisites</h2>
+            <ul>
+                <li>Windows 11 operating system</li>
+                <li>Administrator privileges</li>
+                <li>Internet connection for downloading packages</li>
+                <li>Approximately 500MB of free disk space</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h2>Step 1: Download MySQL Installer</h2>
+            <div class="step">
+                <ol>
+                    <li>Open your web browser and navigate to Google</li>
+                    <li>Search for "MySQL" and press Enter</li>
+                    <li>Click on the official MySQL website (mysql.com)</li>
+                    <li>Go to the <strong>Downloads</strong> menu</li>
+                    <li>Scroll down and click on <strong>MySQL Community Downloads</strong></li>
+                    <li>Under MySQL Community Downloads, click on <strong>MySQL Installer for Windows</strong></li>
+                </ol>
+                
+                <div class="note">
+                    <p><strong>Note:</strong> As of this writing, the current version is 8.0.40. The installer automatically detects your operating system.</p>
+                </div>
+                
+                <p>Select the larger installer package (approximately 306MB) which works for both 32-bit and 64-bit Windows systems.</p>
+            </div>
+        </section>
+        
+        <section>
+            <h2>Step 2: Install MySQL Components</h2>
+            <div class="step">
+                <ol>
+                    <li>Run the downloaded installer</li>
+                    <li>Select <strong>Custom</strong> setup type to choose specific components</li>
+                    <li>Click <strong>Next</strong> to proceed</li>
+                    <li>Under <strong>Select Products</strong>, expand MySQL Servers and add the latest MySQL Server version</li>
+                    <li>Expand Applications and add:
+                        <ul>
+                            <li>MySQL Workbench</li>
+                            <li>MySQL Shell</li>
+                        </ul>
+                    </li>
+                    <li>Click <strong>Next</strong> then <strong>Execute</strong> to begin installation</li>
+                    <li>Wait for all components to install (this may take several minutes)</li>
+                </ol>
+            </div>
+        </section>
+        
+        <section>
+            <h2>Step 3: Configure MySQL Server</h2>
+            <div class="step">
+                <ol>
+                    <li>After installation completes, click <strong>Next</strong> to begin configuration</li>
+                    <li>Select <strong>Standalone MySQL Server</strong> configuration type</li>
+                    <li>Keep default networking settings (port 3306)</li>
+                    <li>Select the recommended authentication method (Use Strong Password Encryption)</li>
+                    <li>Set a secure root password (admin password) and remember it</li>
+                    <li>Keep default Windows service settings</li>
+                    <li>Apply configuration by clicking <strong>Execute</strong></li>
+                    <li>Click <strong>Finish</strong> when configuration completes</li>
+                </ol>
+                
+                <div class="note">
+                    <p><strong>Security Tip:</strong> Choose a strong password for the root account and store it securely. This is your database administrator password.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section>
+            <h2>Step 4: Set Environment Variables</h2>
+            <div class="step">
+                <ol>
+                    <li>Navigate to <strong>C:\Program Files\MySQL\MySQL Server 8.0\bin</strong></li>
+                    <li>Copy this path</li>
+                    <li>Open Start menu and search for "environment variables"</li>
+                    <li>Select <strong>Edit the system environment variables</strong></li>
+                    <li>Click <strong>Environment Variables</strong></li>
+                    <li>Under System variables, find and select <strong>Path</strong>, then click <strong>Edit</strong></li>
+                    <li>Click <strong>New</strong> and paste the MySQL bin path</li>
+                    <li>Click <strong>OK</strong> to save all changes</li>
+                </ol>
+            </div>
+        </section>
+        
+        <section>
+            <h2>Step 5: Verify Installation</h2>
+            <div class="step">
+                <ol>
+                    <li>Open Command Prompt</li>
+                    <li>Type the following command to check version:
+                        <div class="code-block">mysql --version</div>
+                    </li>
+                    <li>You should see output showing MySQL 8.0.40</li>
+                    <li>Start MySQL server with:
+                        <div class="code-block">mysql -u root -p</div>
+                    </li>
+                    <li>Enter your root password when prompted</li>
+                </ol>
+            </div>
+        </section>
+        
+        <section>
+            <h2>Step 6: Create Your First Database</h2>
+            <div class="step">
+                <p>Once logged into MySQL, you can view existing databases and create a new one:</p>
+                
+                <p>View all databases:</p>
+                <div class="code-block">show databases;</div>
+                
+                <p>Create a new database (replace "AmitDB" with your preferred name):</p>
+                <div class="code-block">create database AmitDB;</div>
+                
+                <p>Verify your new database exists:</p>
+                <div class="code-block">show databases;</div>
+            </div>
+        </section>
+        
+        <section>
+            <h2>Using MySQL Workbench</h2>
+            <p>MySQL Workbench provides a graphical interface for working with your databases:</p>
+            <ul>
+                <li>Launch MySQL Workbench from your Start menu</li>
+                <li>Create a new connection to your local MySQL server</li>
+                <li>Use the root username and password you set during installation</li>
+                <li>Explore the visual tools for database design, SQL development, and administration</li>
+            </ul>
+        </section>
+        
+        <div class="conclusion">
+            <h2>Key Takeaways</h2>
+            <ul>
+                <li>MySQL 8.0.40 and Workbench can be easily installed on Windows 11 using the official installer</li>
+                <li>Custom installation allows you to select specific components you need</li>
+                <li>Setting environment variables enables command-line access to MySQL tools</li>
+                <li>The root password is critical - store it securely</li>
+                <li>MySQL Workbench provides a user-friendly interface for database management</li>
+                <li>Creating your first database is simple with the CREATE DATABASE command</li>
+            </ul>
+            
+            <h3>Next Steps</h3>
+            <p>Now that you have MySQL installed, consider:</p>
+            <ul>
+                <li>Learning basic SQL commands</li>
+                <li>Exploring MySQL Workbench features</li>
+                <li>Creating tables and relationships in your new database</li>
+                <li>Setting up regular database backups</li>
+            </ul>
+        </div>
+    </article>
+</body>
+</html>
