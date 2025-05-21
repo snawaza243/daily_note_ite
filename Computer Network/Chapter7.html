@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 7: Network Security Essentials | Computer Networks: From Scratch to Mastery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-600 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <a href="#" class="text-2xl font-bold mb-4 md:mb-0">Computer Networks: From Scratch to Mastery</a>
+            <div class="flex flex-wrap gap-4">
+                <a href="#" class="hover:underline">Home</a>
+                <a href="#" class="hover:underline">Module 1</a>
+                <a href="#" class="hover:underline">Module 2</a>
+                <a href="#" class="font-bold underline">Module 3</a>
+                <a href="#" class="hover:underline">Module 4</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Chapter Navigation -->
+    <div class="container mx-auto px-4 py-2 bg-blue-50 rounded-lg my-4">
+        <div class="flex flex-wrap justify-between">
+            <a href="chapter6.html" class="text-blue-700 hover:underline">← Chapter 6: Routing & Switching</a>
+            <a href="chapter8.html" class="text-blue-700 hover:underline">Chapter 8: Network Management →</a>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-center mb-4">Chapter 7: Network Security Essentials</h1>
+        <p class="text-xl text-center text-gray-600 max-w-3xl mx-auto">
+            Protecting networks from threats through firewalls, cryptography, authentication, and security best practices.
+        </p>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 pb-12">
+        <!-- Introduction -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Introduction</h2>
+            <p class="mb-4">Network security has become paramount in our interconnected world. Building on our understanding of networking fundamentals (Chapters 1-6), this chapter explores the essential technologies and practices that protect networks from evolving threats.</p>
+            <p>By the end of this chapter, you will understand:</p>
+            <ul class="list-disc pl-8 mt-2 space-y-1">
+                <li>How firewalls and IDS/IPS systems protect network perimeters</li>
+                <li>Cryptographic protocols like SSL/TLS and AES that secure data</li>
+                <li>Modern authentication methods including 2FA and biometrics</li>
+                <li>Network security best practices for robust protection</li>
+                <li>VPN technologies for secure remote access</li>
+                <li>Network Access Control (NAC) for policy enforcement</li>
+                <li>Techniques for threat detection and mitigation</li>
+            </ul>
+        </section>
+
+        <!-- Firewalls and IDS/IPS -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Firewalls and IDS/IPS</h2>
+            
+            <article class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">Firewalls</h3>
+                <p class="mb-3">Firewalls act as gatekeepers, controlling incoming and outgoing network traffic based on security rules:</p>
+                
+                <div class="grid md:grid-cols-3 gap-4 mb-4">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Packet-Filtering</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Examines headers (IP, port, protocol)</li>
+                            <li>Fast but limited visibility</li>
+                            <li>Stateless (no session tracking)</li>
+                        </ul>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Stateful</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Tracks connection state</li>
+                            <li>More secure than packet-filtering</li>
+                            <li>Understands session context</li>
+                        </ul>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Next-Generation</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Deep packet inspection</li>
+                            <li>Application awareness</li>
+                            <li>Integrated threat intelligence</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h4 class="font-semibold mb-2">Firewall Rule Example (pfSense)</h4>
+                    <pre class="bg-gray-200 p-3 rounded overflow-x-auto"><code class="language-text"># Allow HTTP from any to web server
+pass in quick on $ext_if proto tcp from any to $web_server port 80
+
+# Block all other inbound traffic
+block in quick on $ext_if all</code></pre>
+                </div>
+                
+                <div class="bg-yellow-50 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">Firewall Best Practices</h4>
+                    <ul class="list-disc pl-8 space-y-1">
+                        <li>Default deny policy (block all, allow by exception)</li>
+                        <li>Regular rule reviews and cleanup</li>
+                        <li>Separate rules for different security zones</li>
+                        <li>Logging for suspicious activity</li>
+                    </ul>
+                </div>
+            </article>
+            
+            <article>
+                <h3 class="text-xl font-semibold mb-3">IDS/IPS Systems</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-semibold mb-2">Intrusion Detection Systems (IDS)</h4>
+                        <ul class="list-disc pl-8 mb-4 space-y-1">
+                            <li><strong>Signature-based</strong>: Matches known attack patterns</li>
+                            <li><strong>Anomaly-based</strong>: Detects deviations from normal behavior</li>
+                            <li>Passive monitoring (alerts but doesn't block)</li>
+                            <li>Typically deployed in promiscuous mode</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-2">Intrusion Prevention Systems (IPS)</h4>
+                        <ul class="list-disc pl-8 mb-4 space-y-1">
+                            <li>Active blocking of malicious traffic</li>
+                            <li>Inline deployment (directly in traffic path)</li>
+                            <li>Can perform TCP resets or packet drops</li>
+                            <li>More impactful on network performance</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">IDS/IPS Deployment</h4>
+                    <div id="ids-ips-diagram" class="w-full h-64 bg-white border border-gray-300 rounded-lg mb-2"></div>
+                    <p class="text-sm text-gray-600">Network diagram showing IDS in monitoring mode and IPS inline deployment.</p>
+                </div>
+            </article>
+        </section>
+
+        <!-- Cryptography -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Cryptography</h2>
+            
+            <article class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">SSL/TLS</h3>
+                <p class="mb-3">SSL (Secure Sockets Layer) and its successor TLS (Transport Layer Security) provide secure communication over networks:</p>
+                
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h4 class="font-semibold mb-2">TLS Handshake Process</h4>
+                    <ol class="list-decimal pl-8 space-y-2">
+                        <li><strong>Client Hello</strong>: Client sends supported cipher suites and random number</li>
+                        <li><strong>Server Hello</strong>: Server chooses cipher suite and sends its random number</li>
+                        <li><strong>Certificate</strong>: Server sends its certificate for authentication</li>
+                        <li><strong>Key Exchange</strong>: Client and server establish shared secret</li>
+                        <li><strong>Finished</strong>: Secure communication begins</li>
+                    </ol>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <h4 class="font-semibold mb-2">Certificate Authorities (CAs)</h4>
+                        <p>Trusted entities that issue digital certificates:</p>
+                        <ul class="list-disc pl-8 mt-2 space-y-1">
+                            <li>Verify identity of certificate applicants</li>
+                            <li>Sign certificates with their private key</li>
+                            <li>Public CAs (e.g., DigiCert, Let's Encrypt)</li>
+                            <li>Private CAs for internal networks</li>
+                        </ul>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">TLS Best Practices</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Use TLS 1.2 or 1.3 (disable older versions)</li>
+                            <li>Implement strong cipher suites (e.g., AES-GCM)</li>
+                            <li>Regularly renew certificates</li>
+                            <li>Use certificate pinning where appropriate</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+            
+            <article>
+                <h3 class="text-xl font-semibold mb-3">AES Encryption</h3>
+                <p class="mb-3">The Advanced Encryption Standard (AES) is a symmetric block cipher:</p>
+                
+                <div class="grid md:grid-cols-3 gap-4 mb-4">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Key Sizes</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>AES-128: 128-bit key</li>
+                            <li>AES-192: 192-bit key</li>
+                            <li>AES-256: 256-bit key</li>
+                        </ul>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Modes of Operation</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>CBC (Cipher Block Chaining)</li>
+                            <li>GCM (Galois/Counter Mode)</li>
+                            <li>ECB (Electronic Codebook - insecure)</li>
+                        </ul>
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Applications</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>VPN encryption</li>
+                            <li>Disk encryption</li>
+                            <li>Secure messaging</li>
+                            <li>TLS data encryption</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">AES vs RSA</h4>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white">
+                            <thead>
+                                <tr class="bg-blue-100">
+                                    <th class="py-2 px-4 border">Feature</th>
+                                    <th class="py-2 px-4 border">AES</th>
+                                    <th class="py-2 px-4 border">RSA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="py-2 px-4 border">Type</td>
+                                    <td class="py-2 px-4 border">Symmetric</td>
+                                    <td class="py-2 px-4 border">Asymmetric</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="py-2 px-4 border">Speed</td>
+                                    <td class="py-2 px-4 border">Fast</td>
+                                    <td class="py-2 px-4 border">Slow</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4 border">Key Management</td>
+                                    <td class="py-2 px-4 border">Single shared key</td>
+                                    <td class="py-2 px-4 border">Key pairs</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="py-2 px-4 border">Common Uses</td>
+                                    <td class="py-2 px-4 border">Bulk data encryption</td>
+                                    <td class="py-2 px-4 border">Key exchange, signatures</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- Authentication Methods -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Authentication Methods</h2>
+            
+            <article class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">Two-Factor Authentication (2FA)</h3>
+                <p class="mb-3">2FA requires users to provide two different authentication factors:</p>
+                
+                <div class="grid md:grid-cols-3 gap-4 mb-4">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Knowledge</h4>
+                        <p>Something you know:</p>
+                        <ul class="list-disc pl-6 mt-1 space-y-1">
+                            <li>Password</li>
+                            <li>PIN</li>
+                            <li>Security questions</li>
+                        </ul>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Possession</h4>
+                        <p>Something you have:</p>
+                        <ul class="list-disc pl-6 mt-1 space-y-1">
+                            <li>Smartphone (SMS/authenticator app)</li>
+                            <li>Hardware token</li>
+                            <li>Smart card</li>
+                        </ul>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Inherence</h4>
+                        <p>Something you are:</p>
+                        <ul class="list-disc pl-6 mt-1 space-y-1">
+                            <li>Fingerprint</li>
+                            <li>Facial recognition</li>
+                            <li>Iris scan</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">2FA Implementation Options</h4>
+                    <ul class="list-disc pl-8 space-y-1">
+                        <li><strong>SMS-based</strong>: Codes sent via text message (less secure)</li>
+                        <li><strong>Authenticator apps</strong>: Google Authenticator, Microsoft Authenticator</li>
+                        <li><strong>Hardware tokens</strong>: YubiKey, RSA SecurID</li>
+                        <li><strong>Push notifications</strong>: Approve login attempts via app</li>
+                    </ul>
+                </div>
+            </article>
+            
+            <article>
+                <h3 class="text-xl font-semibold mb-3">Biometric Authentication</h3>
+                <p class="mb-3">Biometrics use unique physical characteristics for authentication:</p>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-semibold mb-2">Common Biometric Methods</h4>
+                        <ul class="list-disc pl-8 space-y-1">
+                            <li><strong>Fingerprint recognition</strong>: Widely adopted in smartphones</li>
+                            <li><strong>Facial recognition</strong>: Apple Face ID, Windows Hello</li>
+                            <li><strong>Iris scanning</strong>: High accuracy but more expensive</li>
+                            <li><strong>Voice recognition</strong>: Used in telephone banking</li>
+                        </ul>
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Biometric Considerations</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>False acceptance/rejection rates</li>
+                            <li>Privacy concerns with biometric data storage</li>
+                            <li>Irrevocability (can't change your fingerprints)</li>
+                            <li>Often combined with other factors (multi-factor)</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- Network Security Best Practices -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Network Security Best Practices</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">Fundamental Practices</h3>
+                    <ul class="list-disc pl-8 space-y-2">
+                        <li><strong>Regular patching</strong>: Keep systems updated with security fixes</li>
+                        <li><strong>Least privilege</strong>: Grant minimum necessary access</li>
+                        <li><strong>Network segmentation</strong>: Isolate sensitive systems</li>
+                        <li><strong>Security audits</strong>: Regular vulnerability assessments</li>
+                        <li><strong>Employee training</strong>: Security awareness programs</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3">Defense in Depth</h3>
+                    <p>Implement multiple layers of security controls:</p>
+                    <ol class="list-decimal pl-8 mt-2 space-y-1">
+                        <li>Perimeter defenses (firewalls)</li>
+                        <li>Network monitoring (IDS/IPS)</li>
+                        <li>Endpoint protection</li>
+                        <li>Data encryption</li>
+                        <li>Access controls</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="bg-green-50 p-4 rounded-lg">
+                <h4 class="font-semibold mb-2">Security Policy Essentials</h4>
+                <ul class="list-disc pl-8 space-y-1">
+                    <li>Password complexity requirements</li>
+                    <li>Acceptable use policies</li>
+                    <li>Incident response procedures</li>
+                    <li>Data classification and handling</li>
+                    <li>Remote access guidelines</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- VPNs -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Virtual Private Networks (VPNs)</h2>
+            
+            <p class="mb-4">VPNs create secure, encrypted tunnels over public networks:</p>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">VPN Protocols</h3>
+                    <ul class="list-disc pl-8 space-y-2">
+                        <li><strong>IPsec</strong>: Suite of protocols for secure IP communications</li>
+                        <li><strong>OpenVPN</strong>: Open-source, highly configurable</li>
+                        <li><strong>WireGuard</strong>: Modern, lightweight, fast</li>
+                        <li><strong>L2TP/IPsec</strong>: Combines L2TP tunneling with IPsec encryption</li>
+                        <li><strong>SSL/TLS VPNs</strong>: Clientless access via web browsers</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3">VPN Use Cases</h3>
+                    <ul class="list-disc pl-8 space-y-1">
+                        <li><strong>Remote work</strong>: Secure access to corporate resources</li>
+                        <li><strong>Site-to-site connectivity</strong>: Connecting branch offices</li>
+                        <li><strong>Privacy protection</strong>: Masking internet activity</li>
+                        <li><strong>Bypassing geo-restrictions</strong>: Accessing region-locked content</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="bg-blue-50 p-4 rounded-lg">
+                <h4 class="font-semibold mb-2">VPN Configuration Example (OpenVPN)</h4>
+                <pre class="bg-white p-3 rounded overflow-x-auto"><code class="language-text"># Server configuration
+port 1194
+proto udp
+dev tun
+ca ca.crt
+cert server.crt
+key server.key
+dh dh.pem
+server 10.8.0.0 255.255.255.0
+push "route 192.168.1.0 255.255.255.0"
+keepalive 10 120
+tls-auth ta.key 0
+cipher AES-256-CBC
+user nobody
+group nogroup
+persist-key
+persist-tun
+status openvpn-status.log
+verb 3</code></pre>
+            </div>
+        </section>
+
+        <!-- Network Access Control -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Network Access Control (NAC)</h2>
+            
+            <p class="mb-4">NAC enforces security policies before granting network access:</p>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">NAC Components</h3>
+                    <ul class="list-disc pl-8 space-y-1">
+                        <li><strong>Policy Server</strong>: Central decision point</li>
+                        <li><strong>Authentication Server</strong>: Verifies user credentials</li>
+                        <li><strong>Posture Assessment</strong>: Checks device compliance</li>
+                        <li><strong>Enforcement Points</strong>: Switches, wireless controllers</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3">NAC Deployment Modes</h3>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li><strong>Pre-admission</strong>: Checks before granting access</li>
+                        <li><strong>Post-admission</strong>: Continuous monitoring</li>
+                        <li><strong>Inline</strong>: Directly in network path</li>
+                        <li><strong>Out-of-band</strong>: Uses network infrastructure</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="bg-gray-100 p-4 rounded-lg">
+                <h4 class="font-semibold mb-2">NAC Process Flow</h4>
+                <div id="nac-diagram" class="w-full h-64 bg-white border border-gray-300 rounded-lg mb-2"></div>
+                <p class="text-sm text-gray-600">Diagram showing device authentication, posture assessment, and network access granting.</p>
+            </div>
+        </section>
+
+        <!-- Threat Detection and Mitigation -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Threat Detection and Mitigation</h2>
+            
+            <article class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">Common Network Threats</h3>
+                <div class="grid md:grid-cols-3 gap-4 mb-4">
+                    <div class="bg-red-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Malware</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Viruses, worms, trojans</li>
+                            <li>Ransomware</li>
+                            <li>Spyware</li>
+                        </ul>
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">DDoS Attacks</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Volume-based (UDP floods)</li>
+                            <li>Protocol attacks (SYN floods)</li>
+                            <li>Application layer attacks</li>
+                        </ul>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Advanced Threats</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>APT (Advanced Persistent Threats)</li>
+                            <li>Zero-day exploits</li>
+                            <li>Insider threats</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+            
+            <article>
+                <h3 class="text-xl font-semibold mb-3">Detection and Mitigation</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-semibold mb-2">Detection Techniques</h4>
+                        <ul class="list-disc pl-8 space-y-1">
+                            <li><strong>SIEM systems</strong>: Security Information and Event Management</li>
+                            <li><strong>Network traffic analysis</strong>: Detect anomalies</li>
+                            <li><strong>Endpoint detection and response (EDR)</strong></li>
+                            <li><strong>Threat intelligence feeds</strong></li>
+                        </ul>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Mitigation Strategies</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li><strong>Rate limiting</strong>: For DDoS protection</li>
+                            <li><strong>Blacklisting/whitelisting</strong></li>
+                            <li><strong>Traffic filtering</strong></li>
+                            <li><strong>Incident response plans</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- Practical Examples -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Practical Examples</h2>
+            
+            <article class="mb-8">
+                <h3 class="text-xl font-semibold mb-3">Example 1: Configuring Firewall Rules in pfSense</h3>
+                <p class="mb-4">Step-by-step guide to creating secure firewall rules:</p>
+                
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h4 class="font-semibold mb-2">Steps:</h4>
+                    <ol class="list-decimal pl-8 space-y-2">
+                        <li>Access pfSense web interface (https://[your-pfsense-ip])</li>
+                        <li>Navigate to Firewall > Rules</li>
+                        <li>Select the appropriate interface (e.g., WAN, LAN)</li>
+                        <li>Add a new rule:
+                            <ul class="list-disc pl-8 mt-1 space-y-1">
+                                <li>Action: Pass or Block</li>
+                                <li>Interface: Select network interface</li>
+                                <li>Protocol: TCP, UDP, ICMP, etc.</li>
+                                <li>Source/Destination: Define addresses</li>
+                                <li>Port: Specify if needed</li>
+                                <li>Description: Add meaningful description</li>
+                            </ul>
+                        </li>
+                        <li>Save and apply changes</li>
+                    </ol>
+                </div>
+                
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">Sample Rule: Allow Secure Web Access</h4>
+                    <pre class="bg-white p-3 rounded overflow-x-auto"><code class="language-text">Action: Pass
+Interface: WAN
+Protocol: TCP
+Source: Any
+Destination: WAN address
+Destination Port: 443 (HTTPS)
+Description: Allow inbound HTTPS to web server</code></pre>
+                </div>
+            </article>
+            
+            <article>
+                <h3 class="text-xl font-semibold mb-3">Example 2: Visualizing TLS Handshake with HTML Canvas</h3>
+                <p class="mb-4">Interactive diagram showing the TLS 1.3 handshake process:</p>
+                
+                <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                    <div id="tls-handshake-diagram" class="w-full h-96 bg-white border border-gray-300 rounded-lg flex flex-col items-center justify-center">
+                        <!-- Visualization will be rendered here by JavaScript -->
+                        <p class="text-gray-500">TLS Handshake Visualization Loading...</p>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Interactive diagram showing the simplified TLS 1.3 handshake between client and server.</p>
+                </div>
+                
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">TLS 1.3 Handshake Steps</h4>
+                    <ol class="list-decimal pl-8 space-y-2">
+                        <li><strong>Client Hello</strong>: Sends supported cipher suites and key share</li>
+                        <li><strong>Server Hello</strong>: Chooses cipher suite and sends key share</li>
+                        <li><strong>Server Certificate</strong>: Authenticates server identity</li>
+                        <li><strong>Finished</strong>: Both sides derive session keys</li>
+                        <li><strong>Application Data</strong>: Encrypted communication begins</li>
+                    </ol>
+                </div>
+            </article>
+        </section>
+
+        <!-- Summary -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Summary</h2>
+            
+            <p class="mb-4">In this chapter, we've explored essential network security concepts:</p>
+            
+            <ul class="list-disc pl-8 mb-6 space-y-2">
+                <li><strong>Firewalls and IDS/IPS</strong>: First line of defense against network threats</li>
+                <li><strong>Cryptography</strong>: SSL/TLS for secure communication, AES for data encryption</li>
+                <li><strong>Authentication</strong>: 2FA and biometrics for stronger access control</li>
+                <li><strong>Best Practices</strong>: Patching, least privilege, segmentation, and audits</li>
+                <li><strong>VPNs</strong>: Secure remote access solutions</li>
+                <li><strong>NAC</strong>: Policy enforcement before network access</li>
+                <li><strong>Threat Management</strong>: Detection techniques and mitigation strategies</li>
+            </ul>
+            
+            <div class="bg-blue-50 p-4 rounded-lg">
+                <h4 class="font-semibold mb-2">Key Takeaways</h4>
+                <ul class="list-disc pl-8 space-y-1">
+                    <li>Implement layered security (defense in depth)</li>
+                    <li>Use strong encryption (TLS 1.2/1.3, AES-256)</li>
+                    <li>Enforce multi-factor authentication</li>
+                    <li>Regularly update and patch systems</li>
+                    <li>Monitor for threats and have response plans</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Further Reading -->
+        <section class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold mb-4">Further Reading</h2>
+            
+            <ul class="list-disc pl-8 space-y-2">
+                <li><strong>Books</strong>:
+                    <ul class="list-disc pl-8 mt-1 space-y-1">
+                        <li>"Network Security Essentials" by William Stallings</li>
+                        <li>"Applied Cryptography" by Bruce Schneier</li>
+                    </ul>
+                </li>
+                <li><strong>RFCs and Standards</strong>:
+                    <ul class="list-disc pl-8 mt-1 space-y-1">
+                        <li>RFC 5246: The Transport Layer Security (TLS) Protocol</li>
+                        <li>RFC 4301: Security Architecture for IP (IPsec)</li>
+                        <li>NIST SP 800-38A: AES Encryption</li>
+                        <li>IEEE 802.1X: Port-Based Network Access Control</li>
+                    </ul>
+                </li>
+                <li><strong>Online Resources</strong>:
+                    <ul class="list-disc pl-8 mt-1 space-y-1">
+                        <li>OWASP Security Guidelines</li>
+                        <li>NIST Cybersecurity Framework</li>
+                        <li>CIS Security Benchmarks</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-4">Computer Networks: From Scratch to Mastery</h3>
+                    <p>A comprehensive tutorial series for CSE graduates and professionals.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-3">Navigation</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:underline">Home</a></li>
+                        <li><a href="#" class="hover:underline">Module 1: Foundations</a></li>
+                        <li><a href="#" class="hover:underline">Module 2: Protocols & Addressing</a></li>
+                        <li><a href="#" class="hover:underline">Module 3: Advanced Networking</a></li>
+                        <li><a href="#" class="hover:underline">Module 4: Real-World Applications</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+                <p>© 2025 Computer Networks Tutorial Series. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Visualizations -->
+    <script>
+        // IDS/IPS Diagram
+        document.addEventListener('DOMContentLoaded', function() {
+            const idsIpsContainer = document.getElementById('ids-ips-diagram');
+            
+            if (idsIpsContainer) {
+                const canvas = document.createElement('canvas');
+                canvas.width = idsIpsContainer.offsetWidth;
+                canvas.height = idsIpsContainer.offsetHeight;
+                idsIpsContainer.appendChild(canvas);
+                
+                const ctx = canvas.getContext('2d');
+                
+                // Draw the network diagram
+                ctx.font = '12px Arial';
+                
+                // Network elements
+                ctx.fillStyle = '#93C5FD';
+                ctx.fillRect(50, 50, 80, 40);
+                ctx.strokeRect(50, 50, 80, 40);
+                ctx.fillStyle = '#000';
+                ctx.fillText('Internet', 60, 75);
+                
+                ctx.fillStyle = '#86EFAC';
+                ctx.fillRect(200, 30, 80, 40);
+                ctx.strokeRect(200, 30, 80, 40);
+                ctx.fillText('Firewall', 215, 55);
+                
+                ctx.fillStyle = '#FCA5A5';
+                ctx.fillRect(200, 90, 80, 40);
+                ctx.strokeRect(200, 90, 80, 40);
+                ctx.fillText('IPS', 230, 115);
+                
+                ctx.fillStyle = '#FCD34D';
+                ctx.fillRect(350, 30, 80, 40);
+                ctx.strokeRect(350, 30, 80, 40);
+                ctx.fillText('IDS', 380, 55);
+                
+                ctx.fillStyle = '#C4B5FD';
+                ctx.fillRect(350, 90, 80, 40);
+                ctx.strokeRect(350, 90, 80, 40);
+                ctx.fillText('LAN', 380, 115);
+                
+                // Connections
+                ctx.strokeStyle = '#000';
+                ctx.beginPath();
+                ctx.moveTo(130, 70);
+                ctx.lineTo(200, 50);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(280, 50);
+                ctx.lineTo(350, 50);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(280, 90);
+                ctx.lineTo(350, 90);
+                ctx.stroke();
+                
+                // Labels
+                ctx.fillText('Inline', 240, 85);
+                ctx.fillText('Monitoring', 290, 85);
+            }
+            
+            // NAC Diagram
+            const nacContainer = document.getElementById('nac-diagram');
+            
+            if (nacContainer) {
+                const canvas = document.createElement('canvas');
+                canvas.width = nacContainer.offsetWidth;
+                canvas.height = nacContainer.offsetHeight;
+                nacContainer.appendChild(canvas);
+                
+                const ctx = canvas.getContext('2d');
+                
+                // Draw the NAC process
+                ctx.font = '12px Arial';
+                
+                // Elements
+                const elements = [
+                    { x: 50, y: 50, width: 100, height: 40, text: 'Device Connects', color: '#93C5FD' },
+                    { x: 200, y: 50, width: 100, height: 40, text: 'Authenticate', color: '#86EFAC' },
+                    { x: 350, y: 50, width: 100, height: 40, text: 'Posture Check', color: '#FCA5A5' },
+                    { x: 200, y: 120, width: 100, height: 40, text: 'Grant Access', color: '#C4B5FD' },
+                    { x: 200, y: 190, width: 100, height: 40, text: 'Remediate', color: '#FCD34D' }
+                ];
+                
+                // Draw elements
+                elements.forEach(el => {
+                    ctx.fillStyle = el.color;
+                    ctx.fillRect(el.x, el.y, el.width, el.height);
+                    ctx.strokeRect(el.x, el.y, el.width, el.height);
+                    ctx.fillStyle = '#000';
+                    ctx.fillText(el.text, el.x + 10, el.y + 25);
+                });
+                
+                // Arrows
+                const drawArrow = (x1, y1, x2, y2, label) => {
+                    ctx.beginPath();
+                    ctx.moveTo(x1, y1);
+                    ctx.lineTo(x2, y2);
+                    ctx.stroke();
+                    
+                    // Arrowhead
+                    const angle = Math.atan2(y2 - y1, x2 - x1);
+                    ctx.beginPath();
+                    ctx.moveTo(x2, y2);
+                    ctx.lineTo(x2 - 10 * Math.cos(angle - Math.PI/6), y2 - 10 * Math.sin(angle - Math.PI/6));
+                    ctx.moveTo(x2, y2);
+                    ctx.lineTo(x2 - 10 * Math.cos(angle + Math.PI/6), y2 - 10 * Math.sin(angle + Math.PI/6));
+                    ctx.stroke();
+                    
+                    // Label
+                    if (label) {
+                        ctx.fillText(label, (x1 + x2)/2 - 20, (y1 + y2)/2 - 10);
+                    }
+                };
+                
+                // Process flow
+                drawArrow(150, 70, 200, 70);
+                drawArrow(300, 70, 350, 70);
+                drawArrow(450, 70, 450, 120, 'Compliant');
+                drawArrow(450, 120, 300, 120);
+                drawArrow(150, 120, 200, 120);
+                drawArrow(250, 160, 250, 190, 'Non-Compliant');
+            }
+            
+            // TLS Handshake Diagram
+            const tlsContainer = document.getElementById('tls-handshake-diagram');
+            
+            if (tlsContainer) {
+                const canvas = document.createElement('canvas');
+                canvas.width = tlsContainer.offsetWidth;
+                canvas.height = tlsContainer.offsetHeight;
+                tlsContainer.innerHTML = '';
+                tlsContainer.appendChild(canvas);
+                
+                const ctx = canvas.getContext('2d');
+                
+                // Draw the TLS handshake
+                ctx.font = '12px Arial';
+                
+                // Client and Server
+                ctx.fillStyle = '#93C5FD';
+                ctx.fillRect(100, 50, 120, 60);
+                ctx.strokeRect(100, 50, 120, 60);
+                ctx.fillStyle = '#000';
+                ctx.fillText('Client', 140, 85);
+                
+                ctx.fillStyle = '#86EFAC';
+                ctx.fillRect(400, 50, 120, 60);
+                ctx.strokeRect(400, 50, 120, 60);
+                ctx.fillText('Server', 440, 85);
+                
+                // Messages
+                const drawMessage = (y, label, fromClient) => {
+                    const x1 = fromClient ? 220 : 400;
+                    const x2 = fromClient ? 400 : 220;
+                    ctx.beginPath();
+                    ctx.moveTo(x1, y);
+                    ctx.lineTo(x2, y);
+                    ctx.stroke();
+                    
+                    // Arrowhead
+                    const angle = fromClient ? 0 : Math.PI;
+                    ctx.beginPath();
+                    ctx.moveTo(x2, y);
+                    ctx.lineTo(x2 - 10 * Math.cos(angle - Math.PI/6), y - 10 * Math.sin(angle - Math.PI/6));
+                    ctx.moveTo(x2, y);
+                    ctx.lineTo(x2 - 10 * Math.cos(angle + Math.PI/6), y - 10 * Math.sin(angle + Math.PI/6));
+                    ctx.stroke();
+                    
+                    ctx.fillText(label, 300, y - 10);
+                };
+                
+                // TLS 1.3 handshake
+                drawMessage(150, 'ClientHello (Key Share)', true);
+                drawMessage(200, 'ServerHello (Key Share, Certificate)', false);
+                drawMessage(250, 'Finished', true);
+                drawMessage(300, 'Finished', false);
+                drawMessage(350, 'Application Data', true);
+                
+                // Labels
+                ctx.fillText('TLS 1.3 Handshake', 280, 130);
+            }
+        });
+    </script>
+</body>
+</html>

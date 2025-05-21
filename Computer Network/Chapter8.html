@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 8: Cloud and Distributed Networking | Computer Networks: From Scratch to Mastery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-600 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <a href="#" class="text-2xl font-bold mb-4 md:mb-0">Computer Networks: From Scratch to Mastery</a>
+            <div class="flex flex-wrap gap-4">
+                <a href="#" class="hover:underline">Home</a>
+                <a href="#" class="hover:underline">Module 1</a>
+                <a href="#" class="hover:underline">Module 2</a>
+                <a href="#" class="font-bold underline">Module 3</a>
+                <a href="#" class="hover:underline">Module 4</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Chapter Navigation -->
+    <div class="container mx-auto px-4 py-2 bg-blue-50 rounded-lg my-4">
+        <div class="flex flex-wrap justify-between">
+            <a href="chapter7.html" class="text-blue-700 hover:underline">← Chapter 7: Network Security Essentials</a>
+            <a href="chapter9.html" class="text-blue-700 hover:underline">Chapter 9: Wireless and IoT Networks →</a>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-center mb-4">Chapter 8: Cloud and Distributed Networking</h1>
+        <p class="text-xl text-center text-gray-600 max-w-3xl mx-auto">
+            Exploring CDNs, SDN, cloud networking, and distributed architectures that power modern applications.
+        </p>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 pb-12">
+        <!-- Introduction -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Introduction</h2>
+            <p class="mb-4">Modern networking extends beyond traditional infrastructure to include cloud services and distributed architectures. Building on our understanding of network fundamentals (Chapters 1-7), this chapter explores how content delivery, software-defined networking, and cloud services are transforming network design and management.</p>
+            <p>By the end of this chapter, you will understand:</p>
+            <ul class="list-disc pl-8 mt-2 space-y-1">
+                <li>How CDNs and SDN optimize network performance and management</li>
+                <li>Core networking services in AWS and Azure cloud platforms</li>
+                <li>Load balancing and redundancy techniques for high availability</li>
+                <li>Edge computing architectures and their benefits</li>
+                <li>Virtual Private Cloud (VPC) implementations</li>
+                <li>Network Function Virtualization (NFV) concepts</li>
+                <li>DDoS mitigation strategies in cloud environments</li>
+            </ul>
+        </section>
+
+        <!-- CDNs and SDN -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">CDNs and SDN</h2>
+            
+            <article class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">Content Delivery Networks (CDNs)</h3>
+                <p class="mb-3">CDNs distribute content across geographically dispersed servers to improve performance:</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-4">
+                    <div>
+                        <h4 class="font-semibold mb-2">CDN Components</h4>
+                        <ul class="list-disc pl-8 space-y-1">
+                            <li><strong>Origin Server</strong>: Original content source</li>
+                            <li><strong>Edge Servers</strong>: Distributed cache locations</li>
+                            <li><strong>Point of Presence (PoP)</strong>: Cluster of edge servers</li>
+                            <li><strong>CDN Manager</strong>: Control and configuration</li>
+                        </ul>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">CDN Benefits</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Reduced latency (content closer to users)</li>
+                            <li>Lower origin server load</li>
+                            <li>Improved scalability</li>
+                            <li>DDoS protection</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h4 class="font-semibold mb-2">CDN Caching Strategies</h4>
+                    <ul class="list-disc pl-8 space-y-1">
+                        <li><strong>Push CDN</strong>: Content uploaded to edge servers proactively</li>
+                        <li><strong>Pull CDN</strong>: Content cached on-demand when first requested</li>
+                        <li><strong>TTL-based</strong>: Content cached for specific time periods</li>
+                        <li><strong>Invalidation</strong>: Manual cache clearing when content updates</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-yellow-50 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">Popular CDN Providers</h4>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-white p-2 rounded text-center">Cloudflare</div>
+                        <div class="bg-white p-2 rounded text-center">Akamai</div>
+                        <div class="bg-white p-2 rounded text-center">AWS CloudFront</div>
+                        <div class="bg-white p-2 rounded text-center">Azure CDN</div>
+                    </div>
+                </div>
+            </article>
+            
+            <article>
+                <h3 class="text-xl font-semibold mb-3">Software-Defined Networking (SDN)</h3>
+                <p class="mb-3">SDN separates network control (brains) from forwarding (muscle):</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-4">
+                    <div>
+                        <h4 class="font-semibold mb-2">SDN Architecture</h4>
+                        <ul class="list-disc pl-8 space-y-1">
+                            <li><strong>Control Plane</strong>: Centralized controller makes decisions</li>
+                            <li><strong>Data Plane</strong>: Switches/routes forward traffic</li>
+                            <li><strong>Northbound API</strong>: Communication with applications</li>
+                            <li><strong>Southbound API</strong>: Communication with devices (e.g., OpenFlow)</li>
+                        </ul>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">SDN Benefits</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Centralized network management</li>
+                            <li>Programmable network behavior</li>
+                            <li>Dynamic traffic engineering</li>
+                            <li>Improved automation</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">SDN Controller Examples</h4>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div class="bg-white p-2 rounded text-center">OpenDaylight</div>
+                        <div class="bg-white p-2 rounded text-center">ONOS</div>
+                        <div class="bg-white p-2 rounded text-center">Cisco ACI</div>
+                        <div class="bg-white p-2 rounded text-center">VMware NSX</div>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- AWS/Azure Networking Basics -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">AWS/Azure Networking Basics</h2>
+            
+            <article class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">AWS Networking Services</h3>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-4">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Amazon VPC</h4>
+                        <p>Virtual Private Cloud provides isolated network environments:</p>
+                        <ul class="list-disc pl-6 mt-1 space-y-1">
+                            <li>Subnets (public/private)</li>
+                            <li>Route tables</li>
+                            <li>Security groups/NACLs</li>
+                            <li>VPC peering</li>
+                        </ul>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Route 53</h4>
+                        <p>Scalable DNS web service:</p>
+                        <ul class="list-disc pl-6 mt-1 space-y-1">
+                            <li>Domain registration</li>
+                            <li>DNS routing</li>
+                            <li>Health checking</li>
+                            <li>Traffic flow</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Elastic Load Balancing</h4>
+                        <p>Distributes traffic across targets:</p>
+                        <ul class="list-disc pl-6 mt-1 space-y-1">
+                            <li>Application Load Balancer (ALB)</li>
+                            <li>Network Load Balancer (NLB)</li>
+                            <li>Gateway Load Balancer (GWLB)</li>
+                        </ul>
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">AWS Direct Connect</h4>
+                        <p>Dedicated network connection to AWS:</p>
+                        <ul class="list-disc pl-6 mt-1 space-y-1">
+                            <li>Bypasses public internet</li>
+                            <li>Consistent network performance</li>
+                            <li>Reduced bandwidth costs</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+            
+            <article>
+                <h3 class="text-xl font-semibold mb-3">Azure Networking Services</h3>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-4">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Virtual Network (VNet)</h4>
+                        <p>Azure's equivalent to AWS VPC:</p>
+                        <ul class="list-disc pl-6 mt-1 space-y-1">
+                            <li>Subnets</li>
+                            <li>Network security groups</li>
+                            <li>VNet peering</li>
+                            <li>Service endpoints</li>
+                        </ul>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Azure DNS</h4>
+                        <p>Hosting service for DNS domains:</p>
+                        <ul class="list-disc pl-6 mt-1 space-y-1">
+                            <li>Fast DNS resolution</li>
+                            <li>High availability</li>
+                            <li>Alias records</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Azure Load Balancer</h4>
+                        <p>Distributes traffic across VMs:</p>
+                        <ul class="list-disc pl-6 mt-1 space-y-1">
+                            <li>Public and internal load balancing</li>
+                            <li>Port forwarding</li>
+                            <li>Automatic reconfiguration</li>
+                        </ul>
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">ExpressRoute</h4>
+                        <p>Private connection to Azure:</p>
+                        <ul class="list-disc pl-6 mt-1 space-y-1">
+                            <li>Private network connection</li>
+                            <li>Predictable performance</li>
+                            <li>Hybrid network support</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- Load Balancers and Redundancy -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Load Balancers and Redundancy</h2>
+            
+            <article class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">Load Balancing Techniques</h3>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-4">
+                    <div>
+                        <h4 class="font-semibold mb-2">Load Balancing Algorithms</h4>
+                        <ul class="list-disc pl-8 space-y-1">
+                            <li><strong>Round Robin</strong>: Rotates requests evenly</li>
+                            <li><strong>Least Connections</strong>: Sends to server with fewest active connections</li>
+                            <li><strong>IP Hash</strong>: Persistent connections based on client IP</li>
+                            <li><strong>Weighted</strong>: Assigns traffic based on server capacity</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Load Balancer Types</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li><strong>Layer 4 (Transport)</strong>: TCP/UDP based</li>
+                            <li><strong>Layer 7 (Application)</strong>: HTTP/HTTPS aware</li>
+                            <li><strong>Global Server Load Balancing (GSLB)</strong>: Geographic distribution</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                    <h4 class="font-semibold mb-2">Load Balancer Health Checks</h4>
+                    <p>Essential for detecting and removing unhealthy servers:</p>
+                    <ul class="list-disc pl-8 mt-2 space-y-1">
+                        <li>TCP connectivity checks</li>
+                        <li>HTTP status code verification</li>
+                        <li>Response time thresholds</li>
+                        <li>Custom health check endpoints</li>
+                    </ul>
+                </div>
+            </article>
+            
+            <article>
+                <h3 class="text-xl font-semibold mb-3">Redundancy Strategies</h3>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-semibold mb-2">High Availability Techniques</h4>
+                        <ul class="list-disc pl-8 space-y-1">
+                            <li><strong>Active-Passive</strong>: Standby servers take over during failure</li>
+                            <li><strong>Active-Active</strong>: All servers handle traffic simultaneously</li>
+                            <li><strong>Geographic Redundancy</strong>: Multiple data center locations</li>
+                            <li><strong>Auto-scaling</strong>: Automatic addition/removal of servers</li>
+                        </ul>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Redundancy Best Practices</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Design for failure (assume components will fail)</li>
+                            <li>Implement circuit breakers for fault isolation</li>
+                            <li>Use multiple availability zones/regions</li>
+                            <li>Regularly test failover procedures</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- Edge Computing -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Edge Computing in Networking</h2>
+            
+            <p class="mb-4">Edge computing brings computation and data storage closer to data sources:</p>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">Edge Computing Benefits</h3>
+                    <ul class="list-disc pl-8 space-y-1">
+                        <li><strong>Reduced Latency</strong>: Processing near data source</li>
+                        <li><strong>Bandwidth Optimization</strong>: Less data sent to central cloud</li>
+                        <li><strong>Improved Reliability</strong>: Local processing continues if cloud connection drops</li>
+                        <li><strong>Enhanced Privacy</strong>: Sensitive data processed locally</li>
+                    </ul>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3">Edge Computing Use Cases</h3>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>IoT device processing</li>
+                        <li>Real-time video analytics</li>
+                        <li>Augmented/Virtual Reality</li>
+                        <li>Smart cities infrastructure</li>
+                        <li>Industrial automation</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="bg-gray-100 p-4 rounded-lg">
+                <h4 class="font-semibold mb-2">Edge Computing Architecture</h4>
+                <div id="edge-computing-diagram" class="w-full h-64 bg-white border border-gray-300 rounded-lg mb-2"></div>
+                <p class="text-sm text-gray-600">Diagram showing edge devices, edge servers, and cloud data centers in a hierarchical architecture.</p>
+            </div>
+        </section>
+
+        <!-- Virtual Private Clouds -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Virtual Private Clouds (VPCs)</h2>
+            
+            <p class="mb-4">VPCs provide logically isolated sections of cloud providers' networks:</p>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">VPC Components</h3>
+                    <ul class="list-disc pl-8 space-y-1">
+                        <li><strong>Subnets</strong>: IP address ranges within VPC</li>
+                        <li><strong>Route Tables</strong>: Define traffic paths</li>
+                        <li><strong>Internet Gateways</strong>: VPC connectivity to internet</li>
+                        <li><strong>NAT Gateways</strong>: Outbound internet for private subnets</li>
+                        <li><strong>Security Groups</strong>: Stateful virtual firewalls</li>
+                        <li><strong>Network ACLs</strong>: Stateless subnet-level firewalls</li>
+                    </ul>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3">VPC Connectivity Options</h3>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li><strong>VPC Peering</strong>: Connect VPCs privately</li>
+                        <li><strong>VPN Connections</strong>: Secure tunnel to on-premises</li>
+                        <li><strong>Direct Connect/ExpressRoute</strong>: Dedicated private connection</li>
+                        <li><strong>Transit Gateway</strong>: Hub-and-spoke topology</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="bg-blue-50 p-4 rounded-lg">
+                <h4 class="font-semibold mb-2">AWS VPC Configuration Example</h4>
+                <pre class="bg-white p-3 rounded overflow-x-auto"><code class="language-bash"># Create VPC
+aws ec2 create-vpc --cidr-block 10.0.0.0/16
+
+# Create Subnet
+aws ec2 create-subnet --vpc-id vpc-123456 --cidr-block 10.0.1.0/24
+
+# Create Internet Gateway
+aws ec2 create-internet-gateway
+aws ec2 attach-internet-gateway --vpc-id vpc-123456 --internet-gateway-id igw-123456
+
+# Update Route Table
+aws ec2 create-route --route-table-id rtb-123456 \
+    --destination-cidr-block 0.0.0.0/0 \
+    --gateway-id igw-123456</code></pre>
+            </div>
+        </section>
+
+        <!-- Network Function Virtualization -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Network Function Virtualization (NFV)</h2>
+            
+            <p class="mb-4">NFV replaces dedicated network appliances with software running on commodity hardware:</p>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">NFV Benefits</h3>
+                    <ul class="list-disc pl-8 space-y-1">
+                        <li><strong>Reduced Costs</strong>: Eliminates proprietary hardware</li>
+                        <li><strong>Increased Flexibility</strong>: Rapid deployment of network services</li>
+                        <li><strong>Scalability</strong>: Scale up/down as needed</li>
+                        <li><strong>Automation</strong>: Programmable network functions</li>
+                    </ul>
+                </div>
+                <div class="bg-purple-50 p-4 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3">Common Virtualized Functions</h3>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Virtual Routers</li>
+                        <li>Virtual Firewalls</li>
+                        <li>Virtual Load Balancers</li>
+                        <li>Virtual WAN Optimization</li>
+                        <li>Virtual Session Border Controllers</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="bg-gray-100 p-4 rounded-lg">
+                <h4 class="font-semibold mb-2">NFV Architecture</h4>
+                <ul class="list-disc pl-8 space-y-1">
+                    <li><strong>Virtualized Network Functions (VNFs)</strong>: Software implementations</li>
+                    <li><strong>NFV Infrastructure (NFVI)</strong>: Compute, storage, networking</li>
+                    <li><strong>Management and Orchestration (MANO)</strong>: Deployment and lifecycle</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- DDoS Mitigation -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">DDoS Mitigation in Cloud Networks</h2>
+            
+            <article class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">DDoS Attack Types</h3>
+                <div class="grid md:grid-cols-3 gap-4 mb-4">
+                    <div class="bg-red-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Volumetric</h4>
+                        <p>Floods network with traffic:</p>
+                        <ul class="list-disc pl-6 mt-1 space-y-1">
+                            <li>UDP floods</li>
+                            <li>ICMP floods</li>
+                            <li>DNS amplification</li>
+                        </ul>
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Protocol</h4>
+                        <p>Exploits protocol weaknesses:</p>
+                        <ul class="list-disc pl-6 mt-1 space-y-1">
+                            <li>SYN floods</li>
+                            <li>Ping of Death</li>
+                            <li>Smurf attack</li>
+                        </ul>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Application Layer</h4>
+                        <p>Targets specific apps:</p>
+                        <ul class="list-disc pl-6 mt-1 space-y-1">
+                            <li>HTTP floods</li>
+                            <li>Slowloris</li>
+                            <li>DNS query floods</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+            
+            <article>
+                <h3 class="text-xl font-semibold mb-3">Mitigation Strategies</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-semibold mb-2">Cloud-Based Protection</h4>
+                        <ul class="list-disc pl-8 space-y-1">
+                            <li><strong>Always-on DDoS protection</strong>: AWS Shield Advanced, Azure DDoS Protection</li>
+                            <li><strong>Traffic scrubbing</strong>: Filter malicious traffic at edge</li>
+                            <li><strong>Anycast network distribution</strong>: Spread attack traffic</li>
+                            <li><strong>Rate limiting</strong>: Restrict request rates</li>
+                        </ul>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Best Practices</h4>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>Enable automatic scaling to absorb traffic spikes</li>
+                            <li>Use CDNs to distribute traffic</li>
+                            <li>Implement WAF (Web Application Firewall)</li>
+                            <li>Regularly test DDoS response plans</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- Practical Examples -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Practical Examples</h2>
+            
+            <article class="mb-8">
+                <h3 class="text-xl font-semibold mb-3">Example 1: Configuring an AWS VPC</h3>
+                <p class="mb-4">Step-by-step guide to setting up a secure VPC:</p>
+                
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h4 class="font-semibold mb-2">Steps:</h4>
+                    <ol class="list-decimal pl-8 space-y-2">
+                        <li>Navigate to AWS VPC Console</li>
+                        <li>Create VPC with appropriate CIDR (e.g., 10.0.0.0/16)</li>
+                        <li>Create subnets in different AZs:
+                            <ul class="list-disc pl-8 mt-1 space-y-1">
+                                <li>Public subnets (10.0.1.0/24, 10.0.2.0/24)</li>
+                                <li>Private subnets (10.0.3.0/24, 10.0.4.0/24)</li>
+                            </ul>
+                        </li>
+                        <li>Create and attach Internet Gateway</li>
+                        <li>Configure route tables:
+                            <ul class="list-disc pl-8 mt-1 space-y-1">
+                                <li>Public route table with 0.0.0.0/0 to IGW</li>
+                                <li>Private route table with local route only</li>
+                            </ul>
+                        </li>
+                        <li>Set up NAT Gateway in public subnet for private subnet internet access</li>
+                        <li>Configure security groups and network ACLs</li>
+                    </ol>
+                </div>
+                
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">Terraform VPC Configuration</h4>
+                    <pre class="bg-white p-3 rounded overflow-x-auto"><code class="language-hcl">resource "aws_vpc" "main" {
+  cidr_block = "10.0.0.0/16"
+  enable_dns_support = true
+  enable_dns_hostnames = true
+}
+
+resource "aws_subnet" "public" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "10.0.1.0/24"
+  availability_zone = "us-east-1a"
+}
+
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.main.id
+}
+
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.gw.id
+  }
+}</code></pre>
+                </div>
+            </article>
+            
+            <article>
+                <h3 class="text-xl font-semibold mb-3">Example 2: Visualizing CDN Architecture</h3>
+                <p class="mb-4">Interactive diagram showing how a CDN delivers content:</p>
+                
+                <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                    <div id="cdn-diagram" class="w-full h-96 bg-white border border-gray-300 rounded-lg flex flex-col items-center justify-center">
+                        <!-- Visualization will be rendered here by JavaScript -->
+                        <p class="text-gray-500">CDN Architecture Visualization Loading...</p>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Diagram showing origin server, edge locations, and user requests being served from the nearest edge.</p>
+                </div>
+                
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">CDN Request Flow</h4>
+                    <ol class="list-decimal pl-8 space-y-2">
+                        <li>User requests content from website</li>
+                        <li>DNS routes request to nearest CDN edge server</li>
+                        <li>Edge server checks cache for content</li>
+                        <li>If cached (HIT), serves content immediately</li>
+                        <li>If not cached (MISS), retrieves from origin server</li>
+                        <li>Edge server caches content for future requests</li>
+                        <li>Content delivered to user</li>
+                    </ol>
+                </div>
+            </article>
+        </section>
+
+        <!-- Summary -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Summary</h2>
+            
+            <p class="mb-4">In this chapter, we've explored modern distributed and cloud networking technologies:</p>
+            
+            <ul class="list-disc pl-8 mb-6 space-y-2">
+                <li><strong>CDNs</strong>: Distributed content delivery for improved performance</li>
+                <li><strong>SDN</strong>: Programmable networks with separated control/data planes</li>
+                <li><strong>Cloud Networking</strong>: AWS VPC, Azure VNet, and their services</li>
+                <li><strong>Load Balancing</strong>: Distributing traffic for scalability and redundancy</li>
+                <li><strong>Edge Computing</strong>: Processing data closer to its source</li>
+                <li><strong>NFV</strong>: Virtualizing network functions for flexibility</li>
+                <li><strong>DDoS Protection</strong>: Mitigation strategies in cloud environments</li>
+            </ul>
+            
+            <div class="bg-blue-50 p-4 rounded-lg">
+                <h4 class="font-semibold mb-2">Key Takeaways</h4>
+                <ul class="list-disc pl-8 space-y-1">
+                    <li>Use CDNs to improve content delivery performance</li>
+                    <li>Consider SDN for programmable, flexible networks</li>
+                    <li>Leverage cloud provider networking services for scalability</li>
+                    <li>Implement load balancing and redundancy for high availability</li>
+                    <li>Explore edge computing for latency-sensitive applications</li>
+                    <li>Enable DDoS protection for cloud resources</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Further Reading -->
+        <section class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold mb-4">Further Reading</h2>
+            
+            <ul class="list-disc pl-8 space-y-2">
+                <li><strong>Books</strong>:
+                    <ul class="list-disc pl-8 mt-1 space-y-1">
+                        <li>"Cloud Networking: Understanding Cloud-Based Data Center Networks" by Gary Lee</li>
+                        <li>"Software-Defined Networking: A Comprehensive Approach" by Paul Goransson</li>
+                    </ul>
+                </li>
+                <li><strong>Documentation</strong>:
+                    <ul class="list-disc pl-8 mt-1 space-y-1">
+                        <li>AWS Networking Documentation</li>
+                        <li>Azure Networking Documentation</li>
+                        <li>Open Networking Foundation SDN Resources</li>
+                    </ul>
+                </li>
+                <li><strong>Online Resources</strong>:
+                    <ul class="list-disc pl-8 mt-1 space-y-1">
+                        <li>Cloudflare Learning Center</li>
+                        <li>Akamai Tech Docs</li>
+                        <li>OpenDaylight Project Documentation</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-4">Computer Networks: From Scratch to Mastery</h3>
+                    <p>A comprehensive tutorial series for CSE graduates and professionals.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-3">Navigation</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:underline">Home</a></li>
+                        <li><a href="#" class="hover:underline">Module 1: Foundations</a></li>
+                        <li><a href="#" class="hover:underline">Module 2: Protocols & Addressing</a></li>
+                        <li><a href="#" class="hover:underline">Module 3: Advanced Networking</a></li>
+                        <li><a href="#" class="hover:underline">Module 4: Real-World Applications</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+                <p>© 2025 Computer Networks Tutorial Series. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Visualizations -->
+    <script>
+        // CDN Diagram
+        document.addEventListener('DOMContentLoaded', function() {
+            const cdnContainer = document.getElementById('cdn-diagram');
+            
+            if (cdnContainer) {
+                const canvas = document.createElement('canvas');
+                canvas.width = cdnContainer.offsetWidth;
+                canvas.height = cdnContainer.offsetHeight;
+                cdnContainer.innerHTML = '';
+                cdnContainer.appendChild(canvas);
+                
+                const ctx = canvas.getContext('2d');
+                
+                // Draw the CDN architecture
+                ctx.font = '12px Arial';
+                
+                // Origin Server
+                ctx.fillStyle = '#FCA5A5';
+                ctx.fillRect(50, 100, 100, 60);
+                ctx.strokeRect(50, 100, 100, 60);
+                ctx.fillStyle = '#000';
+                ctx.fillText('Origin Server', 55, 130);
+                
+                // Edge Servers
+                const edgeServers = [
+                    { x: 200, y: 50, label: 'Edge Server (NY)' },
+                    { x: 350, y: 150, label: 'Edge Server (London)' },
+                    { x: 250, y: 250, label: 'Edge Server (Tokyo)' }
+                ];
+                
+                edgeServers.forEach(server => {
+                    ctx.fillStyle = '#93C5FD';
+                    ctx.fillRect(server.x, server.y, 100, 60);
+                    ctx.strokeRect(server.x, server.y, 100, 60);
+                    ctx.fillStyle = '#000';
+                    ctx.fillText(server.label, server.x + 5, server.y + 30);
+                });
+                
+                // Users
+                const users = [
+                    { x: 150, y: 30, label: 'User (East Coast)' },
+                    { x: 400, y: 80, label: 'User (Europe)' },
+                    { x: 300, y: 350, label: 'User (Asia)' }
+                ];
+                
+                users.forEach(user => {
+                    ctx.fillStyle = '#86EFAC';
+                    ctx.beginPath();
+                    ctx.arc(user.x, user.y, 20, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+                    ctx.fillStyle = '#000';
+                    ctx.fillText(user.label, user.x - 40, user.y - 10);
+                });
+                
+                // Connections
+                ctx.strokeStyle = '#000';
+                
+                // Origin to Edge
+                edgeServers.forEach(server => {
+                    ctx.beginPath();
+                    ctx.moveTo(150, 130);
+                    ctx.lineTo(server.x, server.y + 30);
+                    ctx.stroke();
+                });
+                
+                // Edge to Users
+                users.forEach((user, index) => {
+                    const server = edgeServers[index];
+                    ctx.beginPath();
+                    ctx.moveTo(server.x + 50, server.y);
+                    ctx.lineTo(user.x, user.y + 20);
+                    ctx.stroke();
+                    
+                    // Arrow
+                    const angle = Math.atan2(user.y + 20 - (server.y), user.x - (server.x + 50));
+                    ctx.beginPath();
+                    ctx.moveTo(user.x, user.y + 20);
+                    ctx.lineTo(user.x - 10 * Math.cos(angle - Math.PI/6), user.y + 20 - 10 * Math.sin(angle - Math.PI/6));
+                    ctx.moveTo(user.x, user.y + 20);
+                    ctx.lineTo(user.x - 10 * Math.cos(angle + Math.PI/6), user.y + 20 - 10 * Math.sin(angle + Math.PI/6));
+                    ctx.stroke();
+                });
+                
+                // Labels
+                ctx.fillText('Content Distribution', 150, 90);
+                ctx.fillText('User Requests', 250, 300);
+            }
+            
+            // Edge Computing Diagram
+            const edgeContainer = document.getElementById('edge-computing-diagram');
+            
+            if (edgeContainer) {
+                const canvas = document.createElement('canvas');
+                canvas.width = edgeContainer.offsetWidth;
+                canvas.height = edgeContainer.offsetHeight;
+                edgeContainer.appendChild(canvas);
+                
+                const ctx = canvas.getContext('2d');
+                
+                // Draw the edge computing architecture
+                ctx.font = '12px Arial';
+                
+                // Cloud Data Center
+                ctx.fillStyle = '#FCA5A5';
+                ctx.fillRect(300, 50, 150, 80);
+                ctx.strokeRect(300, 50, 150, 80);
+                ctx.fillStyle = '#000';
+                ctx.fillText('Cloud Data Center', 310, 90);
+                
+                // Edge Servers
+                ctx.fillStyle = '#93C5FD';
+                ctx.fillRect(200, 150, 120, 60);
+                ctx.strokeRect(200, 150, 120, 60);
+                ctx.fillText('Edge Server 1', 210, 185);
+                
+                ctx.fillRect(400, 150, 120, 60);
+                ctx.strokeRect(400, 150, 120, 60);
+                ctx.fillText('Edge Server 2', 410, 185);
+                
+                // Edge Devices
+                ctx.fillStyle = '#86EFAC';
+                ctx.beginPath();
+                ctx.arc(100, 250, 20, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+                ctx.fillText('IoT Device', 50, 250);
+                
+                ctx.beginPath();
+                ctx.arc(250, 250, 20, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+                ctx.fillText('Smartphone', 220, 280);
+                
+                ctx.beginPath();
+                ctx.arc(400, 250, 20, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+                ctx.fillText('Sensor', 390, 280);
+                
+                // Connections
+                ctx.strokeStyle = '#000';
+                
+                // Cloud to Edge
+                ctx.beginPath();
+                ctx.moveTo(375, 130);
+                ctx.lineTo(260, 150);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(375, 130);
+                ctx.lineTo(460, 150);
+                ctx.stroke();
+                
+                // Edge to Devices
+                ctx.beginPath();
+                ctx.moveTo(200, 210);
+                ctx.lineTo(100, 230);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(260, 210);
+                ctx.lineTo(250, 230);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(400, 210);
+                ctx.lineTo(400, 230);
+                ctx.stroke();
+                
+                // Labels
+                ctx.fillText('Central Cloud Processing', 310, 40);
+                ctx.fillText('Local Edge Processing', 210, 140);
+                ctx.fillText('Data Sources', 100, 230);
+            }
+        });
+    </script>
+</body>
+</html>
