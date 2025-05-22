@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 9: Network Management & Monitoring | Computer Networks: From Scratch to Mastery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-600 text-white p-4 shadow-md">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold mb-4 md:mb-0">Computer Networks: From Scratch to Mastery</a>
+            <div class="flex flex-wrap gap-4">
+                <a href="module1.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 1: Foundations</a>
+                <a href="module2.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 2: Protocols & Addressing</a>
+                <a href="module3.html" class="bg-blue-800 px-3 py-1 rounded">Module 3: Advanced Networking</a>
+                <a href="module4.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 4: Real-World Applications</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Chapter Navigation -->
+    <div class="container mx-auto px-4 py-2 bg-gray-100 flex justify-between">
+        <a href="chapter8.html" class="text-blue-600 hover:underline">← Chapter 8: Cloud & Distributed Networks</a>
+        <a href="chapter10.html" class="text-blue-600 hover:underline">Chapter 10: Network Security Deep Dive →</a>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <article class="bg-white rounded-lg shadow-md overflow-hidden">
+            <!-- Header -->
+            <header class="bg-gray-800 text-white p-6">
+                <h1 class="text-3xl font-bold">Chapter 9: Network Management & Monitoring</h1>
+                <p class="mt-2 text-gray-300">Module 3: Advanced Networking</p>
+            </header>
+
+            <!-- Introduction -->
+            <section class="p-6 border-b">
+                <h2 class="text-2xl font-semibold mb-4">Introduction</h2>
+                <p class="mb-4">Effective network management and monitoring are critical skills for any network professional. This chapter explores essential tools and techniques for maintaining, troubleshooting, and optimizing computer networks.</p>
+                <p class="mb-4">By the end of this chapter, you will be able to:</p>
+                <ul class="list-disc pl-6 mb-4 space-y-1">
+                    <li>Use Wireshark for packet analysis and troubleshooting</li>
+                    <li>Employ ping and traceroute to diagnose connectivity issues</li>
+                    <li>Resolve common network errors using diagnostic commands</li>
+                    <li>Analyze logs and monitor network health with various tools</li>
+                    <li>Understand and implement SNMP for device management</li>
+                    <li>Utilize NetFlow for traffic analysis</li>
+                    <li>Measure and interpret key network performance metrics</li>
+                </ul>
+            </section>
+
+            <!-- Network Troubleshooting Tools -->
+            <section class="p-6 border-b">
+                <h2 class="text-2xl font-semibold mb-4">Network Troubleshooting Tools</h2>
+                
+                <h3 class="text-xl font-semibold mt-6 mb-3">Wireshark: Packet Analysis</h3>
+                <p class="mb-4">Wireshark is the most widely used network protocol analyzer. It captures packets in real-time and displays them in human-readable format, allowing for detailed network analysis.</p>
+                
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h4 class="font-semibold mb-2">Key Wireshark Features:</h4>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li><strong>Packet Capture:</strong> Records all traffic on a network interface</li>
+                        <li><strong>Protocol Decoding:</strong> Supports over 2,000 network protocols</li>
+                        <li><strong>Filtering:</strong> Powerful display filters (e.g., <code>tcp.port == 80</code>, <code>http</code>)</li>
+                        <li><strong>Statistics:</strong> Provides network performance metrics and conversation analysis</li>
+                    </ul>
+                </div>
+
+                <h3 class="text-xl font-semibold mt-6 mb-3">Ping: Testing Reachability</h3>
+                <p class="mb-4">Ping uses ICMP (Internet Control Message Protocol) to test reachability and measure round-trip time between hosts.</p>
+                
+                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg mb-4 overflow-x-auto"><code class="language-bash"># Basic ping (Windows/Linux)
+ping example.com
+
+# Continuous ping (Windows)
+ping -t example.com
+
+# Ping with specific count (Linux/Windows)
+ping -n 5 example.com  # Windows
+ping -c 5 example.com  # Linux
+
+# Ping with packet size
+ping -l 1500 example.com  # Windows
+ping -s 1500 example.com  # Linux</code></pre>
+
+                <h3 class="text-xl font-semibold mt-6 mb-3">Traceroute: Path Mapping</h3>
+                <p class="mb-4">Traceroute (tracert on Windows) maps the path packets take to reach a destination, identifying each hop (router) along the way.</p>
+                
+                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg mb-4 overflow-x-auto"><code class="language-bash"># Windows
+tracert example.com
+
+# Linux/macOS
+traceroute example.com
+
+# Using ICMP instead of UDP (Linux)
+traceroute -I example.com</code></pre>
+
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-4">
+                    <h4 class="font-semibold text-blue-800 mb-2">How Traceroute Works:</h4>
+                    <p>Traceroute sends packets with incrementally increasing TTL (Time To Live) values. Each router along the path decrements the TTL and sends back an ICMP "Time Exceeded" message when TTL reaches 0, revealing its address.</p>
+                </div>
+            </section>
+
+            <!-- Common Errors & Fixes -->
+            <section class="p-6 border-b">
+                <h2 class="text-2xl font-semibold mb-4">Common Errors & Fixes</h2>
+                
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">1. Connectivity Loss</h4>
+                        <p class="mb-2"><strong>Symptoms:</strong> Cannot reach any network resources</p>
+                        <p><strong>Solutions:</strong></p>
+                        <ul class="list-disc pl-6">
+                            <li>Check physical connections</li>
+                            <li>Verify IP configuration with <code>ipconfig</code>/<code>ifconfig</code></li>
+                            <li>Test with ping to gateway and external hosts</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">2. DNS Resolution Failures</h4>
+                        <p class="mb-2"><strong>Symptoms:</strong> Can ping by IP but not by hostname</p>
+                        <p><strong>Solutions:</strong></p>
+                        <ul class="list-disc pl-6">
+                            <li>Flush DNS cache: <code>ipconfig /flushdns</code></li>
+                            <li>Verify DNS server settings</li>
+                            <li>Test with <code>nslookup</code> or <code>dig</code></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">3. Duplicate IP Addresses</h4>
+                        <p class="mb-2"><strong>Symptoms:</strong> Intermittent connectivity, IP conflict warnings</p>
+                        <p><strong>Solutions:</strong></p>
+                        <ul class="list-disc pl-6">
+                            <li>Check ARP tables: <code>arp -a</code></li>
+                            <li>Use DHCP properly or implement IPAM</li>
+                            <li>Implement DHCP snooping on switches</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">4. High Latency/Packet Loss</h4>
+                        <p class="mb-2"><strong>Symptoms:</strong> Slow response times, choppy VoIP/video</p>
+                        <p><strong>Solutions:</strong></p>
+                        <ul class="list-disc pl-6">
+                            <li>Use ping and traceroute to identify problematic hops</li>
+                            <li>Check for bandwidth saturation</li>
+                            <li>Inspect QoS configurations</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Diagnostic Commands -->
+            <section class="p-6 border-b">
+                <h2 class="text-2xl font-semibold mb-4">Diagnostic Commands</h2>
+                
+                <h3 class="text-xl font-semibold mt-6 mb-3">ipconfig/ifconfig</h3>
+                <p class="mb-4">Displays and manages network interface configuration.</p>
+                
+                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg mb-4 overflow-x-auto"><code class="language-bash"># Windows: Display all configuration
+ipconfig /all
+
+# Windows: Release and renew DHCP lease
+ipconfig /release
+ipconfig /renew
+
+# Linux/macOS: Display interface info
+ifconfig -a
+ip addr show  # Modern alternative</code></pre>
+
+                <h3 class="text-xl font-semibold mt-6 mb-3">netstat</h3>
+                <p class="mb-4">Displays network connections, routing tables, and interface statistics.</p>
+                
+                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg mb-4 overflow-x-auto"><code class="language-bash"># Show all active connections
+netstat -an
+
+# Show routing table
+netstat -r
+
+# Show listening ports
+netstat -ln
+
+# Show statistics by protocol
+netstat -s</code></pre>
+            </section>
+
+            <!-- Log Analysis and Monitoring Tools -->
+            <section class="p-6 border-b">
+                <h2 class="text-2xl font-semibold mb-4">Log Analysis and Monitoring Tools</h2>
+                
+                <h3 class="text-xl font-semibold mt-6 mb-3">Syslog and Router Logs</h3>
+                <p class="mb-4">Syslog is a standard for message logging that allows separation of the software generating messages from the system storing them.</p>
+                
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h4 class="font-semibold mb-2">Common Syslog Facilities:</h4>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li><strong>kern:</strong> Kernel messages</li>
+                        <li><strong>user:</strong> User-level messages</li>
+                        <li><strong>mail:</strong> Mail system</li>
+                        <li><strong>auth:</strong> Security/authentication messages</li>
+                        <li><strong>local0-7:</strong> Locally defined messages</li>
+                    </ul>
+                </div>
+
+                <h3 class="text-xl font-semibold mt-6 mb-3">Monitoring Tools</h3>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">SolarWinds</h4>
+                        <p>Comprehensive network monitoring with performance analysis, alerting, and reporting.</p>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Nagios</h4>
+                        <p>Open-source monitoring system for network services, host resources, and more.</p>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">PRTG</h4>
+                        <p>Easy-to-use monitoring solution with sensors for various network aspects.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SNMP -->
+            <section class="p-6 border-b">
+                <h2 class="text-2xl font-semibold mb-4">SNMP (Simple Network Management Protocol)</h2>
+                
+                <p class="mb-4">SNMP is an Internet Standard protocol for collecting and organizing information about managed devices on IP networks.</p>
+                
+                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <h3 class="text-xl font-semibold mt-6 mb-3">SNMP Components</h3>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li><strong>Manager:</strong> The monitoring system</li>
+                            <li><strong>Agent:</strong> Software running on managed devices</li>
+                            <li><strong>MIB (Management Information Base):</strong> Database of managed objects</li>
+                            <li><strong>OID (Object Identifier):</strong> Unique identifier for each managed object</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-semibold mt-6 mb-3">SNMP Versions</h3>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li><strong>SNMPv1:</strong> Original version (not secure)</li>
+                            <li><strong>SNMPv2c:</strong> Improved performance with community strings</li>
+                            <li><strong>SNMPv3:</strong> Adds encryption and authentication</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <pre class="bg-gray-800 text-gray-100 p-4 rounded-lg mb-4 overflow-x-auto"><code class="language-bash"># Basic SNMP walk command (Linux)
+snmpwalk -v 2c -c public 192.168.1.1
+
+# Secure SNMPv3 query
+snmpget -v 3 -u myuser -l authPriv -a SHA -A myauthpass -x AES -X myprivpass 192.168.1.1 sysName.0</code></pre>
+            </section>
+
+            <!-- NetFlow Analysis -->
+            <section class="p-6 border-b">
+                <h2 class="text-2xl font-semibold mb-4">NetFlow Analysis</h2>
+                
+                <p class="mb-4">NetFlow is a network protocol developed by Cisco for collecting IP traffic information and monitoring network traffic.</p>
+                
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h4 class="font-semibold mb-2">NetFlow Components:</h4>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li><strong>Exporter:</strong> Device that generates NetFlow records (usually a router)</li>
+                        <li><strong>Collector:</strong> Receives and stores flow records</li>
+                        <li><strong>Analyzer:</strong> Processes and presents the data</li>
+                    </ul>
+                </div>
+
+                <h3 class="text-xl font-semibold mt-6 mb-3">NetFlow Use Cases</h3>
+                <ul class="list-disc pl-6 space-y-1 mb-4">
+                    <li>Bandwidth monitoring and capacity planning</li>
+                    <li>Network anomaly detection</li>
+                    <li>Application performance monitoring</li>
+                    <li>Security analysis and intrusion detection</li>
+                </ul>
+            </section>
+
+            <!-- Network Performance Metrics -->
+            <section class="p-6 border-b">
+                <h2 class="text-2xl font-semibold mb-4">Network Performance Metrics</h2>
+                
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Latency</h4>
+                        <p>Time taken for a packet to travel from source to destination. Measured in milliseconds (ms).</p>
+                        <p class="mt-2"><strong>Typical values:</strong> &lt;100ms (good), 100-300ms (fair), &gt;300ms (poor)</p>
+                    </div>
+                    
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Jitter</h4>
+                        <p>Variation in packet delay. Critical for real-time applications like VoIP.</p>
+                        <p class="mt-2"><strong>Acceptable:</strong> &lt;30ms for VoIP</p>
+                    </div>
+                    
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Packet Loss</h4>
+                        <p>Percentage of packets that fail to reach their destination.</p>
+                        <p class="mt-2"><strong>Acceptable:</strong> &lt;1% for most applications, &lt;0.1% for VoIP</p>
+                    </div>
+                    
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Throughput</h4>
+                        <p>Actual rate of successful message delivery over a channel.</p>
+                        <p class="mt-2"><strong>Measurement:</strong> bits per second (bps), packets per second (pps)</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Practical Example 1: Wireshark Packet Capture -->
+            <section class="p-6 border-b">
+                <h2 class="text-2xl font-semibold mb-4">Practical Example: Wireshark Packet Capture</h2>
+                
+                <p class="mb-4">Follow these steps to capture and analyze HTTP traffic with Wireshark:</p>
+                
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-4">
+                    <h4 class="font-semibold text-blue-800 mb-2">Step-by-Step Guide:</h4>
+                    <ol class="list-decimal pl-6 space-y-2">
+                        <li>Launch Wireshark and select the appropriate network interface</li>
+                        <li>Start capturing packets by clicking the shark fin icon</li>
+                        <li>In the filter bar, enter <code>http</code> to only show HTTP traffic</li>
+                        <li>Open a web browser and visit any HTTP (not HTTPS) website</li>
+                        <li>Stop the capture after loading the page</li>
+                        <li>Examine the HTTP request/response packets:
+                            <ul class="list-disc pl-6 mt-1">
+                                <li>Look for GET requests and 200 OK responses</li>
+                                <li>Examine headers in the packet details pane</li>
+                            </ul>
+                        </li>
+                        <li>Right-click a packet and select "Follow TCP Stream" to see the complete conversation</li>
+                    </ol>
+                </div>
+                
+                <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                    <h4 class="font-semibold text-yellow-800 mb-2">Troubleshooting Tip:</h4>
+                    <p>If you're not seeing any HTTP traffic, ensure you're using HTTP (not HTTPS) websites, as Wireshark can't decrypt HTTPS traffic without the private key.</p>
+                </div>
+            </section>
+
+            <!-- Practical Example 2: Visualizing Traceroute -->
+            <section class="p-6">
+                <h2 class="text-2xl font-semibold mb-4">Visualizing Traceroute with HTML Canvas</h2>
+                
+                <p class="mb-4">This interactive diagram shows how traceroute works, with packets traveling through multiple hops to reach a destination:</p>
+                
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <canvas id="tracerouteCanvas" width="800" height="400" class="w-full max-w-full border border-gray-300"></canvas>
+                    <div class="mt-2 flex justify-center">
+                        <button id="startTraceroute" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Start Traceroute</button>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2">Diagram Description:</h4>
+                    <p>The visualization shows a source computer on the left sending packets through three routers (hops) to reach a destination server on the right. Each hop is represented by a router icon with its IP address. The animation demonstrates how packets with increasing TTL values reach further into the network, with each router responding when the TTL expires.</p>
+                </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const canvas = document.getElementById('tracerouteCanvas');
+                        const ctx = canvas.getContext('2d');
+                        const startBtn = document.getElementById('startTraceroute');
+                        
+                        // Adjust canvas size for mobile
+                        if (window.innerWidth < 768) {
+                            canvas.width = window.innerWidth - 40;
+                            canvas.height = 300;
+                        }
+                        
+                        // Network elements
+                        const elements = [
+                            { type: 'pc', x: 50, y: canvas.height/2, label: 'Source PC', ip: '192.168.1.100' },
+                            { type: 'router', x: canvas.width*0.25, y: canvas.height/2, label: 'Router 1', ip: '10.0.0.1' },
+                            { type: 'router', x: canvas.width*0.5, y: canvas.height/2, label: 'Router 2', ip: '172.16.0.1' },
+                            { type: 'router', x: canvas.width*0.75, y: canvas.height/2, label: 'Router 3', ip: '203.0.113.1' },
+                            { type: 'server', x: canvas.width-50, y: canvas.height/2, label: 'Destination', ip: '198.51.100.42' }
+                        ];
+                        
+                        // Draw initial network
+                        function drawNetwork() {
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            
+                            // Draw connections
+                            ctx.strokeStyle = '#666';
+                            ctx.lineWidth = 2;
+                            for (let i = 0; i < elements.length-1; i++) {
+                                ctx.beginPath();
+                                ctx.moveTo(elements[i].x + 30, elements[i].y);
+                                ctx.lineTo(elements[i+1].x - 30, elements[i+1].y);
+                                ctx.stroke();
+                            }
+                            
+                            // Draw elements
+                            elements.forEach(el => {
+                                // Draw device
+                                if (el.type === 'pc') {
+                                    ctx.fillStyle = '#4CAF50';
+                                    ctx.fillRect(el.x-20, el.y-20, 40, 40);
+                                } else if (el.type === 'router') {
+                                    ctx.fillStyle = '#2196F3';
+                                    ctx.beginPath();
+                                    ctx.arc(el.x, el.y, 20, 0, Math.PI*2);
+                                    ctx.fill();
+                                } else if (el.type === 'server') {
+                                    ctx.fillStyle = '#FF5722';
+                                    ctx.beginPath();
+                                    ctx.moveTo(el.x-20, el.y-20);
+                                    ctx.lineTo(el.x+20, el.y-20);
+                                    ctx.lineTo(el.x+20, el.y+20);
+                                    ctx.lineTo(el.x-20, el.y+20);
+                                    ctx.closePath();
+                                    ctx.fill();
+                                }
+                                
+                                // Draw label
+                                ctx.fillStyle = '#333';
+                                ctx.font = '12px Arial';
+                                ctx.textAlign = 'center';
+                                ctx.fillText(el.label, el.x, el.y + 40);
+                                ctx.fillText(el.ip, el.x, el.y + 55);
+                            });
+                        }
+                        
+                        // Animate traceroute
+                        function animateTraceroute() {
+                            let hop = 0;
+                            let animationFrame;
+                            
+                            function animate() {
+                                if (hop >= elements.length-1) {
+                                    cancelAnimationFrame(animationFrame);
+                                    startBtn.disabled = false;
+                                    return;
+                                }
+                                
+                                drawNetwork();
+                                
+                                // Draw packet moving to current hop
+                                const progress = (Date.now() % 1000) / 1000;
+                                const startX = elements[hop].x + 30;
+                                const endX = elements[hop+1].x - 30;
+                                const currentX = startX + (endX - startX) * progress;
+                                const y = elements[0].y;
+                                
+                                // Draw packet
+                                ctx.fillStyle = '#FFC107';
+                                ctx.beginPath();
+                                ctx.arc(currentX, y, 8, 0, Math.PI*2);
+                                ctx.fill();
+                                
+                                // Draw TTL expired at hop
+                                if (progress > 0.9 && hop < elements.length-1) {
+                                    ctx.fillStyle = '#F44336';
+                                    ctx.font = '10px Arial';
+                                    ctx.fillText('TTL Expired!', elements[hop+1].x, y - 15);
+                                }
+                                
+                                animationFrame = requestAnimationFrame(animate);
+                                
+                                // Move to next hop after delay
+                                if (progress > 0.99) {
+                                    setTimeout(() => {
+                                        hop++;
+                                    }, 500);
+                                }
+                            }
+                            
+                            startBtn.disabled = true;
+                            animate();
+                        }
+                        
+                        startBtn.addEventListener('click', animateTraceroute);
+                        drawNetwork();
+                    });
+                </script>
+            </section>
+
+            <!-- Summary -->
+            <section class="p-6 bg-gray-50">
+                <h2 class="text-2xl font-semibold mb-4">Summary</h2>
+                <p class="mb-4">In this chapter, we've explored essential network management and monitoring techniques:</p>
+                <ul class="list-disc pl-6 space-y-1 mb-4">
+                    <li>Mastered packet analysis with Wireshark and basic troubleshooting with ping and traceroute</li>
+                    <li>Learned to diagnose and resolve common network issues</li>
+                    <li>Utilized key diagnostic commands like ipconfig and netstat</li>
+                    <li>Explored log analysis and monitoring tools for network health</li>
+                    <li>Implemented SNMP for device management and NetFlow for traffic analysis</li>
+                    <li>Measured and interpreted critical network performance metrics</li>
+                </ul>
+                <p>These skills form the foundation for effective network administration and troubleshooting in professional environments.</p>
+            </section>
+
+            <!-- Further Reading -->
+            <section class="p-6 bg-white">
+                <h2 class="text-2xl font-semibold mb-4">Further Reading</h2>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>Kurose, J. F., & Ross, K. W. (2021). <em>Computer Networking: A Top-Down Approach</em>. Pearson.</li>
+                    <li>Wireshark User Guide: <a href="https://www.wireshark.org/docs/" class="text-blue-600 hover:underline">https://www.wireshark.org/docs/</a></li>
+                    <li>RFC 3411 - Architecture for SNMP Frameworks</li>
+                    <li>RFC 3954 - Cisco Systems NetFlow Services Export Version 9</li>
+                    <li>Cisco Networking Academy: <a href="https://www.netacad.com/" class="text-blue-600 hover:underline">https://www.netacad.com/</a></li>
+                </ul>
+            </section>
+        </article>
+    </main>
+
+    <!-- Footer Navigation -->
+    <footer class="bg-gray-800 text-white p-6">
+        <div class="container mx-auto">
+            <h3 class="text-xl font-semibold mb-4">Continue Your Learning Journey</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <h4 class="font-semibold mb-2">Module 1: Foundations</h4>
+                    <ul class="space-y-1">
+                        <li><a href="chapter1.html" class="text-gray-300 hover:text-white">Chapter 1: Introduction</a></li>
+                        <li><a href="chapter2.html" class="text-gray-300 hover:text-white">Chapter 2: Network Models</a></li>
+                        <li><a href="chapter3.html" class="text-gray-300 hover:text-white">Chapter 3: Transmission Media</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-2">Module 2: Protocols</h4>
+                    <ul class="space-y-1">
+                        <li><a href="chapter4.html" class="text-gray-300 hover:text-white">Chapter 4: IP Addressing</a></li>
+                        <li><a href="chapter5.html" class="text-gray-300 hover:text-white">Chapter 5: Key Protocols</a></li>
+                        <li><a href="chapter6.html" class="text-gray-300 hover:text-white">Chapter 6: Routing & Switching</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-2">Module 3: Advanced</h4>
+                    <ul class="space-y-1">
+                        <li><a href="chapter7.html" class="text-gray-300 hover:text-white">Chapter 7: Network Security</a></li>
+                        <li><a href="chapter8.html" class="text-gray-300 hover:text-white">Chapter 8: Cloud Networks</a></li>
+                        <li><a href="#" class="text-white font-medium">Chapter 9: Network Management</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-2">Module 4: Applications</h4>
+                    <ul class="space-y-1">
+                        <li><a href="chapter10.html" class="text-gray-300 hover:text-white">Chapter 10: Security Deep Dive</a></li>
+                        <li><a href="chapter11.html" class="text-gray-300 hover:text-white">Chapter 11: Wireless Networks</a></li>
+                        <li><a href="chapter12.html" class="text-gray-300 hover:text-white">Chapter 12: Emerging Trends</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-6 pt-6 border-t border-gray-700 text-center text-gray-400">
+                <p>© 2025 Computer Networks: From Scratch to Mastery. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
