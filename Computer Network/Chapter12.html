@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 12: Emerging Trends | Computer Networks: From Scratch to Mastery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-800 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold mb-4 md:mb-0">Networking Mastery</a>
+            <div class="flex flex-wrap gap-4">
+                <a href="module1.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 1</a>
+                <a href="module2.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 2</a>
+                <a href="module3.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 3</a>
+                <a href="module4.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 4</a>
+                <a href="chapter11.html" class="hover:bg-blue-700 px-3 py-1 rounded">Previous Chapter</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto py-8 px-4">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">Chapter 12: Emerging Trends</h1>
+            <p class="text-xl text-gray-600">Future technologies shaping computer networks</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto py-8 px-4">
+        <!-- Introduction -->
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Introduction</h2>
+            <p class="text-lg text-gray-700 mb-4">This final chapter explores cutting-edge technologies transforming computer networks. Building on foundational knowledge from previous chapters, we'll examine innovations from IoT to quantum networking that will define the next decade of network architecture and management.</p>
+            <p class="text-lg text-gray-700">By the end of this chapter, you'll understand:</p>
+            <ul class="list-disc pl-8 mt-2 space-y-2 text-gray-700">
+                <li>IoT network architectures and their unique challenges</li>
+                <li>6G wireless technologies beyond current 5G capabilities</li>
+                <li>Quantum networking principles and current research</li>
+                <li>AI applications in network management and optimization</li>
+                <li>Blockchain for decentralized network security</li>
+                <li>Zero trust architecture for modern security</li>
+                <li>Sustainable green networking practices</li>
+            </ul>
+        </section>
+
+        <!-- IoT Networks -->
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">IoT Networks: Connecting the World</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Key Protocols</h3>
+                    <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                        <li><strong>MQTT</strong>: Publish-subscribe protocol for low-power devices (TCP-based)</li>
+                        <li><strong>CoAP</strong>: Constrained Application Protocol (UDP-based for IoT)</li>
+                        <li><strong>LoRaWAN</strong>: Long-range, low-power wide-area networking</li>
+                        <li><strong>Zigbee</strong>: Mesh networking for smart homes (IEEE 802.15.4)</li>
+                    </ul>
+                    
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Architecture</h3>
+                    <p class="text-gray-700 mb-4">Typical IoT deployments use a 3-tier architecture:</p>
+                    <ol class="list-decimal pl-8 space-y-2 text-gray-700">
+                        <li><strong>Edge devices</strong>: Sensors and actuators (temperature, motion)</li>
+                        <li><strong>Gateways</strong>: Aggregate and preprocess data</li>
+                        <li><strong>Cloud/Data Center</strong>: Storage and analytics</li>
+                    </ol>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Applications</h3>
+                    <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                        <li><strong>Smart Homes</strong>: Connected appliances, security systems</li>
+                        <li><strong>Industrial IoT</strong>: Predictive maintenance, asset tracking</li>
+                        <li><strong>Healthcare</strong>: Remote patient monitoring</li>
+                        <li><strong>Smart Cities</strong>: Traffic management, waste monitoring</li>
+                    </ul>
+                    
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Challenges</h3>
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+                        <h4 class="font-semibold text-red-700">Security Vulnerabilities</h4>
+                        <p class="text-red-700">Default credentials, unencrypted communications, and lack of updates make IoT devices prime targets.</p>
+                    </div>
+                    <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4">
+                        <h4 class="font-semibold text-yellow-700">Scalability</h4>
+                        <p class="text-yellow-700">Managing millions of devices requires efficient protocols and edge computing.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6G Technologies -->
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">6G Technologies: The Future of Wireless</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Key Features</h3>
+                    <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                        <li><strong>Terahertz bands</strong>: 100GHz-10THz for ultra-high bandwidth</li>
+                        <li><strong>Ultra-low latency</strong>: <1ms for real-time applications</li>
+                        <li><strong>Massive connectivity</strong>: 10M devices/km²</li>
+                        <li><strong>AI-native</strong>: Machine learning integrated into network operations</li>
+                    </ul>
+                    
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Comparison with 5G</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white border border-gray-300">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="py-2 px-4 border-b text-left">Feature</th>
+                                    <th class="py-2 px-4 border-b text-left">5G</th>
+                                    <th class="py-2 px-4 border-b text-left">6G</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="py-2 px-4 border-b">Peak Data Rate</td>
+                                    <td class="py-2 px-4 border-b">20 Gbps</td>
+                                    <td class="py-2 px-4 border-b">1 Tbps</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4 border-b">Latency</td>
+                                    <td class="py-2 px-4 border-b">1-5 ms</td>
+                                    <td class="py-2 px-4 border-b"><1 ms</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4 border-b">Frequency Bands</td>
+                                    <td class="py-2 px-4 border-b">Sub-6GHz, mmWave</td>
+                                    <td class="py-2 px-4 border-b">Terahertz</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Use Cases</h3>
+                    <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                        <li><strong>Holographic Communication</strong>: Real-time 3D holograms</li>
+                        <li><strong>Autonomous Vehicles</strong>: Vehicle-to-everything (V2X) at scale</li>
+                        <li><strong>Tactile Internet</strong>: Haptic feedback with near-zero latency</li>
+                        <li><strong>Smart Surfaces</strong>: Environment as network infrastructure</li>
+                    </ul>
+                    
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Challenges</h3>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-semibold">Infrastructure Costs</h4>
+                        <p class="text-gray-700">Terahertz signals have limited range, requiring dense base station deployment.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quantum Networking -->
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Quantum Networking: Revolutionizing Communication</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Core Concepts</h3>
+                    <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                        <li><strong>Quantum Key Distribution (QKD)</strong>: Unhackable encryption using quantum states</li>
+                        <li><strong>Entanglement</strong>: Instant correlation between particles regardless of distance</li>
+                        <li><strong>Quantum Repeaters</strong>: Extend quantum communication range</li>
+                    </ul>
+                    
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Current Progress</h3>
+                    <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                        <li>China's 2,000km quantum-secured backbone</li>
+                        <li>Quantum networks in Chicago, Delft, and Tokyo testbeds</li>
+                        <li>Commercial QKD systems from Toshiba, ID Quantique</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Quantum Internet Vision</h3>
+                    <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                        <p class="text-gray-700">A future internet combining classical and quantum communication, enabling:</p>
+                        <ul class="list-disc pl-8 mt-2 space-y-1 text-gray-700">
+                            <li>Unbreakable encryption</li>
+                            <li>Distributed quantum computing</li>
+                            <li>Enhanced scientific measurements</li>
+                        </ul>
+                    </div>
+                    
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Technical Challenges</h3>
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4">
+                        <h4 class="font-semibold text-red-700">Scalability</h4>
+                        <p class="text-red-700">Maintaining quantum states over long distances requires breakthroughs in quantum repeaters and error correction.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI in Network Management -->
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">AI in Network Management: Intelligent Networks</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Applications</h3>
+                    <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                        <li><strong>Predictive Maintenance</strong>: Detect failures before they occur</li>
+                        <li><strong>Traffic Optimization</strong>: Dynamic routing based on predictions</li>
+                        <li><strong>Anomaly Detection</strong>: Identify DDoS attacks or intrusions</li>
+                        <li><strong>Self-healing Networks</strong>: Automatic troubleshooting</li>
+                    </ul>
+                    
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Tools</h3>
+                    <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                        <li><strong>Cisco DNA Center</strong>: AI-driven enterprise networking</li>
+                        <li><strong>Juniper Mist AI</strong>: Wireless and WAN optimization</li>
+                        <li><strong>Open-source</strong>: TensorFlow, PyTorch for custom solutions</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Practical Example: AI Monitoring</h3>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="text-lg font-semibold text-gray-700 mb-2">Configuring Anomaly Detection</h4>
+                        <pre class="bg-gray-800 text-green-400 p-3 rounded overflow-x-auto"><code class="language-python">
+# Sample Python code for network anomaly detection
+from sklearn.ensemble import IsolationForest
+import pandas as pd
+
+# Load network traffic data
+data = pd.read_csv('network_traffic.csv')
+
+# Train anomaly detection model
+model = IsolationForest(contamination=0.01)
+model.fit(data[['bandwidth', 'latency', 'packet_loss']])
+
+# Predict anomalies
+data['anomaly'] = model.predict(data[['bandwidth', 'latency', 'packet_loss']])
+
+# Flag suspicious activity
+anomalies = data[data['anomaly'] == -1]
+                        </code></pre>
+                        <p class="mt-2 text-gray-700">This simple machine learning model can identify unusual network patterns that may indicate attacks or failures.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blockchain in Networking -->
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Blockchain in Networking: Decentralized Solutions</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Applications</h3>
+                    <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                        <li><strong>Secure Device Authentication</strong>: Tamper-proof identity for IoT devices</li>
+                        <li><strong>Blockchain-based DNS</strong>: Resilient against DDoS (e.g., Handshake, ENS)</li>
+                        <li><strong>Network Resource Sharing</strong>: Decentralized bandwidth markets</li>
+                        <li><strong>SDN Security</strong>: Immutable flow rule verification</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Implementation Example</h3>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="text-lg font-semibold text-gray-700 mb-2">IoT Device Authentication</h4>
+                        <pre class="bg-gray-800 text-green-400 p-3 rounded overflow-x-auto"><code class="language-solidity">
+// Sample Solidity smart contract for device authentication
+contract DeviceAuth {
+    mapping(address => bool) public authorizedDevices;
+    address public admin;
+    
+    constructor() {
+        admin = msg.sender;
+    }
+    
+    function addDevice(address device) public {
+        require(msg.sender == admin, "Only admin can add devices");
+        authorizedDevices[device] = true;
+    }
+    
+    function verifyDevice(address device) public view returns (bool) {
+        return authorizedDevices[device];
+    }
+}
+                        </code></pre>
+                        <p class="mt-2 text-gray-700">This Ethereum smart contract manages a whitelist of authorized IoT devices.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Zero Trust Architecture -->
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Zero Trust Architecture: Securing Modern Networks</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Core Principles</h3>
+                    <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                        <li><strong>Verify Every Request</strong>: No implicit trust based on network location</li>
+                        <li><strong>Least Privilege</strong>: Minimal access required for tasks</li>
+                        <li><strong>Assume Breach</strong>: Design for containment of compromises</li>
+                    </ul>
+                    
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Implementation</h3>
+                    <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                        <li><strong>Identity Verification</strong>: Multi-factor authentication (MFA)</li>
+                        <li><strong>Microsegmentation</strong>: Fine-grained network partitions</li>
+                        <li><strong>Continuous Monitoring</strong>: Real-time risk assessment</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Zero Trust Flow</h3>
+                    <div id="zeroTrustFlow" class="bg-gray-100 p-4 rounded-lg">
+                        <div class="flex flex-col space-y-4">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white">1</div>
+                                <div class="ml-4">
+                                    <h4 class="font-semibold">User Authentication</h4>
+                                    <p class="text-sm text-gray-600">MFA verification before access</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white">2</div>
+                                <div class="ml-4">
+                                    <h4 class="font-semibold">Device Verification</h4>
+                                    <p class="text-sm text-gray-600">Check device health/compliance</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white">3</div>
+                                <div class="ml-4">
+                                    <h4 class="font-semibold">Least Privilege Access</h4>
+                                    <p class="text-sm text-gray-600">Grant minimal required permissions</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white">4</div>
+                                <div class="ml-4">
+                                    <h4 class="font-semibold">Continuous Validation</h4>
+                                    <p class="text-sm text-gray-600">Monitor session for anomalies</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Green Networking -->
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Green Networking Initiatives: Sustainable Practices</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Energy-Efficient Techniques</h3>
+                    <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                        <li><strong>Low-Power Protocols</strong>: IEEE 802.3az (Energy Efficient Ethernet)</li>
+                        <li><strong>Optimized Routing</strong>: Algorithms minimizing energy consumption</li>
+                        <li><strong>Network Virtualization</strong>: Consolidating physical hardware</li>
+                        <li><strong>Renewable Energy</strong>: Solar/wind-powered base stations</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Industry Efforts</h3>
+                    <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                        <li><strong>Carbon-Neutral Clouds</strong>: Google, Microsoft commitments</li>
+                        <li><strong>5G/6G Efficiency</strong>: New radio designs reducing power</li>
+                        <li><strong>Cooling Innovations</strong>: Liquid cooling, natural air in data centers</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practical Example 1 -->
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Practical Example 1: Simulating an IoT Network in Packet Tracer</h2>
+            
+            <p class="text-lg text-gray-700 mb-4">Create a smart home IoT simulation with sensors and a gateway:</p>
+            
+            <div class="bg-gray-100 p-4 rounded-lg">
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">Step-by-Step Guide</h3>
+                <ol class="list-decimal pl-8 space-y-4 text-gray-700">
+                    <li>
+                        <strong>Add devices</strong>:
+                        <ul class="list-disc pl-8 mt-2">
+                            <li>1x Home Gateway (ISR 1100)</li>
+                            <li>2x IoT devices (temperature sensor, smart light)</li>
+                            <li>1x Smartphone (for control)</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Configure the gateway</strong>:
+                        <pre class="bg-gray-800 text-green-400 p-3 rounded overflow-x-auto mt-2"><code class="language-bash">
+interface GigabitEthernet0/0/0
+ ip address 192.168.1.1 255.255.255.0
+!
+ip http server
+ip http secure-server
+                        </code></pre>
+                    </li>
+                    <li>
+                        <strong>Set up IoT devices</strong>:
+                        <ul class="list-disc pl-8 mt-2">
+                            <li>Configure sensors with gateway as server</li>
+                            <li>Set reporting intervals (e.g., 5 minutes)</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Test communication</strong>:
+                        <ul class="list-disc pl-8 mt-2">
+                            <li>Use smartphone to view sensor data</li>
+                            <li>Control smart light remotely</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Practical Example 2 -->
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Practical Example 2: Visualizing a 6G Network Architecture</h2>
+            
+            <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                <canvas id="networkCanvas" width="800" height="400" class="w-full border border-gray-300 bg-white"></canvas>
+                <p class="mt-2 text-gray-700">This diagram illustrates a 6G network with terahertz base stations, AI orchestration, and diverse connected devices.</p>
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const canvas = document.getElementById('networkCanvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Adjust canvas size for mobile
+                    if (window.innerWidth < 768) {
+                        canvas.width = window.innerWidth - 40;
+                        canvas.height = 300;
+                    }
+                    
+                    // Draw devices
+                    function drawDevice(x, y, width, height, color, label) {
+                        ctx.fillStyle = color;
+                        ctx.fillRect(x, y, width, height);
+                        ctx.strokeRect(x, y, width, height);
+                        ctx.fillStyle = '#000';
+                        ctx.font = '12px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(label, x + width/2, y + height + 15);
+                    }
+                    
+                    // Draw connections
+                    function drawConnection(x1, y1, x2, y2) {
+                        ctx.beginPath();
+                        ctx.moveTo(x1, y1);
+                        ctx.lineTo(x2, y2);
+                        ctx.strokeStyle = '#666';
+                        ctx.stroke();
+                    }
+                    
+                    // Core Network
+                    drawDevice(350, 50, 100, 40, '#4CAF50', 'AI Orchestrator');
+                    
+                    // Base Stations
+                    drawDevice(150, 150, 80, 40, '#2196F3', 'THz Base Station');
+                    drawDevice(350, 150, 80, 40, '#2196F3', 'THz Base Station');
+                    drawDevice(550, 150, 80, 40, '#2196F3', 'THz Base Station');
+                    
+                    // Devices
+                    drawDevice(100, 250, 60, 30, '#FF9800', 'Holographic Device');
+                    drawDevice(250, 250, 60, 30, '#FF9800', 'Autonomous Vehicle');
+                    drawDevice(400, 250, 60, 30, '#FF9800', 'Smart Glasses');
+                    drawDevice(550, 250, 60, 30, '#FF9800', 'Tactile Sensor');
+                    
+                    // Connections
+                    drawConnection(400, 90, 400, 150); // Core to middle BS
+                    drawConnection(190, 190, 130, 250); // Left BS to device
+                    drawConnection(400, 190, 400, 250); // Middle BS to device
+                    drawConnection(610, 190, 580, 250); // Right BS to device
+                    
+                    // Labels
+                    ctx.font = '14px Arial';
+                    ctx.fillStyle = '#E91E63';
+                    ctx.fillText('Terahertz Links', 400, 130);
+                    ctx.fillText('AI-Managed Handoffs', 400, 350);
+                });
+            </script>
+        </section>
+
+        <!-- Summary -->
+        <section class="mb-12 bg-blue-50 p-6 rounded-lg border border-blue-200">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Summary</h2>
+            <p class="text-lg text-gray-700 mb-4">In this final chapter, we've explored transformative technologies shaping networking's future:</p>
+            <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                <li><strong>IoT networks</strong> are connecting billions of devices with specialized protocols and architectures</li>
+                <li><strong>6G</strong> promises terahertz speeds, near-zero latency, and AI integration beyond 5G capabilities</li>
+                <li><strong>Quantum networking</strong> offers unhackable communication through QKD and entanglement</li>
+                <li><strong>AI</strong> enables predictive, self-optimizing networks through machine learning</li>
+                <li><strong>Blockchain</strong> provides decentralized security for device authentication and data integrity</li>
+                <li><strong>Zero Trust</strong> architecture replaces perimeter security with continuous verification</li>
+                <li><strong>Green networking</strong> initiatives are making infrastructure more sustainable</li>
+            </ul>
+            <p class="text-lg text-gray-700 mt-4">These emerging trends build upon the foundational knowledge covered in this series, pointing toward an exciting future for computer networks.</p>
+        </section>
+
+        <!-- Further Reading -->
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Further Reading</h2>
+            <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                <li>"Computer Networking: A Top-Down Approach" by Kurose and Ross - Networking fundamentals</li>
+                <li>IEEE 6G White Papers - Technical specifications for next-gen wireless</li>
+                <li>Quantum Networking Research Papers - ArXiv quantum computing section</li>
+                <li>Cisco AI Networking Solutions - Enterprise AI applications</li>
+                <li>NIST SP 800-207 - Zero Trust Architecture guidelines</li>
+                <li>IoT Security Foundation Best Practices - Securing connected devices</li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-xl font-bold">Networking Mastery</h3>
+                    <p class="text-gray-400">From Scratch to Mastery</p>
+                </div>
+                <div class="flex flex-wrap gap-4">
+                    <a href="chapter11.html" class="hover:text-blue-300">← Previous Chapter</a>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-6 pt-6 text-center text-gray-400">
+                <p>© 2025 Computer Networks: From Scratch to Mastery. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 10: Building a Home Networking Lab | Computer Networks: From Scratch to Mastery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-800 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold mb-4 md:mb-0">Networking Mastery</a>
+            <div class="flex flex-wrap gap-4">
+                <a href="module1.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 1</a>
+                <a href="module2.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 2</a>
+                <a href="module3.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 3</a>
+                <a href="module4.html" class="hover:bg-blue-700 px-3 py-1 rounded">Module 4</a>
+                <a href="chapter9.html" class="hover:bg-blue-700 px-3 py-1 rounded">Previous Chapter</a>
+                <a href="chapter11.html" class="hover:bg-blue-700 px-3 py-1 rounded">Next Chapter</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto py-8 px-4">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">Chapter 10: Building a Home Networking Lab</h1>
+            <p class="text-xl text-gray-600">Practical implementation of networking concepts in a home lab environment</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto py-8 px-4">
+        <!-- Introduction -->
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Introduction</h2>
+            <p class="text-lg text-gray-700 mb-4">This chapter bridges the gap between theoretical networking knowledge and practical implementation by guiding you through setting up your own home networking lab. Building on concepts from previous chapters (IP addressing, routing, switching, security), we'll explore hands-on approaches to reinforce your learning.</p>
+            <p class="text-lg text-gray-700">By the end of this chapter, you'll be able to:</p>
+            <ul class="list-disc pl-8 mt-2 space-y-2 text-gray-700">
+                <li>Configure physical routers and servers for a home lab</li>
+                <li>Simulate networks using Packet Tracer and GNS3</li>
+                <li>Design an efficient home lab network topology</li>
+                <li>Select budget-friendly hardware for your lab</li>
+                <li>Implement virtualization for flexible network testing</li>
+                <li>Secure your lab environment</li>
+                <li>Troubleshoot common lab issues</li>
+            </ul>
+        </section>
+
+        <!-- Setting Up a Router/Server -->
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Setting Up a Router/Server: Core Lab Components</h2>
+            
+            <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Physical Router Configuration</h3>
+            <p class="text-lg text-gray-700 mb-4">Configuring a physical router (like Cisco or TP-Link) is fundamental to your lab. Here's a basic setup process:</p>
+            
+            <div class="bg-gray-100 p-4 rounded-lg mb-6">
+                <h4 class="text-xl font-semibold text-gray-700 mb-2">Basic Cisco Router Setup</h4>
+                <pre class="bg-gray-800 text-green-400 p-4 rounded overflow-x-auto"><code class="language-bash">
+# Access privileged EXEC mode
+Router> enable
+
+# Enter global configuration mode
+Router# configure terminal
+
+# Configure hostname
+Router(config)# hostname HomeLab-R1
+
+# Set console password
+HomeLab-R1(config)# line console 0
+HomeLab-R1(config-line)# password secure123
+HomeLab-R1(config-line)# login
+
+# Enable secret password
+HomeLab-R1(config)# enable secret mysecretpass
+
+# Configure an interface
+HomeLab-R1(config)# interface gigabitethernet0/0
+HomeLab-R1(config-if)# ip address 192.168.1.1 255.255.255.0
+HomeLab-R1(config-if)# no shutdown
+                </code></pre>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Server Setup with pfSense</h3>
+            <p class="text-lg text-gray-700 mb-4">For a budget-friendly router/firewall solution, pfSense is excellent. Here's how to set it up on an old PC:</p>
+            
+            <ol class="list-decimal pl-8 space-y-2 text-gray-700">
+                <li>Download pfSense ISO from the official website</li>
+                <li>Create a bootable USB using tools like Rufus or BalenaEtcher</li>
+                <li>Install on your hardware (minimum 1GB RAM, 2 network interfaces)</li>
+                <li>Follow the installation wizard (default options are fine for most cases)</li>
+                <li>Access the web interface at https://192.168.1.1 (default credentials: admin/pfsense)</li>
+                <li>Configure WAN and LAN interfaces</li>
+                <li>Set up DHCP server for automatic IP assignment</li>
+                <li>Configure NAT for internet sharing</li>
+            </ol>
+        </section>
+
+        <!-- Packet Tracer/GNS3 Tutorials -->
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Packet Tracer/GNS3 Tutorials: Simulating Networks</h2>
+            
+            <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Cisco Packet Tracer Basics</h3>
+            <p class="text-lg text-gray-700 mb-4">Packet Tracer is ideal for beginners to simulate networks. Let's create a simple LAN:</p>
+            
+            <div class="bg-gray-100 p-4 rounded-lg mb-6">
+                <h4 class="text-xl font-semibold text-gray-700 mb-2">Creating a Basic LAN</h4>
+                <ol class="list-decimal pl-8 space-y-2 text-gray-700">
+                    <li>Open Packet Tracer and create a new project</li>
+                    <li>Add a 2960 switch and two PCs from the device menu</li>
+                    <li>Connect them using straight-through cables</li>
+                    <li>Configure IP addresses on the PCs (e.g., 192.168.1.10/24 and 192.168.1.11/24)</li>
+                    <li>Test connectivity using the simulation mode</li>
+                </ol>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Advanced GNS3 Setup</h3>
+            <p class="text-lg text-gray-700 mb-4">GNS3 offers more advanced capabilities, including integration with real router images and virtual machines:</p>
+            
+            <div class="bg-gray-100 p-4 rounded-lg">
+                <h4 class="text-xl font-semibold text-gray-700 mb-2">GNS3 with Cisco IOS</h4>
+                <ol class="list-decimal pl-8 space-y-2 text-gray-700">
+                    <li>Download and install GNS3 (including GNS3 VM if using VMware/ESXi)</li>
+                    <li>Obtain a Cisco IOS image (legally from Cisco or used hardware)</li>
+                    <li>In GNS3, create a new project and go to Edit > Preferences</li>
+                    <li>Under IOS routers, add your image and set platform/model</li>
+                    <li>Configure RAM and idle values (typically 256-512MB RAM per router)</li>
+                    <li>Drag routers to workspace and connect them</li>
+                    <li>Start devices and configure via console</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Home Lab Network Design -->
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Home Lab Network Design: Planning Your Topology</h2>
+            
+            <p class="text-lg text-gray-700 mb-4">Designing an effective lab network requires careful planning. Consider these factors:</p>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-2">Topology Choices</h4>
+                    <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                        <li><strong>Star topology</strong>: Simple, centralized (good for beginners)</li>
+                        <li><strong>Hybrid topology</strong>: Mix of star, mesh, etc. (more realistic)</li>
+                        <li><strong>Dual-homed</strong>: Multiple connections for redundancy</li>
+                    </ul>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-2">Subnetting Strategy</h4>
+                    <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                        <li>Separate subnets for different functions (e.g., 192.168.1.0/24 for management)</li>
+                        <li>Use VLANs to logically separate traffic</li>
+                        <li>Plan for growth with private IP ranges (10.0.0.0/8, 172.16.0.0/12)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Canvas Example: Home Lab Topology -->
+            <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Example Home Lab Topology</h3>
+            <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                <canvas id="topologyCanvas" width="800" height="400" class="w-full border border-gray-300 bg-white"></canvas>
+                <p class="mt-2 text-gray-700">This diagram shows a typical home lab setup with a router, switch, servers, and workstations separated into different VLANs.</p>
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const canvas = document.getElementById('topologyCanvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Adjust canvas size for mobile
+                    if (window.innerWidth < 768) {
+                        canvas.width = window.innerWidth - 40;
+                        canvas.height = 300;
+                    }
+                    
+                    // Draw devices
+                    function drawDevice(x, y, width, height, color, label) {
+                        ctx.fillStyle = color;
+                        ctx.fillRect(x, y, width, height);
+                        ctx.strokeRect(x, y, width, height);
+                        ctx.fillStyle = '#000';
+                        ctx.font = '12px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(label, x + width/2, y + height + 15);
+                    }
+                    
+                    // Draw connections
+                    function drawConnection(x1, y1, x2, y2) {
+                        ctx.beginPath();
+                        ctx.moveTo(x1, y1);
+                        ctx.lineTo(x2, y2);
+                        ctx.strokeStyle = '#666';
+                        ctx.stroke();
+                    }
+                    
+                    // Router
+                    drawDevice(350, 50, 100, 40, '#4CAF50', 'Router (pfSense)');
+                    
+                    // Switch
+                    drawDevice(350, 150, 100, 40, '#2196F3', 'L3 Switch');
+                    
+                    // Servers
+                    drawDevice(150, 250, 80, 40, '#FF9800', 'Web Server');
+                    drawDevice(350, 250, 80, 40, '#FF9800', 'DNS Server');
+                    drawDevice(550, 250, 80, 40, '#FF9800', 'File Server');
+                    
+                    // Workstations
+                    drawDevice(150, 350, 60, 30, '#9C27B0', 'PC1 (VLAN 10)');
+                    drawDevice(350, 350, 60, 30, '#9C27B0', 'PC2 (VLAN 20)');
+                    drawDevice(550, 350, 60, 30, '#9C27B0', 'PC3 (VLAN 30)');
+                    
+                    // Connections
+                    drawConnection(400, 90, 400, 150); // Router to Switch
+                    drawConnection(400, 190, 190, 250); // Switch to Web Server
+                    drawConnection(400, 190, 400, 250); // Switch to DNS Server
+                    drawConnection(400, 190, 610, 250); // Switch to File Server
+                    drawConnection(400, 190, 190, 350); // Switch to PC1
+                    drawConnection(400, 190, 400, 350); // Switch to PC2
+                    drawConnection(400, 190, 610, 350); // Switch to PC3
+                    
+                    // VLAN labels
+                    ctx.font = '10px Arial';
+                    ctx.fillStyle = '#E91E63';
+                    ctx.fillText('VLAN 10 (Servers)', 190, 240);
+                    ctx.fillText('VLAN 20 (Management)', 400, 240);
+                    ctx.fillText('VLAN 30 (Users)', 610, 240);
+                });
+            </script>
+        </section>
+
+        <!-- Budget Hardware Recommendations -->
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Budget Hardware Recommendations: Affordable Lab Gear</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Routers</h3>
+                    <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                        <li><strong>Cisco 1841</strong>: $50-100 on eBay (supports most IOS features)</li>
+                        <li><strong>TP-Link ER605</strong>: $60 new (good for basic routing/VLANs)</li>
+                        <li><strong>MikroTik hEX</strong>: $70 new (powerful for the price)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Switches</h3>
+                    <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                        <li><strong>Cisco 2960</strong>: $50-150 used (Layer 2 managed switch)</li>
+                        <li><strong>TP-Link TL-SG108E</strong>: $40 new (basic VLAN support)</li>
+                        <li><strong>HP ProCurve 1810</strong>: $80 used (quiet, reliable)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Servers</h3>
+                    <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                        <li><strong>Raspberry Pi 4</strong>: $50-100 (low-power DNS/web server)</li>
+                        <li><strong>Dell Optiplex 7010</strong>: $100-200 used (great for pfSense)</li>
+                        <li><strong>HP ProLiant DL380 G7</strong>: $200-300 used (enterprise-grade)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Other Components</h3>
+                    <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                        <li><strong>USB-to-Console cable</strong>: $10-20 (for router configuration)</li>
+                        <li><strong>Network cables</strong>: $10 for a pack of assorted lengths</li>
+                        <li><strong>Patch panel</strong>: $20-50 (for cable organization)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Virtualization for Labs -->
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Virtualization for Labs: Running Virtual Networks</h2>
+            
+            <p class="text-lg text-gray-700 mb-4">Virtualization allows you to run multiple network devices on a single physical machine, saving space and cost.</p>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">VirtualBox Setup</h3>
+                    <ol class="list-decimal pl-8 space-y-2 text-gray-700">
+                        <li>Download and install VirtualBox</li>
+                        <li>Create a new VM (Linux/Windows/BSD as needed)</li>
+                        <li>Configure network adapters (NAT, Bridged, Internal Network)</li>
+                        <li>Install your chosen OS (Ubuntu Server is lightweight)</li>
+                        <li>Clone VMs to create multiple instances</li>
+                    </ol>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Proxmox VE</h3>
+                    <ol class="list-decimal pl-8 space-y-2 text-gray-700">
+                        <li>Download Proxmox VE ISO and create bootable USB</li>
+                        <li>Install on dedicated hardware (minimum 4GB RAM)</li>
+                        <li>Access web interface at https://[server-ip]:8006</li>
+                        <li>Create containers (LXC) or full VMs</li>
+                        <li>Configure virtual networks and bridges</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="bg-gray-100 p-4 rounded-lg">
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">Virtual Network Example</h3>
+                <div id="virtualNetwork" class="flex flex-wrap justify-center gap-4 p-4">
+                    <div class="w-24 h-24 bg-blue-200 rounded-lg flex flex-col items-center justify-center border-2 border-blue-500">
+                        <div class="w-8 h-8 bg-blue-500 rounded-full mb-2"></div>
+                        <span class="text-xs text-center">Host Machine</span>
+                    </div>
+                    <div class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                        </svg>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <div class="w-20 h-20 bg-green-200 rounded-lg flex flex-col items-center justify-center border-2 border-green-500">
+                            <div class="w-6 h-6 bg-green-500 rounded-full mb-1"></div>
+                            <span class="text-xs text-center">VM: Router</span>
+                        </div>
+                        <div class="w-20 h-20 bg-purple-200 rounded-lg flex flex-col items-center justify-center border-2 border-purple-500">
+                            <div class="w-6 h-6 bg-purple-500 rounded-full mb-1"></div>
+                            <span class="text-xs text-center">VM: Server</span>
+                        </div>
+                        <div class="w-20 h-20 bg-yellow-200 rounded-lg flex flex-col items-center justify-center border-2 border-yellow-500">
+                            <div class="w-6 h-6 bg-yellow-500 rounded-full mb-1"></div>
+                            <span class="text-xs text-center">VM: Client</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="mt-2 text-gray-700">This visualization shows a host machine running three virtual machines that form a complete network environment.</p>
+            </div>
+        </section>
+
+        <!-- Network Security in Home Labs -->
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Network Security in Home Labs: Protecting Your Setup</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Essential Security Measures</h3>
+                    <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                        <li><strong>Firewall rules</strong>: Block unnecessary inbound traffic</li>
+                        <li><strong>ACLs</strong>: Restrict access to management interfaces</li>
+                        <li><strong>VLAN segregation</strong>: Isolate lab traffic from home network</li>
+                        <li><strong>VPN</strong>: Use OpenVPN or WireGuard for secure remote access</li>
+                        <li><strong>Password policies</strong>: Strong, unique passwords for all devices</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">pfSense Firewall Example</h3>
+                    <pre class="bg-gray-800 text-green-400 p-4 rounded overflow-x-auto"><code class="language-bash">
+# Block incoming traffic except SSH (adjust interface as needed)
+block in on $WAN_NIC all
+pass in on $WAN_NIC proto tcp to $WAN_ADDR port 22
+
+# Allow established/related connections
+pass out on $WAN_NIC all
+pass in on $WAN_NIC proto tcp from any to any flags S/SA keep state
+pass in on $WAN_NIC proto udp from any to any keep state
+
+# NAT configuration for internal network
+nat on $WAN_NIC from $LAN_NET to any -> ($WAN_NIC)
+                    </code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Troubleshooting Home Lab Issues -->
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Troubleshooting Home Lab Issues: Resolving Common Problems</h2>
+            
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-300">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="py-2 px-4 border-b text-left">Issue</th>
+                            <th class="py-2 px-4 border-b text-left">Possible Cause</th>
+                            <th class="py-2 px-4 border-b text-left">Solution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="py-2 px-4 border-b">No connectivity between devices</td>
+                            <td class="py-2 px-4 border-b">Incorrect IP configuration, VLAN mismatch, cable issue</td>
+                            <td class="py-2 px-4 border-b">Verify IPs/subnets, check VLAN assignments, test cables</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 px-4 border-b">Router not forwarding traffic</td>
+                            <td class="py-2 px-4 border-b">Missing default route, NAT not configured, ACL blocking</td>
+                            <td class="py-2 px-4 border-b">Check routing table, verify NAT rules, review ACLs</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 px-4 border-b">GNS3 performance issues</td>
+                            <td class="py-2 px-4 border-b">Insufficient RAM/CPU, improper idle PC setting</td>
+                            <td class="py-2 px-4 border-b">Allocate more resources, set correct idle PC value</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 px-4 border-b">VMs can't reach internet</td>
+                            <td class="py-2 px-4 border-b">Host firewall blocking, incorrect NAT, DNS misconfiguration</td>
+                            <td class="py-2 px-4 border-b">Check host firewall, verify NAT settings, test DNS resolution</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-gray-700 mt-6 mb-3">Essential Troubleshooting Commands</h3>
+            <div class="grid md:grid-cols-2 gap-4 mt-4">
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <h4 class="text-lg font-semibold text-gray-700 mb-2">Cisco IOS</h4>
+                    <pre class="bg-gray-800 text-green-400 p-3 rounded overflow-x-auto"><code class="language-bash">
+show ip interface brief  # Check interface status
+show running-config     # View current configuration
+show vlan brief         # Verify VLAN assignments
+ping 192.168.1.1       # Test connectivity
+traceroute 8.8.8.8     # Trace network path
+                    </code></pre>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <h4 class="text-lg font-semibold text-gray-700 mb-2">Linux</h4>
+                    <pre class="bg-gray-800 text-green-400 p-3 rounded overflow-x-auto"><code class="language-bash">
+ip addr show            # View IP configuration
+ping -c 4 192.168.1.1  # Test connectivity
+traceroute 8.8.8.8     # Trace network path
+netstat -tuln          # Check listening ports
+ss -tuln               # Modern alternative to netstat
+                    </code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practical Example 1 -->
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Practical Example 1: Building a VLAN Network in Packet Tracer</h2>
+            
+            <p class="text-lg text-gray-700 mb-4">Let's create a network with two VLANs in Cisco Packet Tracer:</p>
+            
+            <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">Step-by-Step Configuration</h3>
+                <ol class="list-decimal pl-8 space-y-4 text-gray-700">
+                    <li>
+                        <strong>Add devices</strong>:
+                        <ul class="list-disc pl-8 mt-2">
+                            <li>1x 2960 switch</li>
+                            <li>4x PCs</li>
+                            <li>1x router (1841)</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Connect devices</strong>:
+                        <ul class="list-disc pl-8 mt-2">
+                            <li>Connect PCs to switch using straight-through cables</li>
+                            <li>Connect switch to router using a straight-through cable (switch port 24 to router Gig0/0)</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Configure VLANs on switch</strong>:
+                        <pre class="bg-gray-800 text-green-400 p-3 rounded overflow-x-auto mt-2"><code class="language-bash">
+enable
+configure terminal
+vlan 10
+name SALES
+vlan 20
+name ENGINEERING
+exit
+interface range fastEthernet 0/1-2
+switchport mode access
+switchport access vlan 10
+interface range fastEthernet 0/3-4
+switchport mode access
+switchport access vlan 20
+interface gigabitethernet 0/1
+switchport mode trunk
+end
+                        </code></pre>
+                    </li>
+                    <li>
+                        <strong>Configure router-on-a-stick</strong>:
+                        <pre class="bg-gray-800 text-green-400 p-3 rounded overflow-x-auto mt-2"><code class="language-bash">
+enable
+configure terminal
+interface gigabitethernet0/0
+no shutdown
+interface gigabitethernet0/0.10
+encapsulation dot1Q 10
+ip address 192.168.10.1 255.255.255.0
+interface gigabitethernet0/0.20
+encapsulation dot1Q 20
+ip address 192.168.20.1 255.255.255.0
+end
+                        </code></pre>
+                    </li>
+                    <li>
+                        <strong>Configure PCs</strong>:
+                        <ul class="list-disc pl-8 mt-2">
+                            <li>PC1 (VLAN 10): IP 192.168.10.10/24, gateway 192.168.10.1</li>
+                            <li>PC2 (VLAN 10): IP 192.168.10.11/24, gateway 192.168.10.1</li>
+                            <li>PC3 (VLAN 20): IP 192.168.20.10/24, gateway 192.168.20.1</li>
+                            <li>PC4 (VLAN 20): IP 192.168.20.11/24, gateway 192.168.20.1</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Test connectivity</strong>:
+                        <ul class="list-disc pl-8 mt-2">
+                            <li>PCs in same VLAN should ping each other</li>
+                            <li>PCs in different VLANs should ping through router</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Summary -->
+        <section class="mb-12 bg-blue-50 p-6 rounded-lg border border-blue-200">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Summary</h2>
+            <p class="text-lg text-gray-700 mb-4">In this chapter, we've covered the essential aspects of building a home networking lab:</p>
+            <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                <li>Learned to configure physical routers and servers for hands-on practice</li>
+                <li>Explored network simulation with Packet Tracer and GNS3</li>
+                <li>Designed effective home lab topologies with proper subnetting</li>
+                <li>Identified budget-friendly hardware options for building a lab</li>
+                <li>Implemented virtualization to maximize lab flexibility</li>
+                <li>Applied security measures to protect our lab environment</li>
+                <li>Developed troubleshooting skills for common lab issues</li>
+            </ul>
+            <p class="text-lg text-gray-700 mt-4">These practical skills complement the theoretical knowledge from previous chapters and prepare you for real-world networking scenarios.</p>
+        </section>
+
+        <!-- Further Reading -->
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Further Reading</h2>
+            <ul class="list-disc pl-8 space-y-2 text-gray-700">
+                <li>"Network Warrior" by Gary Donahue - Practical networking guide</li>
+                <li>Cisco Packet Tracer Tutorials - Official Cisco learning resources</li>
+                <li>GNS3 Documentation - Comprehensive guides for advanced simulations</li>
+                <li>pfSense Documentation - Detailed firewall/router setup instructions</li>
+                <li>"Virtualization Essentials" by Matthew Portnoy - Foundation for virtual labs</li>
+                <li>Homelab subreddit (r/homelab) - Community for lab enthusiasts</li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-xl font-bold">Networking Mastery</h3>
+                    <p class="text-gray-400">From Scratch to Mastery</p>
+                </div>
+                <div class="flex flex-wrap gap-4">
+                    <a href="chapter9.html" class="hover:text-blue-300">← Previous Chapter</a>
+                    <a href="chapter11.html" class="hover:text-blue-300">Next Chapter →</a>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-6 pt-6 text-center text-gray-400">
+                <p>© 2025 Computer Networks: From Scratch to Mastery. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
