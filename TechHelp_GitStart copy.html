@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Git Guide: From Cloning to Pushing Changes</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #16a085;
+        }
+        code {
+            background-color: #f0f0f0;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        pre {
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            overflow-x: auto;
+        }
+        .note {
+            background-color: #e7f5fe;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .best-practice {
+            background-color: #e8f8f5;
+            border-left: 4px solid #1abc9c;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .warning {
+            background-color: #fdedec;
+            border-left: 4px solid #e74c3c;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .command {
+            font-weight: bold;
+            color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <h1>A Comprehensive Guide to Git Branching and Collaboration</h1>
+    <p>Git is an essential tool for modern software development, enabling teams to collaborate efficiently while maintaining code integrity. This guide will walk you through the complete process of creating a local development environment, making changes, and contributing to a project using Git.</p>
+
+    <h2>Setting Up Your Development Environment</h2>
+
+    <h3>Step 1: Create a Local Folder</h3>
+    <p>Before diving into Git commands, organization is key. Create a dedicated folder on your local machine where you'll store the project:</p>
+    <ol>
+        <li>Right-click in your preferred location (Desktop, Documents, etc.)</li>
+        <li>Select "New" → "Folder"</li>
+        <li>Name it something meaningful like "WM_BitBucket_vb6"</li>
+    </ol>
+    <p>This folder will serve as your project's home, keeping all related files neatly organized in one place.</p>
+
+    <h3>Step 2: Launch Git Bash</h3>
+    <p>Git Bash provides a Unix-like command line interface for Windows users:</p>
+    <ul>
+        <li>Navigate to your newly created folder</li>
+        <li>Right-click and select "Git Bash Here"</li>
+        <li>Alternatively, open Git Bash from the Start menu and use <code>cd</code> commands to navigate to your folder</li>
+    </ul>
+    <p>Git Bash is powerful because it combines Git commands with traditional bash shell functionality, giving you complete control over your version control operations.</p>
+
+    <h2>Cloning the Repository</h2>
+
+    <h3>Step 3: Clone a Specific Branch</h3>
+    <p>Cloning creates a local copy of a remote repository. To clone just the <code>developer</code> branch:</p>
+    <pre><code>git clone -b developer https://gituser@bitbucket.org/iitpldev/vb6_migration.git</code></pre>
+    <p>Breaking this command down:</p>
+    <ul>
+        <li><code>git clone</code> initializes the copy process</li>
+        <li><code>-b developer</code> specifies you want only the <code>developer</code> branch</li>
+        <li>The URL points to the Bitbucket repository with your username (<code>tarunsharma3</code>)</li>
+    </ul>
+    <p>After execution, you'll see a new folder (<code>vb6_migration</code>) containing the project files.</p>
+
+    <h2>Branching Strategy</h2>
+
+    <h3>Step 4: Navigate to the Project Folder</h3>
+    <p>Open a new Git Bash session directly in your project folder:</p>
+    <ul>
+        <li>Navigate to <code>vb6_migration</code> in File Explorer</li>
+        <li>Right-click and select "Git Bash Here"</li>
+    </ul>
+    <p>This ensures all subsequent commands execute in the correct context.</p>
+
+    <h3>Step 5: Create Your Development Branch</h3>
+    <p>Isolating your work in a dedicated branch prevents conflicts with the main codebase:</p>
+    <pre><code>git branch tarun_dev</code></pre>
+    <div class="best-practice">
+        <p><strong>Best practices for branch naming:</strong></p>
+        <ul>
+            <li>Include your name for personal branches (<code>tarun_dev</code>)</li>
+            <li>Use lowercase with underscores</li>
+            <li>Keep it descriptive but concise</li>
+        </ul>
+    </div>
+
+    <h3>Step 6: Switch to Your New Branch</h3>
+    <p>Create and switch in one command with:</p>
+    <pre><code>git checkout tarun_dev</code></pre>
+    <p>Or use the newer, more intuitive:</p>
+    <pre><code>git switch tarun_dev</code></pre>
+    <p>Your prompt should now show <code>(tarun_dev)</code>, confirming you're working in your personal branch.</p>
+
+    <h2>Making and Tracking Changes</h2>
+
+    <h3>Step 7: Implement Your Changes</h3>
+    <p>With your environment set up:</p>
+    <ol>
+        <li>Open your preferred code editor (VS Code, Sublime Text, etc.)</li>
+        <li>Make necessary modifications to the project files</li>
+        <li>Save your changes regularly</li>
+    </ol>
+    <div class="note">
+        <p><strong>Remember to:</strong></p>
+        <ul>
+            <li>Make small, focused changes</li>
+            <li>Keep related changes together</li>
+            <li>Avoid mixing multiple features in one branch</li>
+        </ul>
+    </div>
+
+    <h3>Step 8: Check Your Changes</h3>
+    <p>Before committing, review what you've modified:</p>
+    <pre><code>git status</code></pre>
+    <p>This shows:</p>
+    <ul>
+        <li>Untracked files (new files Git isn't monitoring)</li>
+        <li>Modified files (existing files you've changed)</li>
+        <li>Staged files (changes ready to commit)</li>
+    </ul>
+
+    <h3>Step 9: Stage Your Changes</h3>
+    <p>Select which changes to include in your next commit:</p>
+    <p>For specific files:</p>
+    <pre><code>git add path/filename</code></pre>
+    <p>For all changes:</p>
+    <pre><code>git add .</code></pre>
+    <p>Staging gives you precise control over what goes into each commit, allowing you to logically group changes even if you made them together physically.</p>
+
+    <h3>Step 10: Commit Your Changes</h3>
+    <p>Create a permanent record of your staged changes:</p>
+    <pre><code>git commit -m 'Descriptive message about your changes'</code></pre>
+    <div class="best-practice">
+        <p><strong>Commit messages should:</strong></p>
+        <ul>
+            <li>Be concise but explanatory</li>
+            <li>Use present tense ("Add feature" not "Added feature")</li>
+            <li>Reference any issue trackers if applicable</li>
+        </ul>
+    </div>
+
+    <h2>Sharing Your Work</h2>
+
+    <h3>Step 11: Push to the Remote Repository</h3>
+    <p>Upload your branch to Bitbucket:</p>
+    <pre><code>git push -u origin tarun_dev</code></pre>
+    <p>Breaking this down:</p>
+    <ul>
+        <li><code>git push</code> uploads your commits</li>
+        <li><code>-u</code> sets up tracking between local and remote branches</li>
+        <li><code>origin</code> refers to the remote repository</li>
+        <li><code>tarun_dev</code> specifies your branch name</li>
+    </ul>
+    <p>After this, your changes will be visible on Bitbucket, where you can create a pull request to merge them into the main branch.</p>
+
+    <h2>Best Practices for Smooth Collaboration</h2>
+    <ol>
+        <li><strong>Regularly Pull Changes</strong>: Before starting work, pull the latest changes from the main branch to avoid conflicts.
+            <pre><code>git pull origin developer</code></pre>
+        </li>
+        <li><strong>Commit Often</strong>: Small, frequent commits make it easier to identify and undo specific changes if needed.</li>
+        <li><strong>Write Meaningful Messages</strong>: Your future self (and teammates) will thank you for clear commit messages.</li>
+        <li><strong>Branch Cleanup</strong>: Delete merged branches to keep your repository organized:
+            <pre><code>git branch -d old_branch_name</code></pre>
+        </li>
+        <li><strong>Use .gitignore</strong>: Exclude temporary files, build artifacts, and sensitive information from version control.</li>
+    </ol>
+
+    <h2>Troubleshooting Common Issues</h2>
+    <ul>
+        <li><strong>Authentication Problems</strong>: If prompted for credentials, consider setting up SSH keys for smoother access.</li>
+        <li><strong>Merge Conflicts</strong>: When multiple people edit the same file, Git may need manual resolution. Stay calm and follow the instructions Git provides.</li>
+        <li><strong>Detached HEAD State</strong>: If you see this message, you've checked out a specific commit rather than a branch. Return to safety with <code>git switch branchname</code>.</li>
+    </ul>
+
+    <h2>Conclusion</h2>
+    <p>Mastering these Git fundamentals empowers you to collaborate effectively on any software project. By isolating your work in branches, making atomic commits, and clearly communicating your changes, you contribute to a maintainable codebase and smooth team workflow.</p>
+    <p>Remember, version control is a journey—don't hesitate to experiment in a safe environment and explore more advanced Git features as you grow more comfortable with these basics.</p>
+</body>
+</html>

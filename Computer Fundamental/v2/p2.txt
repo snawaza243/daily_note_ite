@@ -1,0 +1,64 @@
+You are an expert in computer fundamentals, technical writing, and web development, tasked with creating a detailed tutorial chapter for a blog series titled "Introduction to Computers: From Basics to Advanced Concepts." The series is designed for CSE students and professionals, covering 30 chapters across 7 sections. Generate a comprehensive tutorial for Chapter 2, adhering to the following guidelines:
+
+1. **Content Requirements**:
+   - Provide an in-depth explanation of computer classification, including theoretical concepts, practical applications, and real-world examples for beginners and advanced learners.
+   - Cover these subtopics thoroughly:
+     - **Classification by Size**: Detail supercomputers (e.g., Frontier), mainframes (e.g., IBM Z16), minicomputers (legacy systems), and microcomputers (PCs, Raspberry Pi), including their specifications, use cases, and cost ranges.
+     - **Classification by Function**: Explain servers (web, database), workstations (CAD/3D modeling), embedded systems (IoT devices), and client machines (laptops, smartphones).
+     - **Classification by Data Handling**: Contrast analog (e.g., thermostats), digital (modern PCs), and hybrid computers (e.g., medical imaging systems).
+     - **Industry Standards**: Discuss SPEC benchmarks for performance classification, TPC for server ratings, and ENERGY STAR for efficiency.
+   - Define key terms (e.g., FLOPS, throughput, embedded system) with examples.
+   - Include two practical examples:
+     - A step-by-step guide to identifying a computer's class using system specs (CPU cores, RAM, TDP).
+     - An interactive HTML table comparing computer types with sortable columns (size, cost, performance).
+
+2. **Structure**:
+   - **Introduction**: Explain why classification matters (procurement, development, troubleshooting).
+   - **Main Sections**:
+     - Computers by Size: From Supercomputers to Microcomputers
+     - Computers by Function: Servers, Workstations, and Beyond
+     - Data Handling Capabilities: Analog vs Digital vs Hybrid
+     - Industry Benchmarks and Standards
+     - Practical Example 1: Classifying Your Own Device
+     - Practical Example 2: Interactive Comparison Table
+   - **Summary**: Key takeaways in a comparison matrix.
+   - **Further Reading**: "Structured Computer Organization" by Tanenbaum, IEEE Compute Society resources.
+
+3. **Technical Accuracy**:
+   - Reference current specs (e.g., Frontier's 1.1 exaFLOPS, IBM Z16's 200+ cores).
+   - Use correct terminology (e.g., "microcomputer" not "PC" when historically accurate).
+
+4. **Output Format**:
+   - Valid HTML with Tailwind CSS (CDN linked).
+   - Semantic tags, responsive design.
+   - Interactive elements using HTML/CSS/JS (no frameworks).
+   - Navigation bar linking to Section 1 and adjacent chapters.
+
+5. **Interactive Example Guidelines**:
+   - Create a sortable HTML table with Tailwind and vanilla JS.
+   - Columns: Type, Example, Cost, FLOPS, Use Case.
+   - Include accessibility labels for screen readers.
+
+6. **Tone and Style**:
+   - Professional yet approachable. Use analogies (e.g., "Supercomputers are like Formula 1 cars").
+   - Highlight career implications (e.g., "Why game devs need workstations").
+
+7. **Chapter Details**:
+   - Section: 1 - Introduction to Computers
+   - Title: Classification of Computers
+   - Topics:
+     - Size-based categories
+     - Functional roles
+     - Data processing types
+     - Benchmarking standards
+   - Learning Objectives:
+     - Identify computer classes by specs
+     - Select appropriate systems for use cases
+     - Interpret industry benchmarks
+
+**Output**:
+Provide complete HTML for Chapter 2 with:
+1. Dynamic comparison table
+2. Device classification walkthrough
+3. Tailwind-styled diagrams of computer categories
+4. Navigation to Chapter 1 (Evolution) and Chapter 3 (History)

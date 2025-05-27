@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 1: Introduction and Evolution of Computers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <style>
+        .timeline-container {
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 20px;
+        }
+        .timeline {
+            display: inline-flex;
+            min-width: 100%;
+        }
+        .timeline-item {
+            min-width: 250px;
+            margin-right: 20px;
+        }
+        .architecture-diagram {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            grid-template-rows: auto;
+            gap: 20px;
+            place-items: center;
+        }
+        .architecture-diagram .cpu {
+            grid-column: 2;
+            grid-row: 1;
+        }
+        .architecture-diagram .memory {
+            grid-column: 1;
+            grid-row: 1;
+        }
+        .architecture-diagram .io {
+            grid-column: 3;
+            grid-row: 1;
+        }
+        .arrow {
+            position: relative;
+            width: 100%;
+            height: 2px;
+            background-color: #3b82f6;
+        }
+        .arrow:after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: -6px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid #3b82f6;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+        }
+        .bidirectional-arrow {
+            position: relative;
+            width: 100%;
+            height: 2px;
+            background-color: #3b82f6;
+        }
+        .bidirectional-arrow:before, .bidirectional-arrow:after {
+            content: '';
+            position: absolute;
+            top: -6px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid #3b82f6;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+        }
+        .bidirectional-arrow:before {
+            left: -8px;
+            transform: rotate(180deg);
+        }
+        .bidirectional-arrow:after {
+            right: -8px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-blue-800 text-white p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold">Introduction to Computers</h1>
+            <div class="space-x-4">
+                <a href="#" class="hover:text-blue-200">Home</a>
+                <a href="#" class="hover:text-blue-200">Chapters</a>
+                <a href="#" class="hover:text-blue-200">Resources</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 md:p-6">
+        <section>
+            <h1 class="text-3xl font-bold text-gray-800 mb-6">Chapter 1: Introduction and Evolution of Computers</h1>
+            
+            <!-- 1.1 What is a Computer? -->
+            <article class="mb-12 bg-white p-6 rounded-lg shadow-sm">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4 border-b pb-2">1.1 What is a Computer?</h2>
+                
+                <div class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500">
+                    <p class="font-medium text-gray-700">A <strong>computer</strong> is an electronic device that processes data according to a set of instructions (program) to produce meaningful information. At its core, it follows the <strong>IPO model</strong> (Input-Process-Output).</p>
+                </div>
+                
+                <h3 class="text-xl font-medium text-gray-700 mt-6 mb-3">The IPO Model</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-bold text-blue-700">Input</h4>
+                        <p>Data entered into the system (keyboard, mouse, sensors)</p>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-bold text-blue-700">Process</h4>
+                        <p>CPU performs operations on the data (calculations, comparisons)</p>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-bold text-blue-700">Output</h4>
+                        <p>Results presented to the user (screen, printer, speakers)</p>
+                    </div>
+                </div>
+                
+                <h3 class="text-xl font-medium text-gray-700 mt-6 mb-3">Von Neumann Architecture</h3>
+                <p class="mb-4">The foundation of modern computers, proposed by John von Neumann in 1945, consists of:</p>
+                
+                <div class="architecture-diagram mb-6">
+                    <div class="memory bg-gray-100 p-6 rounded-lg text-center w-full">
+                        <h4 class="font-bold">Memory</h4>
+                        <p>Stores data and instructions</p>
+                    </div>
+                    <div class="cpu bg-gray-100 p-6 rounded-lg text-center w-full">
+                        <h4 class="font-bold">CPU</h4>
+                        <p>Central Processing Unit</p>
+                        <p>(Control Unit + ALU)</p>
+                    </div>
+                    <div class="io bg-gray-100 p-6 rounded-lg text-center w-full">
+                        <h4 class="font-bold">I/O Devices</h4>
+                        <p>Input/Output</p>
+                    </div>
+                </div>
+                <div class="architecture-diagram mb-6">
+                    <div class="memory"></div>
+                    <div class="cpu">
+                        <div class="bidirectional-arrow"></div>
+                    </div>
+                    <div class="io"></div>
+                </div>
+                
+                <div class="bg-gray-100 p-4 rounded-lg mb-6">
+                    <h4 class="font-bold text-gray-700">Key Terms:</h4>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>Algorithm</strong>: Step-by-step procedure to solve a problem</li>
+                        <li><strong>Hardware</strong>: Physical components of a computer</li>
+                        <li><strong>Software</strong>: Programs and operating information</li>
+                        <li><strong>Binary System</strong>: Base-2 number system computers use (0s and 1s)</li>
+                    </ul>
+                </div>
+            </article>
+            
+            <!-- 1.2 Historical Timeline -->
+            <article class="mb-12 bg-white p-6 rounded-lg shadow-sm">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4 border-b pb-2">1.2 Historical Timeline</h2>
+                
+                <h3 class="text-xl font-medium text-gray-700 mt-6 mb-3">Pre-20th Century</h3>
+                <div class="timeline-container mb-6">
+                    <div class="timeline">
+                        <div class="timeline-item bg-gray-100 p-4 rounded-lg">
+                            <h4 class="font-bold">Abacus (3000 BCE)</h4>
+                            <p>First known calculating tool</p>
+                        </div>
+                        <div class="timeline-item bg-gray-100 p-4 rounded-lg">
+                            <h4 class="font-bold">Pascal's Calculator (1642)</h4>
+                            <p>Mechanical adding machine</p>
+                        </div>
+                        <div class="timeline-item bg-gray-100 p-4 rounded-lg">
+                            <h4 class="font-bold">Analytical Engine (1837)</h4>
+                            <p>Babbage's programmable computer concept</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 class="text-xl font-medium text-gray-700 mt-6 mb-3">Modern Era</h3>
+                <div class="timeline-container mb-6">
+                    <div class="timeline">
+                        <div class="timeline-item bg-gray-100 p-4 rounded-lg">
+                            <h4 class="font-bold">Z3 (1941)</h4>
+                            <p>First programmable electromechanical computer</p>
+                        </div>
+                        <div class="timeline-item bg-gray-100 p-4 rounded-lg">
+                            <h4 class="font-bold">ENIAC (1946)</h4>
+                            <p>First general-purpose electronic computer</p>
+                        </div>
+                        <div class="timeline-item bg-gray-100 p-4 rounded-lg">
+                            <h4 class="font-bold">IBM 7090 (1959)</h4>
+                            <p>First commercial transistorized computer</p>
+                        </div>
+                        <div class="timeline-item bg-gray-100 p-4 rounded-lg">
+                            <h4 class="font-bold">Intel 4004 (1971)</h4>
+                            <p>First commercially available microprocessor</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 class="text-xl font-medium text-gray-700 mt-6 mb-3">Pioneers of Computing</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-bold">Charles Babbage</h4>
+                        <p>"Father of the computer" - designed the Analytical Engine</p>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-bold">Ada Lovelace</h4>
+                        <p>First computer programmer</p>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-bold">Alan Turing</h4>
+                        <p>Theoretical foundations of computing</p>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-bold">Grace Hopper</h4>
+                        <p>Developed the first compiler</p>
+                    </div>
+                </div>
+            </article>
+            
+            <!-- 1.3 Generational Comparison -->
+            <article class="mb-12 bg-white p-6 rounded-lg shadow-sm">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4 border-b pb-2">1.3 Generational Comparison</h2>
+                
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 mb-6" id="generationsTable">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onclick="sortTable(0)">Generation</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onclick="sortTable(1)">Technology</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onclick="sortTable(2)">Example</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onclick="sortTable(3)">Key Advancement</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">1st (1940s)</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Vacuum Tubes</td>
+                                <td class="px-6 py-4 whitespace-nowrap">UNIVAC</td>
+                                <td class="px-6 py-4">Electronic Computation</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap">2nd (1950s)</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Transistors</td>
+                                <td class="px-6 py-4 whitespace-nowrap">IBM 1401</td>
+                                <td class="px-6 py-4">Smaller, Faster</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">3rd (1960s)</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Integrated Circuits</td>
+                                <td class="px-6 py-4 whitespace-nowrap">IBM System/360</td>
+                                <td class="px-6 py-4">OS, Multiprogramming</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap">4th (1970s)</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Microprocessors</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Apple II</td>
+                                <td class="px-6 py-4">Personal Computing</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">5th (Now)</td>
+                                <td class="px-6 py-4 whitespace-nowrap">AI/Quantum</td>
+                                <td class="px-6 py-4 whitespace-nowrap">Google Sycamore</td>
+                                <td class="px-6 py-4">Parallel Processing</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+            
+            <!-- 1.4 Practical: Simulating ENIAC -->
+            <article class="mb-12 bg-white p-6 rounded-lg shadow-sm">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4 border-b pb-2">1.4 Practical: Simulating ENIAC</h2>
+                
+                <div class="bg-gray-100 p-4 rounded-lg mb-6">
+                    <h3 class="text-xl font-medium text-gray-700 mb-3">Case Study: ENIAC in WWII</h3>
+                    <p>ENIAC (Electronic Numerical Integrator and Computer) was developed during World War II to calculate artillery firing tables. It:</p>
+                    <ul class="list-disc pl-5 mt-2 space-y-1">
+                        <li>Weighed 27 tons and occupied 1800 square feet</li>
+                        <li>Contained 17,468 vacuum tubes</li>
+                        <li>Consumed 150 kW of power</li>
+                        <li>Performed 5,000 additions per second (revolutionary at the time)</li>
+                    </ul>
+                </div>
+                
+                <h3 class="text-xl font-medium text-gray-700 mt-6 mb-3">Punch Card Emulator</h3>
+                <p class="mb-4">Early computers used punch cards for input. Try this simple JavaScript emulator:</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <pre class="mb-4"><code class="language-javascript">function simulatePunchCard(input) {
+    // Convert binary string to punch card representation
+    return input.split('').map(bit => 
+        bit === '1' ? '◉' : '○'
+    ).join('');
+}
+
+// Example usage:
+console.log(simulatePunchCard('1101')); 
+// Output: ◉◉○◉</code></pre>
+                        <button onclick="runEmulator()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Run Emulator</button>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-bold mb-2">Output:</h4>
+                        <div id="emulatorOutput" class="font-mono text-lg bg-white p-4 rounded">
+                            Enter binary and click "Run Emulator"
+                        </div>
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium text-gray-700">Try binary input:</label>
+                            <input type="text" id="binaryInput" value="1101" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+        
+        <!-- Learning Objectives -->
+        <section class="bg-blue-50 p-6 rounded-lg mb-12">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">Learning Objectives Achieved</h2>
+            <ul class="list-disc pl-5 space-y-2">
+                <li>Understand the IPO model and von Neumann architecture</li>
+                <li>Trace the historical development of computing technology</li>
+                <li>Compare computer generations and their key advancements</li>
+                <li>Appreciate the practical applications of early computers</li>
+            </ul>
+        </section>
+        
+        <!-- Further Reading -->
+        <section class="bg-gray-100 p-6 rounded-lg">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">Further Reading</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white p-4 rounded-lg">
+                    <h3 class="font-bold text-blue-700">Books</h3>
+                    <p>"The Computer: A Very Short Introduction" by Darrel Ince</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg">
+                    <h3 class="font-bold text-blue-700">Web</h3>
+                    <p>Computer History Museum's ENIAC exhibit: <a href="https://computerhistory.org" class="text-blue-600 hover:underline">computerhistory.org</a></p>
+                </div>
+                <div class="bg-white p-4 rounded-lg">
+                    <h3 class="font-bold text-blue-700">Videos</h3>
+                    <p>"The Machine That Changed the World" (BBC Documentary)</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white p-6 mt-12">
+        <div class="container mx-auto">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-xl font-bold">Introduction to Computers</h2>
+                    <p class="text-gray-400">From Basics to Advanced Concepts</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-gray-400">Next Chapter:</p>
+                    <a href="#" class="text-blue-300 hover:underline">2. Classification of Computers</a>
+                </div>
+            </div>
+            <div class="mt-6 pt-6 border-t border-gray-700 text-center text-gray-400">
+                <p>© 2023 Computer Science Education Blog. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sortable table functionality
+        function sortTable(n) {
+            let table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("generationsTable");
+            switching = true;
+            dir = "asc"; 
+            
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+                    
+                    if (dir == "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchcount ++;      
+                } else {
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+        
+        // Punch card emulator
+        function runEmulator() {
+            const input = document.getElementById('binaryInput').value;
+            const output = simulatePunchCard(input);
+            document.getElementById('emulatorOutput').textContent = output;
+        }
+        
+        function simulatePunchCard(input) {
+            // Validate input
+            if (!/^[01]+$/.test(input)) {
+                return 'Error: Only 0s and 1s allowed';
+            }
+            
+            return input.split('').map(bit => 
+                bit === '1' ? '◉' : '○'
+            ).join('');
+        }
+        
+        // Initialize code highlighting
+        hljs.highlightAll();
+    </script>
+</body>
+</html>

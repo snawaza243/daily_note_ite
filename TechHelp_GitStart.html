@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Git Guide: From Cloning to Pushing Changes</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #16a085;
+        }
+        code {
+            background-color: #f0f0f0;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        pre {
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            overflow-x: auto;
+        }
+        .note {
+            background-color: #e7f5fe;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .best-practice {
+            background-color: #e8f8f5;
+            border-left: 4px solid #1abc9c;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .warning {
+            background-color: #fdedec;
+            border-left: 4px solid #e74c3c;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .command {
+            font-weight: bold;
+            color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <h1>A Comprehensive Guide to Git Branching and Collaboration</h1>
+    <p>Git is an essential tool for modern software development, enabling teams to collaborate efficiently while maintaining code integrity. This guide will walk you through the complete process of creating a local development environment, making changes, and contributing to a project using Git.</p>
+
+    <h2>Setting Up Your Development Environment</h2>
+
+    <h3>Step 1: Create a Local Folder</h3>
+    <p>Create a dedicated folder on your local machine where you'll store the project:</p>
+    <ol>
+        <li>Right-click in your preferred location (Desktop, Documents, etc.)</li>
+        <li>Select "New" → "Folder"</li>
+        <li>Name it something meaningful like "Demo_Project_Git"</li>
+    </ol>
+
+    <h3>Step 2: Launch Git Bash</h3>
+    <p>Git Bash provides a Unix-like command line interface for Windows users:</p>
+    <ul>
+        <li>Navigate to your newly created folder</li>
+        <li>Right-click and select "Git Bash Here"</li>
+        <li>Alternatively, open Git Bash and use <code>cd</code> to navigate</li>
+    </ul>
+
+    <h2>Cloning the Repository</h2>
+
+    <h3>Step 3: Clone a Specific Branch</h3>
+    <p>To clone the <code>developer</code> branch:</p>
+    <pre><code>git clone -b developer https://demo_user@bitbucket.org/demo_org/demo_project.git</code></pre>
+    <p>Breaking this down:</p>
+    <ul>
+        <li><code>git clone</code>: initializes cloning</li>
+        <li><code>-b developer</code>: clones the developer branch</li>
+        <li>URL: demo Bitbucket repo with demo user</li>
+    </ul>
+
+    <h2>Branching Strategy</h2>
+
+    <h3>Step 4: Navigate to the Project Folder</h3>
+    <ul>
+        <li>Go to <code>demo_project</code> in File Explorer</li>
+        <li>Select "Git Bash Here"</li>
+    </ul>
+
+    <h3>Step 5: Create Your Development Branch</h3>
+    <pre><code>git branch demo_dev</code></pre>
+    <div class="best-practice">
+        <p><strong>Best practices for branch naming:</strong></p>
+        <ul>
+            <li>Include your name or purpose: <code>demo_dev</code></li>
+            <li>Use lowercase and underscores</li>
+        </ul>
+    </div>
+
+    <h3>Step 6: Switch to Your New Branch</h3>
+    <pre><code>git checkout demo_dev</code></pre>
+    <p>Or</p>
+    <pre><code>git switch demo_dev</code></pre>
+
+    <h2>Making and Tracking Changes</h2>
+
+    <h3>Step 7: Implement Your Changes</h3>
+    <ol>
+        <li>Open a code editor (VS Code, etc.)</li>
+        <li>Edit and save files</li>
+    </ol>
+
+    <div class="note">
+        <p><strong>Tips:</strong></p>
+        <ul>
+            <li>Keep changes small and focused</li>
+        </ul>
+    </div>
+
+    <h3>Step 8: Check Your Changes</h3>
+    <pre><code>git status</code></pre>
+
+    <h3>Step 9: Stage Your Changes</h3>
+    <pre><code>git add .</code></pre>
+
+    <h3>Step 10: Commit Your Changes</h3>
+    <pre><code>git commit -m "Add login feature"</code></pre>
+
+    <div class="best-practice">
+        <p><strong>Commit message tips:</strong></p>
+        <ul>
+            <li>Be concise and use present tense</li>
+        </ul>
+    </div>
+
+    <h2>Sharing Your Work</h2>
+
+    <h3>Step 11: Push to the Remote Repository</h3>
+    <pre><code>git push -u origin demo_dev</code></pre>
+
+    <h2>Best Practices for Smooth Collaboration</h2>
+    <ol>
+        <li><strong>Pull Updates</strong>: Regularly run <code>git pull origin developer</code></li>
+        <li><strong>Commit Often</strong>: Helps track and rollback easily</li>
+        <li><strong>Clean Branches</strong>: Use <code>git branch -d branch_name</code> when done</li>
+        <li><strong>Use .gitignore</strong>: To avoid tracking unnecessary files</li>
+    </ol>
+
+    <h2>Troubleshooting Common Issues</h2>
+    <ul>
+        <li><strong>Authentication</strong>: Set up SSH keys to avoid repeated login prompts</li>
+        <li><strong>Merge Conflicts</strong>: Use <code>git status</code> and <code>git merge</code> wisely</li>
+    </ul>
+</body>
+</html>
