@@ -1,0 +1,40 @@
+Create a detailed, accurate, and up-to-date HTML page for a learning module titled "Pitfalls of Large Language Models (LLMs)" as part of a comprehensive course on LLMs and prompt engineering. The content must be correct, in-depth, and suitable for learners with a beginner-to-intermediate understanding of AI. Use HTML with inline Tailwind CSS (via CDN) for styling and JavaScript for interactivity or visualizations. Follow these requirements:
+
+1. **Content Requirements**:
+   - Cover the following topics in detail:
+     - **Citing Sources**: Explain why LLMs often fail to provide accurate citations, with examples of incorrect citations and strategies to mitigate this (e.g., prompting for source verification).
+     - **Hallucinations**: Describe how LLMs generate false or fabricated information, with examples of hallucinated outputs and techniques to reduce them (e.g., grounding prompts with facts).
+     - **Bias**: Discuss how biases in training data affect LLM responses, with examples of biased outputs and methods to minimize bias (e.g., neutral prompting).
+     - **Math Errors**: Explain why LLMs struggle with precise calculations, with examples of incorrect math outputs and workarounds (e.g., using external tools or specific prompts).
+     - **Prompt Hacking**: Describe how malicious inputs can manipulate LLM outputs, with examples of prompt injection and defenses (e.g., input sanitization).
+     - **Context Limitations**: Discuss how LLMs may lose or misunderstand context in long conversations, with examples and mitigation strategies (e.g., summarizing context).
+     - **Overconfidence**: Explain how LLMs may present uncertain or incorrect information as fact, with examples and ways to prompt for uncertainty acknowledgment.
+     - **Mitigation Best Practices**: Provide general strategies for minimizing these pitfalls, such as clear prompt design, cross-verification, and iterative testing.
+   - Include at least two code examples (e.g., Python scripts using an LLM API like Hugging Face’s Transformers to demonstrate a pitfall like hallucination or bias, and a corrected prompt to mitigate it).
+   - Provide a visual representation using HTML5 Canvas and JavaScript to illustrate a concept (e.g., a diagram showing how hallucinations occur in the LLM pipeline or a flowchart of mitigation strategies).
+
+2. **Styling Requirements**:
+   - Use Tailwind CSS (via CDN) for responsive, modern styling.
+   - Structure the page with a header, navigation bar, main content section, and footer.
+   - Ensure the design is clean, with a focus on readability (e.g., use appropriate font sizes, spacing, and color contrasts).
+   - Style code snippets with a monospaced font and syntax highlighting effect using Tailwind classes.
+   - Make the canvas visualization interactive (e.g., hover effects or clickable elements to reveal explanations of each pitfall or mitigation).
+
+3. **Interactivity Requirements**:
+   - Include JavaScript to add interactivity, such as buttons to toggle between examples of pitfalls and their mitigations, show/hide code outputs, or animate the canvas visualization.
+   - Ensure the JavaScript is lightweight and compatible with modern browsers.
+
+4. **Output Format**:
+   - The output must be a single, complete HTML file with inline Tailwind CSS and JavaScript.
+   - The content must be wrapped in appropriate HTML semantic elements (e.g., `<article>`, `<section>`).
+   - Include a title, meta tags for responsiveness, and a favicon link.
+   - Ensure all code is functional and error-free.
+
+5. **Additional Instructions**:
+   - Verify that all information is accurate and up-to-date as of May 2025, avoiding outdated references (e.g., don’t mention deprecated APIs or techniques).
+   - Use clear, concise language suitable for learners, with examples to illustrate complex concepts.
+   - Structure the content with headings, subheadings, and bullet points for clarity.
+   - Avoid speculative or unverified information about LLMs or their pitfalls.
+   - Ensure the content is engaging and practical, preparing learners to handle LLM limitations effectively.
+
+Output the complete HTML code, including all content, styling, and interactivity, as a single file.

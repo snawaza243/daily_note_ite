@@ -1,0 +1,41 @@
+Create a detailed, accurate, and up-to-date HTML page for a learning module titled "Prompt Hacking & Security" as part of a comprehensive course on Large Language Models (LLMs) and prompt engineering. The content must be correct, in-depth, and suitable for learners with a beginner-to-intermediate understanding of AI. Use HTML with inline Tailwind CSS (via CDN) for styling and JavaScript for interactivity or visualizations. Follow these requirements:
+
+1. **Content Requirements**:
+   - Cover the following topics in detail:
+     - **Prompt Injection**: Explain how malicious inputs can alter LLM behavior (e.g., injecting commands to ignore instructions), with examples of vulnerable prompts and their exploited outputs.
+     - **Prompt Leaking**: Describe techniques used to extract system prompts or hidden instructions, with examples of leaking attempts and their results.
+     - **Jailbreaking**: Discuss methods to bypass safety filters (e.g., rephrasing to trick the model), with examples of jailbreaking attempts and their outcomes.
+     - **Defensive Measures**: Explain techniques like input sanitization, moderation layers, and restricted contexts to prevent attacks, with examples of secure prompts.
+     - **Offensive Measures**: Clarify common attacker techniques (e.g., adversarial inputs, role-playing to bypass filters), with examples, while emphasizing ethical boundaries.
+     - **Ethical Implications**: Discuss the ethical concerns of prompt hacking, such as misuse, privacy violations, and potential harm, with examples of responsible vs. irresponsible use.
+     - **Monitoring and Logging**: Describe techniques for detecting and tracking malicious inputs (e.g., anomaly detection, logging user prompts), with examples of monitoring setups.
+     - **Best Practices for Secure Prompt Design**: Provide guidelines for creating robust prompts, such as avoiding ambiguous instructions or using strict output formats, with examples.
+   - Include at least two code examples (e.g., Python scripts using an LLM API like Hugging Face’s Transformers to demonstrate a prompt injection attack and a defensive measure, showing vulnerable vs. secure outcomes).
+   - Provide a visual representation using HTML5 Canvas and JavaScript to illustrate a concept (e.g., a diagram showing how prompt injection exploits an LLM or a flowchart of defensive measures).
+
+2. **Styling Requirements**:
+   - Use Tailwind CSS (via CDN) for responsive, modern styling.
+   - Structure the page with a header, navigation bar, main content section, and footer.
+   - Ensure the design is clean, with a focus on readability (e.g., use appropriate font sizes, spacing, and color contrasts).
+   - Style code snippets with a monospaced font and syntax highlighting effect using Tailwind classes.
+   - Make the canvas visualization interactive (e.g., hover effects or clickable elements to reveal explanations of each security concept or attack vector).
+
+3. **Interactivity Requirements**:
+   - Include JavaScript to add interactivity, such as buttons to toggle between examples of vulnerable vs. secure prompts, show/hide code outputs, or animate the canvas visualization (e.g., simulating a prompt injection attack).
+   - Ensure the JavaScript is lightweight and compatible with modern browsers.
+
+4. **Output Format**:
+   - The output must be a single, complete HTML file with inline Tailwind CSS and JavaScript.
+   - The content must be wrapped in appropriate HTML semantic elements (e.g., `<article>`, `<section>`).
+   - Include a title, meta tags for responsiveness, and a favicon link.
+   - Ensure all code is functional and error-free.
+
+5. **Additional Instructions**:
+   - Verify that all information is accurate and up-to-date as of May 2025, avoiding outdated references (e.g., don’t mention deprecated APIs or outdated security practices).
+   - Use clear, concise language suitable for learners, with examples to illustrate complex concepts.
+   - Structure the content with headings, subheadings, and bullet points for clarity.
+   - Avoid speculative or unverified information about LLMs or security techniques.
+   - Ensure the content is engaging and practical, preparing learners to design secure prompts and understand risks in real-world applications.
+   - Emphasize ethical considerations, discouraging misuse while educating about vulnerabilities.
+
+Output the complete HTML code, including all content, styling, and interactivity, as a single file.

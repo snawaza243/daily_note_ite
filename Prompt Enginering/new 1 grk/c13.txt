@@ -1,0 +1,39 @@
+Create a detailed, accurate, and up-to-date HTML page for a learning module titled "Ethics and Responsible AI in Prompt Engineering" as part of a comprehensive course on Large Language Models (LLMs) and prompt engineering. The content must be correct, in-depth, and suitable for learners with a beginner-to-intermediate understanding of AI, building on prior chapters. Use HTML with inline Tailwind CSS (via CDN) for styling and JavaScript for interactivity or visualizations. Follow these requirements:
+
+1. **Content Requirements**:
+   - Cover the following topics in detail:
+     - **Ethical Considerations in Prompt Engineering**: Discuss ethical issues like bias amplification, misinformation, and privacy risks, with examples of prompts that could lead to unethical outcomes.
+     - **Responsible Prompt Design**: Explain how to craft prompts to minimize harm, promote fairness, and ensure transparency, with examples of responsible vs. irresponsible prompts.
+     - **Bias Mitigation in Prompts**: Describe techniques to reduce bias in LLM outputs (e.g., neutral language, diverse examples), with examples showing biased vs. unbiased outputs.
+     - **Privacy and Data Security**: Discuss how prompts can inadvertently expose sensitive data and strategies to prevent this, with examples of secure prompt design.
+     - **Environmental Impact**: Explain the environmental concerns of training and deploying LLMs, with guidance on efficient prompt engineering to reduce computational costs.
+     - **Accountability and Transparency**: Discuss the importance of documenting prompt usage and ensuring transparency in AI outputs, with examples of accountability mechanisms.
+     - **Regulatory Compliance**: Introduce relevant AI regulations (e.g., GDPR, AI Act as of 2025) and their implications for prompt engineering, with examples of compliant prompts.
+   - Include at least two code examples (e.g., Python scripts using an LLM API like Hugging Face’s Transformers to demonstrate ethical vs. unethical prompts or bias mitigation techniques).
+   - Provide a visual representation using HTML5 Canvas and JavaScript to illustrate a concept (e.g., a diagram showing the ethical decision-making process in prompt design or a flowchart of bias mitigation steps).
+
+2. **Styling Requirements**:
+   - Use Tailwind CSS (via CDN) for responsive, modern styling.
+   - Structure the page with a header, navigation bar, main content section, and footer.
+   - Ensure the design is clean, with a focus on readability (e.g., use appropriate font sizes, spacing, and color contrasts).
+   - Style code snippets with a monospaced font and syntax highlighting effect using Tailwind classes.
+   - Make the canvas visualization interactive (e.g., hover effects or clickable elements to reveal explanations of each ethical concept).
+
+3. **Interactivity Requirements**:
+   - Include JavaScript to add interactivity, such as buttons to toggle between examples of ethical vs. unethical prompts, show/hide code outputs, or animate the canvas visualization.
+   - Ensure the JavaScript is lightweight and compatible with modern browsers.
+
+4. **Output Format**:
+   - The output must be a single, complete HTML file with inline Tailwind CSS and JavaScript.
+   - The content must be wrapped in appropriate HTML semantic elements (e.g., `<article>`, `<section>`).
+   - Include a title, meta tags for responsiveness, and a favicon link.
+   - Ensure all code is functional and error-free.
+
+5. **Additional Instructions**:
+   - Verify that all information is accurate and up-to-date as of May 2025, avoiding outdated references (e.g., don’t mention deprecated regulations or practices).
+   - Use clear, concise language suitable for learners, with examples to illustrate complex concepts.
+   - Structure the content with headings, subheadings, and bullet points for clarity.
+   - Avoid speculative or unverified information about LLMs or ethical practices.
+   - Ensure the content is engaging and practical, preparing learners to apply ethical principles in real-world prompt engineering.
+
+Output the complete HTML code, including all content, styling, and interactivity, as a single file.

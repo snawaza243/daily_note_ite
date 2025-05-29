@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding LLM Fundamentals | AI Course</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-gradient {
+                @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-primary-400;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto font-mono text-sm;
+            }
+            .token-keyword { @apply text-purple-400; }
+            .token-function { @apply text-blue-400; }
+            .token-string { @apply text-green-400; }
+            .token-comment { @apply text-gray-500; }
+            .token-parameter { @apply text-yellow-300; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold text-gradient">Understanding LLM Fundamentals</h1>
+                <nav class="hidden md:block">
+                    <ul class="flex space-x-6">
+                        <li><a href="#what-are-llms" class="hover:text-primary-600 transition">What are LLMs?</a></li>
+                        <li><a href="#types" class="hover:text-primary-600 transition">Types</a></li>
+                        <li><a href="#architecture" class="hover:text-primary-600 transition">Architecture</a></li>
+                        <li><a href="#applications" class="hover:text-primary-600 transition">Applications</a></li>
+                    </ul>
+                </nav>
+                <button class="md:hidden text-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <article class="max-w-4xl mx-auto">
+            <section id="introduction" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">Introduction to Large Language Models</h2>
+                <p class="mb-4">Large Language Models (LLMs) represent a breakthrough in artificial intelligence, enabling machines to understand and generate human-like text with remarkable fluency. This module explores their fundamental concepts, architecture, and real-world applications.</p>
+                <div class="bg-primary-50 border-l-4 border-primary-500 p-4 rounded-r mb-6">
+                    <p class="font-medium text-primary-800">Learning Objectives:</p>
+                    <ul class="list-disc pl-5 mt-2 space-y-1">
+                        <li>Understand what LLMs are and how they work</li>
+                        <li>Identify different types of LLMs and their use cases</li>
+                        <li>Learn about transformer architecture and training processes</li>
+                        <li>Explore practical applications and ethical considerations</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="what-are-llms" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">What are Large Language Models?</h2>
+                <p class="mb-4">Large Language Models (LLMs) are artificial intelligence systems trained on vast amounts of text data to understand and generate human-like language. They are a type of neural network that can perform various natural language processing (NLP) tasks.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Key Characteristics</h3>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li><strong>Massive scale:</strong> Typically trained on terabytes of text data from books, websites, and other sources</li>
+                            <li><strong>Contextual understanding:</strong> Can interpret meaning based on surrounding text</li>
+                            <li><strong>Generative capability:</strong> Produce coherent, contextually relevant text responses</li>
+                            <li><strong>Adaptability:</strong> Can be fine-tuned for specific tasks or domains</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Core Capabilities</h3>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Text generation (stories, articles, code)</li>
+                            <li>Question answering and information retrieval</li>
+                            <li>Language translation between multiple languages</li>
+                            <li>Text summarization and simplification</li>
+                            <li>Sentiment analysis and text classification</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-gray-100 p-4 rounded-lg mb-6">
+                    <h3 class="text-lg font-semibold mb-2">How LLMs Differ from Traditional NLP</h3>
+                    <p>Unlike traditional NLP systems that rely on hand-crafted rules and feature engineering, LLMs learn patterns and representations directly from data through self-supervised learning. This enables them to handle a wide range of tasks without task-specific programming.</p>
+                </div>
+            </section>
+
+            <section id="types" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">Types of Large Language Models</h2>
+                <p class="mb-4">The LLM landscape includes various models with different architectures, capabilities, and licensing models. Here are some prominent examples:</p>
+                
+                <div class="overflow-x-auto mb-6">
+                    <table class="min-w-full bg-white rounded-lg overflow-hidden">
+                        <thead class="bg-primary-600 text-white">
+                            <tr>
+                                <th class="py-3 px-4 text-left">Model</th>
+                                <th class="py-3 px-4 text-left">Developer</th>
+                                <th class="py-3 px-4 text-left">Parameters</th>
+                                <th class="py-3 px-4 text-left">Key Features</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium">GPT-4</td>
+                                <td class="py-3 px-4">OpenAI</td>
+                                <td class="py-3 px-4">~1.8T (estimated)</td>
+                                <td class="py-3 px-4">Multimodal, strong reasoning, large context window</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium">Claude 3</td>
+                                <td class="py-3 px-4">Anthropic</td>
+                                <td class="py-3 px-4">Undisclosed</td>
+                                <td class="py-3 px-4">Constitutional AI, strong safety features</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium">Gemini 1.5</td>
+                                <td class="py-3 px-4">Google DeepMind</td>
+                                <td class="py-3 px-4">Undisclosed</td>
+                                <td class="py-3 px-4">Multimodal from ground up, efficient architecture</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium">Llama 3</td>
+                                <td class="py-3 px-4">Meta</td>
+                                <td class="py-3 px-4">8B to 70B</td>
+                                <td class="py-3 px-4">Open weights, strong open-source alternative</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium">Mixtral</td>
+                                <td class="py-3 px-4">Mistral AI</td>
+                                <td class="py-3 px-4">Sparse MoE (46B active)</td>
+                                <td class="py-3 px-4">Mixture of Experts, cost-efficient inference</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Proprietary Models</h3>
+                        <p class="mb-3">Commercial models like GPT-4 and Claude offer advanced capabilities through API access but have closed weights and usage restrictions.</p>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Typically more powerful due to greater resources</li>
+                            <li>Often have better safety and moderation features</li>
+                            <li>Usage costs can accumulate at scale</li>
+                            <li>Limited customization options</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Open-Source Models</h3>
+                        <p class="mb-3">Models like Llama 3 and Mistral allow for self-hosting and modification but may require more technical expertise to deploy.</p>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Full control over deployment and data</li>
+                            <li>Can be fine-tuned for specific use cases</li>
+                            <li>Often more cost-effective at scale</li>
+                            <li>May lag behind proprietary models in capability</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="architecture" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">How LLMs are Built</h2>
+                <p class="mb-4">Modern LLMs are primarily based on the transformer architecture, introduced in the seminal 2017 paper "Attention Is All You Need." This architecture enables efficient processing of sequential data while capturing long-range dependencies.</p>
+                
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold mb-3 text-primary-700">Transformer Architecture</h3>
+                    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-4">
+                        <canvas id="transformer-diagram" class="w-full h-64 bg-gray-100 rounded" width="800" height="400"></canvas>
+                        <div class="text-center mt-2 text-sm text-gray-600">Hover over components to learn about each part</div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-medium mb-2">Key Components:</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>Tokenization:</strong> Text is split into tokens (words or subwords)</li>
+                                <li><strong>Embedding Layer:</strong> Converts tokens to numerical vectors</li>
+                                <li><strong>Attention Mechanism:</strong> Weights importance of different parts of input</li>
+                                <li><strong>Feed-Forward Networks:</strong> Process representations at each position</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-2">Training Process:</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>Pre-training:</strong> Self-supervised learning on massive text corpora</li>
+                                <li><strong>Fine-tuning:</strong> Supervised learning on specific tasks</li>
+                                <li><strong>RLHF:</strong> Reinforcement Learning from Human Feedback aligns model outputs</li>
+                                <li><strong>Scaling:</strong> Larger models and more data improve performance</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold mb-3 text-primary-700">Key Terminology</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                            <dl class="space-y-3">
+                                <dt class="font-medium">Tokens</dt>
+                                <dd class="text-sm text-gray-600">The basic units of text that LLMs process, which can be whole words or subword pieces (e.g., "unhappiness" → "un", "happiness")</dd>
+                                
+                                <dt class="font-medium">Embeddings</dt>
+                                <dd class="text-sm text-gray-600">Numerical representations of tokens that capture semantic meaning in high-dimensional space</dd>
+                                
+                                <dt class="font-medium">Attention Mechanism</dt>
+                                <dd class="text-sm text-gray-600">A method for determining which parts of the input are most relevant to each output token</dd>
+                            </dl>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                            <dl class="space-y-3">
+                                <dt class="font-medium">Context Window</dt>
+                                <dd class="text-sm text-gray-600">The maximum number of tokens the model can consider at once (e.g., 128K for some modern models)</dd>
+                                
+                                <dt class="font-medium">Inference</dt>
+                                <dd class="text-sm text-gray-600">The process of generating outputs from the model given an input prompt</dd>
+                                
+                                <dt class="font-medium">Temperature</dt>
+                                <dd class="text-sm text-gray-600">A parameter that controls the randomness of predictions (higher = more creative, lower = more deterministic)</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold mb-3 text-primary-700">Code Example: Tokenization with Hugging Face</h3>
+                    <div class="mb-4">
+                        <button id="toggle-code" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md transition">
+                            Show Code Example
+                        </button>
+                    </div>
+                    <div id="code-example" class="hidden">
+                        <div class="code-block mb-4">
+                            <pre><code><span class="token-keyword">from</span> transformers <span class="token-keyword">import</span> AutoTokenizer
+
+<span class="token-comment"># Load tokenizer for a pretrained model</span>
+tokenizer = AutoTokenizer.<span class="token-function">from_pretrained</span>(<span class="token-string">"meta-llama/Llama-2-7b-hf"</span>)
+
+<span class="token-comment"># Sample text to tokenize</span>
+text = <span class="token-string">"Large Language Models are transforming AI."</span>
+
+<span class="token-comment"># Tokenize the text</span>
+tokens = tokenizer.<span class="token-function">tokenize</span>(text)
+token_ids = tokenizer.<span class="token-function">encode</span>(text)
+
+<span class="token-keyword">print</span>(<span class="token-string">"Original text:"</span>, text)
+<span class="token-keyword">print</span>(<span class="token-string">"Tokens:"</span>, tokens)
+<span class="token-keyword">print</span>(<span class="token-string">"Token IDs:"</span>, token_ids)
+
+<span class="token-comment"># Output would look something like:</span>
+<span class="token-comment"># Original text: Large Language Models are transforming AI.</span>
+<span class="token-comment"># Tokens: ['Large', 'ĠLanguage', 'ĠModels', 'Ġare', 'Ġtransforming', 'ĠAI', '.']</span>
+<span class="token-comment"># Token IDs: [1, 8344, 2999, 11371, 526, 15492, 5026, 2]</span></code></pre>
+                        </div>
+                        <div class="bg-primary-50 border-l-4 border-primary-500 p-4 rounded-r">
+                            <p class="font-medium text-primary-800">Explanation:</p>
+                            <p class="text-sm mt-1">This code demonstrates how text is converted to tokens that an LLM can process. The tokenizer splits the text into subword units (note the special characters indicating spaces) and converts them to numerical IDs that the model uses internally.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="applications" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">Applications of LLMs</h2>
+                <p class="mb-4">Large Language Models have found widespread applications across industries, transforming how we interact with information and automate tasks.</p>
+                
+                <div class="grid md:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                        <div class="text-primary-600 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold mb-2">Conversational AI</h3>
+                        <p class="text-sm text-gray-600">Chatbots, virtual assistants, and customer service automation that provide human-like interactions at scale.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                        <div class="text-primary-600 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold mb-2">Content Creation</h3>
+                        <p class="text-sm text-gray-600">Generating articles, marketing copy, code documentation, and other written content with human oversight.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                        <div class="text-primary-600 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold mb-2">Code Generation</h3>
+                        <p class="text-sm text-gray-600">Assisting developers with code completion, debugging, and even generating entire functions from descriptions.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                        <div class="text-primary-600 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold mb-2">Language Translation</h3>
+                        <p class="text-sm text-gray-600">High-quality translation between languages with better context understanding than traditional systems.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                        <div class="text-primary-600 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold mb-2">Information Retrieval</h3>
+                        <p class="text-sm text-gray-600">Enhanced search systems that understand queries in natural language and provide summarized answers.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
+                        <div class="text-primary-600 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold mb-2">Education & Tutoring</h3>
+                        <p class="text-sm text-gray-600">Personalized learning assistants that can explain concepts, generate practice problems, and provide feedback.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ethics" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">Ethical Considerations</h2>
+                <p class="mb-4">While LLMs offer tremendous potential, they also raise important ethical concerns that developers and users must consider.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Potential Risks</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <span class="bg-red-100 text-red-800 rounded-full p-1 mr-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
+                                <div>
+                                    <h4 class="font-medium">Bias and Fairness</h4>
+                                    <p class="text-sm text-gray-600">LLMs can perpetuate or amplify biases present in their training data, leading to unfair or harmful outputs.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-red-100 text-red-800 rounded-full p-1 mr-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
+                                <div>
+                                    <h4 class="font-medium">Misinformation</h4>
+                                    <p class="text-sm text-gray-600">LLMs can generate plausible-sounding but incorrect information ("hallucinations").</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-red-100 text-red-800 rounded-full p-1 mr-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
+                                <div>
+                                    <h4 class="font-medium">Privacy Concerns</h4>
+                                    <p class="text-sm text-gray-600">Models may memorize and potentially reveal sensitive information from training data.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-red-100 text-red-800 rounded-full p-1 mr-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
+                                <div>
+                                    <h4 class="font-medium">Environmental Impact</h4>
+                                    <p class="text-sm text-gray-600">Training large models consumes significant energy, contributing to carbon emissions.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Mitigation Strategies</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <span class="bg-green-100 text-green-800 rounded-full p-1 mr-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
+                                <div>
+                                    <h4 class="font-medium">Bias Mitigation</h4>
+                                    <p class="text-sm text-gray-600">Careful dataset curation, bias detection tools, and fairness constraints during training.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-green-100 text-green-800 rounded-full p-1 mr-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
+                                <div>
+                                    <h4 class="font-medium">Fact-Checking</h4>
+                                    <p class="text-sm text-gray-600">Implementing verification systems and clearly indicating uncertain information.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-green-100 text-green-800 rounded-full p-1 mr-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
+                                <div>
+                                    <h4 class="font-medium">Data Privacy</h4>
+                                    <p class="text-sm text-gray-600">Differential privacy techniques and careful data filtering to remove sensitive information.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-green-100 text-green-800 rounded-full p-1 mr-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
+                                <div>
+                                    <h4 class="font-medium">Efficiency Improvements</h4>
+                                    <p class="text-sm text-gray-600">Model compression, sparse architectures, and renewable energy for training.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-primary-50 rounded-lg p-6 mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">Summary</h2>
+                <p class="mb-4">Large Language Models represent a significant advancement in AI capabilities, with transformative potential across many domains. Understanding their fundamentals—how they work, their capabilities and limitations, and their ethical implications—is crucial for effectively and responsibly leveraging this technology.</p>
+                
+                <div class="bg-white p-4 rounded-lg mb-4">
+                    <h3 class="text-lg font-semibold mb-2">Key Takeaways</h3>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>LLMs are based on transformer architecture and trained on massive text datasets</li>
+                        <li>They excel at understanding and generating human-like text across many tasks</li>
+                        <li>Different models (proprietary vs. open-source) offer various tradeoffs</li>
+                        <li>Proper use requires understanding their limitations and ethical considerations</li>
+                        <li>Continued advancements are making models more capable and efficient</li>
+                    </ul>
+                </div>
+            </section>
+        </article>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h2 class="text-xl font-bold">AI Learning Series</h2>
+                    <p class="text-gray-400 text-sm">Understanding Large Language Models</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-primary-400 transition">Terms</a>
+                    <a href="#" class="hover:text-primary-400 transition">Privacy</a>
+                    <a href="#" class="hover:text-primary-400 transition">Contact</a>
+                </div>
+            </div>
+            <div class="mt-6 pt-6 border-t border-gray-700 text-center text-gray-400 text-sm">
+                <p>© 2025 AI Education Initiative. All rights reserved.</p>
+                <p class="mt-1">Information current as of May 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle code example visibility
+        document.getElementById('toggle-code').addEventListener('click', function() {
+            const codeExample = document.getElementById('code-example');
+            codeExample.classList.toggle('hidden');
+            this.textContent = codeExample.classList.contains('hidden') ? 
+                'Show Code Example' : 'Hide Code Example';
+        });
+
+        // Transformer diagram visualization
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('transformer-diagram');
+            const ctx = canvas.getContext('2d');
+            const tooltip = document.createElement('div');
+            tooltip.className = 'absolute bg-white p-2 rounded shadow-lg text-sm hidden z-10 max-w-xs border border-gray-200';
+            document.body.appendChild(tooltip);
+
+            // Set canvas size
+            function resizeCanvas() {
+                const container = canvas.parentElement;
+                canvas.width = container.clientWidth;
+                canvas.height = canvas.width * 0.5; // Maintain aspect ratio
+                drawDiagram();
+            }
+
+            // Components data
+            const components = [
+                { 
+                    x: 0.05, y: 0.2, width: 0.15, height: 0.6, 
+                    color: '#7dd3fc', name: 'Input Embedding', 
+                    description: 'Converts input tokens to numerical vectors that capture semantic meaning.'
+                },
+                { 
+                    x: 0.25, y: 0.1, width: 0.15, height: 0.8, 
+                    color: '#38bdf8', name: 'Positional Encoding', 
+                    description: 'Adds information about the position of each token in the sequence.'
+                },
+                { 
+                    x: 0.45, y: 0.2, width: 0.2, height: 0.6, 
+                    color: '#0ea5e9', name: 'Multi-Head Attention', 
+                    description: 'Mechanism that learns relationships between all tokens in the sequence simultaneously.'
+                },
+                { 
+                    x: 0.7, y: 0.3, width: 0.2, height: 0.4, 
+                    color: '#0369a1', name: 'Feed Forward Network', 
+                    description: 'Processes each position independently through a neural network with hidden layers.'
+                },
+                { 
+                    x: 0.92, y: 0.2, width: 0.15, height: 0.6, 
+                    color: '#075985', name: 'Output', 
+                    description: 'Produces probability distribution over vocabulary for next token prediction.'
+                }
+            ];
+
+            // Draw the diagram
+            function drawDiagram() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw connections
+                ctx.strokeStyle = '#9ca3af';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(components[0].x * canvas.width + components[0].width * canvas.width, 
+                           components[0].y * canvas.height + components[0].height * canvas.height / 2);
+                for (let i = 1; i < components.length; i++) {
+                    ctx.lineTo(components[i].x * canvas.width, 
+                              components[i].y * canvas.height + components[i].height * canvas.height / 2);
+                }
+                ctx.stroke();
+
+                // Draw components
+                components.forEach(comp => {
+                    ctx.fillStyle = comp.color;
+                    ctx.fillRect(
+                        comp.x * canvas.width, 
+                        comp.y * canvas.height, 
+                        comp.width * canvas.width, 
+                        comp.height * canvas.height
+                    );
+                    ctx.strokeStyle = '#1e3a8a';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(
+                        comp.x * canvas.width, 
+                        comp.y * canvas.height, 
+                        comp.width * canvas.width, 
+                        comp.height * canvas.height
+                    );
+
+                    // Add text
+                    ctx.fillStyle = '#ffffff';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    const fontSize = Math.min(14, canvas.width * 0.03);
+                    ctx.font = `bold ${fontSize}px Arial`;
+                    
+                    // Split name into words and draw vertically centered
+                    const words = comp.name.split(' ');
+                    const lineHeight = fontSize * 1.2;
+                    const startY = comp.y * canvas.height + comp.height * canvas.height / 2 - 
+                                 (words.length - 1) * lineHeight / 2;
+                    
+                    words.forEach((word, i) => {
+                        ctx.fillText(
+                            word,
+                            comp.x * canvas.width + comp.width * canvas.width / 2,
+                            startY + i * lineHeight
+                        );
+                    });
+                });
+            }
+
+            // Handle hover interactions
+            canvas.addEventListener('mousemove', function(e) {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                let hovered = false;
+                
+                components.forEach(comp => {
+                    const compX = comp.x * canvas.width;
+                    const compY = comp.y * canvas.height;
+                    const compWidth = comp.width * canvas.width;
+                    const compHeight = comp.height * canvas.height;
+                    
+                    if (x >= compX && x <= compX + compWidth && 
+                        y >= compY && y <= compY + compHeight) {
+                        hovered = true;
+                        
+                        // Highlight component
+                        ctx.fillStyle = comp.color.replace(')', ', 0.7)').replace('rgb', 'rgba');
+                        ctx.fillRect(compX, compY, compWidth, compHeight);
+                        
+                        // Show tooltip
+                        tooltip.style.left = `${e.pageX + 10}px`;
+                        tooltip.style.top = `${e.pageY + 10}px`;
+                        tooltip.innerHTML = `<strong>${comp.name}</strong><p class="mt-1">${comp.description}</p>`;
+                        tooltip.classList.remove('hidden');
+                        
+                        // Change cursor
+                        canvas.style.cursor = 'pointer';
+                    }
+                });
+                
+                if (!hovered) {
+                    tooltip.classList.add('hidden');
+                    canvas.style.cursor = 'default';
+                    drawDiagram(); // Redraw to remove highlights
+                }
+            });
+            
+            canvas.addEventListener('mouseout', function() {
+                tooltip.classList.add('hidden');
+                drawDiagram(); // Redraw to remove highlights
+            });
+
+            // Initial setup
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+        });
+    </script>
+</body>
+</html>

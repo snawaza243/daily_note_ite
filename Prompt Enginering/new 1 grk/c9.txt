@@ -1,0 +1,39 @@
+Create a detailed, accurate, and up-to-date HTML page for a learning module titled "LLM Settings" as part of a comprehensive course on Large Language Models (LLMs) and prompt engineering. The content must be correct, in-depth, and suitable for learners with a beginner-to-intermediate understanding of AI. Use HTML with inline Tailwind CSS (via CDN) for styling and JavaScript for interactivity or visualizations. Follow these requirements:
+
+1. **Content Requirements**:
+   - Cover the following topics in detail:
+     - **Temperature**: Explain how temperature controls randomness in LLM outputs (e.g., 0 for deterministic, 1 for creative), with examples showing different temperature settings and their effects on responses.
+     - **Top-P Sampling**: Describe how top-p (nucleus sampling) manages response diversity by selecting from the smallest set of tokens whose cumulative probability exceeds p, with examples comparing top-p values.
+     - **Max Tokens**: Discuss how setting a maximum token limit controls response length, with examples showing short vs. long responses.
+     - **Top-K Sampling**: Explain top-k sampling, where the model selects from the k most likely tokens, with examples comparing top-k to top-p.
+     - **Presence and Frequency Penalties**: Describe how these penalties reduce repetition and adjust topic focus, with examples showing their impact on outputs.
+     - **Other Hyperparameters**: Cover additional settings like beam search or repetition penalties, explaining their roles and effects, with examples where applicable.
+     - **Practical Use Cases**: Provide guidance on choosing appropriate settings for specific tasks (e.g., low temperature for factual responses, high temperature for creative writing), with example prompts and outputs.
+   - Include at least two code examples (e.g., Python scripts using an LLM API like Hugging Face’s Transformers to demonstrate the effect of different settings, such as temperature or top-p, on output quality).
+   - Provide a visual representation using HTML5 Canvas and JavaScript to illustrate a concept (e.g., a graph showing how temperature or top-p affects output diversity or a diagram of the token selection process).
+
+2. **Styling Requirements**:
+   - Use Tailwind CSS (via CDN) for responsive, modern styling.
+   - Structure the page with a header, navigation bar, main content section, and footer.
+   - Ensure the design is clean, with a focus on readability (e.g., use appropriate font sizes, spacing, and color contrasts).
+   - Style code snippets with a monospaced font and syntax highlighting effect using Tailwind classes.
+   - Make the canvas visualization interactive (e.g., sliders to adjust temperature/top-p values and update the visualization, or hover effects to reveal explanations).
+
+3. **Interactivity Requirements**:
+   - Include JavaScript to add interactivity, such as sliders or buttons to toggle between examples of different settings (e.g., low vs. high temperature), show/hide code outputs, or animate the canvas visualization.
+   - Ensure the JavaScript is lightweight and compatible with modern browsers.
+
+4. **Output Format**:
+   - The output must be a single, complete HTML file with inline Tailwind CSS and JavaScript.
+   - The content must be wrapped in appropriate HTML semantic elements (e.g., `<article>`, `<section>`).
+   - Include a title, meta tags for responsiveness, and a favicon link.
+   - Ensure all code is functional and error-free.
+
+5. **Additional Instructions**:
+   - Verify that all information is accurate and up-to-date as of May 2025, avoiding outdated references (e.g., don’t mention deprecated APIs or settings).
+   - Use clear, concise language suitable for learners, with examples to illustrate complex concepts.
+   - Structure the content with headings, subheadings, and bullet points for clarity.
+   - Avoid speculative or unverified information about LLMs or their settings.
+   - Ensure the content is engaging and practical, preparing learners to optimize LLM performance for various tasks.
+
+Output the complete HTML code, including all content, styling, and interactivity, as a single file.

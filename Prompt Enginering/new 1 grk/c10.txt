@@ -1,0 +1,39 @@
+Create a detailed, accurate, and up-to-date HTML page for a learning module titled "Image Prompting (for AI Art Models)" as part of a comprehensive course on Large Language Models (LLMs) and prompt engineering, focusing on AI art generation models like DALL·E or Midjourney. The content must be correct, in-depth, and suitable for learners with a beginner-to-intermediate understanding of AI. Use HTML with inline Tailwind CSS (via CDN) for styling and JavaScript for interactivity or visualizations. Follow these requirements:
+
+1. **Content Requirements**:
+   - Cover the following topics in detail:
+     - **Style Modifiers**: Explain how to use style modifiers (e.g., "Cyberpunk, neon-lit cityscape," "in the style of Van Gogh") to define the aesthetic of generated images, with examples of prompts and their expected visual outcomes.
+     - **Quality Boosters**: Describe how to include terms like "Ultra HD, 8K, detailed" to enhance image quality, with examples showing the impact on outputs.
+     - **Weighted Terms**: Discuss emphasizing elements using syntax like `::word::2` (or model-specific equivalents), with examples of weighted vs. non-weighted prompts.
+     - **Fix Deformed Generations**: Explain techniques like `--no [hands]` or similar parameters to avoid common errors in image generation, with examples of corrected prompts.
+     - **Negative Prompting**: Describe excluding unwanted elements (e.g., "no blurry images, no extra limbs") to refine outputs, with examples of effective negative prompts.
+     - **Prompt Structure for Image Models**: Outline best practices for crafting effective image prompts, including clarity, specificity, and combining modifiers, with example prompts.
+     - **Iterative Prompt Refinement**: Discuss how to refine image prompts based on initial outputs, with examples of iterative improvements for better results.
+   - Include at least two code examples (e.g., Python scripts using an API like DALL·E’s or Stable Diffusion’s to demonstrate image prompting techniques, such as style modifiers or negative prompting, with sample outputs described).
+   - Provide a visual representation using HTML5 Canvas and JavaScript to illustrate a concept (e.g., a mockup of how style modifiers influence image generation or a flowchart of the iterative prompting process).
+
+2. **Styling Requirements**:
+   - Use Tailwind CSS (via CDN) for responsive, modern styling.
+   - Structure the page with a header, navigation bar, main content section, and footer.
+   - Ensure the design is clean, with a focus on readability (e.g., use appropriate font sizes, spacing, and color contrasts).
+   - Style code snippets with a monospaced font and syntax highlighting effect using Tailwind classes.
+   - Make the canvas visualization interactive (e.g., hover effects or clickable elements to reveal explanations of each prompting technique).
+
+3. **Interactivity Requirements**:
+   - Include JavaScript to add interactivity, such as buttons to toggle between examples of different image prompting techniques, show/hide code outputs, or animate the canvas visualization (e.g., simulating how style modifiers change a base image).
+   - Ensure the JavaScript is lightweight and compatible with modern browsers.
+
+4. **Output Format**:
+   - The output must be a single, complete HTML file with inline Tailwind CSS and JavaScript.
+   - The content must be wrapped in appropriate HTML semantic elements (e.g., `<article>`, `<section>`).
+   - Include a title, meta tags for responsiveness, and a favicon link.
+   - Ensure all code is functional and error-free.
+
+5. **Additional Instructions**:
+   - Verify that all information is accurate and up-to-date as of May 2025, avoiding outdated references (e.g., don’t mention deprecated APIs or model-specific syntax no longer in use).
+   - Use clear, concise language suitable for learners, with examples to illustrate complex concepts.
+   - Structure the content with headings, subheadings, and bullet points for clarity.
+   - Avoid speculative or unverified information about AI art models or prompting techniques.
+   - Ensure the content is engaging and practical, preparing learners to create effective prompts for AI art generation.
+
+Output the complete HTML code, including all content, styling, and interactivity, as a single file.

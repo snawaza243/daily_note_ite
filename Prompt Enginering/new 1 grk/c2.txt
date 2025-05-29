@@ -1,0 +1,37 @@
+Create a detailed, accurate, and up-to-date HTML page for a learning module titled "Introduction to Prompting" as part of a comprehensive course on Large Language Models (LLMs) and prompt engineering. The content must be correct, in-depth, and suitable for learners with a beginner-to-intermediate understanding of AI. Use HTML with inline Tailwind CSS (via CDN) for styling and JavaScript for interactivity or visualizations. Follow these requirements:
+
+1. **Content Requirements**:
+   - Cover the following topics in detail:
+     - **Basic Prompting**: Explain what basic prompting is, using examples like "Explain quantum computing in simple terms" or "Write a short story about a robot." Describe how LLMs interpret and respond to simple prompts.
+     - **Need for Prompt Engineering**: Discuss why well-structured prompts are necessary, including how they improve response accuracy, reduce errors, and produce more relevant outputs. Highlight challenges with vague or poorly crafted prompts.
+     - **Prompt Structure Basics**: Outline the components of an effective prompt, such as clarity, specificity, and context. Explain how these elements influence LLM output.
+     - **Examples of Good vs. Bad Prompts**: Provide at least three pairs of good and bad prompts (e.g., "What is AI?" vs. "Explain artificial intelligence in detail, focusing on its history and applications in healthcare"). Explain why the good prompts yield better results.
+     - **Introduction to Prompt Types**: Briefly introduce zero-shot prompting (no examples), few-shot prompting (providing examples), and role-based prompting (e.g., "Act as a teacher"). Explain their purposes and when to use them.
+   - Include at least one code example (e.g., a Python script using an LLM API like Hugging Face’s Transformers to demonstrate a basic prompt and its output).
+   - Provide a visual representation using HTML5 Canvas and JavaScript to illustrate a concept (e.g., a flowchart showing how an LLM processes a prompt or a diagram comparing good vs. bad prompt outcomes).
+
+2. **Styling Requirements**:
+   - Use Tailwind CSS (via CDN) for responsive, modern styling.
+   - Structure the page with a header, navigation bar, main content section, and footer.
+   - Ensure the design is clean, with a focus on readability (e.g., use appropriate font sizes, spacing, and color contrasts).
+   - Style code snippets with a monospaced font and syntax highlighting effect using Tailwind classes.
+   - Make the canvas visualization interactive (e.g., hover effects or clickable elements to reveal explanations).
+
+3. **Interactivity Requirements**:
+   - Include JavaScript to add interactivity, such as a button to toggle between good and bad prompt examples or to animate the canvas visualization.
+   - Ensure the JavaScript is lightweight and compatible with modern browsers.
+
+4. **Output Format**:
+   - The output must be a single, complete HTML file with inline Tailwind CSS and JavaScript.
+   - The content must be wrapped in appropriate HTML semantic elements (e.g., `<article>`, `<section>`).
+   - Include a title, meta tags for responsiveness, and a favicon link.
+   - Ensure all code is functional and error-free.
+
+5. **Additional Instructions**:
+   - Verify that all information is accurate and up-to-date as of May 2025, avoiding outdated references (e.g., don’t mention deprecated models or APIs).
+   - Use clear, concise language suitable for learners, with examples to illustrate complex concepts.
+   - Structure the content with headings, subheadings, and bullet points for clarity.
+   - Avoid speculative or unverified information about LLMs or prompting techniques.
+   - Ensure the content is engaging and practical, preparing learners for advanced prompting concepts in later chapters.
+
+Output the complete HTML code, including all content, styling, and interactivity, as a single file.
