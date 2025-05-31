@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompting Techniques | LLM Course</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        secondary: {
+                            500: '#8b5cf6'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-gradient {
+                @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-primary-400;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto font-mono text-sm;
+            }
+            .token-keyword { @apply text-purple-400; }
+            .token-function { @apply text-blue-400; }
+            .token-string { @apply text-green-400; }
+            .token-comment { @apply text-gray-500; }
+            .token-parameter { @apply text-yellow-300; }
+            .technique-card { @apply bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:border-primary-500 transition; }
+            .technique-tag { @apply inline-block bg-primary-100 text-primary-800 text-xs px-2 py-1 rounded-full; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold text-gradient">Prompting Techniques</h1>
+                <nav class="hidden md:block">
+                    <ul class="flex space-x-6">
+                        <li><a href="#role-prompting" class="hover:text-primary-600 transition">Role Prompting</a></li>
+                        <li><a href="#few-shot" class="hover:text-primary-600 transition">Few-Shot</a></li>
+                        <li><a href="#cot" class="hover:text-primary-600 transition">Chain of Thought</a></li>
+                        <li><a href="#combining" class="hover:text-primary-600 transition">Combining</a></li>
+                    </ul>
+                </nav>
+                <button class="md:hidden text-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <article class="max-w-4xl mx-auto">
+            <section id="introduction" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">Advanced Prompting Techniques</h2>
+                <p class="mb-4">Mastering different prompting techniques allows you to unlock the full potential of Large Language Models. This module explores sophisticated methods to improve your prompt engineering skills.</p>
+                <div class="bg-primary-50 border-l-4 border-primary-500 p-4 rounded-r mb-6">
+                    <p class="font-medium text-primary-800">Learning Objectives:</p>
+                    <ul class="list-disc pl-5 mt-2 space-y-1">
+                        <li>Understand and apply various advanced prompting techniques</li>
+                        <li>Learn when to use each technique based on task requirements</li>
+                        <li>Combine multiple techniques for optimal results</li>
+                        <li>Evaluate the effectiveness of different approaches</li>
+                        <li>Develop strategies for complex problem-solving with LLMs</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="role-prompting" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">Role Prompting</h2>
+                <p class="mb-4">Assigning a specific role to the LLM helps tailor responses to particular perspectives or expertise levels.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="technique-card">
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Basic Example</h3>
+                        <div class="code-block mb-4">
+                            <pre><code><span class="token-string">"Act as a senior software engineer. Explain how hash tables work to a junior developer."</span></code></pre>
+                        </div>
+                        <p class="text-sm text-gray-600">This prompt will generate a technical explanation with appropriate depth for the target audience.</p>
+                    </div>
+                    <div class="technique-card">
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Advanced Example</h3>
+                        <div class="code-block mb-4">
+                            <pre><code><span class="token-string">"""  
+You are a financial analyst with 10 years of experience.
+Explain the concept of dollar-cost averaging to a client who:
+- Is 25 years old
+- Has basic investing knowledge
+- Prefers simple analogies
+
+Keep the explanation under 3 paragraphs.
+"""</span></code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <h3 class="text-xl font-semibold mb-3 text-primary-700">Benefits of Role Prompting</h3>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="p-3 rounded-lg bg-primary-50">
+                            <h4 class="font-medium mb-1">Expertise Level</h4>
+                            <p class="text-sm text-gray-600">Matches explanation depth to audience knowledge</p>
+                        </div>
+                        <div class="p-3 rounded-lg bg-primary-50">
+                            <h4 class="font-medium mb-1">Perspective</h4>
+                            <p class="text-sm text-gray-600">Provides context-aware responses</p>
+                        </div>
+                        <div class="p-3 rounded-lg bg-primary-50">
+                            <h4 class="font-medium mb-1">Consistency</h4>
+                            <p class="text-sm text-gray-600">Maintains appropriate tone throughout</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="few-shot" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">Few-Shot Prompting</h2>
+                <p class="mb-4">Providing examples helps the model understand the desired format, style, or reasoning pattern.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="technique-card">
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Classification Example</h3>
+                        <div class="code-block">
+                            <pre><code><span class="token-string">"""  
+Classify the sentiment of these tweets:
+1. "I love this product! It's amazing!" → Positive
+2. "This is the worst service I've ever experienced" → Negative
+3. "The update has some good and bad aspects" → Neutral
+4. "Just tried the new feature and it works well" → 
+"""</span></code></pre>
+                        </div>
+                    </div>
+                    <div class="technique-card">
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Formatting Example</h3>
+                        <div class="code-block">
+                            <pre><code><span class="token-string">"""  
+Convert dates to this format: YYYY-MM-DD
+Example 1: Jan 5, 2023 → 2023-01-05
+Example 2: March 20 → 2025-03-20 (assume current year)
+Now convert: July 4th → 
+"""</span></code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold mb-3 text-primary-700">Code Example: Few-Shot Prompting</h3>
+                    <div class="mb-4">
+                        <button id="toggle-code-1" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md transition">
+                            Show Python Example
+                        </button>
+                    </div>
+                    <div id="code-example-1" class="hidden">
+                        <div class="code-block mb-4">
+                            <pre><code><span class="token-keyword">import</span> openai
+
+<span class="token-comment"># Few-shot prompt for text transformation</span>
+few_shot_prompt = <span class="token-string">"""  
+Convert these sentences to business jargon:
+1. "We need to work faster" → "We need to leverage synergies to accelerate deliverables"
+2. "Let's make a plan" → "Let's strategize a proactive roadmap"
+3. "This isn't working" → "This initiative lacks operational alignment"
+4. "We should talk to customers" → 
+"""</span>
+
+response = openai.ChatCompletion.<span class="token-function">create</span>(
+    model=<span class="token-string">"gpt-4"</span>,
+    messages=[{<span class="token-string">"role"</span>: <span class="token-string">"user"</span>, <span class="token-string">"content"</span>: few_shot_prompt}],
+    temperature=<span class="token-number">0.7</span>,
+    max_tokens=<span class="token-number">100</span>
+)
+
+<span class="token-keyword">print</span>(response.choices[<span class="token-number">0</span>].message.content)
+<span class="token-comment"># Likely output: "We should engage in proactive stakeholder outreach"</span></code></pre>
+                        </div>
+                        <div class="bg-primary-50 border-l-4 border-primary-500 p-4 rounded-r">
+                            <p class="font-medium text-primary-800">Key Features:</p>
+                            <ul class="list-disc pl-5 mt-1 text-sm">
+                                <li>Provides clear examples of the transformation pattern</li>
+                                <li>Shows both input and desired output format</li>
+                                <li>Allows the model to infer the transformation rules</li>
+                                <li>Temperature setting allows for some creativity</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="cot" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">Chain of Thought (CoT)</h2>
+                <p class="mb-4">CoT prompting encourages the model to break down complex problems into intermediate reasoning steps.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="technique-card">
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Standard CoT</h3>
+                        <div class="code-block mb-4">
+                            <pre><code><span class="token-string">"""  
+A store has 15 apples. 6 are sold on Monday and 4 more on Tuesday. 
+How many apples remain at the end of Tuesday?
+
+Think step by step and show your work.
+"""</span></code></pre>
+                        </div>
+                        <div class="bg-gray-100 p-3 rounded-lg">
+                            <p class="font-medium">Sample Output:</p>
+                            <p class="text-sm">1. Start with 15 apples<br>
+                            2. Monday: 15 - 6 = 9 apples remain<br>
+                            3. Tuesday: 9 - 4 = 5 apples remain<br>
+                            4. Final answer: 5 apples</p>
+                        </div>
+                    </div>
+                    <div class="technique-card">
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Zero-Shot CoT</h3>
+                        <div class="code-block mb-4">
+                            <pre><code><span class="token-string">"""  
+If a train travels 300 miles in 5 hours, what is its average speed?
+Let's think step by step.
+"""</span></code></pre>
+                        </div>
+                        <div class="bg-gray-100 p-3 rounded-lg">
+                            <p class="font-medium">Sample Output:</p>
+                            <p class="text-sm">1. Total distance: 300 miles<br>
+                            2. Total time: 5 hours<br>
+                            3. Speed = Distance / Time = 300 / 5<br>
+                            4. Final answer: 60 mph</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <h3 class="text-xl font-semibold mb-3 text-primary-700">CoT Effectiveness</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-medium mb-2">Without CoT</h4>
+                            <ul class="list-disc pl-5 space-y-1 text-sm">
+                                <li>Direct answers may skip reasoning steps</li>
+                                <li>Higher chance of logical errors</li>
+                                <li>Harder to verify correctness</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-2">With CoT</h4>
+                            <ul class="list-disc pl-5 space-y-1 text-sm">
+                                <li>Transparent reasoning process</li>
+                                <li>Easier to debug incorrect steps</li>
+                                <li>Improves accuracy on complex problems by 20-40%</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="least-to-most" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">Least-to-Most Prompting</h2>
+                <p class="mb-4">This technique breaks complex problems into smaller, sequential sub-questions.</p>
+                
+                <div class="technique-card mb-6">
+                    <h3 class="text-xl font-semibold mb-3 text-primary-700">Example: Business Analysis</h3>
+                    <div class="code-block mb-4">
+                        <pre><code><span class="token-string">"""  
+Analyze this business scenario step by step:
+
+1. What is the core problem described?
+2. What are 2-3 potential solutions?
+3. For each solution, list pros and cons
+4. Recommend the best option with justification
+
+Scenario: 
+"A SaaS company has 40% churn rate. Customers cite complex onboarding as the main reason."
+"""</span></code></pre>
+                    </div>
+                    <div class="bg-gray-100 p-3 rounded-lg">
+                        <p class="font-medium">Sample Output Structure:</p>
+                        <p class="text-sm">1. Core Problem: Complex onboarding causing high churn...<br>
+                        2. Potential Solutions:<br>
+                        &nbsp;&nbsp;a. Simplify onboarding flow...<br>
+                        &nbsp;&nbsp;b. Add interactive tutorials...<br>
+                        3. Pros and Cons...<br>
+                        4. Recommendation: Implement interactive tutorials because...</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="dual-prompt" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">Dual Prompt Approach</h2>
+                <p class="mb-4">Separate planning and execution into distinct prompts for better control.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="technique-card">
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Planning Prompt</h3>
+                        <div class="code-block">
+                            <pre><code><span class="token-string">"""  
+Create a step-by-step plan to research and write a 500-word blog post about:
+"The impact of AI on sustainable agriculture"
+
+Output the plan as a numbered list.
+"""</span></code></pre>
+                        </div>
+                    </div>
+                    <div class="technique-card">
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Execution Prompt</h3>
+                        <div class="code-block">
+                            <pre><code><span class="token-string">"""  
+Using this plan, write the blog post section for step 3: 
+"Compare traditional vs AI-enhanced farming techniques"
+
+Keep it concise (1-2 paragraphs) and include specific examples.
+"""</span></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="combining" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">Combining Techniques</h2>
+                <p class="mb-4">Powerful results come from combining multiple prompting techniques.</p>
+                
+                <div class="technique-card mb-6">
+                    <h3 class="text-xl font-semibold mb-3 text-primary-700">Role + CoT + Few-Shot</h3>
+                    <div class="code-block">
+                        <pre><code><span class="token-string">"""  
+You are a senior data scientist. Explain how to implement k-means clustering in Python.
+
+Structure your explanation:
+1. Briefly describe what k-means does
+2. List the key steps in the algorithm
+3. Show a complete Python implementation
+4. Provide 2 evaluation metrics
+
+Example for another algorithm (decision trees):
+1. Decision trees split data recursively...
+2. Steps: a) Calculate impurity, b) Find best split...
+3. Code: from sklearn.tree import DecisionTreeClassifier...
+4. Metrics: accuracy, F1-score...
+
+Now explain k-means following this structure.
+"""</span></code></pre>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold mb-3 text-primary-700">Code Example: Combined Techniques</h3>
+                    <div class="mb-4">
+                        <button id="toggle-code-2" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md transition">
+                            Show Python Example
+                        </button>
+                    </div>
+                    <div id="code-example-2" class="hidden">
+                        <div class="code-block mb-4">
+                            <pre><code><span class="token-keyword">import</span> openai
+
+<span class="token-comment"># Combined technique prompt</span>
+prompt = <span class="token-string">"""  
+Act as an experienced cybersecurity professional. 
+Analyze this potential security vulnerability using the following steps:
+
+1. Describe the vulnerability in simple terms
+2. Explain potential attack vectors
+3. Rate severity (Low/Medium/High/Critical)
+4. Recommend mitigation strategies
+
+Example for another vulnerability (SQL injection):
+1. SQL injection allows attackers to...
+2. Attack vectors: a) Unsanitized form inputs...
+3. Severity: High
+4. Mitigation: a) Use prepared statements...
+
+Now analyze: "Server accepts password reset tokens without expiration"
+"""</span>
+
+response = openai.ChatCompletion.<span class="token-function">create</span>(
+    model=<span class="token-string">"gpt-4"</span>,
+    messages=[{<span class="token-string">"role"</span>: <span class="token-string">"user"</span>, <span class="token-string">"content"</span>: prompt}],
+    temperature=<span class="token-number">0.3</span>,  <span class="token-comment"># Lower for more deterministic output</span>
+    max_tokens=<span class="token-number">500</span>
+)
+
+<span class="token-keyword">print</span>(response.choices[<span class="token-number">0</span>].message.content)</code></pre>
+                        </div>
+                        <div class="bg-primary-50 border-l-4 border-primary-500 p-4 rounded-r">
+                            <p class="font-medium text-primary-800">Techniques Used:</p>
+                            <ul class="list-disc pl-5 mt-1 text-sm">
+                                <li><strong>Role Prompting:</strong> Cybersecurity professional</li>
+                                <li><strong>Few-Shot:</strong> SQL injection example</li>
+                                <li><strong>Chain of Thought:</strong> Structured analysis steps</li>
+                                <li><strong>Constraints:</strong> Severity rating scale</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="self-consistency" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">Self-Consistency Prompting</h2>
+                <p class="mb-4">Generate multiple responses and select the most consistent or highest quality answer.</p>
+                
+                <div class="technique-card mb-6">
+                    <h3 class="text-xl font-semibold mb-3 text-primary-700">Example Implementation</h3>
+                    <div class="code-block">
+                        <pre><code><span class="token-string">"""  
+Generate 3 different approaches to solve this problem, then select the best one:
+
+Problem: 
+"Our mobile app has low user retention after the first week."
+
+Approach 1: 
+Approach 2: 
+Approach 3: 
+
+After listing all 3, analyze their pros/cons and recommend the best option.
+"""</span></code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section id="prompt-chaining" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">Prompt Chaining</h2>
+                <p class="mb-4">Break complex tasks into a sequence of smaller prompts with intermediate outputs.</p>
+                
+                <div class="technique-card mb-6">
+                    <h3 class="text-xl font-semibold mb-3 text-primary-700">Example: Research Paper Summary</h3>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="p-3 rounded-lg bg-primary-50">
+                            <h4 class="font-medium mb-1">Prompt 1</h4>
+                            <p class="text-sm text-gray-600">"Extract key claims from this research paper"</p>
+                        </div>
+                        <div class="p-3 rounded-lg bg-primary-50">
+                            <h4 class="font-medium mb-1">Prompt 2</h4>
+                            <p class="text-sm text-gray-600">"Organize claims into categories"</p>
+                        </div>
+                        <div class="p-3 rounded-lg bg-primary-50">
+                            <h4 class="font-medium mb-1">Prompt 3</h4>
+                            <p class="text-sm text-gray-600">"Write executive summary from organized claims"</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="when-to-use" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">When to Use Each Technique</h2>
+                <p class="mb-4">Choose the right technique based on your specific requirements.</p>
+                
+                <div class="overflow-x-auto mb-6">
+                    <table class="min-w-full bg-white rounded-lg overflow-hidden">
+                        <thead class="bg-primary-600 text-white">
+                            <tr>
+                                <th class="py-3 px-4 text-left">Technique</th>
+                                <th class="py-3 px-4 text-left">Best For</th>
+                                <th class="py-3 px-4 text-left">Complexity</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium">Role Prompting</td>
+                                <td class="py-3 px-4">Audience-specific explanations</td>
+                                <td class="py-3 px-4">Low to Medium</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium">Few-Shot</td>
+                                <td class="py-3 px-4">Formatting, classification</td>
+                                <td class="py-3 px-4">Low</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium">Chain of Thought</td>
+                                <td class="py-3 px-4">Math, logic problems</td>
+                                <td class="py-3 px-4">Medium to High</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium">Least-to-Most</td>
+                                <td class="py-3 px-4">Complex analysis tasks</td>
+                                <td class="py-3 px-4">High</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4 font-medium">Prompt Chaining</td>
+                                <td class="py-3 px-4">Multi-stage workflows</td>
+                                <td class="py-3 px-4">Very High</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <h3 class="text-xl font-semibold mb-3 text-primary-700">Technique Selection Guide</h3>
+                    <div class="mb-4">
+                        <canvas id="technique-flowchart" class="w-full h-64 bg-gray-100 rounded" width="800" height="400"></canvas>
+                        <div class="text-center mt-2 text-sm text-gray-600">Hover over decision points for details</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-primary-50 rounded-lg p-6 mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">Summary</h2>
+                <p class="mb-4">Mastering these prompting techniques will significantly enhance your ability to work effectively with Large Language Models across various applications.</p>
+                
+                <div class="bg-white p-4 rounded-lg mb-4">
+                    <h3 class="text-lg font-semibold mb-2">Key Takeaways</h3>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Different techniques serve different purposes - choose appropriately</li>
+                        <li>Combining techniques often yields the best results</li>
+                        <li>Complex problems benefit from decomposition (CoT, Least-to-Most)</li>
+                        <li>Always consider the tradeoffs between simplicity and control</li>
+                        <li>Test and iterate to find the optimal approach for your use case</li>
+                    </ul>
+                </div>
+            </section>
+        </article>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h2 class="text-xl font-bold">LLM Prompt Engineering Course</h2>
+                    <p class="text-gray-400 text-sm">Prompting Techniques</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-primary-400 transition">Terms</a>
+                    <a href="#" class="hover:text-primary-400 transition">Privacy</a>
+                    <a href="#" class="hover:text-primary-400 transition">Contact</a>
+                </div>
+            </div>
+            <div class="mt-6 pt-6 border-t border-gray-700 text-center text-gray-400 text-sm">
+                <p>© 2025 AI Education Initiative. All rights reserved.</p>
+                <p class="mt-1">Information current as of May 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle code examples
+        document.getElementById('toggle-code-1').addEventListener('click', function() {
+            const codeExample = document.getElementById('code-example-1');
+            codeExample.classList.toggle('hidden');
+            this.textContent = codeExample.classList.contains('hidden') ? 
+                'Show Python Example' : 'Hide Python Example';
+        });
+
+        document.getElementById('toggle-code-2').addEventListener('click', function() {
+            const codeExample = document.getElementById('code-example-2');
+            codeExample.classList.toggle('hidden');
+            this.textContent = codeExample.classList.contains('hidden') ? 
+                'Show Python Example' : 'Hide Python Example';
+        });
+
+        // Technique selection flowchart
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('technique-flowchart');
+            const ctx = canvas.getContext('2d');
+            const tooltip = document.createElement('div');
+            tooltip.className = 'absolute bg-white p-3 rounded shadow-lg text-sm hidden z-10 max-w-xs border border-gray-200';
+            document.body.appendChild(tooltip);
+
+            // Set canvas size
+            function resizeCanvas() {
+                const container = canvas.parentElement;
+                canvas.width = container.clientWidth;
+                canvas.height = canvas.width * 0.5;
+                drawFlowchart();
+            }
+
+            // Flowchart elements
+            const elements = [
+                { 
+                    type: 'diamond', x: 0.5, y: 0.2, width: 0.25, height: 0.15,
+                    text: 'Is the task simple?', 
+                    options: ['Yes', 'No'],
+                    descriptions: [
+                        'Simple tasks: Single-step questions, formatting, basic info',
+                        'Complex tasks: Multi-step reasoning, analysis, problem-solving'
+                    ]
+                },
+                { 
+                    type: 'rectangle', x: 0.25, y: 0.4, width: 0.2, height: 0.1,
+                    text: 'Use Few-Shot', 
+                    description: 'Provide examples of desired input/output format'
+                },
+                { 
+                    type: 'rectangle', x: 0.75, y: 0.4, width: 0.2, height: 0.1,
+                    text: 'Use CoT', 
+                    description: 'Ask for step-by-step reasoning'
+                },
+                { 
+                    type: 'diamond', x: 0.5, y: 0.6, width: 0.25, height: 0.15,
+                    text: 'Need specific style?', 
+                    options: ['Yes', 'No'],
+                    descriptions: [
+                        'Use Role Prompting to set expertise level/perspective',
+                        'Proceed with basic instruction'
+                    ]
+                },
+                { 
+                    type: 'rectangle', x: 0.25, y: 0.8, width: 0.2, height: 0.1,
+                    text: 'Add Role', 
+                    description: 'Specify desired perspective (e.g., "Act as an expert...")'
+                },
+                { 
+                    type: 'rectangle', x: 0.75, y: 0.8, width: 0.2, height: 0.1,
+                    text: 'Basic Prompt', 
+                    description: 'Direct instruction without additional framing'
+                }
+            ];
+
+            // Arrows data
+            const arrows = [
+                { from: 0, to: 1, option: 0 }, { from: 0, to: 2, option: 1 },
+                { from: 1, to: 3 }, { from: 2, to: 3 },
+                { from: 3, to: 4, option: 0 }, { from: 3, to: 5, option: 1 }
+            ];
+
+            // Draw the flowchart
+            function drawFlowchart() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw arrows
+                ctx.strokeStyle = '#6b7280';
+                ctx.lineWidth = 2;
+                ctx.fillStyle = '#6b7280';
+                arrows.forEach(arrow => {
+                    const from = elements[arrow.from];
+                    const to = elements[arrow.to];
+                    
+                    // Calculate start and end points
+                    let startX, startY, endX, endY;
+                    
+                    if (from.type === 'diamond') {
+                        // Coming from bottom of diamond
+                        startX = from.x * canvas.width;
+                        startY = from.y * canvas.height + from.height * canvas.height / 2;
+                    } else {
+                        // Coming from bottom of rectangle
+                        startX = from.x * canvas.width + from.width * canvas.width / 2;
+                        startY = from.y * canvas.height + from.height * canvas.height;
+                    }
+                    
+                    if (to.type === 'diamond') {
+                        // Going to top of diamond
+                        endX = to.x * canvas.width;
+                        endY = to.y * canvas.height - to.height * canvas.height / 2;
+                    } else {
+                        // Going to top of rectangle
+                        endX = to.x * canvas.width + to.width * canvas.width / 2;
+                        endY = to.y * canvas.height;
+                    }
+                    
+                    // Draw line
+                    ctx.beginPath();
+                    ctx.moveTo(startX, startY);
+                    ctx.lineTo(endX, endY);
+                    ctx.stroke();
+                    
+                    // Draw arrowhead
+                    const headLength = 10;
+                    const angle = Math.atan2(endY - startY, endX - startX);
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(endX, endY);
+                    ctx.lineTo(
+                        endX - headLength * Math.cos(angle - Math.PI / 6),
+                        endY - headLength * Math.sin(angle - Math.PI / 6)
+                    );
+                    ctx.lineTo(
+                        endX - headLength * Math.cos(angle + Math.PI / 6),
+                        endY - headLength * Math.sin(angle + Math.PI / 6)
+                    );
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    // Add option label if present
+                    if (arrow.option !== undefined) {
+                        const optionText = elements[arrow.from].options[arrow.option];
+                        const midX = startX + (endX - startX) * 0.5;
+                        const midY = startY + (endY - startY) * 0.5;
+                        
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(midX - 15, midY - 10, 30, 20);
+                        ctx.fillStyle = '#000000';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.font = 'bold 10px Arial';
+                        ctx.fillText(optionText, midX, midY);
+                        ctx.fillStyle = '#6b7280';
+                    }
+                });
+                
+                // Draw elements
+                elements.forEach(el => {
+                    ctx.fillStyle = '#e0f2fe';
+                    ctx.strokeStyle = '#0369a1';
+                    ctx.lineWidth = 2;
+                    
+                    if (el.type === 'diamond') {
+                        // Draw diamond
+                        const x = el.x * canvas.width;
+                        const y = el.y * canvas.height;
+                        const width = el.width * canvas.width;
+                        const height = el.height * canvas.height;
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(x, y);
+                        ctx.lineTo(x + width/2, y + height/2);
+                        ctx.lineTo(x, y + height);
+                        ctx.lineTo(x - width/2, y + height/2);
+                        ctx.closePath();
+                        ctx.fill();
+                        ctx.stroke();
+                    } else {
+                        // Draw rectangle
+                        ctx.fillRect(
+                            el.x * canvas.width,
+                            el.y * canvas.height,
+                            el.width * canvas.width,
+                            el.height * canvas.height
+                        );
+                        ctx.strokeRect(
+                            el.x * canvas.width,
+                            el.y * canvas.height,
+                            el.width * canvas.width,
+                            el.height * canvas.height
+                        );
+                    }
+                    
+                    // Add text
+                    ctx.fillStyle = '#000000';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    const fontSize = Math.min(12, canvas.width * 0.015);
+                    ctx.font = `${fontSize}px Arial`;
+                    
+                    const textX = el.type === 'diamond' 
+                        ? el.x * canvas.width 
+                        : el.x * canvas.width + el.width * canvas.width / 2;
+                    const textY = el.type === 'diamond' 
+                        ? el.y * canvas.height + el.height * canvas.height / 2 
+                        : el.y * canvas.height + el.height * canvas.height / 2;
+                    
+                    // Split text into lines if needed
+                    const lines = el.text.split('\n');
+                    const lineHeight = fontSize * 1.2;
+                    const startY = textY - (lines.length - 1) * lineHeight / 2;
+                    
+                    lines.forEach((line, i) => {
+                        ctx.fillText(line, textX, startY + i * lineHeight);
+                    });
+                });
+            }
+
+            // Handle hover interactions
+            canvas.addEventListener('mousemove', function(e) {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                let hovered = false;
+                
+                elements.forEach(el => {
+                    if (el.type === 'diamond') {
+                        // Diamond hit test (simplified)
+                        const centerX = el.x * canvas.width;
+                        const centerY = el.y * canvas.height;
+                        const halfWidth = el.width * canvas.width / 2;
+                        const halfHeight = el.height * canvas.height / 2;
+                        
+                        if (Math.abs(x - centerX) / halfWidth + Math.abs(y - centerY) / halfHeight <= 1) {
+                            hovered = true;
+                            showTooltip(e.pageX, e.pageY, el.text, el.descriptions ? 
+                                `${el.descriptions.join('<br><br>')}` : el.description);
+                        }
+                    } else {
+                        // Rectangle hit test
+                        if (x >= el.x * canvas.width && 
+                            x <= el.x * canvas.width + el.width * canvas.width &&
+                            y >= el.y * canvas.height && 
+                            y <= el.y * canvas.height + el.height * canvas.height) {
+                            hovered = true;
+                            showTooltip(e.pageX, e.pageY, el.text, el.description);
+                        }
+                    }
+                });
+                
+                if (!hovered) {
+                    tooltip.classList.add('hidden');
+                }
+            });
+            
+            function showTooltip(pageX, pageY, title, content) {
+                tooltip.innerHTML = `<strong>${title}</strong><div class="mt-1">${content}</div>`;
+                tooltip.style.left = `${pageX + 10}px`;
+                tooltip.style.top = `${pageY + 10}px`;
+                tooltip.classList.remove('hidden');
+            }
+            
+            // Initial setup
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+        });
+    </script>
+</body>
+</html>
