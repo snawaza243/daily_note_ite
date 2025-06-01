@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Improving LLM Reliability | Prompt Engineering Course</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        dark: '#1F2937',
+                        light: '#F3F4F6',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
+        
+        .code-block {
+            font-family: 'Fira Code', monospace;
+            background-color: #1E293B;
+            color: #F8FAFC;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+        
+        .code-comment {
+            color: #94A3B8;
+        }
+        
+        .code-keyword {
+            color: #F472B6;
+        }
+        
+        .code-string {
+            color: #34D399;
+        }
+        
+        .code-function {
+            color: #60A5FA;
+        }
+        
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            margin: 2rem 0;
+        }
+        
+        .tooltip {
+            position: absolute;
+            background-color: rgba(31, 41, 55, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 10;
+            max-width: 300px;
+        }
+        
+        .problem-box {
+            border-left: 4px solid #EF4444;
+            background-color: #FEE2E2;
+        }
+        
+        .solution-box {
+            border-left: 4px solid #10B981;
+            background-color: #D1FAE5;
+        }
+        
+        .technique-box {
+            border-left: 4px solid #3B82F6;
+            background-color: #DBEAFE;
+        }
+    </style>
+</head>
+<body class="bg-light font-sans text-dark">
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold text-primary">Prompt Engineering Course</h1>
+                <nav>
+                    <ul class="flex space-x-6">
+                        <li><a href="#" class="text-gray-600 hover:text-primary transition">Home</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary transition">Modules</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary transition">Resources</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <article class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-8">
+                <h2 class="text-4xl font-bold mb-6 text-dark">Improving LLM Reliability</h2>
+                <p class="text-lg text-gray-700 mb-8">
+                    This module explores techniques to enhance the reliability and consistency of Large Language Model outputs. Learn practical methods to reduce errors, bias, and unpredictability in your AI applications.
+                </p>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">1. Prompt Debiasing</h3>
+                    <p class="mb-4">
+                        LLMs can reflect biases present in their training data. Careful prompt design can help mitigate these biases.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="problem-box p-4 rounded">
+                            <h4 class="font-medium text-red-700 mb-2">Biased Prompt:</h4>
+                            <div class="code-block mb-4">
+                                "Describe the characteristics of a good nurse and a good engineer."
+                            </div>
+                            <h4 class="font-medium mb-2">Biased Output:</h4>
+                            <div class="bg-gray-100 p-4 rounded">
+                                "A good nurse is compassionate, patient, and nurturing, typically female. A good engineer is logical, analytical, and technical, typically male."
+                            </div>
+                        </div>
+                        <div class="solution-box p-4 rounded">
+                            <h4 class="font-medium text-green-700 mb-2">Debiased Prompt:</h4>
+                            <div class="code-block mb-4">
+                                "Describe the characteristics of excellent professionals in nursing and engineering. Avoid gender stereotypes and focus on skills and qualities that anyone can develop."
+                            </div>
+                            <h4 class="font-medium mb-2">Improved Output:</h4>
+                            <div class="bg-gray-100 p-4 rounded">
+                                "Excellent nurses demonstrate strong clinical knowledge, empathy, attention to detail, and communication skills. Outstanding engineers show problem-solving ability, technical expertise, creativity, and collaboration skills. Both professions require dedication and continuous learning."
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-medium mb-2">Python Implementation for Debiasing:</h4>
+                        <div class="code-block">
+                            <span class="code-keyword">from</span> transformers <span class="code-keyword">import</span> pipeline<br><br>
+                            <span class="code-comment"># Initialize text generation pipeline</span><br>
+                            generator = pipeline(<span class="code-string">"text-generation"</span>, model=<span class="code-string">"meta-llama/Meta-Llama-3-8B-Instruct"</span>)<br><br>
+                            <span class="code-comment"># Biased prompt</span><br>
+                            biased_prompt = <span class="code-string">"Describe the characteristics of a good nurse and a good engineer."</span><br>
+                            biased_output = generator(biased_prompt, max_length=200, num_return_sequences=1)<br><br>
+                            <span class="code-comment"># Debiased prompt</span><br>
+                            debiased_prompt = (<span class="code-string">"Describe the characteristics of excellent professionals in nursing and engineering. "</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">"Avoid gender stereotypes and focus on skills and qualities that anyone can develop."</span>)<br>
+                            debiased_output = generator(debiased_prompt, max_length=200, num_return_sequences=1)<br><br>
+                            <span class="code-function">print</span>(<span class="code-string">"Biased output:"</span>, biased_output[0][<span class="code-string">'generated_text'</span>])<br>
+                            <span class="code-function">print</span>(<span class="code-string">"\nDebiased output:"</span>, debiased_output[0][<span class="code-string">'generated_text'</span>])
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">2. Prompt Ensembling</h3>
+                    <p class="mb-4">
+                        Using multiple prompts and aggregating results can improve reliability by reducing variance from any single prompt.
+                    </p>
+                    
+                    <div class="technique-box p-4 rounded mb-6">
+                        <h4 class="font-medium text-blue-700 mb-2">Ensembling Approach:</h4>
+                        <ol class="list-decimal pl-5 space-y-2">
+                            <li>Create 3-5 variations of your prompt addressing the same task</li>
+                            <li>Generate responses for each prompt variation</li>
+                            <li>Aggregate results (majority vote for categorical answers, average for numerical)</li>
+                            <li>Resolve disagreements through additional verification</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-gray-100 p-4 rounded">
+                            <h5 class="font-medium mb-2">Prompt 1:</h5>
+                            <p class="text-sm mb-2">"What is the capital of Burkina Faso?"</p>
+                            <h5 class="font-medium">Response:</h5>
+                            <p>Ouagadougou</p>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded">
+                            <h5 class="font-medium mb-2">Prompt 2:</h5>
+                            <p class="text-sm mb-2">"Identify the capital city of Burkina Faso from these options: a) Bamako b) Ouagadougou c) Accra"</p>
+                            <h5 class="font-medium">Response:</h5>
+                            <p>b) Ouagadougou</p>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded">
+                            <h5 class="font-medium mb-2">Prompt 3:</h5>
+                            <p class="text-sm mb-2">"The capital of Burkina Faso is _"</p>
+                            <h5 class="font-medium">Response:</h5>
+                            <p>Ouagadougou</p>
+                        </div>
+                    </div>
+                    <div class="solution-box p-4 rounded mb-6">
+                        <h4 class="font-medium text-green-700 mb-2">Ensemble Result:</h4>
+                        <p>All three prompts agree the capital is Ouagadougou (high confidence)</p>
+                    </div>
+                    
+                    <div class="canvas-container">
+                        <canvas id="ensemblingChart"></canvas>
+                        <div id="ensemblingTooltip" class="tooltip"></div>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">3. LLM Self-Evaluation</h3>
+                    <p class="mb-4">
+                        Prompting the model to verify its own responses can catch errors and improve accuracy.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="problem-box p-4 rounded">
+                            <h4 class="font-medium text-red-700 mb-2">Initial Response:</h4>
+                            <div class="code-block mb-4">
+                                Prompt: "When was the telephone invented?"<br><br>
+                                Response: "The telephone was invented in 1867 by Alexander Graham Bell."
+                            </div>
+                            <p class="text-gray-700">(Incorrect year - actual invention was 1876)</p>
+                        </div>
+                        <div class="solution-box p-4 rounded">
+                            <h4 class="font-medium text-green-700 mb-2">With Self-Verification:</h4>
+                            <div class="code-block mb-4">
+                                "When was the telephone invented? After answering, check historical records to verify your answer is accurate."
+                            </div>
+                            <h4 class="font-medium mb-2">Improved Response:</h4>
+                            <div class="bg-gray-100 p-4 rounded">
+                                "The telephone was invented by Alexander Graham Bell in 1876. After checking historical records, I confirm this date is correct - Bell received the patent on March 7, 1876, and made the first successful call on March 10, 1876."
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-medium mb-2">Self-Evaluation Prompt Templates:</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-gray-100 p-4 rounded">
+                                <h5 class="font-medium">Fact Verification:</h5>
+                                <div class="code-block text-sm">
+                                    "After answering, verify your response against reliable sources and note any discrepancies."
+                                </div>
+                            </div>
+                            <div class="bg-gray-100 p-4 rounded">
+                                <h5 class="font-medium">Logical Consistency:</h5>
+                                <div class="code-block text-sm">
+                                    "Check if your response contains any contradictions or illogical statements."
+                                </div>
+                            </div>
+                            <div class="bg-gray-100 p-4 rounded">
+                                <h5 class="font-medium">Completeness:</h5>
+                                <div class="code-block text-sm">
+                                    "Review your answer to ensure it fully addresses the question without missing key elements."
+                                </div>
+                            </div>
+                            <div class="bg-gray-100 p-4 rounded">
+                                <h5 class="font-medium">Bias Check:</h5>
+                                <div class="code-block text-sm">
+                                    "Analyze your response for potential biases and revise if found."
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">4. Calibration Techniques</h3>
+                    <p class="mb-4">
+                        Adjusting generation parameters can significantly impact output reliability.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h4 class="font-medium mb-2">Key Parameters:</h4>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li><span class="font-medium">Temperature</span> (0-1): Lower for factual accuracy (0.2-0.5), higher for creativity (0.7-1)</li>
+                                <li><span class="font-medium">Top-p (nucleus sampling)</span>: 0.9 balances creativity and focus</li>
+                                <li><span class="font-medium">Max tokens</span>: Limit response length to prevent rambling</li>
+                                <li><span class="font-medium">Frequency penalty</span>: Reduce repetition (0.1-0.5)</li>
+                                <li><span class="font-medium">Presence penalty</span>: Encourage novelty (0-0.5)</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-2">Python Configuration:</h4>
+                            <div class="code-block">
+                                <span class="code-keyword">from</span> transformers <span class="code-keyword">import</span> pipeline<br><br>
+                                <span class="code-comment"># High-reliability configuration</span><br>
+                                reliable_config = {<br>
+                                &nbsp;&nbsp;<span class="code-string">"temperature"</span>: 0.3,  <span class="code-comment"># More deterministic</span><br>
+                                &nbsp;&nbsp;<span class="code-string">"top_p"</span>: 0.9,       <span class="code-comment"># Focused sampling</span><br>
+                                &nbsp;&nbsp;<span class="code-string">"max_length"</span>: 200, <span class="code-comment"># Reasonable length</span><br>
+                                &nbsp;&nbsp;<span class="code-string">"repetition_penalty"</span>: 1.2  <span class="code-comment"># Reduce repetition</span><br>
+                                }<br><br>
+                                generator = pipeline(<span class="code-string">"text-generation"</span>, model=<span class="code-string">"meta-llama/Meta-Llama-3-8B-Instruct"</span>)<br>
+                                response = generator(<span class="code-string">"Explain quantum computing basics"</span>, **reliable_config)
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-gray-100 p-4 rounded">
+                            <h5 class="font-medium">Low Temp (0.2)</h5>
+                            <p class="text-sm">"Quantum computing uses qubits that can exist in superposition of states 0 and 1, enabling parallel computation through quantum entanglement and interference."</p>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded">
+                            <h5 class="font-medium">Medium Temp (0.5)</h5>
+                            <p class="text-sm">"Quantum computers leverage quantum mechanical phenomena like superposition and entanglement. Unlike classical bits, qubits can represent multiple states simultaneously, potentially solving certain problems much faster."</p>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded">
+                            <h5 class="font-medium">High Temp (0.9)</h5>
+                            <p class="text-sm">"Imagine a computer that dances with subatomic particles! Quantum computing harnesses the strange, wonderful world of quantum physics - where cats are both dead and alive, and particles communicate instantly across galaxies!"</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">5. Improving Mathematical Accuracy</h3>
+                    <p class="mb-4">
+                        LLMs often struggle with precise calculations but can improve with proper prompting.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="problem-box p-4 rounded">
+                            <h4 class="font-medium text-red-700 mb-2">Direct Question:</h4>
+                            <div class="code-block mb-4">
+                                "Calculate 473 × 829"
+                            </div>
+                            <h4 class="font-medium mb-2">Incorrect Output:</h4>
+                            <div class="bg-gray-100 p-4 rounded">
+                                "473 × 829 = 392,117"<br>
+                                (Correct answer: 392,117 is correct, but LLMs often make mistakes on such calculations)
+                            </div>
+                        </div>
+                        <div class="solution-box p-4 rounded">
+                            <h4 class="font-medium text-green-700 mb-2">Improved Approach:</h4>
+                            <div class="code-block mb-4">
+                                "Break down the calculation of 473 × 829 step by step using the distributive property of multiplication. Show each intermediate step before providing the final answer."
+                            </div>
+                            <h4 class="font-medium mb-2">Better Output:</h4>
+                            <div class="bg-gray-100 p-4 rounded">
+                                "Let's calculate 473 × 829 step by step:<br>
+                                1) 400 × 829 = 331,600<br>
+                                2) 70 × 829 = 58,030<br>
+                                3) 3 × 829 = 2,487<br>
+                                Now sum the partial results:<br>
+                                331,600 + 58,030 = 389,630<br>
+                                389,630 + 2,487 = 392,117<br>
+                                Final answer: 473 × 829 = 392,117"
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-medium mb-2">Math Reliability Techniques:</h4>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li><span class="font-medium">Step-by-step prompting:</span> Ask the model to show its work</li>
+                            <li><span class="font-medium">Verification steps:</span> "Double-check each calculation"</li>
+                            <li><span class="font-medium">External tools:</span> "Generate Python code to solve this math problem"</li>
+                            <li><span class="font-medium">Unit inclusion:</span> "Include units in all calculations"</li>
+                            <li><span class="font-medium">Estimation first:</span> "Provide a rough estimate before precise calculation"</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">6. External Validation</h3>
+                    <p class="mb-4">
+                        Cross-checking LLM outputs with external sources or tools enhances reliability.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h4 class="font-medium mb-2">Validation Approaches:</h4>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li><span class="font-medium">Fact-checking APIs:</span> NewsGuard, FactCheck.org</li>
+                                <li><span class="font-medium">Calculation tools:</span> Wolfram Alpha, calculator plugins</li>
+                                <li><span class="font-medium">Database lookups:</span> Verify against known datasets</li>
+                                <li><span class="font-medium">Human review:</span> Critical claims should be verified</li>
+                                <li><span class="font-medium">Multi-model consensus:</span> Compare outputs across different LLMs</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-2">Python Implementation:</h4>
+                            <div class="code-block">
+                                <span class="code-keyword">import</span> requests<br>
+                                <span class="code-keyword">from</span> transformers <span class="code-keyword">import</span> pipeline<br><br>
+                                <span class="code-comment"># Get LLM response</span><br>
+                                generator = pipeline(<span class="code-string">"text-generation"</span>, model=<span class="code-string">"meta-llama/Meta-Llama-3-8B-Instruct"</span>)<br>
+                                response = generator(<span class="code-string">"What is the current population of Tokyo?"</span>, max_length=100)[0][<span class="code-string">'generated_text'</span>]<br><br>
+                                <span class="code-comment"># Verify with external API</span><br>
+                                <span class="code-keyword">def</span> <span class="code-function">verify_population</span>(city):<br>
+                                &nbsp;&nbsp;api_url = <span class="code-string">f"https://api.populationdata.com/cities/{city}"</span><br>
+                                &nbsp;&nbsp;data = requests.get(api_url).json()<br>
+                                &nbsp;&nbsp;<span class="code-keyword">return</span> data[<span class="code-string">'population'</span>]<br><br>
+                                <span class="code-comment"># Compare results</span><br>
+                                llm_population = <span class="code-function">extract_number</span>(response)  <span class="code-comment"># Assume we have this helper function</span><br>
+                                api_population = verify_population(<span class="code-string">"tokyo"</span>)<br>
+                                <span class="code-function">print</span>(<span class="code-string">f"LLM estimate: {llm_population:,}, API data: {api_population:,}"</span>)
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">7. Prompt Refinement Iterations</h3>
+                    <p class="mb-4">
+                        Iteratively improving prompts based on output analysis significantly enhances reliability.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="problem-box p-4 rounded">
+                            <h4 class="font-medium text-red-700 mb-2">Initial Prompt:</h4>
+                            <div class="code-block mb-4">
+                                "Explain blockchain technology"
+                            </div>
+                            <h4 class="font-medium mb-2">Issues:</h4>
+                            <ul class="list-disc pl-5">
+                                <li>Too broad - could be technical or non-technical</li>
+                                <li>No target audience specified</li>
+                                <li>No length guidance</li>
+                                <li>No structure requirements</li>
+                            </ul>
+                        </div>
+                        <div class="solution-box p-4 rounded">
+                            <h4 class="font-medium text-green-700 mb-2">Refined Prompt:</h4>
+                            <div class="code-block mb-4">
+                                "Explain blockchain technology to a non-technical business audience in 3 paragraphs. Use analogies from everyday life. Structure your response as: 1) Core concept 2) How it works 3) Business benefits. Avoid technical jargon."
+                            </div>
+                            <h4 class="font-medium mb-2">Improved Output:</h4>
+                            <div class="bg-gray-100 p-4 rounded">
+                                <p><strong>Core Concept:</strong> Imagine a shared Google Doc that everyone can see but no one can alter secretly - that's like a blockchain. It's a digital ledger that records transactions across many computers securely and transparently.</p>
+                                <p><strong>How It Works:</strong> When someone makes a transaction, it's grouped with others in a "block." Network participants verify these blocks using complex math. Once verified, the block joins the chain of previous transactions permanently.</p>
+                                <p><strong>Business Benefits:</strong> Blockchain reduces fraud by making tampering evident. It cuts middlemen in transactions, saving costs. It enables trust between parties who don't know each other through mathematical verification rather than institutional trust.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="technique-box p-4 rounded">
+                        <h4 class="font-medium text-blue-700 mb-2">Refinement Process:</h4>
+                        <ol class="list-decimal pl-5 space-y-2">
+                            <li>Test initial prompt with diverse inputs</li>
+                            <li>Analyze failure modes (incomplete, inaccurate, or off-target responses)</li>
+                            <li>Add constraints and specificity to address issues</li>
+                            <li>Test refined prompt</li>
+                            <li>Repeat until consistent quality is achieved</li>
+                        </ol>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">8. Handling Ambiguity</h3>
+                    <p class="mb-4">
+                        Clarifying ambiguous inputs prevents unreliable or irrelevant responses.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="problem-box p-4 rounded">
+                            <h4 class="font-medium text-red-700 mb-2">Ambiguous Prompt:</h4>
+                            <div class="code-block mb-4">
+                                "Tell me about banks"
+                            </div>
+                            <h4 class="font-medium mb-2">Potential Issues:</h4>
+                            <ul class="list-disc pl-5">
+                                <li>Financial institutions or river banks?</li>
+                                <li>Historical, operational, or regulatory aspects?</li>
+                                <li>Target audience knowledge level?</li>
+                                <li>Length and depth of response?</li>
+                            </ul>
+                        </div>
+                        <div class="solution-box p-4 rounded">
+                            <h4 class="font-medium text-green-700 mb-2">Clarified Prompt:</h4>
+                            <div class="code-block mb-4">
+                                "Explain how commercial banks operate as financial intermediaries to a high school student. Cover: 1) Basic functions 2) How they make money 3) Role in the economy. Use simple analogies and limit to 300 words."
+                            </div>
+                            <h4 class="font-medium mb-2">Better Output:</h4>
+                            <div class="bg-gray-100 p-4 rounded">
+                                <p><strong>Basic Functions:</strong> Banks are like money traffic controllers. They take deposits (like parking money in a garage), provide loans (renting out that money to others), and enable payments (money taxis moving funds between people).</p>
+                                <p><strong>Making Money:</strong> Banks earn by charging higher interest on loans than they pay on deposits. The difference (spread) is their profit. They also charge fees for services like accounts and transfers.</p>
+                                <p><strong>Economic Role:</strong> Banks keep money flowing in the economy like blood vessels. They connect savers with borrowers, enabling businesses to grow and people to buy homes. The Federal Reserve oversees them like a referee to prevent reckless lending.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section>
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">Reliability Checklist</h3>
+                    <div class="bg-white border border-gray-200 rounded-lg p-6">
+                        <h4 class="font-medium mb-3">Before Deploying LLM Applications:</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex items-start">
+                                <svg class="h-5 w-5 text-green-500 mt-0.5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Have you tested for biased outputs?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <svg class="h-5 w-5 text-green-500 mt-0.5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Are critical facts being verified externally?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <svg class="h-5 w-5 text-green-500 mt-0.5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Have you implemented self-evaluation steps?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <svg class="h-5 w-5 text-green-500 mt-0.5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Are generation parameters properly calibrated?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <svg class="h-5 w-5 text-green-500 mt-0.5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Have you tested with ambiguous inputs?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <svg class="h-5 w-5 text-green-500 mt-0.5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Is there a human review process for critical outputs?</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </article>
+    </main>
+
+    <footer class="bg-dark text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-xl font-bold text-primary">Prompt Engineering Course</h3>
+                    <p class="text-gray-400 mt-1">Building Reliable AI Systems - 2025 Edition</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition">Terms</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">Privacy</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">Contact</a>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-6 pt-6 text-center text-gray-400 text-sm">
+                <p>© 2025 AI Education Institute. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize canvas visualization for prompt ensembling
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('ensemblingChart');
+            const ctx = canvas.getContext('2d');
+            const tooltip = document.getElementById('ensemblingTooltip');
+            
+            // Set canvas dimensions
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            // Visualization data
+            const steps = [
+                { 
+                    id: 1, 
+                    x: 100, 
+                    y: 150, 
+                    title: "Original Task", 
+                    description: "The information need or problem to be solved",
+                    color: "#3B82F6"
+                },
+                { 
+                    id: 2, 
+                    x: 300, 
+                    y: 50, 
+                    title: "Prompt Variant 1", 
+                    description: "First phrasing of the prompt addressing the task",
+                    color: "#F59E0B"
+                },
+                { 
+                    id: 3, 
+                    x: 300, 
+                    y: 150, 
+                    title: "Prompt Variant 2", 
+                    description: "Second phrasing with different approach",
+                    color: "#10B981"
+                },
+                { 
+                    id: 4, 
+                    x: 300, 
+                    y: 250, 
+                    title: "Prompt Variant 3", 
+                    description: "Third phrasing with additional constraints",
+                    color: "#8B5CF6"
+                },
+                { 
+                    id: 5, 
+                    x: 500, 
+                    y: 50, 
+                    title: "Response 1", 
+                    description: "Output from first prompt variant",
+                    color: "#F59E0B"
+                },
+                { 
+                    id: 6, 
+                    x: 500, 
+                    y: 150, 
+                    title: "Response 2", 
+                    description: "Output from second prompt variant",
+                    color: "#10B981"
+                },
+                { 
+                    id: 7, 
+                    x: 500, 
+                    y: 250, 
+                    title: "Response 3", 
+                    description: "Output from third prompt variant",
+                    color: "#8B5CF6"
+                },
+                { 
+                    id: 8, 
+                    x: 700, 
+                    y: 150, 
+                    title: "Ensemble Result", 
+                    description: "Aggregated response combining insights from all variants",
+                    color: "#EF4444"
+                }
+            ];
+            
+            const connections = [
+                { from: 1, to: 2, label: "Create" },
+                { from: 1, to: 3, label: "Create" },
+                { from: 1, to: 4, label: "Create" },
+                { from: 2, to: 5, label: "Generate" },
+                { from: 3, to: 6, label: "Generate" },
+                { from: 4, to: 7, label: "Generate" },
+                { from: 5, to: 8, label: "Aggregate" },
+                { from: 6, to: 8, label: "Aggregate" },
+                { from: 7, to: 8, label: "Aggregate" }
+            ];
+            
+            // Draw the visualization
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw connections first
+                connections.forEach(conn => {
+                    const fromStep = steps.find(s => s.id === conn.from);
+                    const toStep = steps.find(s => s.id === conn.to);
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(fromStep.x, fromStep.y);
+                    ctx.lineTo(toStep.x, toStep.y);
+                    ctx.strokeStyle = "#9CA3AF";
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                    
+                    // Connection label
+                    const midX = (fromStep.x + toStep.x) / 2;
+                    const midY = (fromStep.y + toStep.y) / 2;
+                    ctx.fillStyle = "#1F2937";
+                    ctx.font = "12px Inter";
+                    ctx.textAlign = "center";
+                    ctx.fillText(conn.label, midX, midY - 10);
+                });
+                
+                // Draw steps
+                steps.forEach(step => {
+                    // Step circle
+                    ctx.beginPath();
+                    ctx.arc(step.x, step.y, 30, 0, Math.PI * 2);
+                    ctx.fillStyle = step.color;
+                    ctx.fill();
+                    
+                    // Step number
+                    ctx.fillStyle = "#FFFFFF";
+                    ctx.font = "bold 14px Inter";
+                    ctx.textAlign = "center";
+                    ctx.fillText(step.id, step.x, step.y + 5);
+                });
+                
+                // Draw step titles
+                steps.forEach(step => {
+                    ctx.fillStyle = "#1F2937";
+                    ctx.font = "bold 12px Inter";
+                    ctx.textAlign = "center";
+                    ctx.fillText(step.title, step.x, step.y + 40);
+                });
+            }
+            
+            // Add interactivity
+            canvas.addEventListener('mousemove', function(e) {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                let hoveredStep = null;
+                steps.forEach(step => {
+                    const distance = Math.sqrt((x - step.x) ** 2 + (y - step.y) ** 2);
+                    if (distance <= 30) {
+                        hoveredStep = step;
+                    }
+                });
+                
+                if (hoveredStep) {
+                    canvas.style.cursor = 'pointer';
+                    
+                    // Position tooltip near the step
+                    tooltip.style.left = `${hoveredStep.x + 40}px`;
+                    tooltip.style.top = `${hoveredStep.y - 20}px`;
+                    tooltip.style.opacity = '1';
+                    tooltip.innerHTML = `<strong>${hoveredStep.title}</strong><br>${hoveredStep.description}`;
+                } else {
+                    canvas.style.cursor = 'default';
+                    tooltip.style.opacity = '0';
+                }
+            });
+            
+            // Initial draw
+            draw();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+                draw();
+            });
+        });
+    </script>
+</body>
+</html>

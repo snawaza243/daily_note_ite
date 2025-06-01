@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-World Usage Examples of LLMs | Prompt Engineering Course</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        dark: '#1F2937',
+                        light: '#F3F4F6',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
+        
+        .code-block {
+            font-family: 'Fira Code', monospace;
+            background-color: #1E293B;
+            color: #F8FAFC;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+        
+        .code-comment {
+            color: #94A3B8;
+        }
+        
+        .code-keyword {
+            color: #F472B6;
+        }
+        
+        .code-string {
+            color: #34D399;
+        }
+        
+        .code-function {
+            color: #60A5FA;
+        }
+        
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            margin: 2rem 0;
+        }
+        
+        .tooltip {
+            position: absolute;
+            background-color: rgba(31, 41, 55, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 10;
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body class="bg-light font-sans text-dark">
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold text-primary">Prompt Engineering Course</h1>
+                <nav>
+                    <ul class="flex space-x-6">
+                        <li><a href="#" class="text-secondary font-medium hover:text-primary transition">Home</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary transition">Modules</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary transition">Resources</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <article class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-8">
+                <h2 class="text-4xl font-bold mb-6 text-dark">Real-World Usage Examples of LLMs</h2>
+                <p class="text-lg text-gray-700 mb-8">
+                    This module explores practical applications of Large Language Models (LLMs) across various domains. 
+                    You'll learn how to craft effective prompts for common real-world tasks, with examples and interactive demonstrations.
+                </p>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">1. Structured Data Extraction</h3>
+                    <p class="mb-4">
+                        LLMs can transform unstructured text into structured formats like JSON, CSV, or tables. This is particularly useful for data processing pipelines.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h4 class="font-medium mb-2">Example Prompt:</h4>
+                            <div class="code-block mb-4">
+                                Extract the product details from the following text as JSON with fields for name, price, and features:<br><br>
+                                "The Quantum X900 laptop features a 15.6" 4K display, 32GB RAM, and 1TB SSD storage. It's priced at $1,299.99 and comes with a 2-year warranty."
+                            </div>
+                            <button onclick="toggleOutput('data-output')" class="bg-secondary text-white px-4 py-2 rounded hover:bg-green-600 transition">
+                                Show Output
+                            </button>
+                        </div>
+                        <div id="data-output" class="hidden">
+                            <h4 class="font-medium mb-2">Output:</h4>
+                            <div class="code-block">
+                                {<br>
+                                &nbsp;&nbsp;"name": "Quantum X900 laptop",<br>
+                                &nbsp;&nbsp;"price": 1299.99,<br>
+                                &nbsp;&nbsp;"features": [<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;"15.6\" 4K display",<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;"32GB RAM",<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;"1TB SSD storage",<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;"2-year warranty"<br>
+                                &nbsp;&nbsp;]<br>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-medium mb-2">Python Implementation:</h4>
+                        <div class="code-block">
+                            <span class="code-keyword">from</span> transformers <span class="code-keyword">import</span> pipeline<br><br>
+                            <span class="code-comment"># Initialize the text-to-json pipeline</span><br>
+                            extractor = pipeline(<span class="code-string">"text2text-generation"</span>, model=<span class="code-string">"google/flan-t5-large"</span>)<br><br>
+                            <span class="code-comment"># Define the prompt and input text</span><br>
+                            prompt = <span class="code-string">"Extract the product details as JSON with name, price, and features:"</span><br>
+                            text = <span class="code-string">"The Quantum X900 laptop features a 15.6\" 4K display..."</span><br><br>
+                            <span class="code-comment"># Generate the structured output</span><br>
+                            result = extractor(prompt + text)<br>
+                            <span class="code-function">print</span>(result[<span class="code-string">'generated_text'</span>])
+                        </div>
+                    </div>
+                    
+                    <div class="canvas-container">
+                        <canvas id="dataFlowChart"></canvas>
+                        <div id="dataTooltip" class="tooltip"></div>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">2. Inferring: Sentiment Analysis & Summarization</h3>
+                    <p class="mb-4">
+                        LLMs can analyze text for sentiment, extract key topics, and create concise summaries—valuable for processing customer feedback or research papers.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h4 class="font-medium mb-2">Sentiment Analysis Prompt:</h4>
+                            <div class="code-block mb-4">
+                                Analyze the sentiment of this product review as positive, neutral, or negative:<br><br>
+                                "The battery life is excellent, lasting a full day of heavy use. However, the keyboard feels cheap and the touchpad is unresponsive at times."
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-2">Output:</h4>
+                            <div class="code-block">
+                                Sentiment: Mixed (positive and negative aspects)<br><br>
+                                Positive aspects: Battery life<br>
+                                Negative aspects: Keyboard quality, touchpad responsiveness
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-medium mb-2">Summarization Prompt:</h4>
+                            <div class="code-block mb-4">
+                                Summarize the following article in 3 bullet points:<br><br>
+                                [Article text about recent advancements in renewable energy...]
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-2">Output:</h4>
+                            <div class="code-block">
+                                • New solar panel design achieves 25% higher efficiency<br>
+                                • Breakthrough in battery storage reduces costs by 40%<br>
+                                • Global renewable energy capacity grew by 15% in 2024
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">3. Writing Professional Emails</h3>
+                    <p class="mb-4">
+                        LLMs can help craft well-structured emails with specific tones, saving time on business communication.
+                    </p>
+                    
+                    <div class="mb-6">
+                        <div class="flex space-x-4 mb-4">
+                            <button onclick="showEmailExample('formal')" class="bg-primary text-white px-4 py-2 rounded hover:bg-blue-600 transition">Formal</button>
+                            <button onclick="showEmailExample('persuasive')" class="bg-primary text-white px-4 py-2 rounded hover:bg-blue-600 transition">Persuasive</button>
+                            <button onclick="showEmailExample('followup')" class="bg-primary text-white px-4 py-2 rounded hover:bg-blue-600 transition">Follow-up</button>
+                        </div>
+                        
+                        <div id="formal-email" class="email-example">
+                            <h4 class="font-medium mb-2">Prompt:</h4>
+                            <div class="code-block mb-4">
+                                Write a formal email to a client named Mr. Johnson, explaining a 2-week delay in the project timeline due to unforeseen technical challenges. Assure them we're allocating additional resources and will deliver by the new deadline of June 15th.
+                            </div>
+                            <h4 class="font-medium mb-2">Output:</h4>
+                            <div class="bg-gray-100 p-4 rounded">
+                                <p>Subject: Update on Project Timeline</p><br>
+                                <p>Dear Mr. Johnson,</p><br>
+                                <p>I hope this message finds you well. I'm writing to inform you that we've encountered unforeseen technical challenges that require us to adjust the project timeline. After careful assessment, we've determined that we'll need approximately two additional weeks to resolve these issues while maintaining our quality standards.</p><br>
+                                <p>Please rest assured that we've already allocated additional resources to address these challenges, and our team is working diligently to complete the project by the new deadline of June 15th.</p><br>
+                                <p>We sincerely apologize for this adjustment and appreciate your understanding. Should you have any questions or require additional information, please don't hesitate to contact me directly.</p><br>
+                                <p>Best regards,<br>
+                                [Your Name]<br>
+                                [Your Position]</p>
+                            </div>
+                        </div>
+                        
+                        <div id="persuasive-email" class="email-example hidden">
+                            <h4 class="font-medium mb-2">Prompt:</h4>
+                            <div class="code-block mb-4">
+                                Write a persuasive email to potential customers about our new productivity software, emphasizing time savings (average 10 hours/week), seamless integration, and the limited-time 30% discount offer ending May 31st.
+                            </div>
+                            <h4 class="font-medium mb-2">Output:</h4>
+                            <div class="bg-gray-100 p-4 rounded">
+                                <p>Subject: Save 10 Hours Weekly + 30% Off Ends Soon</p><br>
+                                <p>Hi [First Name],</p><br>
+                                <p>Are you tired of wasting precious hours on repetitive tasks? Our new ProductivityPro software helps professionals like you save an average of 10 hours every week by automating routine work and seamlessly integrating with your existing tools.</p><br>
+                                <p>For a limited time, we're offering 30% off all annual subscriptions—but this special discount ends May 31st. This is your chance to:</p>
+                                <ul class="list-disc pl-5 mt-2">
+                                    <li>Regain 40+ hours each month</li>
+                                    <li>Work smarter with our AI-powered automation</li>
+                                    <li>Connect all your tools in one dashboard</li>
+                                </ul><br>
+                                <p>Join thousands of professionals who have transformed their workdays. Click below to claim your discount before it's gone:</p><br>
+                                <p>[Get ProductivityPro Now]</p><br>
+                                <p>Best,<br>
+                                [Your Name]</p>
+                            </div>
+                        </div>
+                        
+                        <div id="followup-email" class="email-example hidden">
+                            <h4 class="font-medium mb-2">Prompt:</h4>
+                            <div class="code-block mb-4">
+                                Write a polite follow-up email to a colleague who hasn't responded to your previous request for feedback on the project proposal. Keep it friendly but professional.
+                            </div>
+                            <h4 class="font-medium mb-2">Output:</h4>
+                            <div class="bg-gray-100 p-4 rounded">
+                                <p>Subject: Gentle Reminder: Feedback Request</p><br>
+                                <p>Hi [Colleague's Name],</p><br>
+                                <p>I hope you're doing well! I wanted to follow up on my previous email from [date] regarding your feedback on the [Project Name] proposal. I know you're busy, but your insights would be incredibly valuable as we finalize the plan.</p><br>
+                                <p>If you could share your thoughts by [specific date if applicable], it would help us stay on track. Of course, if you need more time or have any questions, please let me know.</p><br>
+                                <p>Thanks so much for your help with this!</p><br>
+                                <p>Best regards,<br>
+                                [Your Name]</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">4. Coding Assistance</h3>
+                    <p class="mb-4">
+                        LLMs excel at explaining, generating, and debugging code across multiple programming languages.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h4 class="font-medium mb-2">Code Generation Prompt:</h4>
+                            <div class="code-block mb-4">
+                                Write a Python function that takes a list of numbers and returns a dictionary with the mean, median, and mode. Include docstring and type hints.
+                            </div>
+                            <button onclick="toggleOutput('code-output')" class="bg-secondary text-white px-4 py-2 rounded hover:bg-green-600 transition">
+                                Show Solution
+                            </button>
+                        </div>
+                        <div id="code-output" class="hidden">
+                            <h4 class="font-medium mb-2">Output:</h4>
+                            <div class="code-block">
+                                <span class="code-keyword">from</span> typing <span class="code-keyword">import</span> List, Dict<br>
+                                <span class="code-keyword">from</span> statistics <span class="code-keyword">import</span> mean, median, mode<br><br>
+                                <span class="code-keyword">def</span> <span class="code-function">calculate_stats</span>(numbers: List[float]) -> Dict[str, float]:<br>
+                                &nbsp;&nbsp;<span class="code-string">"""Calculate basic statistics from a list of numbers.<br><br>
+                                &nbsp;&nbsp;Args:<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;numbers: List of numeric values<br><br>
+                                &nbsp;&nbsp;Returns:<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;Dictionary with 'mean', 'median', and 'mode' keys<br>
+                                &nbsp;&nbsp;"""</span><br>
+                                &nbsp;&nbsp;<span class="code-keyword">try</span>:<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;mode_val = mode(numbers)<br>
+                                &nbsp;&nbsp;<span class="code-keyword">except</span> StatisticsError:<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;mode_val = <span class="code-keyword">None</span><br><br>
+                                &nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">"mean"</span>: mean(numbers),<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">"median"</span>: median(numbers),<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">"mode"</span>: mode_val<br>
+                                &nbsp;&nbsp;}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-medium mb-2">Debugging Prompt:</h4>
+                            <div class="code-block mb-4">
+                                Explain the error in this Python code and suggest a fix:<br><br>
+                                def calculate_discount(price, discount):<br>
+                                &nbsp;&nbsp;return price - (price * discount)<br><br>
+                                # When called with calculate_discount(100, 0.2) it works,<br>
+                                # but with calculate_discount(100, 20) it gives wrong result
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-2">Output:</h4>
+                            <div class="code-block">
+                                <span class="code-comment"># The issue is inconsistent discount parameter handling.</span><br>
+                                <span class="code-comment"># The function expects discount as decimal (0.2 for 20%),</span><br>
+                                <span class="code-comment"># but sometimes gets percentage (20 for 20%).</span><br><br>
+                                <span class="code-comment"># Solution 1: Document expectation and validate input</span><br>
+                                <span class="code-keyword">def</span> <span class="code-function">calculate_discount</span>(price: float, discount: float) -> float:<br>
+                                &nbsp;&nbsp;<span class="code-string">"""Calculate price after discount.<br>
+                                &nbsp;&nbsp;Args:<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;discount: Decimal (e.g., 0.2 for 20% off)<br>
+                                &nbsp;&nbsp;"""</span><br>
+                                &nbsp;&nbsp;<span class="code-keyword">if</span> discount > 1:  <span class="code-comment"># Assume percentage was passed</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;discount /= 100<br>
+                                &nbsp;&nbsp;<span class="code-keyword">return</span> price * (1 - discount)
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">5. Study Buddy & Learning Assistance</h3>
+                    <p class="mb-4">
+                        LLMs can simplify complex topics, generate study materials, and create practice questions.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h4 class="font-medium mb-2">Simplification Prompt:</h4>
+                            <div class="code-block mb-4">
+                                Explain quantum computing to a high school student using simple analogies and avoid technical jargon. Focus on the key concepts of qubits, superposition, and entanglement.
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-2">Output:</h4>
+                            <div class="bg-gray-100 p-4 rounded">
+                                <p>Quantum computing is like having a magical notebook that can be in multiple states at once. While regular computers use bits (like light switches that are either ON or OFF), quantum computers use qubits that can be ON, OFF, or both at the same time—this is called superposition.</p>
+                                <p class="mt-2">Imagine spinning a coin—while it's spinning, it's not just heads or tails, but in a mix of both states. Qubits work similarly until you "look" at them (measure them), when they settle into one state.</p>
+                                <p class="mt-2">Entanglement is like having two magical coins that are linked—no matter how far apart they are, if you spin one and it lands heads, the other will instantly land tails. This spooky connection helps quantum computers solve certain problems much faster than regular computers.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-medium mb-2">Quiz Generation Prompt:</h4>
+                            <div class="code-block mb-4">
+                                Create a 5-question multiple choice quiz about basic machine learning concepts for beginners. Include one question about supervised vs. unsupervised learning, one about neural networks, one about overfitting, one about feature engineering, and one about evaluation metrics. Provide the correct answers.
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-2">Output:</h4>
+                            <div class="bg-gray-100 p-4 rounded">
+                                <p class="font-medium">1. What is the main difference between supervised and unsupervised learning?</p>
+                                <ul class="list-disc pl-5 mt-1">
+                                    <li>A) Supervised learning uses labeled data, unsupervised doesn't</li>
+                                    <li>B) Supervised learning is faster</li>
+                                    <li>C) Unsupervised learning always gives better results</li>
+                                </ul>
+                                <p class="mt-3 font-medium">2. What are neural networks loosely inspired by?</p>
+                                <ul class="list-disc pl-5 mt-1">
+                                    <li>A) The structure of atoms</li>
+                                    <li>B) The human brain's neurons</li>
+                                    <li>C) Computer processors</li>
+                                </ul>
+                                <p class="mt-3 font-medium">3. Overfitting occurs when a model:</p>
+                                <ul class="list-disc pl-5 mt-1">
+                                    <li>A) Performs well on training data but poorly on new data</li>
+                                    <li>B) Is too simple to capture patterns</li>
+                                    <li>C) Has too few parameters</li>
+                                </ul>
+                                <p class="mt-3"><span class="font-medium">Correct answers:</span> 1-A, 2-B, 3-A</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">6. Designing Chatbots</h3>
+                    <p class="mb-4">
+                        LLMs can power conversational agents with predefined behaviors and personalities.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-medium mb-2">Chatbot Prompt:</h4>
+                            <div class="code-block mb-4">
+                                You are a friendly customer support bot for an e-commerce store called "TechGadgets". Your role is to:<br>
+                                - Greet customers warmly<br>
+                                - Answer questions about products, shipping, and returns<br>
+                                - Escalate complex issues to human agents<br>
+                                - Maintain a helpful but professional tone<br><br>
+                                The customer says: "Hi, I ordered a wireless charger 3 days ago but haven't received any shipping update. Can you help?"
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-2">Output:</h4>
+                            <div class="bg-gray-100 p-4 rounded">
+                                <p>"Hello! Thanks for reaching out to TechGadgets support. I'd be happy to check on your order. Could you please share your order number so I can look up the details? Our standard shipping usually takes 3-5 business days, but I can check the current status for you."</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h4 class="font-medium mb-2">Python Implementation:</h4>
+                        <div class="code-block">
+                            <span class="code-keyword">from</span> transformers <span class="code-keyword">import</span> pipeline<br><br>
+                            <span class="code-comment"># Initialize the chatbot with our system prompt</span><br>
+                            chatbot = pipeline(<span class="code-string">"conversational"</span>, model=<span class="code-string">"facebook/blenderbot-400M-distill"</span>)<br><br>
+                            <span class="code-comment"># System message defines the bot's behavior</span><br>
+                            system_prompt = <span class="code-string">"""You are a friendly customer support bot for TechGadgets...</span><span class="code-string">"""</span><br><br>
+                            <span class="code-comment"># Conversation history</span><br>
+                            conversation = [<br>
+                            &nbsp;&nbsp;{<span class="code-string">"role"</span>: <span class="code-string">"system"</span>, <span class="code-string">"content"</span>: system_prompt},<br>
+                            &nbsp;&nbsp;{<span class="code-string">"role"</span>: <span class="code-string">"user"</span>, <span class="code-string">"content"</span>: <span class="code-string">"Hi, I ordered a wireless charger..."</span>}<br>
+                            ]<br><br>
+                            <span class="code-comment"># Generate response</span><br>
+                            response = chatbot(conversation)<br>
+                            <span class="code-function">print</span>(response[<span class="code-string">'generated_text'</span>])
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">7. Content Generation</h3>
+                    <p class="mb-4">
+                        LLMs can assist with creating blog posts, social media content, and other marketing materials.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-medium mb-2">Blog Post Prompt:</h4>
+                            <div class="code-block mb-4">
+                                Write a 300-word blog post introduction about the benefits of remote work for both employees and employers. Focus on productivity, work-life balance, and cost savings. Use a friendly, engaging tone and include statistics where relevant.
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-2">Output:</h4>
+                            <div class="bg-gray-100 p-4 rounded">
+                                <p class="font-medium">The Remote Work Revolution: Why Everyone Wins</p>
+                                <p class="mt-2">The traditional 9-to-5 office model is undergoing a dramatic transformation. According to a 2024 Global Workplace Report, 72% of knowledge workers now operate remotely at least part-time—and both employees and employers are reaping the benefits.</p>
+                                <p class="mt-2">For employees, remote work offers unparalleled flexibility. A Stanford study found that remote workers reported 25% less stress and 50% lower turnover rates. The elimination of commutes (saving the average worker 200+ hours annually) translates directly into better work-life balance and more time for family, hobbies, and self-care.</p>
+                                <p class="mt-2">Employers benefit too. Companies report 15-20% productivity boosts from remote teams, along with significant real estate savings. Tech giant Dell saved $12 million annually by reducing office space, while maintaining employee satisfaction scores above 90%.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">8. Data Analysis Support</h3>
+                    <p class="mb-4">
+                        LLMs can help interpret data, generate insights, and even suggest visualizations.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h4 class="font-medium mb-2">Analysis Prompt:</h4>
+                            <div class="code-block mb-4">
+                                Analyze this sales data and identify 3 key insights and 2 recommendations:<br><br>
+                                - Q1 Revenue: $1.2M (15% growth YoY)<br>
+                                - Q2 Revenue: $1.1M (8% growth YoY)<br>
+                                - Customer acquisition cost increased from $50 to $75<br>
+                                - Retention rate dropped from 85% to 78%<br>
+                                - New product line contributed 25% of Q2 revenue
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-2">Output:</h4>
+                            <div class="bg-gray-100 p-4 rounded">
+                                <p class="font-medium">Key Insights:</p>
+                                <ol class="list-decimal pl-5 mt-1">
+                                    <li>Revenue growth is slowing despite new product success (25% contribution)</li>
+                                    <li>Increasing acquisition costs and declining retention suggest customer satisfaction issues</li>
+                                    <li>The new product line is performing well but may be cannibalizing existing products</li>
+                                </ol>
+                                <p class="mt-3 font-medium">Recommendations:</p>
+                                <ol class="list-decimal pl-5 mt-1">
+                                    <li>Investigate reasons for retention drop (survey customers, analyze support tickets)</li>
+                                    <li>Allocate more budget to retain existing customers rather than acquire new ones</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section>
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">9. Prompt Engineering Workflow</h3>
+                    <p class="mb-4">
+                        Effective prompt engineering follows an iterative process of refinement and testing.
+                    </p>
+                    
+                    <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+                        <h4 class="font-medium mb-3">Best Practices:</h4>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li><span class="font-medium">Start specific:</span> Clearly define the task and desired output format</li>
+                            <li><span class="font-medium">Provide examples:</span> Show the model what good output looks like</li>
+                            <li><span class="font-medium">Use constraints:</span> Limit response length or format when needed</li>
+                            <li><span class="font-medium">Iterate:</span> Test multiple prompt variations to find what works best</li>
+                            <li><span class="font-medium">Evaluate:</span> Check outputs for accuracy, completeness, and relevance</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                        <h4 class="font-medium mb-3">Prompt Refinement Example:</h4>
+                        <div class="space-y-4">
+                            <div>
+                                <p class="font-medium text-sm text-gray-600">Initial Prompt:</p>
+                                <p class="bg-white p-3 rounded border">Tell me about machine learning</p>
+                            </div>
+                            <div>
+                                <p class="font-medium text-sm text-gray-600">Refined Prompt:</p>
+                                <p class="bg-white p-3 rounded border">Explain supervised machine learning to a business executive in 3 paragraphs. Focus on practical applications in customer analytics and use analogies from everyday life. Avoid mathematical terminology.</p>
+                            </div>
+                            <div>
+                                <p class="font-medium text-sm text-gray-600">Further Refined:</p>
+                                <p class="bg-white p-3 rounded border">You are explaining supervised machine learning to a retail company's CEO who has no technical background. Structure your response as:<br>
+                                1) Core concept analogy (like teaching a child with examples)<br>
+                                2) Two business use cases from their industry (customer segmentation and demand forecasting)<br>
+                                3) Implementation requirements (data needed, timeline, expected outcomes)<br>
+                                Keep each section under 100 words.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </article>
+    </main>
+
+    <footer class="bg-dark text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-xl font-bold text-primary">Prompt Engineering Course</h3>
+                    <p class="text-gray-400 mt-1">Mastering LLM Applications - 2025 Edition</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition">Terms</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">Privacy</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">Contact</a>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-6 pt-6 text-center text-gray-400 text-sm">
+                <p>© 2025 AI Education Institute. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle output visibility
+        function toggleOutput(id) {
+            const element = document.getElementById(id);
+            element.classList.toggle('hidden');
+        }
+        
+        // Show specific email example
+        function showEmailExample(type) {
+            document.querySelectorAll('.email-example').forEach(el => {
+                el.classList.add('hidden');
+            });
+            document.getElementById(`${type}-email`).classList.remove('hidden');
+        }
+        
+        // Initialize canvas visualization
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('dataFlowChart');
+            const ctx = canvas.getContext('2d');
+            const tooltip = document.getElementById('dataTooltip');
+            
+            // Set canvas dimensions
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            // Visualization data
+            const nodes = [
+                { id: 1, x: 100, y: 100, text: "Unstructured Text", color: "#F59E0B", radius: 60 },
+                { id: 2, x: 300, y: 100, text: "LLM Processing", color: "#3B82F6", radius: 70 },
+                { id: 3, x: 500, y: 100, text: "Structured Output", color: "#10B981", radius: 60 },
+                { id: 4, x: 300, y: 250, text: "Prompt Engineering", color: "#8B5CF6", radius: 80 }
+            ];
+            
+            const connections = [
+                { from: 1, to: 2, label: "Input" },
+                { from: 2, to: 3, label: "Output" },
+                { from: 4, to: 2, label: "Guides" }
+            ];
+            
+            // Draw the visualization
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw connections first
+                connections.forEach(conn => {
+                    const fromNode = nodes.find(n => n.id === conn.from);
+                    const toNode = nodes.find(n => n.id === conn.to);
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(fromNode.x, fromNode.y);
+                    ctx.lineTo(toNode.x, toNode.y);
+                    ctx.strokeStyle = "#9CA3AF";
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                    
+                    // Connection label
+                    const midX = (fromNode.x + toNode.x) / 2;
+                    const midY = (fromNode.y + toNode.y) / 2;
+                    ctx.fillStyle = "#1F2937";
+                    ctx.font = "12px Inter";
+                    ctx.textAlign = "center";
+                    ctx.fillText(conn.label, midX, midY - 10);
+                });
+                
+                // Draw nodes
+                nodes.forEach(node => {
+                    // Node circle
+                    ctx.beginPath();
+                    ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = node.color;
+                    ctx.fill();
+                    
+                    // Node text
+                    ctx.fillStyle = "#FFFFFF";
+                    ctx.font = "14px Inter";
+                    ctx.textAlign = "center";
+                    
+                    // Split text into lines if needed
+                    const lines = node.text.split(' ');
+                    let yOffset = -10;
+                    lines.forEach(line => {
+                        ctx.fillText(line, node.x, node.y + yOffset);
+                        yOffset += 20;
+                    });
+                });
+            }
+            
+            // Add interactivity
+            canvas.addEventListener('mousemove', function(e) {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                let hoveredNode = null;
+                nodes.forEach(node => {
+                    const distance = Math.sqrt((x - node.x) ** 2 + (y - node.y) ** 2);
+                    if (distance <= node.radius) {
+                        hoveredNode = node;
+                    }
+                });
+                
+                if (hoveredNode) {
+                    canvas.style.cursor = 'pointer';
+                    
+                    // Position tooltip near the node
+                    tooltip.style.left = `${hoveredNode.x + hoveredNode.radius + 10}px`;
+                    tooltip.style.top = `${hoveredNode.y - 30}px`;
+                    tooltip.style.opacity = '1';
+                    
+                    // Set tooltip content based on node
+                    if (hoveredNode.id === 1) {
+                        tooltip.textContent = "Raw text input like emails, articles, or product descriptions";
+                    } else if (hoveredNode.id === 2) {
+                        tooltip.textContent = "LLM processes text using the provided prompt instructions";
+                    } else if (hoveredNode.id === 3) {
+                        tooltip.textContent = "Structured output like JSON, tables, or formatted responses";
+                    } else if (hoveredNode.id === 4) {
+                        tooltip.textContent = "Carefully crafted prompts guide the LLM's processing";
+                    }
+                } else {
+                    canvas.style.cursor = 'default';
+                    tooltip.style.opacity = '0';
+                }
+            });
+            
+            // Initial draw
+            draw();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+                draw();
+            });
+        });
+    </script>
+</body>
+</html>
