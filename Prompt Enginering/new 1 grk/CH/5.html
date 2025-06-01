@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parts of a Prompt | LLM Course</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✍️</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        secondary: {
+                            500: '#8b5cf6'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-gradient {
+                @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-primary-400;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto font-mono text-sm;
+            }
+            .token-keyword { @apply text-purple-400; }
+            .token-function { @apply text-blue-400; }
+            .token-string { @apply text-green-400; }
+            .token-comment { @apply text-gray-500; }
+            .token-parameter { @apply text-yellow-300; }
+            .prompt-part { @apply border-l-4 pl-4 py-2 my-2; }
+            .instruction { @apply border-primary-500 bg-primary-50; }
+            .context { @apply border-blue-500 bg-blue-50; }
+            .input-data { @apply border-green-500 bg-green-50; }
+            .output-format { @apply border-purple-500 bg-purple-50; }
+            .constraints { @apply border-yellow-500 bg-yellow-50; }
+            .examples { @apply border-pink-500 bg-pink-50; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold text-gradient">Parts of a Prompt</h1>
+                <nav class="hidden md:block">
+                    <ul class="flex space-x-6">
+                        <li><a href="#instruction" class="hover:text-primary-600 transition">Instruction</a></li>
+                        <li><a href="#context" class="hover:text-primary-600 transition">Context</a></li>
+                        <li><a href="#input-data" class="hover:text-primary-600 transition">Input Data</a></li>
+                        <li><a href="#output-format" class="hover:text-primary-600 transition">Output Format</a></li>
+                    </ul>
+                </nav>
+                <button class="md:hidden text-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <article class="max-w-4xl mx-auto">
+            <section id="introduction" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">Anatomy of an Effective Prompt</h2>
+                <p class="mb-4">Well-structured prompts are essential for getting high-quality responses from Large Language Models. Understanding the components of a prompt helps you craft better inputs and achieve more reliable outputs.</p>
+                <div class="bg-primary-50 border-l-4 border-primary-500 p-4 rounded-r mb-6">
+                    <p class="font-medium text-primary-800">Learning Objectives:</p>
+                    <ul class="list-disc pl-5 mt-2 space-y-1">
+                        <li>Identify and understand the key parts of a prompt</li>
+                        <li>Learn how each component influences the model's response</li>
+                        <li>Develop skills to construct well-formed prompts</li>
+                        <li>Understand best practices for prompt design</li>
+                        <li>See practical examples of effective prompts</li>
+                    </ul>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold mb-3 text-primary-700">Prompt Structure Visualization</h3>
+                    <div class="mb-4">
+                        <canvas id="prompt-anatomy" class="w-full h-64 bg-gray-100 rounded" width="800" height="400"></canvas>
+                        <div class="text-center mt-2 text-sm text-gray-600">Hover over each component to learn more</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="instruction" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">1. Instruction</h2>
+                <p class="mb-4">The instruction is the core task you want the model to perform. Clear, specific instructions lead to better results.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Vague Instruction</h3>
+                        <div class="prompt-part instruction">
+                            <p class="font-mono">"Tell me about AI"</p>
+                            <p class="text-sm text-gray-600 mt-1">❌ Too broad - could result in anything from history to technical details</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Clear Instruction</h3>
+                        <div class="prompt-part instruction">
+                            <p class="font-mono">"Explain how neural networks work in 3 paragraphs for a high school student"</p>
+                            <p class="text-sm text-gray-600 mt-1">✅ Specific about content, length, and audience level</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <h3 class="text-xl font-semibold mb-3 text-primary-700">Instruction Best Practices</h3>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>Start with an action verb (Explain, Summarize, Generate, etc.)</li>
+                        <li>Be specific about what you want</li>
+                        <li>Consider including the scope or boundaries</li>
+                        <li>For complex tasks, break instructions into steps</li>
+                        <li>Place the instruction early in the prompt</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="context" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">2. Context</h2>
+                <p class="mb-4">Context provides background information that helps the model understand the task better.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Without Context</h3>
+                        <div class="prompt-part context">
+                            <p class="font-mono">"Write a product description"</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">With Context</h3>
+                        <div class="prompt-part context">
+                            <p class="font-mono">"Write a product description for a smart water bottle that tracks hydration and syncs with fitness apps. Target audience is health-conscious millennials."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <h3 class="text-xl font-semibold mb-3 text-primary-700">Types of Context</h3>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="p-3 rounded-lg bg-blue-50">
+                            <h4 class="font-medium mb-1">Audience</h4>
+                            <p class="text-sm text-gray-600">"For a 5th grade science class"</p>
+                        </div>
+                        <div class="p-3 rounded-lg bg-blue-50">
+                            <h4 class="font-medium mb-1">Purpose</h4>
+                            <p class="text-sm text-gray-600">"To include in a grant application"</p>
+                        </div>
+                        <div class="p-3 rounded-lg bg-blue-50">
+                            <h4 class="font-medium mb-1">Background</h4>
+                            <p class="text-sm text-gray-600">"Assuming the reader knows basic chemistry"</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="input-data" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">3. Input Data</h2>
+                <p class="mb-4">Input data is the information you want the model to process or analyze.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Without Delimiters</h3>
+                        <div class="prompt-part input-data">
+                            <p class="font-mono">"Summarize this: The company reported Q2 revenue of $5.2M, up 15% year-over-year..."</p>
+                            <p class="text-sm text-gray-600 mt-1">❌ Hard to distinguish instruction from input</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">With Delimiters</h3>
+                        <div class="prompt-part input-data">
+                            <p class="font-mono">"""<br>Summarize the following financial report:<br><br>Report:<br>"The company reported Q2 revenue of $5.2M..."<br>"""</p>
+                            <p class="text-sm text-gray-600 mt-1">✅ Clear separation between instruction and input</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <h3 class="text-xl font-semibold mb-3 text-primary-700">Input Data Best Practices</h3>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>Clearly separate input data from instructions</li>
+                        <li>Use delimiters (""", ---, ###) for multi-line inputs</li>
+                        <li>Provide enough context for the model to understand the data</li>
+                        <li>For large inputs, consider summarizing or highlighting key parts</li>
+                        <li>Specify if the input should be processed literally or conceptually</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="output-format" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">4. Output Format</h2>
+                <p class="mb-4">Specifying the output format helps ensure you get responses in a usable structure.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Unstructured</h3>
+                        <div class="prompt-part output-format">
+                            <p class="font-mono">"List the pros and cons of solar energy"</p>
+                            <p class="text-sm text-gray-600 mt-1">❌ May return a paragraph instead of a list</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Structured</h3>
+                        <div class="prompt-part output-format">
+                            <p class="font-mono">"List 3 pros and 3 cons of solar energy in this format:<br>Pros:<br>- Point 1<br>- Point 2<br>Cons:<br>- Point 1<br>- Point 2"</p>
+                            <p class="text-sm text-gray-600 mt-1">✅ Explicit format leads to more usable output</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold mb-3 text-primary-700">Common Output Formats</h3>
+                    <div class="grid md:grid-cols-4 gap-3">
+                        <div class="bg-white p-3 rounded border border-gray-200 text-center">
+                            <div class="bg-purple-100 text-purple-800 rounded-full w-8 h-8 flex items-center justify-center mx-auto mb-2">
+                                <span>{ }</span>
+                            </div>
+                            <p class="text-sm font-medium">JSON</p>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-gray-200 text-center">
+                            <div class="bg-purple-100 text-purple-800 rounded-full w-8 h-8 flex items-center justify-center mx-auto mb-2">
+                                <span>•</span>
+                            </div>
+                            <p class="text-sm font-medium">Bullet Points</p>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-gray-200 text-center">
+                            <div class="bg-purple-100 text-purple-800 rounded-full w-8 h-8 flex items-center justify-center mx-auto mb-2">
+                                <span>| |</span>
+                            </div>
+                            <p class="text-sm font-medium">Tables</p>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-gray-200 text-center">
+                            <div class="bg-purple-100 text-purple-800 rounded-full w-8 h-8 flex items-center justify-center mx-auto mb-2">
+                                <span>1.</span>
+                            </div>
+                            <p class="text-sm font-medium">Numbered Steps</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="constraints" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">5. Constraints and Parameters</h2>
+                <p class="mb-4">Constraints help control the response characteristics like length, style, and content boundaries.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Without Constraints</h3>
+                        <div class="prompt-part constraints">
+                            <p class="font-mono">"Write a blog post introduction about remote work"</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">With Constraints</h3>
+                        <div class="prompt-part constraints">
+                            <p class="font-mono">"Write a 100-word blog post introduction about remote work. Use an optimistic tone and focus on productivity benefits. Avoid mentioning specific companies."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <h3 class="text-xl font-semibold mb-3 text-primary-700">Common Constraints</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-medium mb-2">Length</h4>
+                            <ul class="list-disc pl-5 space-y-1 text-sm">
+                                <li>"Keep under 200 words"</li>
+                                <li>"3-5 bullet points"</li>
+                                <li>"One paragraph only"</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-2">Style</h4>
+                            <ul class="list-disc pl-5 space-y-1 text-sm">
+                                <li>"Use professional tone"</li>
+                                <li>"Write conversationally"</li>
+                                <li>"Avoid technical jargon"</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="examples" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">6. Examples in Prompts</h2>
+                <p class="mb-4">Including examples helps demonstrate the desired format, style, or reasoning pattern.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Zero-Shot</h3>
+                        <div class="prompt-part examples">
+                            <p class="font-mono">"Convert these dates to MM/DD/YYYY format:<br>Jan 5, 2023"</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Few-Shot</h3>
+                        <div class="prompt-part examples">
+                            <p class="font-mono">"""<br>Convert these dates to MM/DD/YYYY format:<br>Example 1: March 20, 2022 → 03/20/2022<br>Example 2: Feb 15 → 02/15/2025 (assume current year)<br>Now convert: Jan 5, 2023<br>"""</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold mb-3 text-primary-700">Code Example: Few-Shot Prompting</h3>
+                    <div class="mb-4">
+                        <button id="toggle-code-1" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md transition">
+                            Show Python Example
+                        </button>
+                    </div>
+                    <div id="code-example-1" class="hidden">
+                        <div class="code-block mb-4">
+                            <pre><code><span class="token-keyword">import</span> openai
+
+<span class="token-comment"># Few-shot prompt example</span>
+prompt = <span class="token-string">"""  
+Classify the sentiment of these customer reviews:
+1. "I love this product! Works perfectly." → Positive
+2. "Terrible experience, would not recommend." → Negative
+3. "The item was okay, but shipping took too long." → Neutral
+4. "This exceeded all my expectations."
+"""</span>
+
+response = openai.ChatCompletion.<span class="token-function">create</span>(
+    model=<span class="token-string">"gpt-4"</span>,
+    messages=[{<span class="token-string">"role"</span>: <span class="token-string">"user"</span>, <span class="token-string">"content"</span>: prompt}],
+    temperature=<span class="token-number">0.3</span>,
+    max_tokens=<span class="token-number">50</span>
+)
+
+<span class="token-keyword">print</span>(response.choices[<span class="token-number">0</span>].message.content)
+<span class="token-comment"># Output: Positive</span></code></pre>
+                        </div>
+                        <div class="bg-primary-50 border-l-4 border-primary-500 p-4 rounded-r">
+                            <p class="font-medium text-primary-800">Key Features:</p>
+                            <ul class="list-disc pl-5 mt-1 text-sm">
+                                <li>Provides clear examples of the classification task</li>
+                                <li>Shows both input and desired output format</li>
+                                <li>Uses low temperature for consistent classifications</li>
+                                <li>Delimiters (""") separate examples clearly</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="design-principles" class="mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">Prompt Design Principles</h2>
+                <p class="mb-4">Effective prompts balance these components based on your specific needs.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Complete Prompt Example</h3>
+                        <div class="code-block">
+                            <pre><code><span class="token-string">"""  
+[Instruction]  
+Analyze the sentiment of the following product review and extract key features mentioned.
+
+[Context]  
+This is for a consumer electronics company tracking customer feedback. The output will be fed into their analytics dashboard.
+
+[Input Data]  
+Review: "The battery life is amazing - lasts 2 days! But the touchscreen is less responsive than I expected."
+
+[Output Format]  
+Provide output as JSON with these fields:
+- sentiment (positive/neutral/negative)
+- positive_features (array)
+- negative_features (array)
+- neutral_features (array)
+
+[Constraints]  
+- Be concise
+- Use only the information from the review
+- No additional commentary
+
+[Example]  
+For the review "Great sound quality but heavy":
+{
+  "sentiment": "neutral",
+  "positive_features": ["sound quality"],
+  "negative_features": ["heavy"],
+  "neutral_features": []
+}
+"""</span></code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-primary-700">Best Practices</h3>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li><strong>Be specific:</strong> Clearly define what you want</li>
+                            <li><strong>Provide context:</strong> Help the model understand the purpose</li>
+                            <li><strong>Show examples:</strong> Demonstrate desired format or style</li>
+                            <li><strong>Set boundaries:</strong> Define what not to include</li>
+                            <li><strong>Test and iterate:</strong> Refine prompts based on outputs</li>
+                            <li><strong>Balance length:</strong> Include enough detail without being verbose</li>
+                        </ul>
+
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold mb-3 text-primary-700">Code Example: Complete vs. Incomplete Prompt</h3>
+                            <div class="mb-4">
+                                <button id="toggle-code-2" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md transition">
+                                    Show Comparison
+                                </button>
+                            </div>
+                            <div id="code-example-2" class="hidden">
+                                <div class="code-block mb-4">
+                                    <pre><code><span class="token-keyword">import</span> openai
+
+<span class="token-comment"># Incomplete prompt</span>
+bad_prompt = <span class="token-string">"Tell me about this product review"</span>
+
+<span class="token-comment"># Complete prompt</span>
+good_prompt = <span class="token-string">"""  
+Analyze this product review and identify:
+1. Overall sentiment (positive/neutral/negative)
+2. Key positive aspects mentioned
+3. Key negative aspects mentioned
+
+Review: "The camera quality is excellent but the battery drains too fast."
+
+Provide output as a JSON object.
+"""</span>
+
+<span class="token-comment"># Compare outputs</span>
+<span class="token-keyword">for</span> prompt <span class="token-keyword">in</span> [bad_prompt, good_prompt]:
+    response = openai.ChatCompletion.<span class="token-function">create</span>(
+        model=<span class="token-string">"gpt-4"</span>,
+        messages=[{<span class="token-string">"role"</span>: <span class="token-string">"user"</span>, <span class="token-string">"content"</span>: prompt}],
+        temperature=<span class="token-number">0.3</span>
+    )
+    <span class="token-keyword">print</span>(<span class="token-string">f"Prompt: {prompt[:30]}...\nOutput: {response.choices[0].message.content}\n"</span>)</code></pre>
+                                </div>
+                                <div class="bg-primary-50 border-l-4 border-primary-500 p-4 rounded-r">
+                                    <p class="font-medium text-primary-800">Expected Differences:</p>
+                                    <ul class="list-disc pl-5 mt-1 text-sm">
+                                        <li>Incomplete prompt may return a generic summary</li>
+                                        <li>Complete prompt will provide structured analysis</li>
+                                        <li>Good prompt's output is more actionable and consistent</li>
+                                        <li>Complete prompt enables direct integration with other systems</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-primary-50 rounded-lg p-6 mb-12">
+                <h2 class="text-2xl font-bold mb-4 text-primary-800">Summary</h2>
+                <p class="mb-4">Understanding the parts of a prompt and how they work together is fundamental to effective prompt engineering.</p>
+                
+                <div class="bg-white p-4 rounded-lg mb-4">
+                    <h3 class="text-lg font-semibold mb-2">Key Takeaways</h3>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Every effective prompt contains clear instructions</li>
+                        <li>Context helps the model understand your needs</li>
+                        <li>Input data should be clearly separated from instructions</li>
+                        <li>Specifying output format saves time on post-processing</li>
+                        <li>Constraints help control response characteristics</li>
+                        <li>Examples dramatically improve output quality for complex tasks</li>
+                        <li>Well-structured prompts combine these elements appropriately</li>
+                    </ul>
+                </div>
+            </section>
+        </article>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h2 class="text-xl font-bold">LLM Prompt Engineering Course</h2>
+                    <p class="text-gray-400 text-sm">Parts of a Prompt</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-primary-400 transition">Terms</a>
+                    <a href="#" class="hover:text-primary-400 transition">Privacy</a>
+                    <a href="#" class="hover:text-primary-400 transition">Contact</a>
+                </div>
+            </div>
+            <div class="mt-6 pt-6 border-t border-gray-700 text-center text-gray-400 text-sm">
+                <p>© 2025 AI Education Initiative. All rights reserved.</p>
+                <p class="mt-1">Information current as of May 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle code examples
+        document.getElementById('toggle-code-1').addEventListener('click', function() {
+            const codeExample = document.getElementById('code-example-1');
+            codeExample.classList.toggle('hidden');
+            this.textContent = codeExample.classList.contains('hidden') ? 
+                'Show Python Example' : 'Hide Python Example';
+        });
+
+        document.getElementById('toggle-code-2').addEventListener('click', function() {
+            const codeExample = document.getElementById('code-example-2');
+            codeExample.classList.toggle('hidden');
+            this.textContent = codeExample.classList.contains('hidden') ? 
+                'Show Comparison' : 'Hide Comparison';
+        });
+
+        // Prompt anatomy visualization
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('prompt-anatomy');
+            const ctx = canvas.getContext('2d');
+            const tooltip = document.createElement('div');
+            tooltip.className = 'absolute bg-white p-3 rounded shadow-lg text-sm hidden z-10 max-w-xs border border-gray-200';
+            document.body.appendChild(tooltip);
+
+            // Set canvas size
+            function resizeCanvas() {
+                const container = canvas.parentElement;
+                canvas.width = container.clientWidth;
+                canvas.height = canvas.width * 0.5;
+                drawPromptAnatomy();
+            }
+
+            // Prompt parts data
+            const parts = [
+                { 
+                    name: "Instruction", 
+                    description: "The core task you want the model to perform (e.g., 'Summarize this text', 'Write Python code')",
+                    color: "#0ea5e9",
+                    x: 0.2, y: 0.3, width: 0.15, height: 0.1
+                },
+                { 
+                    name: "Context", 
+                    description: "Background information that helps the model understand the task (audience, purpose, etc.)",
+                    color: "#3b82f6",
+                    x: 0.4, y: 0.3, width: 0.15, height: 0.1
+                },
+                { 
+                    name: "Input Data", 
+                    description: "The text or data you want the model to process (clearly separated from instructions)",
+                    color: "#10b981",
+                    x: 0.6, y: 0.3, width: 0.15, height: 0.1
+                },
+                { 
+                    name: "Output Format", 
+                    description: "Specification of how the response should be structured (JSON, bullet points, etc.)",
+                    color: "#8b5cf6",
+                    x: 0.3, y: 0.5, width: 0.15, height: 0.1
+                },
+                { 
+                    name: "Constraints", 
+                    description: "Limitations on the response (length, tone, content boundaries)",
+                    color: "#f59e0b",
+                    x: 0.5, y: 0.5, width: 0.15, height: 0.1
+                },
+                { 
+                    name: "Examples", 
+                    description: "Demonstrations of desired output (few-shot learning)",
+                    color: "#ec4899",
+                    x: 0.4, y: 0.7, width: 0.15, height: 0.1
+                }
+            ];
+
+            // Draw connecting lines
+            const connections = [
+                [0, 3], [1, 3], [1, 4], [2, 4], [3, 5], [4, 5]
+            ];
+
+            // Draw the prompt anatomy diagram
+            function drawPromptAnatomy() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw connections first
+                ctx.strokeStyle = '#9ca3af';
+                ctx.lineWidth = 2;
+                connections.forEach(conn => {
+                    const from = parts[conn[0]];
+                    const to = parts[conn[1]];
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(
+                        from.x * canvas.width + from.width * canvas.width / 2,
+                        from.y * canvas.height + from.height * canvas.height
+                    );
+                    ctx.lineTo(
+                        to.x * canvas.width + to.width * canvas.width / 2,
+                        to.y * canvas.height
+                    );
+                    ctx.stroke();
+                });
+                
+                // Draw parts
+                parts.forEach(part => {
+                    ctx.fillStyle = part.color;
+                    ctx.fillRect(
+                        part.x * canvas.width,
+                        part.y * canvas.height,
+                        part.width * canvas.width,
+                        part.height * canvas.height
+                    );
+                    ctx.strokeStyle = '#1e3a8a';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(
+                        part.x * canvas.width,
+                        part.y * canvas.height,
+                        part.width * canvas.width,
+                        part.height * canvas.height
+                    );
+                    
+                    // Add text
+                    ctx.fillStyle = '#ffffff';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    const fontSize = Math.min(12, canvas.width * 0.012);
+                    ctx.font = `bold ${fontSize}px Arial`;
+                    
+                    // Split name into words if needed
+                    const words = part.name.split(' ');
+                    const lineHeight = fontSize * 1.2;
+                    const startY = part.y * canvas.height + part.height * canvas.height / 2 - 
+                                 (words.length - 1) * lineHeight / 2;
+                    
+                    words.forEach((word, i) => {
+                        ctx.fillText(
+                            word,
+                            part.x * canvas.width + part.width * canvas.width / 2,
+                            startY + i * lineHeight
+                        );
+                    });
+                });
+                
+                // Add title
+                ctx.fillStyle = '#000000';
+                ctx.textAlign = 'center';
+                ctx.font = 'bold 16px Arial';
+                ctx.fillText('Anatomy of a Prompt', canvas.width / 2, 30);
+            }
+
+            // Handle hover interactions
+            canvas.addEventListener('mousemove', function(e) {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                let hovered = false;
+                
+                parts.forEach(part => {
+                    if (x >= part.x * canvas.width && 
+                        x <= part.x * canvas.width + part.width * canvas.width &&
+                        y >= part.y * canvas.height && 
+                        y <= part.y * canvas.height + part.height * canvas.height) {
+                        hovered = true;
+                        
+                        // Highlight part
+                        ctx.fillStyle = part.color + 'aa';
+                        ctx.fillRect(
+                            part.x * canvas.width,
+                            part.y * canvas.height,
+                            part.width * canvas.width,
+                            part.height * canvas.height
+                        );
+                        
+                        // Show tooltip
+                        tooltip.style.left = `${e.pageX + 15}px`;
+                        tooltip.style.top = `${e.pageY + 15}px`;
+                        tooltip.innerHTML = `<strong>${part.name}</strong><div class="mt-1">${part.description}</div>`;
+                        tooltip.classList.remove('hidden');
+                        
+                        // Change cursor
+                        canvas.style.cursor = 'pointer';
+                    }
+                });
+                
+                if (!hovered) {
+                    tooltip.classList.add('hidden');
+                    canvas.style.cursor = 'default';
+                    drawPromptAnatomy(); // Redraw to remove highlights
+                }
+            });
+            
+            // Initial setup
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+        });
+    </script>
+</body>
+</html>
