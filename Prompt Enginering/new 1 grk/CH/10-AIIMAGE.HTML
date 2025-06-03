@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Prompting for AI Art | Prompt Engineering Course</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎨</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8B5CF6',
+                        secondary: '#EC4899',
+                        dark: '#1F2937',
+                        light: '#F3F4F6',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
+        
+        .code-block {
+            font-family: 'Fira Code', monospace;
+            background-color: #1E293B;
+            color: #F8FAFC;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+        
+        .code-comment {
+            color: #94A3B8;
+        }
+        
+        .code-keyword {
+            color: #F472B6;
+        }
+        
+        .code-string {
+            color: #34D399;
+        }
+        
+        .code-function {
+            color: #60A5FA;
+        }
+        
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            margin: 2rem 0;
+        }
+        
+        .tooltip {
+            position: absolute;
+            background-color: rgba(31, 41, 55, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 10;
+            max-width: 300px;
+        }
+        
+        .example-box {
+            border-left: 4px solid #EC4899;
+            background-color: #FCE7F3;
+        }
+        
+        .technique-box {
+            border-left: 4px solid #8B5CF6;
+            background-color: #EDE9FE;
+        }
+        
+        .prompt-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .prompt-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .image-placeholder {
+            background: linear-gradient(45deg, #F3F4F6 25%, #E5E7EB 25%, #E5E7EB 50%, #F3F4F6 50%, #F3F4F6 75%, #E5E7EB 75%, #E5E7EB 100%);
+            background-size: 20px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6B7280;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="bg-light font-sans text-dark">
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold text-primary">Prompt Engineering Course</h1>
+                <nav>
+                    <ul class="flex space-x-6">
+                        <li><a href="#" class="text-gray-600 hover:text-primary transition">Home</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary transition">Modules</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary transition">Resources</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <article class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-8">
+                <h2 class="text-4xl font-bold mb-6 text-dark">Image Prompting for AI Art Models</h2>
+                <p class="text-lg text-gray-700 mb-8">
+                    This module explores techniques for crafting effective prompts for AI art generation models like DALL·E, Midjourney, and Stable Diffusion. Learn to create stunning visual outputs through strategic prompt engineering.
+                </p>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">1. Style Modifiers</h3>
+                    <p class="mb-4">
+                        Style modifiers define the aesthetic of generated images by referencing artistic styles, mediums, or visual qualities.
+                    </p>
+                    
+                    <div class="technique-box p-4 rounded mb-6">
+                        <h4 class="font-medium text-purple-700 mb-2">Common Style Categories:</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="bg-white p-3 rounded border">
+                                <h5 class="font-medium">Art Movements</h5>
+                                <ul class="text-sm list-disc pl-5 mt-1">
+                                    <li>Impressionism</li>
+                                    <li>Surrealism</li>
+                                    <li>Art Deco</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-3 rounded border">
+                                <h5 class="font-medium">Mediums</h5>
+                                <ul class="text-sm list-disc pl-5 mt-1">
+                                    <li>Oil painting</li>
+                                    <li>Watercolor</li>
+                                    <li>Charcoal sketch</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-3 rounded border">
+                                <h5 class="font-medium">Visual Qualities</h5>
+                                <ul class="text-sm list-disc pl-5 mt-1">
+                                    <li>Cyberpunk</li>
+                                    <li>Minimalist</li>
+                                    <li>Cinematic</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-3 rounded border">
+                                <h5 class="font-medium">Artists</h5>
+                                <ul class="text-sm list-disc pl-5 mt-1">
+                                    <li>Van Gogh</li>
+                                    <li>H.R. Giger</li>
+                                    <li>Studio Ghibli</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h4 class="font-medium mb-2">Basic Prompt:</h4>
+                            <div class="code-block mb-4">
+                                "A city at night"
+                            </div>
+                            <div class="image-placeholder rounded-lg h-48 mb-2">
+                                Generic city skyline
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-2">With Style Modifiers:</h4>
+                            <div class="code-block mb-4">
+                                "A cyberpunk city at night, neon-lit with towering skyscrapers and flying cars, in the style of Blade Runner 2049, digital art"
+                            </div>
+                            <div class="image-placeholder rounded-lg h-48 mb-2">
+                                Futuristic neon cityscape
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-medium mb-2">Python Implementation (DALL·E API):</h4>
+                        <div class="code-block">
+                            <span class="code-keyword">import</span> openai<br><br>
+                            <span class="code-comment"># Basic prompt</span><br>
+                            basic_response = openai.Image.create(<br>
+                            &nbsp;&nbsp;prompt=<span class="code-string">"A city at night"</span>,<br>
+                            &nbsp;&nbsp;n=<span class="code-keyword">1</span>,<br>
+                            &nbsp;&nbsp;size=<span class="code-string">"1024x1024"</span><br>
+                            )<br><br>
+                            <span class="code-comment"># Styled prompt</span><br>
+                            styled_response = openai.Image.create(<br>
+                            &nbsp;&nbsp;prompt=(<span class="code-string">"A cyberpunk city at night, neon-lit with towering skyscrapers "</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">"and flying cars, in the style of Blade Runner 2049, digital art"</span>),<br>
+                            &nbsp;&nbsp;n=<span class="code-keyword">1</span>,<br>
+                            &nbsp;&nbsp;size=<span class="code-string">"1024x1024"</span><br>
+                            )<br><br>
+                            <span class="code-comment"># Display results (implementation depends on your environment)</span><br>
+                            <span class="code-function">print</span>(<span class="code-string">"Basic image URL:"</span>, basic_response[<span class="code-string">'data'</span>][<span class="code-keyword">0</span>][<span class="code-string">'url'</span>])<br>
+                            <span class="code-function">print</span>(<span class="code-string">"Styled image URL:"</span>, styled_response[<span class="code-string">'data'</span>][<span class="code-keyword">0</span>][<span class="code-string">'url'</span>])
+                        </div>
+                    </div>
+                    
+                    <div class="canvas-container">
+                        <canvas id="styleChart"></canvas>
+                        <div id="styleTooltip" class="tooltip"></div>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">2. Quality Boosters</h3>
+                    <p class="mb-4">
+                        Specific terms can enhance the technical quality and detail of generated images.
+                    </p>
+                    
+                    <div class="example-box p-4 rounded mb-6">
+                        <h4 class="font-medium text-pink-700 mb-2">Example Progression:</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="prompt-card bg-white p-4 rounded border">
+                                <h5 class="font-medium">Basic</h5>
+                                <div class="code-block text-sm mt-2 mb-3">
+                                    "A fantasy castle"
+                                </div>
+                                <div class="image-placeholder rounded-lg h-32">
+                                    Simple castle illustration
+                                </div>
+                            </div>
+                            <div class="prompt-card bg-white p-4 rounded border">
+                                <h5 class="font-medium">Enhanced</h5>
+                                <div class="code-block text-sm mt-2 mb-3">
+                                    "A detailed fantasy castle with intricate stonework"
+                                </div>
+                                <div class="image-placeholder rounded-lg h-32">
+                                    More detailed castle
+                                </div>
+                            </div>
+                            <div class="prompt-card bg-white p-4 rounded border">
+                                <h5 class="font-medium">Ultra Quality</h5>
+                                <div class="code-block text-sm mt-2 mb-3">
+                                    "A majestic fantasy castle with intricate stonework, 8K UHD, hyper-detailed, cinematic lighting, unreal engine 5 render"
+                                </div>
+                                <div class="image-placeholder rounded-lg h-32">
+                                    Photorealistic castle
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="technique-box p-4 rounded">
+                        <h4 class="font-medium text-purple-700 mb-2">Effective Quality Terms:</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <span class="bg-white px-3 py-1 rounded-full text-sm text-center">8K UHD</span>
+                            <span class="bg-white px-3 py-1 rounded-full text-sm text-center">hyper-detailed</span>
+                            <span class="bg-white px-3 py-1 rounded-full text-sm text-center">cinematic lighting</span>
+                            <span class="bg-white px-3 py-1 rounded-full text-sm text-center">sharp focus</span>
+                            <span class="bg-white px-3 py-1 rounded-full text-sm text-center">unreal engine 5</span>
+                            <span class="bg-white px-3 py-1 rounded-full text-sm text-center">octane render</span>
+                            <span class="bg-white px-3 py-1 rounded-full text-sm text-center">photorealistic</span>
+                            <span class="bg-white px-3 py-1 rounded-full text-sm text-center">intricate details</span>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">3. Weighted Terms</h3>
+                    <p class="mb-4">
+                        Emphasize important elements by assigning weights to different parts of your prompt.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h4 class="font-medium mb-2">Standard Prompt:</h4>
+                            <div class="code-block mb-4">
+                                "A mystical forest with glowing mushrooms and a small cottage"
+                            </div>
+                            <div class="image-placeholder rounded-lg h-48 mb-2">
+                                Balanced forest scene
+                            </div>
+                            <p class="text-sm text-gray-600">Equal emphasis on all elements</p>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-2">Weighted Prompt:</h4>
+                            <div class="code-block mb-4">
+                                "A mystical forest with glowing mushrooms::1.5 and a small cottage::0.8"
+                            </div>
+                            <div class="image-placeholder rounded-lg h-48 mb-2">
+                                Forest with prominent mushrooms
+                            </div>
+                            <p class="text-sm text-gray-600">Mushrooms emphasized, cottage de-emphasized</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-medium mb-2">Weighting Syntax Across Models:</h4>
+                        <table class="min-w-full border">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="border px-4 py-2">Model</th>
+                                    <th class="border px-4 py-2">Syntax</th>
+                                    <th class="border px-4 py-2">Example</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border px-4 py-2">Stable Diffusion</td>
+                                    <td class="border px-4 py-2">(word:weight)</td>
+                                    <td class="border px-4 py-2">(mushrooms:1.5)</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border px-4 py-2">Midjourney</td>
+                                    <td class="border px-4 py-2">::weight</td>
+                                    <td class="border px-4 py-2">mushrooms::1.5</td>
+                                </tr>
+                                <tr>
+                                    <td class="border px-4 py-2">DALL·E</td>
+                                    <td class="border px-4 py-2">Natural language</td>
+                                    <td class="border px-4 py-2">"Focus on the mushrooms"</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">4. Fixing Deformed Generations</h3>
+                    <p class="mb-4">
+                        AI art models often struggle with certain elements like hands, faces, and complex perspectives.
+                    </p>
+                    
+                    <div class="example-box p-4 rounded mb-6">
+                        <h4 class="font-medium text-pink-700 mb-2">Common Issues and Fixes:</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h5 class="font-medium">Problem: Distorted Hands</h5>
+                                <div class="code-block text-sm mb-2">
+                                    "A pianist playing a grand piano, dramatic lighting"
+                                </div>
+                                <p class="text-sm text-gray-600 mb-2">(Often generates extra fingers or unnatural poses)</p>
+                                <h5 class="font-medium mt-3">Solution:</h5>
+                                <div class="code-block text-sm">
+                                    "A pianist playing a grand piano, dramatic lighting, --no deformed hands"
+                                </div>
+                            </div>
+                            <div>
+                                <h5 class="font-medium">Problem: Asymmetrical Faces</h5>
+                                <div class="code-block text-sm mb-2">
+                                    "A beautiful portrait of a woman with freckles"
+                                </div>
+                                <p class="text-sm text-gray-600 mb-2">(Eyes/nose/mouth may be misaligned)</p>
+                                <h5 class="font-medium mt-3">Solution:</h5>
+                                <div class="code-block text-sm">
+                                    "A beautiful symmetrical portrait of a woman with freckles, perfect facial proportions"
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="technique-box p-4 rounded">
+                        <h4 class="font-medium text-purple-700 mb-2">Troubleshooting Guide:</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h5 class="font-medium">Problem Areas</h5>
+                                <ul class="list-disc pl-5 text-sm">
+                                    <li>Hands and fingers</li>
+                                    <li>Facial symmetry</li>
+                                    <li>Text and signs</li>
+                                    <li>Complex machinery</li>
+                                    <li>Perspective in architecture</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="font-medium">Fix Strategies</h5>
+                                <ul class="list-disc pl-5 text-sm">
+                                    <li>Use negative prompts (--no [element])</li>
+                                    <li>Specify "perfect", "symmetrical"</li>
+                                    <li>Avoid close-ups of problematic areas</li>
+                                    <li>Use simpler compositions</li>
+                                    <li>Generate at higher resolutions</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">5. Negative Prompting</h3>
+                    <p class="mb-4">
+                        Explicitly exclude unwanted elements or qualities from your generated images.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h4 class="font-medium mb-2">Without Negative Prompt:</h4>
+                            <div class="code-block mb-4">
+                                "A serene lakeside cabin at sunset"
+                            </div>
+                            <div class="image-placeholder rounded-lg h-48 mb-2">
+                                May include unwanted elements
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-2">With Negative Prompt:</h4>
+                            <div class="code-block mb-4">
+                                "A serene lakeside cabin at sunset --no people, animals, boats, blurry, low quality"
+                            </div>
+                            <div class="image-placeholder rounded-lg h-48 mb-2">
+                                Clean, focused on cabin
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-medium mb-2">Common Negative Terms:</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <span class="bg-gray-100 px-3 py-1 rounded-full text-sm text-center">blurry</span>
+                            <span class="bg-gray-100 px-3 py-1 rounded-full text-sm text-center">deformed</span>
+                            <span class="bg-gray-100 px-3 py-1 rounded-full text-sm text-center">extra limbs</span>
+                            <span class="bg-gray-100 px-3 py-1 rounded-full text-sm text-center">text</span>
+                            <span class="bg-gray-100 px-3 py-1 rounded-full text-sm text-center">low quality</span>
+                            <span class="bg-gray-100 px-3 py-1 rounded-full text-sm text-center">watermark</span>
+                            <span class="bg-gray-100 px-3 py-1 rounded-full text-sm text-center">signature</span>
+                            <span class="bg-gray-100 px-3 py-1 rounded-full text-sm text-center">cropped</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-medium mb-2">Python Implementation (Stable Diffusion):</h4>
+                        <div class="code-block">
+                            <span class="code-keyword">from</span> diffusers <span class="code-keyword">import</span> StableDiffusionPipeline<br>
+                            <span class="code-keyword">import</span> torch<br><br>
+                            <span class="code-comment"># Load model</span><br>
+                            pipe = StableDiffusionPipeline.from_pretrained(<br>
+                            &nbsp;&nbsp;<span class="code-string">"CompVis/stable-diffusion-v1-4"</span>,<br>
+                            &nbsp;&nbsp;torch_dtype=torch.float16<br>
+                            ).to(<span class="code-string">"cuda"</span>)<br><br>
+                            <span class="code-comment"># Generate with negative prompt</span><br>
+                            prompt = <span class="code-string">"A serene lakeside cabin at sunset"</span><br>
+                            negative_prompt = <span class="code-string">"people, animals, boats, blurry, low quality"</span><br>
+                            image = pipe(<br>
+                            &nbsp;&nbsp;prompt,<br>
+                            &nbsp;&nbsp;negative_prompt=negative_prompt,<br>
+                            &nbsp;&nbsp;height=512,<br>
+                            &nbsp;&nbsp;width=512<br>
+                            ).images[<span class="code-keyword">0</span>]<br><br>
+                            <span class="code-comment"># Save or display image</span><br>
+                            image.save(<span class="code-string">"lakeside_cabin.png"</span>)
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">6. Prompt Structure Best Practices</h3>
+                    <p class="mb-4">
+                        Effective image prompts follow a logical structure to communicate your vision clearly.
+                    </p>
+                    
+                    <div class="technique-box p-4 rounded mb-6">
+                        <h4 class="font-medium text-purple-700 mb-2">Optimal Prompt Structure:</h4>
+                        <ol class="list-decimal pl-5 space-y-2">
+                            <li><span class="font-medium">Main Subject:</span> Clear description of primary focus</li>
+                            <li><span class="font-medium">Details:</span> Specific attributes and features</li>
+                            <li><span class="font-medium">Composition:</span> Framing, perspective, camera angle</li>
+                            <li><span class="font-medium">Style:</span> Artistic medium, movement, or influence</li>
+                            <li><span class="font-medium">Quality:</span> Technical specifications</li>
+                            <li><span class="font-medium">Lighting:</span> Mood and illumination</li>
+                            <li><span class="font-medium">Color Palette:</span> Dominant or accent colors</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="example-box p-4 rounded">
+                        <h4 class="font-medium text-pink-700 mb-2">Example Breakdown:</h4>
+                        <div class="code-block mb-2">
+                            "A majestic white wolf standing on a snowy cliff edge (subject),<br>
+                            with detailed fur, piercing blue eyes, and visible breath in the cold air (details),<br>
+                            low angle shot looking up, full body in frame (composition),<br>
+                            in the style of fantasy concept art, digital painting (style),<br>
+                            8K UHD, hyper-detailed, cinematic lighting (quality),<br>
+                            moonlight casting soft blue highlights (lighting),<br>
+                            cool tones with blue and silver accents (color palette)"
+                        </div>
+                        <div class="image-placeholder rounded-lg h-48 mt-2">
+                            Detailed wolf concept art
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">7. Iterative Prompt Refinement</h3>
+                    <p class="mb-4">
+                        Rarely does the first prompt produce perfect results. Iterative refinement is key.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="prompt-card bg-white p-4 rounded border">
+                            <h5 class="font-medium">Iteration 1</h5>
+                            <div class="code-block text-xs mt-2 mb-3">
+                                "A futuristic city"
+                            </div>
+                            <div class="image-placeholder rounded-lg h-32 text-xs">
+                                Generic futuristic buildings
+                            </div>
+                            <p class="text-xs text-gray-600 mt-2">Too vague - needs more detail</p>
+                        </div>
+                        <div class="prompt-card bg-white p-4 rounded border">
+                            <h5 class="font-medium">Iteration 2</h5>
+                            <div class="code-block text-xs mt-2 mb-3">
+                                "A cyberpunk city at night with neon lights"
+                            </div>
+                            <div class="image-placeholder rounded-lg h-32 text-xs">
+                                Better but lacks depth
+                            </div>
+                            <p class="text-xs text-gray-600 mt-2">Add style and quality</p>
+                        </div>
+                        <div class="prompt-card bg-white p-4 rounded border">
+                            <h5 class="font-medium">Iteration 3</h5>
+                            <div class="code-block text-xs mt-2 mb-3">
+                                "A sprawling cyberpunk metropolis at night, neon-lit streets with holographic advertisements, towering skyscrapers with intricate designs, in the style of Blade Runner 2049, cinematic 8K UHD render, hyper-detailed"
+                            </div>
+                            <div class="image-placeholder rounded-lg h-32 text-xs">
+                                Rich, detailed cityscape
+                            </div>
+                            <p class="text-xs text-gray-600 mt-2">Final version</p>
+                        </div>
+                    </div>
+                    
+                    <div class="canvas-container">
+                        <canvas id="iterationChart"></canvas>
+                        <div id="iterationTooltip" class="tooltip"></div>
+                    </div>
+                </section>
+                
+                <section>
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">Prompting Checklist</h3>
+                    <div class="bg-white border border-gray-200 rounded-lg p-6">
+                        <h4 class="font-medium mb-3">Before Generating Images:</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex items-start">
+                                <svg class="h-5 w-5 text-green-500 mt-0.5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Have you specified the main subject clearly?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <svg class="h-5 w-5 text-green-500 mt-0.5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Have you included relevant style modifiers?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <svg class="h-5 w-5 text-green-500 mt-0.5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Have you added quality boosters if needed?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <svg class="h-5 w-5 text-green-500 mt-0.5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Have you excluded unwanted elements?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <svg class="h-5 w-5 text-green-500 mt-0.5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Have you weighted important elements?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <svg class="h-5 w-5 text-green-500 mt-0.5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Have you planned for iterative refinement?</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </article>
+    </main>
+
+    <footer class="bg-dark text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-xl font-bold text-primary">Prompt Engineering Course</h3>
+                    <p class="text-gray-400 mt-1">Mastering AI Art Generation - 2025 Edition</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition">Terms</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">Privacy</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">Contact</a>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-6 pt-6 text-center text-gray-400 text-sm">
+                <p>© 2025 AI Education Institute. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize style visualization
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('styleChart');
+            const ctx = canvas.getContext('2d');
+            const tooltip = document.getElementById('styleTooltip');
+            
+            // Set canvas dimensions
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            // Draw the visualization
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw base image
+                const baseImg = new Image();
+                baseImg.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MDAiIGhlaWdodD0iMzAwIiB2aWV3Qm94PSIwIDAgNTAwIDMwMCI+PHJlY3Qgd2lkdGg9IjUwMCIgaGVpZ2h0PSIzMDAiIGZpbGw9IiNGRkYiLz48cmVjdCB4PSI1MCIgeT0iNTAiIHdpZHRoPSI0MDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRUVFRUVFIi8+PC9zdmc+';
+                
+                // Draw style layers
+                const styles = [
+                    { name: "Base Image", color: "#E5E7EB", x: 50, y: 50, width: 150, height: 100 },
+                    { name: "Subject", color: "#A78BFA", x: 100, y: 80, width: 100, height: 70 },
+                    { name: "Details", color: "#F472B6", x: 120, y: 90, width: 80, height: 60 },
+                    { name: "Composition", color: "#34D399", x: 140, y: 100, width: 60, height: 50 },
+                    { name: "Style", color: "#F59E0B", x: 160, y: 110, width: 40, height: 40 },
+                    { name: "Quality", color: "#60A5FA", x: 180, y: 120, width: 20, height: 30 }
+                ];
+                
+                // Draw layers
+                styles.forEach((style, i) => {
+                    ctx.fillStyle = style.color;
+                    ctx.fillRect(style.x, style.y, style.width, style.height);
+                    
+                    ctx.fillStyle = "#1F2937";
+                    ctx.font = "12px Inter";
+                    ctx.fillText(style.name, style.x + 10, style.y + 20);
+                });
+                
+                // Draw arrows
+                ctx.beginPath();
+                ctx.moveTo(220, 140);
+                ctx.lineTo(300, 140);
+                ctx.strokeStyle = "#1F2937";
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                // Draw final image
+                ctx.fillStyle = "#8B5CF6";
+                ctx.fillRect(320, 50, 150, 100);
+                ctx.fillStyle = "#FFFFFF";
+                ctx.font = "14px Inter";
+                ctx.fillText("Final Image", 350, 100);
+            }
+            
+            // Add interactivity
+            canvas.addEventListener('mousemove', function(e) {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const styles = [
+                    { name: "Base Image", desc: "Basic description of the scene", x: 50, y: 50, width: 150, height: 100 },
+                    { name: "Subject", desc: "Clear focus of the image", x: 100, y: 80, width: 100, height: 70 },
+                    { name: "Details", desc: "Specific features and attributes", x: 120, y: 90, width: 80, height: 60 },
+                    { name: "Composition", desc: "Framing and perspective", x: 140, y: 100, width: 60, height: 50 },
+                    { name: "Style", desc: "Artistic medium and influences", x: 160, y: 110, width: 40, height: 40 },
+                    { name: "Quality", desc: "Technical specifications", x: 180, y: 120, width: 20, height: 30 }
+                ];
+                
+                let hoveredStyle = null;
+                styles.forEach(style => {
+                    if (x >= style.x && x <= style.x + style.width &&
+                        y >= style.y && y <= style.y + style.height) {
+                        hoveredStyle = style;
+                    }
+                });
+                
+                if (hoveredStyle) {
+                    canvas.style.cursor = 'pointer';
+                    
+                    // Position tooltip
+                    tooltip.style.left = `${hoveredStyle.x + 20}px`;
+                    tooltip.style.top = `${hoveredStyle.y + 30}px`;
+                    tooltip.style.opacity = '1';
+                    tooltip.innerHTML = `<strong>${hoveredStyle.name}</strong><br>${hoveredStyle.desc}`;
+                } else {
+                    canvas.style.cursor = 'default';
+                    tooltip.style.opacity = '0';
+                }
+            });
+            
+            // Initial draw
+            draw();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+                draw();
+            });
+        });
+        
+        // Initialize iteration visualization
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('iterationChart');
+            const ctx = canvas.getContext('2d');
+            const tooltip = document.getElementById('iterationTooltip');
+            
+            // Set canvas dimensions
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            // Draw the visualization
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw iteration path
+                ctx.beginPath();
+                ctx.moveTo(50, 200);
+                ctx.lineTo(150, 200);
+                ctx.lineTo(250, 200);
+                ctx.lineTo(350, 200);
+                ctx.lineTo(450, 200);
+                ctx.lineTo(550, 200);
+                ctx.lineTo(650, 200);
+                ctx.strokeStyle = "#8B5CF6";
+                ctx.lineWidth = 3;
+                ctx.stroke();
+                
+                // Draw iteration points
+                const iterations = [
+                    { x: 50, y: 200, name: "Initial Idea", desc: "Basic concept in mind" },
+                    { x: 150, y: 200, name: "First Prompt", desc: "Basic description" },
+                    { x: 250, y: 200, name: "Add Details", desc: "More specific features" },
+                    { x: 350, y: 200, name: "Style Modifiers", desc: "Artistic direction" },
+                    { x: 450, y: 200, name: "Quality Boosters", desc: "Technical improvements" },
+                    { x: 550, y: 200, name: "Negative Prompts", desc: "Exclude unwanted elements" },
+                    { x: 650, y: 200, name: "Final Image", desc: "Refined output" }
+                ];
+                
+                iterations.forEach(iter => {
+                    ctx.beginPath();
+                    ctx.arc(iter.x, iter.y, 10, 0, Math.PI * 2);
+                    ctx.fillStyle = "#EC4899";
+                    ctx.fill();
+                    
+                    ctx.fillStyle = "#1F2937";
+                    ctx.font = "12px Inter";
+                    ctx.textAlign = "center";
+                    ctx.fillText(iter.name, iter.x, iter.y + 30);
+                });
+                
+                // Draw quality improvement curve
+                ctx.beginPath();
+                ctx.moveTo(50, 250);
+                ctx.bezierCurveTo(200, 100, 400, 300, 650, 150);
+                ctx.strokeStyle = "#10B981";
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 3]);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                
+                ctx.fillStyle = "#10B981";
+                ctx.font = "12px Inter";
+                ctx.fillText("Quality Improvement", 350, 120);
+            }
+            
+            // Add interactivity
+            canvas.addEventListener('mousemove', function(e) {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const iterations = [
+                    { x: 50, y: 200, name: "Initial Idea", desc: "Basic concept in mind" },
+                    { x: 150, y: 200, name: "First Prompt", desc: "Basic description" },
+                    { x: 250, y: 200, name: "Add Details", desc: "More specific features" },
+                    { x: 350, y: 200, name: "Style Modifiers", desc: "Artistic direction" },
+                    { x: 450, y: 200, name: "Quality Boosters", desc: "Technical improvements" },
+                    { x: 550, y: 200, name: "Negative Prompts", desc: "Exclude unwanted elements" },
+                    { x: 650, y: 200, name: "Final Image", desc: "Refined output" }
+                ];
+                
+                let hoveredIter = null;
+                iterations.forEach(iter => {
+                    const distance = Math.sqrt((x - iter.x) ** 2 + (y - iter.y) ** 2);
+                    if (distance <= 15) {
+                        hoveredIter = iter;
+                    }
+                });
+                
+                if (hoveredIter) {
+                    canvas.style.cursor = 'pointer';
+                    
+                    // Position tooltip
+                    tooltip.style.left = `${hoveredIter.x + 20}px`;
+                    tooltip.style.top = `${hoveredIter.y - 40}px`;
+                    tooltip.style.opacity = '1';
+                    tooltip.innerHTML = `<strong>${hoveredIter.name}</strong><br>${hoveredIter.desc}`;
+                } else {
+                    canvas.style.cursor = 'default';
+                    tooltip.style.opacity = '0';
+                }
+            });
+            
+            // Initial draw
+            draw();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+                draw();
+            });
+        });
+    </script>
+</body>
+</html>

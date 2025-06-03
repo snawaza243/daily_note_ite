@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Settings | Prompt Engineering Course</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        dark: '#1F2937',
+                        light: '#F3F4F6',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
+        
+        .code-block {
+            font-family: 'Fira Code', monospace;
+            background-color: #1E293B;
+            color: #F8FAFC;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+        
+        .code-comment {
+            color: #94A3B8;
+        }
+        
+        .code-keyword {
+            color: #F472B6;
+        }
+        
+        .code-string {
+            color: #34D399;
+        }
+        
+        .code-function {
+            color: #60A5FA;
+        }
+        
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            margin: 2rem 0;
+        }
+        
+        .tooltip {
+            position: absolute;
+            background-color: rgba(31, 41, 55, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 10;
+            max-width: 300px;
+        }
+        
+        .setting-box {
+            border-left: 4px solid #3B82F6;
+            background-color: #DBEAFE;
+        }
+        
+        .example-box {
+            border-left: 4px solid #10B981;
+            background-color: #D1FAE5;
+        }
+        
+        .slider-container {
+            width: 100%;
+            margin: 1rem 0;
+        }
+        
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #E5E7EB;
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #3B82F6;
+            cursor: pointer;
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #3B82F6;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-light font-sans text-dark">
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold text-primary">Prompt Engineering Course</h1>
+                <nav>
+                    <ul class="flex space-x-6">
+                        <li><a href="#" class="text-gray-600 hover:text-primary transition">Home</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary transition">Modules</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary transition">Resources</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <article class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-8">
+                <h2 class="text-4xl font-bold mb-6 text-dark">LLM Settings and Hyperparameters</h2>
+                <p class="text-lg text-gray-700 mb-8">
+                    This module explores the key settings that control how Large Language Models generate text. Learn to optimize these parameters for different use cases and understand their effects on output quality.
+                </p>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">1. Temperature</h3>
+                    <p class="mb-4">
+                        Temperature controls the randomness of predictions by scaling the logits before applying softmax. Lower values make outputs more deterministic, while higher values increase creativity.
+                    </p>
+                    
+                    <div class="setting-box p-4 rounded mb-6">
+                        <h4 class="font-medium text-blue-700 mb-2">How It Works:</h4>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li><span class="font-medium">0.0-0.3:</span> Very deterministic, repetitive but precise</li>
+                            <li><span class="font-medium">0.4-0.7:</span> Balanced creativity and reliability</li>
+                            <li><span class="font-medium">0.8-1.2:</span> Highly creative, less predictable</li>
+                            <li><span class="font-medium">>1.2:</span> Often incoherent, experimental only</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-gray-100 p-4 rounded">
+                            <h5 class="font-medium">Temp: 0.2 (Precise)</h5>
+                            <p class="text-sm">"The capital of France is Paris. Paris is located in northern France and serves as the country's political and cultural center."</p>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded">
+                            <h5 class="font-medium">Temp: 0.7 (Balanced)</h5>
+                            <p class="text-sm">"Paris, the romantic capital of France, is known for its iconic Eiffel Tower and rich history. Situated along the Seine River, it's a global hub for art and fashion."</p>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded">
+                            <h5 class="font-medium">Temp: 1.0 (Creative)</h5>
+                            <p class="text-sm">"Ah, Paris! The City of Light twinkles along the Seine, where croissants crisp in bakeries and artists find muse in every cobblestone. France's beating heart pulses strongest here."</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-medium mb-2">Interactive Temperature Demo:</h4>
+                        <div class="slider-container">
+                            <input type="range" min="0" max="20" value="7" class="slider" id="tempSlider">
+                            <div class="flex justify-between text-sm text-gray-600">
+                                <span>0.0 (Deterministic)</span>
+                                <span id="tempValue">0.7</span>
+                                <span>2.0 (Random)</span>
+                            </div>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded mt-2" id="tempOutput">
+                            "Paris, the capital of France, is renowned for its art, architecture, and cultural significance. The city attracts millions of visitors annually to landmarks like the Louvre and Notre-Dame."
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-medium mb-2">Python Implementation:</h4>
+                        <div class="code-block">
+                            <span class="code-keyword">from</span> transformers <span class="code-keyword">import</span> pipeline<br><br>
+                            <span class="code-comment"># Low temperature for factual responses</span><br>
+                            factual_generator = pipeline(<span class="code-string">"text-generation"</span>, model=<span class="code-string">"meta-llama/Meta-Llama-3-8B-Instruct"</span>)<br>
+                            factual_response = factual_generator(<br>
+                            &nbsp;&nbsp;<span class="code-string">"Explain quantum computing basics"</span>,<br>
+                            &nbsp;&nbsp;temperature=0.3,<br>
+                            &nbsp;&nbsp;max_length=200<br>
+                            )<br><br>
+                            <span class="code-comment"># High temperature for creative writing</span><br>
+                            creative_generator = pipeline(<span class="code-string">"text-generation"</span>, model=<span class="code-string">"meta-llama/Meta-Llama-3-8B-Instruct"</span>)<br>
+                            creative_response = creative_generator(<br>
+                            &nbsp;&nbsp;<span class="code-string">"Write a poetic description of a quantum computer"</span>,<br>
+                            &nbsp;&nbsp;temperature=0.9,<br>
+                            &nbsp;&nbsp;max_length=200<br>
+                            )<br><br>
+                            <span class="code-function">print</span>(<span class="code-string">"Factual:"</span>, factual_response[0][<span class="code-string">'generated_text'</span>])<br>
+                            <span class="code-function">print</span>(<span class="code-string">"\nCreative:"</span>, creative_response[0][<span class="code-string">'generated_text'</span>])
+                        </div>
+                    </div>
+                    
+                    <div class="canvas-container">
+                        <canvas id="tempChart"></canvas>
+                        <div id="tempTooltip" class="tooltip"></div>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">2. Top-P (Nucleus Sampling)</h3>
+                    <p class="mb-4">
+                        Top-p sampling selects from the smallest set of tokens whose cumulative probability exceeds p, allowing dynamic vocabulary selection.
+                    </p>
+                    
+                    <div class="setting-box p-4 rounded mb-6">
+                        <h4 class="font-medium text-blue-700 mb-2">Key Characteristics:</h4>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li><span class="font-medium">0.0-0.5:</span> Very narrow selection, conservative outputs</li>
+                            <li><span class="font-medium">0.6-0.9:</span> Balanced diversity and quality (recommended)</li>
+                            <li><span class="font-medium">1.0:</span> Equivalent to no top-p filtering</li>
+                            <li>Works well with temperature 0.7-1.0</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-gray-100 p-4 rounded">
+                            <h5 class="font-medium">Top-P: 0.3 (Narrow)</h5>
+                            <p class="text-sm">"The benefits of exercise include improved cardiovascular health, increased muscle strength, and better mental wellbeing."</p>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded">
+                            <h5 class="font-medium">Top-P: 0.7 (Balanced)</h5>
+                            <p class="text-sm">"Regular exercise offers numerous advantages: it boosts heart health, enhances mood through endorphin release, builds endurance, and may even extend lifespan."</p>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded">
+                            <h5 class="font-medium">Top-P: 0.95 (Broad)</h5>
+                            <p class="text-sm">"Moving your body does wonders! From the obvious perks like toned muscles to subtle benefits like neural growth factors that make your brain sparkle, exercise is nature's miracle drug."</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-medium mb-2">Interactive Top-P Demo:</h4>
+                        <div class="slider-container">
+                            <input type="range" min="0" max="100" value="70" class="slider" id="topPSlider">
+                            <div class="flex justify-between text-sm text-gray-600">
+                                <span>0.1 (Narrow)</span>
+                                <span id="topPValue">0.7</span>
+                                <span>1.0 (Broad)</span>
+                            </div>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded mt-2" id="topPOutput">
+                            "Learning new skills creates neural pathways in the brain, enhances cognitive flexibility, and can improve problem-solving abilities across different domains."
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-medium mb-2">Python Implementation:</h4>
+                        <div class="code-block">
+                            <span class="code-keyword">from</span> transformers <span class="code-keyword">import</span> pipeline<br><br>
+                            <span class="code-comment"># Conservative top-p for technical content</span><br>
+                            tech_generator = pipeline(<span class="code-string">"text-generation"</span>, model=<span class="code-string">"meta-llama/Meta-Llama-3-8B-Instruct"</span>)<br>
+                            tech_response = tech_generator(<br>
+                            &nbsp;&nbsp;<span class="code-string">"Explain SSL encryption"</span>,<br>
+                            &nbsp;&nbsp;top_p=0.5,<br>
+                            &nbsp;&nbsp;temperature=0.5,<br>
+                            &nbsp;&nbsp;max_length=200<br>
+                            )<br><br>
+                            <span class="code-comment"># Higher top-p for creative content</span><br>
+                            story_generator = pipeline(<span class="code-string">"text-generation"</span>, model=<span class="code-string">"meta-llama/Meta-Llama-3-8B-Instruct"</span>)<br>
+                            story_response = story_generator(<br>
+                            &nbsp;&nbsp;<span class="code-string">"Write a short sci-fi premise"</span>,<br>
+                            &nbsp;&nbsp;top_p=0.9,<br>
+                            &nbsp;&nbsp;temperature=0.8,<br>
+                            &nbsp;&nbsp;max_length=200<br>
+                            )<br><br>
+                            <span class="code-function">print</span>(<span class="code-string">"Technical:"</span>, tech_response[0][<span class="code-string">'generated_text'</span>])<br>
+                            <span class="code-function">print</span>(<span class="code-string">"\nCreative:"</span>, story_response[0][<span class="code-string">'generated_text'</span>])
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">3. Max Tokens</h3>
+                    <p class="mb-4">
+                        The maximum number of tokens to generate, controlling response length. One token ≈ 3/4 of a word for English text.
+                    </p>
+                    
+                    <div class="example-box p-4 rounded mb-6">
+                        <h4 class="font-medium text-green-700 mb-2">Example Prompt:</h4>
+                        <div class="code-block mb-4">
+                            "Summarize the key events of the American Revolution"
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-gray-100 p-4 rounded">
+                                <h5 class="font-medium">Max Tokens: 50</h5>
+                                <p class="text-sm">"The American Revolution (1765-1783) was a colonial revolt where the 13 Colonies defeated Britain, established independence, and created the United States."</p>
+                            </div>
+                            <div class="bg-gray-100 p-4 rounded">
+                                <h5 class="font-medium">Max Tokens: 100</h5>
+                                <p class="text-sm">"The American Revolution began with colonial protests against British taxes (Stamp Act, Tea Act), escalated with the Boston Tea Party and Battles of Lexington/Concord (1775), and concluded with the Treaty of Paris (1783) after key battles like Saratoga and Yorktown."</p>
+                            </div>
+                            <div class="bg-gray-100 p-4 rounded">
+                                <h5 class="font-medium">Max Tokens: 200</h5>
+                                <p class="text-sm">"Spanning 1765-1783, the American Revolution emerged from colonial opposition to British taxation without representation. Key events include the Stamp Act protests (1765), Boston Massacre (1770), Boston Tea Party (1773), and the Continental Congresses. The war officially began in 1775 with battles at Lexington and Concord. The Declaration of Independence (1776) formalized the break. Turning points included the Continental Army's winter at Valley Forge and victory at Saratoga (1777), which secured French support. The war concluded with the British surrender at Yorktown (1781) and Treaty of Paris (1783)."</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="font-medium mb-2">Python Implementation:</h4>
+                        <div class="code-block">
+                            <span class="code-keyword">from</span> transformers <span class="code-keyword">import</span> pipeline<br><br>
+                            <span class="code-comment"># Short summary</span><br>
+                            short_summary = pipeline(<span class="code-string">"text-generation"</span>, model=<span class="code-string">"meta-llama/Meta-Llama-3-8B-Instruct"</span>)<br>
+                            short_result = short_summary(<br>
+                            &nbsp;&nbsp;<span class="code-string">"Explain photosynthesis in one sentence"</span>,<br>
+                            &nbsp;&nbsp;max_length=50,  <span class="code-comment"># ~40 words</span><br>
+                            &nbsp;&nbsp;temperature=0.3<br>
+                            )<br><br>
+                            <span class="code-comment"># Detailed explanation</span><br>
+                            detailed_explanation = pipeline(<span class="code-string">"text-generation"</span>, model=<span class="code-string">"meta-llama/Meta-Llama-3-8B-Instruct"</span>)<br>
+                            detailed_result = detailed_explanation(<br>
+                            &nbsp;&nbsp;<span class="code-string">"Explain the process of photosynthesis in detail"</span>,<br>
+                            &nbsp;&nbsp;max_length=300,  <span class="code-comment"># ~225 words</span><br>
+                            &nbsp;&nbsp;temperature=0.5<br>
+                            )<br><br>
+                            <span class="code-function">print</span>(<span class="code-string">"Short:"</span>, short_result[0][<span class="code-string">'generated_text'</span>])<br>
+                            <span class="code-function">print</span>(<span class="code-string">"\nDetailed:"</span>, detailed_result[0][<span class="code-string">'generated_text'</span>])
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">4. Top-K Sampling</h3>
+                    <p class="mb-4">
+                        Limits sampling to the k most likely tokens at each step. Unlike top-p, uses a fixed number rather than probability mass.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h4 class="font-medium mb-2">Comparison with Top-P:</h4>
+                            <table class="min-w-full border">
+                                <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="border px-4 py-2">Feature</th>
+                                        <th class="border px-4 py-2">Top-K</th>
+                                        <th class="border px-4 py-2">Top-P</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="border px-4 py-2">Selection Method</td>
+                                        <td class="border px-4 py-2">Fixed number of tokens</td>
+                                        <td class="border px-4 py-2">Dynamic probability mass</td>
+                                    </tr>
+                                    <tr class="bg-gray-50">
+                                        <td class="border px-4 py-2">Consistency</td>
+                                        <td class="border px-4 py-2">Same k for all steps</td>
+                                        <td class="border px-4 py-2">Varies by probability dist.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border px-4 py-2">Best For</td>
+                                        <td class="border px-4 py-2">When vocabulary is stable</td>
+                                        <td class="border px-4 py-2">When confidence varies</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-2">Example Outputs:</h4>
+                            <div class="bg-gray-100 p-4 rounded mb-2">
+                                <h5 class="font-medium">Top-K=10</h5>
+                                <p class="text-sm">"The Renaissance was a cultural movement that began in 14th century Italy, characterized by renewed interest in classical art and learning."</p>
+                            </div>
+                            <div class="bg-gray-100 p-4 rounded">
+                                <h5 class="font-medium">Top-K=50</h5>
+                                <p class="text-sm">"Emerging from the medieval shadows, the Renaissance blossomed in Florence - a rebirth of Greco-Roman ideals that set Europe ablaze with humanist philosophy, breathtaking art, and scientific inquiry that would reshape the world."</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">5. Penalties (Frequency & Presence)</h3>
+                    <p class="mb-4">
+                        These parameters discourage repetition by penalizing tokens based on their occurrence.
+                    </p>
+                    
+                    <div class="setting-box p-4 rounded mb-6">
+                        <h4 class="font-medium text-blue-700 mb-2">Key Parameters:</h4>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li><span class="font-medium">Frequency Penalty</span> (0-2): Reduces repetition of the exact same token</li>
+                            <li><span class="font-medium">Presence Penalty</span> (0-2): Reduces repetition of similar concepts</li>
+                            <li>Values 1.0+ are very aggressive, 0.1-0.5 is typical</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-gray-100 p-4 rounded">
+                            <h5 class="font-medium">No Penalties</h5>
+                            <p class="text-sm">"The key to success is hard work. Hard work leads to achievement. Achievement requires hard work. Work hard to succeed."</p>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded">
+                            <h5 class="font-medium">With Penalties (freq=0.5, pres=0.3)</h5>
+                            <p class="text-sm">"The key to success combines diligent effort, strategic planning, and continuous learning. Consistent application of these principles fosters achievement while maintaining adaptability."</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">6. Practical Use Cases</h3>
+                    <p class="mb-4">
+                        Recommended settings for common application scenarios.
+                    </p>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full border">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="border px-4 py-2">Use Case</th>
+                                    <th class="border px-4 py-2">Temperature</th>
+                                    <th class="border px-4 py-2">Top-P</th>
+                                    <th class="border px-4 py-2">Max Tokens</th>
+                                    <th class="border px-4 py-2">Other Settings</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border px-4 py-2">Factual Q&A</td>
+                                    <td class="border px-4 py-2">0.1-0.3</td>
+                                    <td class="border px-4 py-2">0.5-0.7</td>
+                                    <td class="border px-4 py-2">100-300</td>
+                                    <td class="border px-4 py-2">freq=0.1</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border px-4 py-2">Creative Writing</td>
+                                    <td class="border px-4 py-2">0.7-1.0</td>
+                                    <td class="border px-4 py-2">0.8-0.95</td>
+                                    <td class="border px-4 py-2">300-600</td>
+                                    <td class="border px-4 py-2">pres=0.2</td>
+                                </tr>
+                                <tr>
+                                    <td class="border px-4 py-2">Code Generation</td>
+                                    <td class="border px-4 py-2">0.2-0.4</td>
+                                    <td class="border px-4 py-2">0.5-0.8</td>
+                                    <td class="border px-4 py-2">200-500</td>
+                                    <td class="border px-4 py-2">freq=0.3</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border px-4 py-2">Summarization</td>
+                                    <td class="border px-4 py-2">0.3-0.6</td>
+                                    <td class="border px-4 py-2">0.7-0.9</td>
+                                    <td class="border px-4 py-2">100-400</td>
+                                    <td class="border px-4 py-2">pres=0.1</td>
+                                </tr>
+                                <tr>
+                                    <td class="border px-4 py-2">Brainstorming</td>
+                                    <td class="border px-4 py-2">0.8-1.2</td>
+                                    <td class="border px-4 py-2">0.9-1.0</td>
+                                    <td class="border px-4 py-2">200-500</td>
+                                    <td class="border px-4 py-2">pres=0.5</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                <section>
+                    <h3 class="text-2xl font-semibold mb-4 text-primary border-b pb-2">Settings Optimization Process</h3>
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                        <h4 class="font-medium mb-3">Workflow for Finding Optimal Settings:</h4>
+                        <ol class="list-decimal pl-5 space-y-3">
+                            <li><span class="font-medium">Define your success criteria</span> (accuracy, creativity, length, etc.)</li>
+                            <li><span class="font-medium">Start with recommended defaults</span> for your use case</li>
+                            <li><span class="font-medium">Test systematically</span> - vary one parameter at a time</li>
+                            <li><span class="font-medium">Evaluate outputs</span> against your criteria</li>
+                            <li><span class="font-medium">Document performance</span> of different combinations</li>
+                            <li><span class="font-medium">Implement monitoring</span> to detect drift over time</li>
+                            <li><span class="font-medium">Re-calibrate periodically</span> as models and needs evolve</li>
+                        </ol>
+                    </div>
+                </section>
+            </div>
+        </article>
+    </main>
+
+    <footer class="bg-dark text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-xl font-bold text-primary">Prompt Engineering Course</h3>
+                    <p class="text-gray-400 mt-1">Mastering LLM Configuration - 2025 Edition</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition">Terms</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">Privacy</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">Contact</a>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-6 pt-6 text-center text-gray-400 text-sm">
+                <p>© 2025 AI Education Institute. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Temperature slider interaction
+        const tempSlider = document.getElementById('tempSlider');
+        const tempValue = document.getElementById('tempValue');
+        const tempOutput = document.getElementById('tempOutput');
+        
+        const tempExamples = [
+            "The capital of France is Paris. Paris is located in northern France along the Seine River.",
+            "Paris, the capital of France, is known for its art, architecture, and cultural landmarks like the Eiffel Tower.",
+            "Ah, Paris! The City of Light, where romance lingers in café air and history whispers along the Seine's graceful curves.",
+            "Parisian essence: buttery croissant crumbs on morning lips, jazz floating from caveau clubs, light dancing on Haussmann's grand facades.",
+            "Paris? More like... Pair-EE! That funky town where berets grow on trees and poodles philosophize in existential cafés, mon ami!"
+        ];
+        
+        tempSlider.addEventListener('input', function() {
+            const temp = this.value / 10;
+            tempValue.textContent = temp.toFixed(1);
+            
+            let exampleIndex;
+            if (temp <= 0.3) exampleIndex = 0;
+            else if (temp <= 0.6) exampleIndex = 1;
+            else if (temp <= 0.9) exampleIndex = 2;
+            else if (temp <= 1.2) exampleIndex = 3;
+            else exampleIndex = 4;
+            
+            tempOutput.textContent = tempExamples[exampleIndex];
+        });
+        
+        // Top-P slider interaction
+        const topPSlider = document.getElementById('topPSlider');
+        const topPValue = document.getElementById('topPValue');
+        const topPOutput = document.getElementById('topPOutput');
+        
+        const topPExamples = [
+            "Learning creates new connections between neurons in the brain through neuroplasticity.",
+            "Learning builds neural pathways, strengthens synaptic connections, and can increase gray matter density in relevant brain regions.",
+            "When we learn, our brains physically change - neurons sprout new dendrites, synapses strengthen, and entire networks reorganize in this amazing dance of neuroplasticity.",
+            "The learning brain is like a galaxy forming new stars - synapses spark to life, neural pathways blaze trails, and knowledge constellations take shape in your personal cognitive universe.",
+            "Brain go brrrr when learn stuff! Zap zap neurons make the thinky thoughts connecty connect boom smart now!"
+        ];
+        
+        topPSlider.addEventListener('input', function() {
+            const topP = this.value / 100;
+            topPValue.textContent = topP.toFixed(1);
+            
+            let exampleIndex;
+            if (topP <= 0.3) exampleIndex = 0;
+            else if (topP <= 0.6) exampleIndex = 1;
+            else if (topP <= 0.9) exampleIndex = 2;
+            else exampleIndex = 3;
+            
+            topPOutput.textContent = topPExamples[exampleIndex];
+        });
+        
+        // Initialize temperature visualization
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('tempChart');
+            const ctx = canvas.getContext('2d');
+            const tooltip = document.getElementById('tempTooltip');
+            
+            // Set canvas dimensions
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            // Draw the visualization
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw axes
+                ctx.beginPath();
+                ctx.moveTo(50, 50);
+                ctx.lineTo(50, 400);
+                ctx.lineTo(700, 400);
+                ctx.strokeStyle = "#1F2937";
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                // Axis labels
+                ctx.fillStyle = "#1F2937";
+                ctx.font = "14px Inter";
+                ctx.textAlign = "center";
+                ctx.fillText("Temperature", 375, 440);
+                ctx.save();
+                ctx.translate(20, 225);
+                ctx.rotate(-Math.PI/2);
+                ctx.fillText("Output Diversity", 0, 0);
+                ctx.restore();
+                
+                // Tick marks
+                ctx.fillStyle = "#1F2937";
+                ctx.font = "12px Inter";
+                
+                // X-axis ticks
+                const tempTicks = [0, 0.5, 1.0, 1.5, 2.0];
+                tempTicks.forEach((tick, i) => {
+                    const x = 50 + (650 / (tempTicks.length - 1)) * i;
+                    ctx.beginPath();
+                    ctx.moveTo(x, 400);
+                    ctx.lineTo(x, 405);
+                    ctx.stroke();
+                    ctx.fillText(tick.toString(), x, 420);
+                });
+                
+                // Y-axis ticks
+                const diversityTicks = ["Low", "Medium", "High"];
+                diversityTicks.forEach((tick, i) => {
+                    const y = 400 - (350 / (diversityTicks.length - 1)) * i;
+                    ctx.beginPath();
+                    ctx.moveTo(50, y);
+                    ctx.lineTo(45, y);
+                    ctx.stroke();
+                    ctx.fillText(tick, 30, y + 5);
+                });
+                
+                // Curve
+                ctx.beginPath();
+                ctx.moveTo(50, 400);
+                for (let x = 0; x <= 650; x += 5) {
+                    const temp = (x / 650) * 2;
+                    const y = 400 - (350 * Math.pow(temp, 0.7));
+                    ctx.lineTo(50 + x, y);
+                }
+                ctx.strokeStyle = "#3B82F6";
+                ctx.lineWidth = 3;
+                ctx.stroke();
+                
+                // Key points
+                const keyPoints = [
+                    { temp: 0.2, label: "Factual Q&A" },
+                    { temp: 0.7, label: "Balanced" },
+                    { temp: 1.2, label: "Creative" }
+                ];
+                
+                keyPoints.forEach(point => {
+                    const x = 50 + (point.temp / 2 * 650);
+                    const y = 400 - (350 * Math.pow(point.temp, 0.7));
+                    
+                    ctx.beginPath();
+                    ctx.arc(x, y, 6, 0, Math.PI * 2);
+                    ctx.fillStyle = "#EF4444";
+                    ctx.fill();
+                    
+                    ctx.fillStyle = "#1F2937";
+                    ctx.font = "12px Inter";
+                    ctx.textAlign = "center";
+                    ctx.fillText(point.label, x, y - 15);
+                });
+            }
+            
+            // Add interactivity
+            canvas.addEventListener('mousemove', function(e) {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Check if mouse is near curve
+                if (x >= 50 && x <= 700 && y >= 50 && y <= 400) {
+                    const temp = ((x - 50) / 650) * 2;
+                    const expectedY = 400 - (350 * Math.pow(temp, 0.7));
+                    
+                    if (Math.abs(y - expectedY) < 20) {
+                        canvas.style.cursor = 'pointer';
+                        
+                        // Position tooltip
+                        tooltip.style.left = `${x + 20}px`;
+                        tooltip.style.top = `${y - 20}px`;
+                        tooltip.style.opacity = '1';
+                        tooltip.innerHTML = `<strong>Temp: ${temp.toFixed(1)}</strong><br>${getTempDescription(temp)}`;
+                        return;
+                    }
+                }
+                
+                canvas.style.cursor = 'default';
+                tooltip.style.opacity = '0';
+            });
+            
+            function getTempDescription(temp) {
+                if (temp < 0.3) return "Highly deterministic, best for factual accuracy";
+                if (temp < 0.7) return "Balanced creativity and reliability";
+                if (temp < 1.0) return "Creative but coherent";
+                return "Highly creative, less predictable";
+            }
+            
+            // Initial draw
+            draw();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+                draw();
+            });
+        });
+    </script>
+</body>
+</html>

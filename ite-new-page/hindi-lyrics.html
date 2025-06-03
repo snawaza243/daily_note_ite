@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hindi Song Lyrics Collection | Multilingual Lyrics with Translations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .hindi-font {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+        }
+        .urdu-font {
+            font-family: 'Noto Nastaliq Urdu', serif;
+            direction: rtl;
+        }
+    </style>
+</head>
+<body class="bg-amber-50 font-sans">
+    <!-- Navigation -->
+    <nav class="bg-amber-800 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold">LyricsVibes</a>
+            <div class="hidden md:flex space-x-8">
+                <a href="#" class="hover:text-amber-200">Latest Lyrics</a>
+                <a href="#" class="hover:text-amber-200">Top Songs</a>
+                <a href="#" class="hover:text-amber-200">Film Albums</a>
+                <a href="#" class="hover:text-amber-200">Artists</a>
+                <a href="#" class="hover:text-amber-200">Genres</a>
+            </div>
+            <button class="md:hidden">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-amber-700 to-amber-900 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-8 md:mb-0">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">Hindi Song Lyrics Collection</h1>
+                <p class="text-xl mb-6">Explore authentic lyrics in Hindi, Urdu, Romanized (Hinglish) with English translations and cultural insights</p>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <a href="#featured" class="bg-white text-amber-800 px-6 py-3 rounded-lg font-semibold text-center hover:bg-amber-100 transition">Featured Lyrics</a>
+                    <a href="#search" class="bg-transparent border-2 border-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-amber-800 transition">Search Songs</a>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center">
+                <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Indian music" class="rounded-lg shadow-xl max-w-full h-auto">
+            </div>
+        </div>
+    </section>
+
+    <!-- Unique Features -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Our Unique Lyrics Format</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Feature 1 -->
+                <div class="bg-amber-50 p-6 rounded-xl border border-amber-200">
+                    <div class="text-amber-600 mb-4 text-3xl">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Multilingual Lyrics</h3>
+                    <p class="text-gray-700">Original Hindi (Devanagari), Urdu, and Romanized (Hinglish) versions for all songs</p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="bg-amber-50 p-6 rounded-xl border border-amber-200">
+                    <div class="text-amber-600 mb-4 text-3xl">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">English Translation</h3>
+                    <p class="text-gray-700">Accurate English translations to understand the poetic meaning</p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="bg-amber-50 p-6 rounded-xl border border-amber-200">
+                    <div class="text-amber-600 mb-4 text-3xl">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Song Versions</h3>
+                    <p class="text-gray-700">Official, karaoke, and cover versions embedded for listening</p>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="bg-amber-50 p-6 rounded-xl border border-amber-200">
+                    <div class="text-amber-600 mb-4 text-3xl">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Cultural Context</h3>
+                    <p class="text-gray-700">Background about the song's significance and musical breakdown</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Lyrics -->
+    <section id="featured" class="py-16 bg-amber-100">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Featured Song Lyrics</h2>
+            
+            <!-- Lyrics Card 1 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden mb-10">
+                <div class="md:flex">
+                    <!-- YouTube Embed -->
+                    <div class="md:w-1/3">
+                        <div class="aspect-w-16 aspect-h-9">
+                            <iframe class="w-full h-64 md:h-full" src="https://www.youtube.com/embed/xyz123" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    
+                    <!-- Lyrics Content -->
+                    <div class="md:w-2/3 p-6">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-2xl font-bold text-amber-800 mb-2">Tum Hi Ho</h3>
+                                <p class="text-gray-600 mb-3">From "Aashiqui 2" • Composer: Mithoon • Singer: Arijit Singh</p>
+                            </div>
+                            <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm">Romantic</span>
+                        </div>
+                        
+                        <!-- Lyrics Preview -->
+                        <div class="my-4">
+                            <h4 class="font-semibold mb-2 flex items-center">
+                                <span class="bg-amber-600 text-white p-1 rounded mr-2">📜</span>
+                                Hindi Lyrics Excerpt
+                            </h4>
+                            <div class="hindi-font bg-amber-50 p-3 rounded italic">
+                                तुम ही हो...<br>
+                                अब तुम ही हो...<br>
+                                ज़िन्दगी अब तुम ही हो...
+                            </div>
+                        </div>
+                        
+                        <div class="my-4">
+                            <h4 class="font-semibold mb-2 flex items-center">
+                                <span class="bg-amber-600 text-white p-1 rounded mr-2">🌍</span>
+                                English Translation
+                            </h4>
+                            <p class="bg-amber-50 p-3 rounded">"You are the one... Now only you exist... My life is now only you..."</p>
+                        </div>
+                        
+                        <!-- Quick Links -->
+                        <div class="mt-6 flex flex-wrap gap-2">
+                            <a href="#" class="px-3 py-1 bg-amber-600 text-white rounded-full text-sm hover:bg-amber-700 flex items-center">
+                                <i class="fas fa-language mr-1"></i> Full Lyrics
+                            </a>
+                            <a href="#" class="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm hover:bg-amber-200 flex items-center">
+                                <i class="fas fa-headphones mr-1"></i> Karaoke
+                            </a>
+                            <a href="#" class="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm hover:bg-amber-200 flex items-center">
+                                <i class="fas fa-info-circle mr-1"></i> Song Info
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Full Features List -->
+                <div class="bg-amber-50 px-6 py-4 border-t border-amber-200">
+                    <h4 class="font-semibold mb-3">This lyrics post includes:</h4>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="px-3 py-1 bg-white rounded-full text-sm flex items-center">
+                            <span class="mr-1">📜</span> Hindi Lyrics
+                        </span>
+                        <span class="px-3 py-1 bg-white rounded-full text-sm flex items-center">
+                            <span class="mr-1">🖋️</span> Urdu Lyrics
+                        </span>
+                        <span class="px-3 py-1 bg-white rounded-full text-sm flex items-center">
+                            <span class="mr-1">✍️</span> Hinglish
+                        </span>
+                        <span class="px-3 py-1 bg-white rounded-full text-sm flex items-center">
+                            <span class="mr-1">🌍</span> Translation
+                        </span>
+                        <span class="px-3 py-1 bg-white rounded-full text-sm flex items-center">
+                            <span class="mr-1">🎵</span> Song Versions
+                        </span>
+                        <span class="px-3 py-1 bg-white rounded-full text-sm flex items-center">
+                            <span class="mr-1">🎭</span> Cultural Notes
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Lyrics Card 2 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden mb-10">
+                <div class="md:flex">
+                    <!-- YouTube Embed -->
+                    <div class="md:w-1/3">
+                        <div class="aspect-w-16 aspect-h-9">
+                            <iframe class="w-full h-64 md:h-full" src="https://www.youtube.com/embed/abc456" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    
+                    <!-- Lyrics Content -->
+                    <div class="md:w-2/3 p-6">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-2xl font-bold text-amber-800 mb-2">Chaiyya Chaiyya</h3>
+                                <p class="text-gray-600 mb-3">From "Dil Se" • Composer: A.R. Rahman • Singer: Sukhwinder Singh</p>
+                            </div>
+                            <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm">Peppy</span>
+                        </div>
+                        
+                        <!-- Lyrics Preview -->
+                        <div class="my-4">
+                            <h4 class="font-semibold mb-2 flex items-center">
+                                <span class="bg-amber-600 text-white p-1 rounded mr-2">✍️</span>
+                                Hinglish (Romanized) Excerpt
+                            </h4>
+                            <div class="bg-amber-50 p-3 rounded italic">
+                                Chaiyya chaiyya chaiyya chaiyya<br>
+                                Chaiyya chaiyya chaiyya chaiyya<br>
+                                Chaiyya chaiyya...
+                            </div>
+                        </div>
+                        
+                        <div class="my-4">
+                            <h4 class="font-semibold mb-2 flex items-center">
+                                <span class="bg-amber-600 text-white p-1 rounded mr-2">🎭</span>
+                                Cultural Significance
+                            </h4>
+                            <p class="bg-amber-50 p-3 rounded">Iconic train-top dance sequence that became globally recognized. The song blends Sufi folk with contemporary beats.</p>
+                        </div>
+                        
+                        <!-- Quick Links -->
+                        <div class="mt-6 flex flex-wrap gap-2">
+                            <a href="#" class="px-3 py-1 bg-amber-600 text-white rounded-full text-sm hover:bg-amber-700 flex items-center">
+                                <i class="fas fa-language mr-1"></i> Full Lyrics
+                            </a>
+                            <a href="#" class="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm hover:bg-amber-200 flex items-center">
+                                <i class="fas fa-film mr-1"></i> Movie Scene
+                            </a>
+                            <a href="#" class="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm hover:bg-amber-200 flex items-center">
+                                <i class="fas fa-guitar mr-1"></i> Music Analysis
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Full Features List -->
+                <div class="bg-amber-50 px-6 py-4 border-t border-amber-200">
+                    <h4 class="font-semibold mb-3">This lyrics post includes:</h4>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="px-3 py-1 bg-white rounded-full text-sm flex items-center">
+                            <span class="mr-1">📜</span> Hindi Lyrics
+                        </span>
+                        <span class="px-3 py-1 bg-white rounded-full text-sm flex items-center">
+                            <span class="mr-1">🖋️</span> Urdu Lyrics
+                        </span>
+                        <span class="px-3 py-1 bg-white rounded-full text-sm flex items-center">
+                            <span class="mr-1">🎶</span> Music Breakdown
+                        </span>
+                        <span class="px-3 py-1 bg-white rounded-full text-sm flex items-center">
+                            <span class="mr-1">🎬</span> Behind the Scenes
+                        </span>
+                        <span class="px-3 py-1 bg-white rounded-full text-sm flex items-center">
+                            <span class="mr-1">💬</span> Fan Comments
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-8">
+                <a href="#" class="inline-block bg-amber-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-amber-700 transition">View All Lyrics Posts</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section id="search" class="py-16 bg-white">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8">Find Your Favorite Song Lyrics</h2>
+            
+            <!-- Search Form -->
+            <div class="bg-amber-50 rounded-xl p-6 shadow-sm">
+                <div class="flex flex-col sm:flex-row gap-3 mb-4">
+                    <input type="text" placeholder="Search by song name..." class="flex-grow px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    <button class="bg-amber-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-amber-700 transition">Search</button>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <a href="#" class="bg-white p-3 rounded-lg text-center hover:bg-amber-100 transition">
+                        <div class="text-amber-600 mb-2 text-xl">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <span>Latest Additions</span>
+                    </a>
+                    <a href="#" class="bg-white p-3 rounded-lg text-center hover:bg-amber-100 transition">
+                        <div class="text-amber-600 mb-2 text-xl">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <span>Top 100</span>
+                    </a>
+                    <a href="#" class="bg-white p-3 rounded-lg text-center hover:bg-amber-100 transition">
+                        <div class="text-amber-600 mb-2 text-xl">
+                            <i class="fas fa-film"></i>
+                        </div>
+                        <span>By Movies</span>
+                    </a>
+                    <a href="#" class="bg-white p-3 rounded-lg text-center hover:bg-amber-100 transition">
+                        <div class="text-amber-600 mb-2 text-xl">
+                            <i class="fas fa-microphone"></i>
+                        </div>
+                        <span>By Singers</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="py-16 bg-amber-100">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Browse Lyrics by Category</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                <a href="#" class="bg-white p-4 rounded-lg text-center hover:shadow-md transition flex flex-col items-center">
+                    <div class="text-amber-600 mb-2 text-2xl">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <span>Romantic</span>
+                </a>
+                <a href="#" class="bg-white p-4 rounded-lg text-center hover:shadow-md transition flex flex-col items-center">
+                    <div class="text-amber-600 mb-2 text-2xl">
+                        <i class="fas fa-laugh-beam"></i>
+                    </div>
+                    <span>Party</span>
+                </a>
+                <a href="#" class="bg-white p-4 rounded-lg text-center hover:shadow-md transition flex flex-col items-center">
+                    <div class="text-amber-600 mb-2 text-2xl">
+                        <i class="fas fa-pray"></i>
+                    </div>
+                    <span>Devotional</span>
+                </a>
+                <a href="#" class="bg-white p-4 rounded-lg text-center hover:shadow-md transition flex flex-col items-center">
+                    <div class="text-amber-600 mb-2 text-2xl">
+                        <i class="fas fa-guitar"></i>
+                    </div>
+                    <span>Sufi</span>
+                </a>
+                <a href="#" class="bg-white p-4 rounded-lg text-center hover:shadow-md transition flex flex-col items-center">
+                    <div class="text-amber-600 mb-2 text-2xl">
+                        <i class="fas fa-mountain"></i>
+                    </div>
+                    <span>Folk</span>
+                </a>
+                <a href="#" class="bg-white p-4 rounded-lg text-center hover:shadow-md transition flex flex-col items-center">
+                    <div class="text-amber-600 mb-2 text-2xl">
+                        <i class="fas fa-theater-masks"></i>
+                    </div>
+                    <span>Classical</span>
+                </a>
+                <a href="#" class="bg-white p-4 rounded-lg text-center hover:shadow-md transition flex flex-col items-center">
+                    <div class="text-amber-600 mb-2 text-2xl">
+                        <i class="fas fa-hiphop"></i>
+                    </div>
+                    <span>Hip-Hop</span>
+                </a>
+                <a href="#" class="bg-white p-4 rounded-lg text-center hover:shadow-md transition flex flex-col items-center">
+                    <div class="text-amber-600 mb-2 text-2xl">
+                        <i class="fas fa-child"></i>
+                    </div>
+                    <span>Children</span>
+                </a>
+                <a href="#" class="bg-white p-4 rounded-lg text-center hover:shadow-md transition flex flex-col items-center">
+                    <div class="text-amber-600 mb-2 text-2xl">
+                        <i class="fas fa-flag"></i>
+                    </div>
+                    <span>Patriotic</span>
+                </a>
+                <a href="#" class="bg-white p-4 rounded-lg text-center hover:shadow-md transition flex flex-col items-center">
+                    <div class="text-amber-600 mb-2 text-2xl">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </div>
+                    <span>More...</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-16 bg-amber-800 text-white">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-6">Get New Lyrics Directly to Your Inbox</h2>
+            <p class="text-xl mb-8">Subscribe to receive our latest lyrics posts with translations and musical insights</p>
+            <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                <input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 rounded-lg focus:outline-none text-gray-800">
+                <button type="submit" class="bg-amber-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-amber-700 transition">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-amber-900 text-amber-100 py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- About -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-white">About LyricsVibes</h3>
+                    <p>Providing authentic Hindi song lyrics in multiple scripts with English translations, cultural context, and musical analysis since 2015.</p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-white">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white">Home</a></li>
+                        <li><a href="#" class="hover:text-white">Latest Lyrics</a></li>
+                        <li><a href="#" class="hover:text-white">Top Songs</a></li>
+                        <li><a href="#" class="hover:text-white">Request Lyrics</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Legal -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-white">Legal</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white">Terms of Use</a></li>
+                        <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-white">DMCA</a></li>
+                        <li><a href="#" class="hover:text-white">Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Social -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-white">Connect With Us</h3>
+                    <div class="flex space-x-4 mb-4 text-xl">
+                        <a href="#" class="hover:text-white"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="hover:text-white"><i class="fab fa-youtube"></i></a>
+                    </div>
+                    <p>For partnerships: <a href="mailto:contact@lyricsvibes.com" class="text-amber-300 hover:underline">contact@lyricsvibes.com</a></p>
+                </div>
+            </div>
+            <div class="border-t border-amber-800 mt-8 pt-8 text-center">
+                <p>&copy; 2024 LyricsVibes. All lyrics are property of their respective owners.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
