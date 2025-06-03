@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethics and Responsible AI in Prompt Engineering | LLM Course</title>
+    <meta name="description" content="Learn ethical considerations and responsible practices for prompt engineering with large language models, including bias mitigation, privacy protection, and regulatory compliance.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚖️</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .mono-code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f3f4f6;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            color: #1f2937;
+        }
+        .code-block {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+        }
+        .ethical-card {
+            transition: all 0.3s ease;
+        }
+        .ethical-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted #4b5563;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #4b5563;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Header -->
+    <header class="bg-green-700 text-white py-6 shadow-md">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-bold">Ethics and Responsible AI in Prompt Engineering</h1>
+            <p class="mt-2 text-green-100">Developing ethical awareness and responsible practices for working with Large Language Models</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-10">
+        <div class="container mx-auto px-4">
+            <div class="flex space-x-6 py-4 overflow-x-auto">
+                <a href="#ethical-considerations" class="text-green-600 hover:text-green-800 font-medium whitespace-nowrap">Ethical Issues</a>
+                <a href="#responsible-design" class="text-gray-600 hover:text-green-600 font-medium whitespace-nowrap">Responsible Design</a>
+                <a href="#bias-mitigation" class="text-gray-600 hover:text-green-600 font-medium whitespace-nowrap">Bias Mitigation</a>
+                <a href="#privacy-security" class="text-gray-600 hover:text-green-600 font-medium whitespace-nowrap">Privacy & Security</a>
+                <a href="#environmental-impact" class="text-gray-600 hover:text-green-600 font-medium whitespace-nowrap">Environmental Impact</a>
+                <a href="#accountability" class="text-gray-600 hover:text-green-600 font-medium whitespace-nowrap">Accountability</a>
+                <a href="#regulatory" class="text-gray-600 hover:text-green-600 font-medium whitespace-nowrap">Regulatory Compliance</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <article class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+            <div class="p-6">
+                <p class="text-lg text-gray-700 mb-6">
+                    As Large Language Models become more powerful and widely deployed, ethical considerations in prompt engineering
+                    grow increasingly important. This module explores the responsibilities of prompt engineers to prevent harm,
+                    ensure fairness, protect privacy, and comply with emerging regulations as of 2025.
+                </p>
+                
+                <!-- Ethical Considerations -->
+                <section id="ethical-considerations" class="mb-12">
+                    <h2 class="text-2xl font-bold text-green-800 mb-4">Ethical Considerations in Prompt Engineering</h2>
+                    <p class="mb-4">
+                        Prompt engineering decisions can significantly impact the ethical outcomes of LLM interactions. Below are key
+                        ethical issues to consider when crafting prompts:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <div class="ethical-card bg-white border rounded-lg overflow-hidden shadow-sm h-full">
+                                <div class="bg-red-600 text-white p-3">
+                                    <h3 class="font-bold">Bias Amplification</h3>
+                                </div>
+                                <div class="p-4">
+                                    <p class="mb-3">Prompts can unintentionally amplify societal biases present in training data:</p>
+                                    <div class="bg-red-50 p-3 rounded border border-red-200">
+                                        <p class="text-sm font-medium text-red-800">Problematic Prompt:</p>
+                                        <p class="text-sm">"Describe the characteristics of a good nurse" (may reinforce gender stereotypes)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="ethical-card bg-white border rounded-lg overflow-hidden shadow-sm h-full">
+                                <div class="bg-purple-600 text-white p-3">
+                                    <h3 class="font-bold">Misinformation Risks</h3>
+                                </div>
+                                <div class="p-4">
+                                    <p class="mb-3">Poorly constrained prompts can generate plausible but false information:</p>
+                                    <div class="bg-purple-50 p-3 rounded border border-purple-200">
+                                        <p class="text-sm font-medium text-purple-800">Problematic Prompt:</p>
+                                        <p class="text-sm">"Write a scientific paper about vaccine side effects" (without accuracy constraints)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="ethical-card bg-white border rounded-lg overflow-hidden shadow-sm h-full">
+                                <div class="bg-blue-600 text-white p-3">
+                                    <h3 class="font-bold">Privacy Concerns</h3>
+                                </div>
+                                <div class="p-4">
+                                    <p class="mb-3">Prompts may expose sensitive information if not carefully designed:</p>
+                                    <div class="bg-blue-50 p-3 rounded border border-blue-200">
+                                        <p class="text-sm font-medium text-blue-800">Problematic Prompt:</p>
+                                        <p class="text-sm">"Summarize this patient's medical history: [Paste full EHR data]"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="ethical-card bg-white border rounded-lg overflow-hidden shadow-sm h-full">
+                                <div class="bg-orange-600 text-white p-3">
+                                    <h3 class="font-bold">Manipulation Potential</h3>
+                                </div>
+                                <div class="p-4">
+                                    <p class="mb-3">Prompts could be designed to generate harmful or deceptive content:</p>
+                                    <div class="bg-orange-50 p-3 rounded border border-orange-200">
+                                        <p class="text-sm font-medium text-orange-800">Problematic Prompt:</p>
+                                        <p class="text-sm">"Write a convincing email to trick users into revealing passwords"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-3">Ethical Decision Framework</h3>
+                        <canvas id="ethicsCanvas" class="w-full h-64 bg-white rounded-lg border border-gray-300 mb-4"></canvas>
+                        <div class="grid grid-cols-4 gap-2 text-center text-xs">
+                            <div class="bg-green-100 p-2 rounded">1. Identify Stakeholders</div>
+                            <div class="bg-green-200 p-2 rounded">2. Assess Potential Harms</div>
+                            <div class="bg-green-300 p-2 rounded">3. Evaluate Alternatives</div>
+                            <div class="bg-green-400 p-2 rounded text-white">4. Implement Safeguards</div>
+                        </div>
+                        <p id="ethicsExplanation" class="hidden mt-3 text-sm text-gray-700">
+                            The ethical decision process involves continuous evaluation at each stage of prompt design and deployment.
+                            Hover over the diagram sections to learn more about each step.
+                        </p>
+                    </div>
+                </section>
+                
+                <!-- Responsible Prompt Design -->
+                <section id="responsible-design" class="mb-12">
+                    <h2 class="text-2xl font-bold text-green-800 mb-4">Responsible Prompt Design</h2>
+                    <p class="mb-4">
+                        Responsible prompt engineering involves proactively designing prompts to minimize potential harms while
+                        achieving the desired outcomes. Compare these examples:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
+                                <h3 class="font-bold text-red-800 mb-2">Irresponsible Prompt</h3>
+                                <p class="mb-3">"Write a job description for a software engineer"</p>
+                                <p class="text-sm text-red-700"><strong>Issues:</strong> May inherit biases from training data, use non-inclusive language, or emphasize stereotypical traits.</p>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
+                                <h3 class="font-bold text-green-800 mb-2">Responsible Prompt</h3>
+                                <p class="mb-3">"Write a gender-neutral job description for a software engineer position that emphasizes skills and qualifications. Include only essential requirements that are truly necessary for the role. Use inclusive language throughout and avoid any demographic stereotypes."</p>
+                                <p class="text-sm text-green-700"><strong>Improvements:</strong> Explicit guidance for inclusivity, focus on skills, and bias mitigation.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-3">Principles of Responsible Prompt Design</h3>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div class="bg-white p-4 rounded shadow">
+                                <h4 class="font-bold mb-2">Transparency</h4>
+                                <p class="text-sm">Clearly indicate when content is AI-generated and document prompt design decisions.</p>
+                            </div>
+                            <div class="bg-white p-4 rounded shadow">
+                                <h4 class="font-bold mb-2">Fairness</h4>
+                                <p class="text-sm">Design prompts to produce equitable outputs across different demographic groups.</p>
+                            </div>
+                            <div class="bg-white p-4 rounded shadow">
+                                <h4 class="font-bold mb-2">Accountability</h4>
+                                <p class="text-sm">Establish mechanisms to audit and review prompt effectiveness and impacts.</p>
+                            </div>
+                            <div class="bg-white p-4 rounded shadow">
+                                <h4 class="font-bold mb-2">Privacy</h4>
+                                <p class="text-sm">Avoid prompts that could lead to disclosure of sensitive or personal information.</p>
+                            </div>
+                            <div class="bg-white p-4 rounded shadow">
+                                <h4 class="font-bold mb-2">Beneficence</h4>
+                                <p class="text-sm">Design prompts that promote positive outcomes and minimize potential harms.</p>
+                            </div>
+                            <div class="bg-white p-4 rounded shadow">
+                                <h4 class="font-bold mb-2">User Autonomy</h4>
+                                <p class="text-sm">Ensure users understand and can control how prompts shape their interactions.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Bias Mitigation -->
+                <section id="bias-mitigation" class="mb-12">
+                    <h2 class="text-2xl font-bold text-green-800 mb-4">Bias Mitigation in Prompts</h2>
+                    <p class="mb-4">
+                        Language models can reflect and amplify biases present in their training data. Thoughtful prompt engineering
+                        can help mitigate these biases through specific techniques:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Bias Mitigation Techniques</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium mb-2">Explicit Neutrality Directives</p>
+                                    <p class="text-sm">"Provide a balanced analysis of political issues, presenting multiple perspectives fairly."</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium mb-2">Diverse Example Specification</p>
+                                    <p class="text-sm">"Generate names for example users that represent diverse ethnic and cultural backgrounds."</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium mb-2">Counter-Stereotyping</p>
+                                    <p class="text-sm">"Describe a nurse using traditionally masculine characteristics and a construction worker using traditionally feminine characteristics."</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Python Implementation</h3>
+                            <div class="code-block">
+                                <pre><code>from transformers import pipeline
+
+# Initialize text generation pipeline
+generator = pipeline('text-generation', model='meta-llama/Meta-Llama-3-70B-Instruct')
+
+def generate_with_bias_mitigation(prompt, topic):
+    # Enhanced prompt with bias mitigation instructions
+    enhanced_prompt = f"""Generate content about {topic} following these guidelines:
+1. Use neutral, objective language
+2. Present balanced perspectives where applicable
+3. Avoid stereotypes or assumptions
+4. Consider diverse viewpoints
+
+Original request: {prompt}
+
+Generated content:"""
+    
+    result = generator(enhanced_prompt, max_length=500, do_sample=True)
+    return result[0]['generated_text']
+
+# Example usage
+print(generate_with_bias_mitigation(
+    "Describe the ideal candidate for CEO position",
+    "executive leadership qualifications"
+))</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                        <h3 class="text-xl font-semibold mb-3">Bias Evaluation Framework</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full bg-white">
+                                <thead>
+                                    <tr class="bg-purple-100">
+                                        <th class="py-2 px-4 border">Bias Type</th>
+                                        <th class="py-2 px-4 border">Prompt Indicator</th>
+                                        <th class="py-2 px-4 border">Mitigation Strategy</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="py-2 px-4 border">Gender</td>
+                                        <td class="py-2 px-4 border">Gendered pronouns, role assumptions</td>
+                                        <td class="py-2 px-4 border">Use neutral language, counter-examples</td>
+                                    </tr>
+                                    <tr class="bg-gray-50">
+                                        <td class="py-2 px-4 border">Cultural</td>
+                                        <td class="py-2 px-4 border">Ethnocentric perspectives</td>
+                                        <td class="py-2 px-4 border">Specify multicultural context</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 px-4 border">Age</td>
+                                        <td class="py-2 px-4 border">Age-related assumptions</td>
+                                        <td class="py-2 px-4 border">Avoid age references unless relevant</td>
+                                    </tr>
+                                    <tr class="bg-gray-50">
+                                        <td class="py-2 px-4 border">Socioeconomic</td>
+                                        <td class="py-2 px-4 border">Class-based assumptions</td>
+                                        <td class="py-2 px-4 border">Use diverse socioeconomic examples</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Privacy and Security -->
+                <section id="privacy-security" class="mb-12">
+                    <h2 class="text-2xl font-bold text-green-800 mb-4">Privacy and Data Security</h2>
+                    <p class="mb-4">
+                        Prompt engineering must consider data privacy and security, especially when handling sensitive information.
+                        Below are key considerations and techniques:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Privacy Risks in Prompts</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-red-50 border border-red-200 rounded-lg">
+                                    <p class="font-medium text-red-800">Direct PII Exposure</p>
+                                    <p class="text-sm">"Analyze this patient's medical record: [Paste full record with name, SSN, etc.]"</p>
+                                </div>
+                                <div class="p-4 bg-red-50 border border-red-200 rounded-lg">
+                                    <p class="font-medium text-red-800">Indirect Re-identification</p>
+                                    <p class="text-sm">"Write a case study about a 45-year-old male CEO in Boston with rare disease X"</p>
+                                </div>
+                                <div class="p-4 bg-red-50 border border-red-200 rounded-lg">
+                                    <p class="font-medium text-red-800">Training Data Memorization</p>
+                                    <p class="text-sm">"Continue this confidential document text: [Paste sensitive fragment]"</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Secure Prompt Design</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                                    <p class="font-medium text-green-800">Data Minimization</p>
+                                    <p class="text-sm">"Analyze these anonymized lab results (remove PII first): [Redacted data]"</p>
+                                </div>
+                                <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                                    <p class="font-medium text-green-800">Aggregation</p>
+                                    <p class="text-sm">"Provide statistics on average treatment outcomes for condition Y (no individual cases)"</p>
+                                </div>
+                                <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                                    <p class="font-medium text-green-800">Synthetic Data</p>
+                                    <p class="text-sm">"Generate a synthetic patient example with condition Z for training purposes"</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-3">Python: Privacy-Preserving Prompt Example</h3>
+                        <div class="code-block">
+                            <pre><code>from presidio_analyzer import AnalyzerEngine
+from presidio_anonymizer import AnonymizerEngine
+
+def sanitize_prompt(prompt_text):
+    # Initialize privacy tools
+    analyzer = AnalyzerEngine()
+    anonymizer = AnonymizerEngine()
+    
+    # Analyze for PII
+    results = analyzer.analyze(text=prompt_text, language='en')
+    
+    # Anonymize the prompt
+    anonymized_text = anonymizer.anonymize(
+        text=prompt_text,
+        analyzer_results=results
+    )
+    
+    return anonymized_text.text
+
+# Example usage
+original_prompt = "Analyze this patient note: John Smith, 45, with SSN 123-45-6789 has diabetes."
+clean_prompt = sanitize_prompt(original_prompt)
+print(f"Sanitized prompt: {clean_prompt}")
+# Output: "Analyze this patient note: &lt;PERSON&gt;, &lt;AGE&gt;, with SSN &lt;US_SSN&gt; has diabetes."</code></pre>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Environmental Impact -->
+                <section id="environmental-impact" class="mb-12">
+                    <h2 class="text-2xl font-bold text-green-800 mb-4">Environmental Impact of Prompt Engineering</h2>
+                    <p class="mb-4">
+                        Large Language Models have significant computational costs. Responsible prompt engineering can help
+                        reduce environmental impact through efficient design:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Energy-Saving Prompt Techniques</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Precise Instructions</p>
+                                    <p class="text-sm text-gray-600">Clear, specific prompts reduce need for multiple generations</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Appropriate Model Size</p>
+                                    <p class="text-sm text-gray-600">Use smaller models for simpler tasks when possible</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Response Length Limits</p>
+                                    <p class="text-sm text-gray-600">Set reasonable max_token parameters</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Caching Common Results</p>
+                                    <p class="text-sm text-gray-600">Store and reuse frequent prompt responses</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Environmental Impact Comparison</h3>
+                            <canvas id="carbonCanvas" class="w-full h-64 bg-white rounded-lg border border-gray-300"></canvas>
+                            <p class="text-sm text-gray-600 mt-2 text-center">Estimated CO₂ emissions per 1000 prompt responses (gCO₂eq)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                        <h3 class="text-xl font-semibold mb-3">Efficient Prompt Design Checklist</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex items-start">
+                                <input type="checkbox" checked class="mt-1 mr-2">
+                                <span>Is the prompt specific enough to avoid multiple generations?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <input type="checkbox" checked class="mt-1 mr-2">
+                                <span>Have I selected the smallest suitable model for this task?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <input type="checkbox" checked class="mt-1 mr-2">
+                                <span>Are response length limits appropriate for the use case?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <input type="checkbox" checked class="mt-1 mr-2">
+                                <span>Can responses be cached and reused for similar queries?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <input type="checkbox" checked class="mt-1 mr-2">
+                                <span>Have I batch-processed prompts when possible?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <input type="checkbox" checked class="mt-1 mr-2">
+                                <span>Am I using the most efficient API parameters?</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Accountability and Transparency -->
+                <section id="accountability" class="mb-12">
+                    <h2 class="text-2xl font-bold text-green-800 mb-4">Accountability and Transparency</h2>
+                    <p class="mb-4">
+                        Maintaining clear documentation and audit trails for prompt engineering decisions is crucial for
+                        responsible AI development and deployment:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Prompt Documentation Template</h3>
+                            <div class="code-block">
+                                <pre><code>### Prompt Metadata
+- Creation Date: 2025-05-15
+- Author: Jane Doe
+- Model: Meta-Llama-3-70B-Instruct
+- Version: 1.2
+
+### Purpose
+Generate product descriptions for e-commerce site
+
+### Ethical Considerations
+- Avoids gender stereotypes
+- Focuses on product features not assumptions about users
+- Includes diversity in example names
+
+### Testing Results
+- Bias evaluation score: 92/100
+- Generated 50 test descriptions with no stereotypes detected
+- User testing showed 15% improvement in inclusivity perception
+
+### Revision History
+1.0 - Initial version
+1.1 - Added explicit inclusivity directives
+1.2 - Shortened response length for efficiency</code></pre>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Transparency Mechanisms</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Prompt Versioning</p>
+                                    <p class="text-sm text-gray-600">Track changes to prompts over time with clear documentation</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Impact Assessments</p>
+                                    <p class="text-sm text-gray-600">Regularly evaluate prompt effects on different user groups</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">User Disclosure</p>
+                                    <p class="text-sm text-gray-600">Clearly indicate when AI is being used and how prompts shape outputs</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Audit Logs</p>
+                                    <p class="text-sm text-gray-600">Maintain records of prompt usage and modifications</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-3">Prompt Audit Checklist</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full bg-white">
+                                <thead>
+                                    <tr class="bg-blue-100">
+                                        <th class="py-2 px-4 border">Area</th>
+                                        <th class="py-2 px-4 border">Questions</th>
+                                        <th class="py-2 px-4 border">Review Frequency</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="py-2 px-4 border">Bias</td>
+                                        <td class="py-2 px-4 border">Could this prompt produce discriminatory outputs?</td>
+                                        <td class="py-2 px-4 border">Monthly</td>
+                                    </tr>
+                                    <tr class="bg-gray-50">
+                                        <td class="py-2 px-4 border">Accuracy</td>
+                                        <td class="py-2 px-4 border">Does the prompt encourage factual, verifiable outputs?</td>
+                                        <td class="py-2 px-4 border">Quarterly</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 px-4 border">Privacy</td>
+                                        <td class="py-2 px-4 border">Could this prompt lead to PII exposure?</td>
+                                        <td class="py-2 px-4 border">Monthly</td>
+                                    </tr>
+                                    <tr class="bg-gray-50">
+                                        <td class="py-2 px-4 border">Transparency</td>
+                                        <td class="py-2 px-4 border">Is it clear to users how prompts affect outputs?</td>
+                                        <td class="py-2 px-4 border">Biannual</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Regulatory Compliance -->
+                <section id="regulatory">
+                    <h2 class="text-2xl font-bold text-green-800 mb-4">Regulatory Compliance (2025)</h2>
+                    <p class="mb-6">
+                        As of 2025, several regulations govern the use of AI systems. Prompt engineers must ensure compliance
+                        with relevant frameworks:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-3 gap-4 mb-6">
+                        <div class="border rounded-lg overflow-hidden">
+                            <div class="bg-indigo-600 text-white p-3">
+                                <h3 class="font-bold">EU AI Act</h3>
+                            </div>
+                            <div class="p-4">
+                                <p class="text-sm mb-3">For high-risk AI systems, requires:</p>
+                                <ul class="list-disc list-inside text-xs space-y-1">
+                                    <li>Risk management systems</li>
+                                    <li>Data governance protocols</li>
+                                    <li>Technical documentation</li>
+                                    <li>Human oversight</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="border rounded-lg overflow-hidden">
+                            <div class="bg-blue-600 text-white p-3">
+                                <h3 class="font-bold">US Executive Order</h3>
+                            </div>
+                            <div class="p-4">
+                                <p class="text-sm mb-3">Mandates for federal agencies:</p>
+                                <ul class="list-disc list-inside text-xs space-y-1">
+                                    <li>AI impact assessments</li>
+                                    <li>Public disclosure requirements</li>
+                                    <li>Algorithmic discrimination prevention</li>
+                                    <li>Third-party testing</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="border rounded-lg overflow-hidden">
+                            <div class="bg-green-600 text-white p-3">
+                                <h3 class="font-bold">Global Standards</h3>
+                            </div>
+                            <div class="p-4">
+                                <p class="text-sm mb-3">Emerging international norms:</p>
+                                <ul class="list-disc list-inside text-xs space-y-1">
+                                    <li>ISO/IEC 42001 AI management</li>
+                                    <li>OECD AI Principles</li>
+                                    <li>UNESCO AI Ethics Framework</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-3">Compliant Prompt Design Examples</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="p-4 bg-white rounded border border-green-200">
+                                <p class="font-medium text-green-800">GDPR-Compliant</p>
+                                <p class="text-sm mt-2">"Generate synthetic customer service dialogue for training purposes. Do not use or infer any real personal data. All examples should be completely fictional."</p>
+                            </div>
+                            <div class="p-4 bg-white rounded border border-blue-200">
+                                <p class="font-medium text-blue-800">AI Act-Compliant</p>
+                                <p class="text-sm mt-2">"Provide three possible responses to this loan application, with confidence scores and explanations for each. Flag any potential biases in the assessment criteria."</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h3 class="text-xl font-semibold mb-3">Regulatory Checklist for Prompt Engineers</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex items-start">
+                                <input type="checkbox" class="mt-1 mr-2">
+                                <span>Have we documented the purpose and design of all production prompts?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <input type="checkbox" class="mt-1 mr-2">
+                                <span>Can we demonstrate fairness testing for high-impact prompts?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <input type="checkbox" class="mt-1 mr-2">
+                                <span>Do we have procedures to handle user requests about AI decisions?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <input type="checkbox" class="mt-1 mr-2">
+                                <span>Are we prepared for regulatory audits of our prompt engineering practices?</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </article>
+        
+        <!-- Summary Card -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+            <div class="bg-green-800 text-white p-4">
+                <h2 class="text-xl font-bold">Ethical Prompt Engineering Checklist</h2>
+            </div>
+            <div class="p-6">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="flex items-start">
+                        <span class="bg-green-200 rounded-full p-1 mr-2">✓</span>
+                        <span>Have I considered potential biases in this prompt?</span>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="bg-green-200 rounded-full p-1 mr-2">✓</span>
+                        <span>Does the prompt protect user privacy and data security?</span>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="bg-green-200 rounded-full p-1 mr-2">✓</span>
+                        <span>Is the prompt designed to minimize environmental impact?</span>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="bg-green-200 rounded-full p-1 mr-2">✓</span>
+                        <span>Have I documented the prompt's purpose and design decisions?</span>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="bg-green-200 rounded-full p-1 mr-2">✓</span>
+                        <span>Does the prompt comply with relevant regulations?</span>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="bg-green-200 rounded-full p-1 mr-2">✓</span>
+                        <span>Have I tested the prompt with diverse users and scenarios?</span>
+                    </div>
+                </div>
+                <div class="mt-6 text-center">
+                    <button onclick="downloadChecklist()" class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-lg transition">
+                        Download Full Checklist
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Next Steps -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-gray-800 text-white p-4">
+                <h2 class="text-xl font-bold">Continuing Your Ethical AI Journey</h2>
+            </div>
+            <div class="p-6">
+                <div class="grid md:grid-cols-3 gap-6">
+                    <a href="#" class="block border rounded-lg p-4 hover:bg-gray-50 transition">
+                        <h3 class="font-semibold text-green-700 mb-2">Case Studies</h3>
+                        <p class="text-sm text-gray-600">Real-world examples of ethical challenges in prompt engineering.</p>
+                    </a>
+                    <a href="#" class="block border rounded-lg p-4 hover:bg-gray-50 transition">
+                        <h3 class="font-semibold text-green-700 mb-2">Regulatory Updates</h3>
+                        <p class="text-sm text-gray-600">Track the latest developments in AI governance.</p>
+                    </a>
+                    <a href="#" class="block border rounded-lg p-4 hover:bg-gray-50 transition">
+                        <h3 class="font-semibold text-green-700 mb-2">Bias Detection Tools</h3>
+                        <p class="text-sm text-gray-600">Resources for analyzing your prompts for potential biases.</p>
+                    </a>
+                </div>
+                <div class="mt-6 text-center">
+                    <button class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-lg transition">
+                        Complete Module
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 border-t mt-12 py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-gray-700">© 2025 Responsible AI Institute</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-600 hover:text-green-600">Resources</a>
+                    <a href="#" class="text-gray-600 hover:text-green-600">Research</a>
+                    <a href="#" class="text-gray-600 hover:text-green-600">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Ethical Decision Canvas
+        function initEthicsCanvas() {
+            const canvas = document.getElementById('ethicsCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas dimensions
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            // Draw the decision process diagram
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = Math.min(canvas.width, canvas.height) * 0.4;
+            
+            // Draw segments
+            const segments = [
+                {color: '#6ee7b7', text: "Identify\nStakeholders"},
+                {color: '#34d399', text: "Assess\nPotential Harms"},
+                {color: '#10b981', text: "Evaluate\nAlternatives"},
+                {color: '#059669', text: "Implement\nSafeguards"}
+            ];
+            
+            segments.forEach((segment, i) => {
+                const startAngle = i * Math.PI / 2;
+                const endAngle = (i + 1) * Math.PI / 2;
+                
+                // Draw segment
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+                ctx.closePath();
+                ctx.fillStyle = segment.color;
+                ctx.fill();
+                ctx.strokeStyle = '#047857';
+                ctx.stroke();
+                
+                // Add text
+                const textAngle = startAngle + (endAngle - startAngle) / 2;
+                const textX = centerX + Math.cos(textAngle) * radius * 0.6;
+                const textY = centerY + Math.sin(textAngle) * radius * 0.6;
+                
+                ctx.font = 'bold 12px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillStyle = '#1f2937';
+                
+                const lines = segment.text.split('\n');
+                lines.forEach((line, j) => {
+                    ctx.fillText(line, textX, textY + j * 15 - (lines.length - 1) * 7.5);
+                });
+                
+                // Add interactivity
+                canvas.addEventListener('mousemove', (e) => {
+                    const rect = canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left - centerX;
+                    const y = e.clientY - rect.top - centerY;
+                    const angle = Math.atan2(y, x);
+                    const distance = Math.sqrt(x * x + y * y);
+                    
+                    if (distance < radius && distance > 10) {
+                        let activeSegment = Math.floor((angle + Math.PI * 2) % (Math.PI * 2) / (Math.PI / 2));
+                        if (activeSegment === i) {
+                            document.getElementById('ethicsExplanation').textContent = getSegmentExplanation(i);
+                            document.getElementById('ethicsExplanation').classList.remove('hidden');
+                        }
+                    }
+                });
+                
+                canvas.addEventListener('mouseout', () => {
+                    document.getElementById('ethicsExplanation').classList.add('hidden');
+                });
+            });
+            
+            // Center circle
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius * 0.2, 0, Math.PI * 2);
+            ctx.fillStyle = '#ecfdf5';
+            ctx.fill();
+            ctx.strokeStyle = '#065f46';
+            ctx.stroke();
+            
+            ctx.font = 'bold 14px Arial';
+            ctx.fillStyle = '#065f46';
+            ctx.fillText('Ethical', centerX, centerY - 5);
+            ctx.fillText('Process', centerX, centerY + 15);
+        }
+        
+        function getSegmentExplanation(index) {
+            const explanations = [
+                "Identify all individuals/groups affected by the AI system and their interests.",
+                "Evaluate potential negative consequences across different stakeholder groups.",
+                "Consider alternative prompt designs that might reduce potential harms.",
+                "Implement technical and procedural safeguards to mitigate identified risks."
+            ];
+            return explanations[index];
+        }
+        
+        // Initialize Carbon Impact Chart
+        function initCarbonChart() {
+            const canvas = document.getElementById('carbonCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas dimensions
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            // Data
+            const models = ["Llama-3-8B", "Llama-3-70B", "GPT-5", "Claude-3"];
+            const emissions = [12, 85, 120, 95];
+            const colors = ['#6ee7b7', '#34d399', '#10b981', '#059669'];
+            
+            // Calculate dimensions
+            const barWidth = canvas.width / (models.length * 1.5);
+            const maxValue = Math.max(...emissions);
+            const scale = (canvas.height - 40) / maxValue;
+            
+            // Draw bars
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            
+            models.forEach((model, i) => {
+                const x = (i + 0.25) * (barWidth * 1.5);
+                const barHeight = emissions[i] * scale;
+                
+                // Draw bar
+                ctx.fillStyle = colors[i];
+                ctx.fillRect(x, canvas.height - barHeight - 30, barWidth, barHeight);
+                
+                // Draw label
+                ctx.fillStyle = '#1f2937';
+                ctx.fillText(model, x + barWidth/2, canvas.height - 10);
+                
+                // Draw value
+                ctx.fillText(emissions[i] + 'g', x + barWidth/2, canvas.height - barHeight - 35);
+            });
+            
+            // Draw axis
+            ctx.beginPath();
+            ctx.moveTo(30, canvas.height - 30);
+            ctx.lineTo(canvas.width - 10, canvas.height - 30);
+            ctx.strokeStyle = '#6b7280';
+            ctx.stroke();
+            
+            // Draw title
+            ctx.font = 'bold 14px Arial';
+            ctx.fillStyle = '#1f2937';
+            ctx.textAlign = 'left';
+            ctx.fillText('Model Carbon Footprint Comparison', 10, 20);
+        }
+        
+        // Download checklist
+        function downloadChecklist() {
+            const checklistContent = `Ethical Prompt Engineering Checklist\n\n` +
+                `1. Bias Considerations\n` +
+                `   ☐ Have I considered potential biases in this prompt?\n` +
+                `   ☐ Does the prompt include diversity in examples?\n` +
+                `   ☐ Have I tested with diverse user groups?\n\n` +
+                `2. Privacy & Security\n` +
+                `   ☐ Does the prompt protect sensitive information?\n` +
+                `   ☐ Have I minimized personal data collection?\n` +
+                `   ☐ Are there safeguards against re-identification?\n\n` +
+                `3. Transparency\n` +
+                `   ☐ Is it clear to users they're interacting with AI?\n` +
+                `   ☐ Have I documented the prompt's purpose and design?\n` +
+                `   ☐ Can users understand how prompts affect outputs?\n\n` +
+                `4. Compliance\n` +
+                `   ☐ Does the prompt comply with relevant regulations?\n` +
+                `   ☐ Have I considered jurisdictional requirements?\n` +
+                `   ☐ Is there a process for handling user complaints?\n\n` +
+                `5. Environmental Impact\n` +
+                `   ☐ Have I selected the most efficient model for this task?\n` +
+                `   ☐ Are response length limits optimized?\n` +
+                `   ☐ Can responses be cached for similar queries?\n\n` +
+                `Date: ${new Date().toISOString().split('T')[0]}`;
+            
+            const blob = new Blob([checklistContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Ethical_Prompt_Checklist.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // Initialize on load
+        window.onload = function() {
+            initEthicsCanvas();
+            initCarbonChart();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                initEthicsCanvas();
+                initCarbonChart();
+            });
+        };
+    </script>
+</body>
+</html>
