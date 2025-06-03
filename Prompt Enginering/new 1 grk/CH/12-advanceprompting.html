@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Prompt Engineering Techniques | LLM Course</title>
+    <meta name="description" content="Learn advanced prompt engineering techniques for large language models including Tree-of-Thought, Self-Reflective prompting, and domain-specific optimization.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💡</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .mono-code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f3f4f6;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            color: #1f2937;
+        }
+        .code-block {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted black;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Header -->
+    <header class="bg-indigo-700 text-white py-6 shadow-md">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-bold">Advanced Prompt Engineering Techniques</h1>
+            <p class="mt-2 text-indigo-100">Mastering sophisticated approaches to interacting with Large Language Models</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm">
+        <div class="container mx-auto px-4">
+            <div class="flex space-x-6 py-4 overflow-x-auto">
+                <a href="#tree-of-thought" class="text-indigo-600 hover:text-indigo-800 font-medium whitespace-nowrap">Tree-of-Thought</a>
+                <a href="#self-reflective" class="text-gray-600 hover:text-indigo-600 font-medium whitespace-nowrap">Self-Reflective</a>
+                <a href="#domain-specific" class="text-gray-600 hover:text-indigo-600 font-medium whitespace-nowrap">Domain-Specific</a>
+                <a href="#automated" class="text-gray-600 hover:text-indigo-600 font-medium whitespace-nowrap">Automated</a>
+                <a href="#multi-modal" class="text-gray-600 hover:text-indigo-600 font-medium whitespace-nowrap">Multi-Modal</a>
+                <a href="#long-contexts" class="text-gray-600 hover:text-indigo-600 font-medium whitespace-nowrap">Long Contexts</a>
+                <a href="#future-trends" class="text-gray-600 hover:text-indigo-600 font-medium whitespace-nowrap">Future Trends</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <article class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+            <div class="p-6">
+                <p class="text-lg text-gray-700 mb-6">
+                    This module builds on foundational prompt engineering concepts to explore advanced techniques that 
+                    significantly enhance the capabilities of Large Language Models (LLMs). You'll learn sophisticated 
+                    approaches to structuring prompts, optimizing for specific use cases, and leveraging the latest 
+                    developments in the field as of 2025.
+                </p>
+                
+                <!-- Tree of Thought Prompting -->
+                <section id="tree-of-thought" class="mb-12">
+                    <h2 class="text-2xl font-bold text-indigo-800 mb-4">Tree-of-Thought Prompting</h2>
+                    <p class="mb-4">
+                        Tree-of-Thought (ToT) prompting encourages the LLM to explore multiple reasoning paths before arriving 
+                        at a solution, mimicking human-like problem-solving. This technique is particularly effective for complex 
+                        problems that benefit from considering different approaches.
+                    </p>
+                    
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+                        <p class="font-medium text-blue-800">Example Prompt:</p>
+                        <p class="mt-2 text-blue-700">
+                            "Let's solve this math problem step by step. Consider three different approaches to solving it, 
+                            then evaluate which approach is most likely to be correct. Finally, provide the answer using the 
+                            best approach. Problem: If a train travels 300 miles in 5 hours, what is its average speed?"
+                        </p>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Visualizing Tree-of-Thought</h3>
+                            <canvas id="totCanvas" class="w-full h-64 bg-gray-100 rounded-lg border border-gray-300"></canvas>
+                            <div class="mt-2 text-sm text-gray-600 text-center">
+                                <button onclick="explainToT()" class="text-indigo-600 hover:text-indigo-800">Click to see explanation</button>
+                                <p id="totExplanation" class="hidden mt-2 text-gray-700">The diagram shows how the LLM explores multiple reasoning paths (branches) before selecting the most promising one (highlighted in green).</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Python Implementation</h3>
+                            <div class="code-block mb-4">
+                                <pre><code>from transformers import AutoModelForCausalLM, AutoTokenizer
+
+model_name = "mistralai/Mixtral-8x22B-v1"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(model_name)
+
+def tree_of_thought_prompt(problem):
+    prompt = f"""Let's solve this problem by exploring multiple approaches:
+    
+Problem: {problem}
+
+Approach 1: [First approach details]
+Approach 2: [Second approach details]
+Approach 3: [Third approach details]
+
+Evaluation of approaches:
+1. [Evaluate approach 1]
+2. [Evaluate approach 2]
+3. [Evaluate approach 3]
+
+Best approach: [Select and justify]
+Solution using best approach: [Provide solution]"""
+
+    inputs = tokenizer(prompt, return_tensors="pt")
+    outputs = model.generate(**inputs, max_length=500)
+    return tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+print(tree_of_thought_prompt("If a train travels 300 miles in 5 hours, what is its average speed?"))</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-green-50 border-l-4 border-green-500 p-4">
+                        <p class="font-medium text-green-800">Key Benefits:</p>
+                        <ul class="mt-2 list-disc list-inside text-green-700">
+                            <li>Increases accuracy on complex problems by 15-30% compared to single-path reasoning</li>
+                            <li>Makes the model's reasoning process more transparent</li>
+                            <li>Reduces "reasoning shortcuts" where models jump to conclusions</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <!-- Self-Reflective Prompting -->
+                <section id="self-reflective" class="mb-12">
+                    <h2 class="text-2xl font-bold text-indigo-800 mb-4">Self-Reflective Prompting</h2>
+                    <p class="mb-4">
+                        Self-reflective prompting asks the model to examine and critique its own reasoning process. This 
+                        meta-cognitive approach helps identify flaws in the model's initial responses and leads to more 
+                        reliable outputs.
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Basic vs. Reflective Prompt</h3>
+                            <div class="mb-4 p-4 bg-gray-100 rounded-lg">
+                                <p class="font-medium">Basic Prompt:</p>
+                                <p>"Explain the causes of World War I."</p>
+                            </div>
+                            <div class="p-4 bg-purple-100 rounded-lg">
+                                <p class="font-medium">Reflective Prompt:</p>
+                                <p>"Explain the causes of World War I. After providing your explanation, analyze whether you might have missed any important factors, and if so, revise your answer accordingly."</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Example Output</h3>
+                            <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                <p class="font-medium">Initial Answer:</p>
+                                <p class="mb-2">"The main causes were militarism, alliances, imperialism, and the assassination of Archduke Franz Ferdinand."</p>
+                                
+                                <p class="font-medium">Self-Reflection:</p>
+                                <p class="mb-2">"I may have overlooked the role of nationalism as a contributing factor, and the complex economic rivalries between powers."</p>
+                                
+                                <p class="font-medium">Revised Answer:</p>
+                                <p>"In addition to militarism, alliances, imperialism, and the assassination, rising nationalism in the Balkans and economic competition between imperial powers were significant factors..."</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 bg-blue-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-3">When to Use Self-Reflective Prompting</h3>
+                        <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <li class="flex items-start">
+                                <span class="bg-blue-200 rounded-full p-1 mr-2">✓</span>
+                                <span>When factual accuracy is critical</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-blue-200 rounded-full p-1 mr-2">✓</span>
+                                <span>For complex, multi-faceted questions</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-blue-200 rounded-full p-1 mr-2">✓</span>
+                                <span>When identifying potential biases</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-blue-200 rounded-full p-1 mr-2">✓</span>
+                                <span>For creative tasks requiring iteration</span>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <!-- Domain-Specific Optimization -->
+                <section id="domain-specific" class="mb-12">
+                    <h2 class="text-2xl font-bold text-indigo-800 mb-4">Prompt Optimization for Specific Domains</h2>
+                    <p class="mb-4">
+                        Different domains require specialized prompt structures to get the best results from LLMs. Below are 
+                        examples for legal, medical, and creative writing domains.
+                    </p>
+                    
+                    <div class="grid md:grid-cols-3 gap-4 mb-6">
+                        <div class="border rounded-lg overflow-hidden">
+                            <div class="bg-red-600 text-white p-3">
+                                <h3 class="font-bold">Legal Prompts</h3>
+                            </div>
+                            <div class="p-4">
+                                <p class="mb-2 font-medium">Example:</p>
+                                <p class="text-sm mb-3">"Analyze this contract clause for potential liabilities, citing relevant California business law statutes. Provide your analysis in three parts: 1) Key terms, 2) Potential risks, 3) Recommended revisions."</p>
+                                <p class="text-xs text-gray-600">Tip: Include jurisdiction and request structured output.</p>
+                            </div>
+                        </div>
+                        <div class="border rounded-lg overflow-hidden">
+                            <div class="bg-green-600 text-white p-3">
+                                <h3 class="font-bold">Medical Prompts</h3>
+                            </div>
+                            <div class="p-4">
+                                <p class="mb-2 font-medium">Example:</p>
+                                <p class="text-sm mb-3">"For a patient with these symptoms [list symptoms], provide a differential diagnosis ordered by likelihood. For each possibility, list: 1) Supporting symptoms, 2) Ruling-out criteria, 3) Recommended tests."</p>
+                                <p class="text-xs text-gray-600">Tip: Emphasize evidence-based reasoning.</p>
+                            </div>
+                        </div>
+                        <div class="border rounded-lg overflow-hidden">
+                            <div class="bg-purple-600 text-white p-3">
+                                <h3 class="font-bold">Creative Writing</h3>
+                            </div>
+                            <div class="p-4">
+                                <p class="mb-2 font-medium">Example:</p>
+                                <p class="text-sm mb-3">"Write a 300-word sci-fi story opening set on Mars. Include: 1) Vivid sensory details, 2) A character with a clear desire, 3) Foreshadowing of the main conflict. Use a tone that's hopeful but with underlying tension."</p>
+                                <p class="text-xs text-gray-600">Tip: Specify emotional tone and structural elements.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-3">Domain-Specific Prompt Template</h3>
+                        <div class="code-block">
+                            <pre><code>"""You are an expert in [DOMAIN] with [X] years of experience. Your task is to [TASK DESCRIPTION].
+
+Required elements in your response:
+1. [First required element]
+2. [Second required element]
+3. [Third required element]
+
+Format your response using [SPECIFIED FORMAT].
+
+Important considerations:
+- [DOMAIN-SPECIFIC CONSIDERATION 1]
+- [DOMAIN-SPECIFIC CONSIDERATION 2]
+
+Begin your response with a [SPECIFIED INTRODUCTION], and conclude with [SPECIFIED CONCLUSION]."""</code></pre>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Automated Prompt Engineering -->
+                <section id="automated" class="mb-12">
+                    <h2 class="text-2xl font-bold text-indigo-800 mb-4">Automated Prompt Engineering</h2>
+                    <p class="mb-4">
+                        Recent advances allow using LLMs themselves to optimize prompts automatically. This section covers 
+                        practical techniques and tools available in 2025.
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Prompt Optimization Loop</h3>
+                            <div class="bg-white p-4 border rounded-lg shadow-sm">
+                                <ol class="list-decimal list-inside space-y-3">
+                                    <li>Generate multiple prompt variations</li>
+                                    <li>Test each against validation examples</li>
+                                    <li>Score outputs using metrics (accuracy, completeness)</li>
+                                    <li>Select top performers for refinement</li>
+                                    <li>Repeat until convergence</li>
+                                </ol>
+                            </div>
+                            <div class="mt-4 p-4 bg-indigo-50 rounded-lg">
+                                <h4 class="font-semibold mb-2">Popular Tools (2025):</h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center">
+                                        <span class="bg-indigo-200 rounded-full w-5 h-5 flex items-center justify-center mr-2">1</span>
+                                        <span>PromptPerfect - Cloud-based prompt optimizer</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <span class="bg-indigo-200 rounded-full w-5 h-5 flex items-center justify-center mr-2">2</span>
+                                        <span>OptiPrompt - Open-source Python library</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <span class="bg-indigo-200 rounded-full w-5 h-5 flex items-center justify-center mr-2">3</span>
+                                        <span>PromptTuner - Integrates with Hugging Face</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Python Example</h3>
+                            <div class="code-block">
+                                <pre><code>from prompt_optimizer import EvolutionaryOptimizer
+
+# Define your base prompt
+base_prompt = "Explain quantum computing"
+
+# Define evaluation function (simplified)
+def evaluate(prompt_variant):
+    response = llm.generate(prompt_variant)
+    return score_response(response)
+
+# Set up optimizer
+optimizer = EvolutionaryOptimizer(
+    base_prompt=base_prompt,
+    evaluation_func=evaluate,
+    population_size=20,
+    mutation_rate=0.1
+)
+
+# Run optimization
+best_prompt = optimizer.optimize(generations=5)
+print(f"Optimized prompt: {best_prompt}")
+
+# Sample output might produce:
+# "Explain quantum computing to a computer science undergraduate, 
+# using analogies from classical computing and 2-3 key equations."</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4">
+                        <p class="font-medium text-yellow-800">Current Limitations:</p>
+                        <ul class="mt-2 list-disc list-inside text-yellow-700">
+                            <li>Requires significant compute resources for thorough optimization</li>
+                            <li>Evaluation metrics can be challenging to define for subjective tasks</li>
+                            <li>May produce prompts that overfit to specific models</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <!-- Multi-Modal Prompting -->
+                <section id="multi-modal" class="mb-12">
+                    <h2 class="text-2xl font-bold text-indigo-800 mb-4">Multi-Modal Prompting</h2>
+                    <p class="mb-4">
+                        With models like GPT-5 and Gemini 2.0 supporting multiple input modalities, prompts can now combine 
+                        text, images, and other data types for richer interactions.
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Use Cases</h3>
+                            <div class="space-y-4">
+                                <div class="p-3 bg-white border rounded-lg shadow-sm">
+                                    <p class="font-medium">Medical Diagnosis</p>
+                                    <p class="text-sm text-gray-600">Combine patient history (text) with X-ray images for more accurate assessments.</p>
+                                </div>
+                                <div class="p-3 bg-white border rounded-lg shadow-sm">
+                                    <p class="font-medium">E-Commerce</p>
+                                    <p class="text-sm text-gray-600">Upload product images with text descriptions to generate optimized listings.</p>
+                                </div>
+                                <div class="p-3 bg-white border rounded-lg shadow-sm">
+                                    <p class="font-medium">Education</p>
+                                    <p class="text-sm text-gray-600">Submit math problem photos with handwritten work for step-by-step feedback.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">API Example</h3>
+                            <div class="code-block">
+                                <pre><code>from openai import OpenAI
+import base64
+
+client = OpenAI()
+
+def encode_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
+
+response = client.chat.completions.create(
+    model="gpt-5-vision-preview",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "Analyze this medical image and describe any abnormalities."},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:image/jpeg;base64,{encode_image('xray.jpg')}"
+                    },
+                },
+            ],
+        }
+    ],
+    max_tokens=500,
+)
+
+print(response.choices[0].message.content)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                        <h3 class="text-xl font-semibold mb-3">Best Practices for Multi-Modal Prompts</h3>
+                        <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
+                            <li class="flex items-start">
+                                <span class="bg-green-200 rounded-full p-1 mr-2">✓</span>
+                                <span>Explicitly reference the visual elements in your text prompt</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-green-200 rounded-full p-1 mr-2">✓</span>
+                                <span>Provide context about why you're including the image</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-green-200 rounded-full p-1 mr-2">✓</span>
+                                <span>For complex images, guide the model's attention ("Focus on the upper right quadrant")</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-green-200 rounded-full p-1 mr-2">✓</span>
+                                <span>Combine with other techniques like chain-of-thought when appropriate</span>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <!-- Handling Long Contexts -->
+                <section id="long-contexts" class="mb-12">
+                    <h2 class="text-2xl font-bold text-indigo-800 mb-4">Handling Long Contexts</h2>
+                    <p class="mb-4">
+                        While modern LLMs support longer contexts (up to 1M tokens in some 2025 models), effective prompt 
+                        engineering for long documents requires special techniques.
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Strategies for Long Documents</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium mb-2">Hierarchical Processing</p>
+                                    <p class="text-sm">First summarize sections, then process summaries:</p>
+                                    <div class="code-block mt-2 text-xs">
+                                        <pre>1. Split document into logical sections
+2. Generate summaries of each section
+3. Process the concatenated summaries
+4. Optionally drill down into specific sections</pre>
+                                    </div>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium mb-2">Recursive Questioning</p>
+                                    <p class="text-sm">Maintain context through a question-answer chain:</p>
+                                    <div class="code-block mt-2 text-xs">
+                                        <pre>Q1: What are the main themes in this document?
+A1: [Themes listed]
+Q2: Regarding theme 3, what evidence supports it?
+A2: [Evidence details]
+Q3: What counterarguments exist for point 2 of evidence?</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Python Implementation</h3>
+                            <div class="code-block">
+                                <pre><code>from transformers import AutoTokenizer, AutoModelForCausalLM
+from langchain_text_splitters import SemanticChunker
+
+model_name = "anthropic/claude-3-200k"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(model_name)
+
+def process_long_document(text, question):
+    # Split document into meaningful chunks
+    splitter = SemanticChunker()
+    chunks = splitter.create_documents([text])
+    
+    # First pass: Summarize each chunk
+    summaries = []
+    for chunk in chunks:
+        prompt = f"Summarize this text in 2-3 sentences:\n\n{chunk}"
+        inputs = tokenizer(prompt, return_tensors="pt")
+        summary = model.generate(**inputs, max_length=150)
+        summaries.append(tokenizer.decode(summary[0], skip_special_tokens=True))
+    
+    # Second pass: Answer question using summaries
+    context = "\n\n".join(summaries)
+    prompt = f"Based on these summaries:\n{context}\n\nQuestion: {question}"
+    inputs = tokenizer(prompt, return_tensors="pt")
+    answer = model.generate(**inputs, max_length=500)
+    return tokenizer.decode(answer[0], skip_special_tokens=True)
+
+# Usage with a long PDF text and specific question
+answer = process_long_document(pdf_text, "What are the key risk factors mentioned?")</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-3">Performance Considerations</h3>
+                        <div class="grid grid-cols-3 gap-4 text-center">
+                            <div class="bg-white p-3 rounded shadow">
+                                <p class="text-sm font-medium">Context Length</p>
+                                <p class="text-2xl font-bold">128K</p>
+                                <p class="text-xs text-gray-600">Common in mid-range 2025 models</p>
+                            </div>
+                            <div class="bg-white p-3 rounded shadow">
+                                <p class="text-sm font-medium">Attention Cost</p>
+                                <p class="text-2xl font-bold">O(n²)</p>
+                                <p class="text-xs text-gray-600">Grows quadratically with length</p>
+                            </div>
+                            <div class="bg-white p-3 rounded shadow">
+                                <p class="text-sm font-medium">Accuracy Drop</p>
+                                <p class="text-2xl font-bold">15-30%</p>
+                                <p class="text-xs text-gray-600">At 100K vs 10K tokens</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Future Trends -->
+                <section id="future-trends">
+                    <h2 class="text-2xl font-bold text-indigo-800 mb-4">Future Trends in Prompt Engineering (2025)</h2>
+                    <p class="mb-6">
+                        The field of prompt engineering continues to evolve rapidly. Here are the most significant developments 
+                        as of mid-2025:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <div class="bg-white border rounded-lg overflow-hidden shadow-sm mb-6">
+                                <div class="bg-gradient-to-r from-purple-600 to-indigo-600 p-3 text-white">
+                                    <h3 class="font-bold">Neuro-Symbolic Prompting</h3>
+                                </div>
+                                <div class="p-4">
+                                    <p>Combining neural networks with symbolic AI for more structured reasoning:</p>
+                                    <div class="code-block mt-2 text-xs">
+                                        <pre>"Solve this physics problem by: 
+1) Extracting given quantities (symbolic)
+2) Identifying relevant equations (symbolic)
+3) Executing calculations (neural)
+4) Verifying dimensional consistency (symbolic)"</pre>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white border rounded-lg overflow-hidden shadow-sm">
+                                <div class="bg-gradient-to-r from-green-600 to-teal-600 p-3 text-white">
+                                    <h3 class="font-bold">Personalized Prompting</h3>
+                                </div>
+                                <div class="p-4">
+                                    <p>Models that adapt to individual user's communication styles and preferences:</p>
+                                    <ul class="list-disc list-inside mt-2 text-sm">
+                                        <li>Learns from your past interactions</li>
+                                        <li>Adapts verbosity and formality</li>
+                                        <li>Remembers domain preferences</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="bg-white border rounded-lg overflow-hidden shadow-sm mb-6">
+                                <div class="bg-gradient-to-r from-red-600 to-orange-600 p-3 text-white">
+                                    <h3 class="font-bold">Multi-Agent Prompting</h3>
+                                </div>
+                                <div class="p-4">
+                                    <p>Orchestrating multiple specialized agents for complex tasks:</p>
+                                    <div class="code-block mt-2 text-xs">
+                                        <pre>"For this market analysis task:
+1) Have the Researcher gather data
+2) Have the Analyst identify trends
+3) Have the Writer draft the report
+4) Have the Editor polish the output
+
+Coordinate between agents and synthesize final result."</pre>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white border rounded-lg overflow-hidden shadow-sm">
+                                <div class="bg-gradient-to-r from-blue-600 to-cyan-600 p-3 text-white">
+                                    <h3 class="font-bold">Embedded Prompt Tuning</h3>
+                                </div>
+                                <div class="p-4">
+                                    <p>Continuous prompt optimization during deployment:</p>
+                                    <ul class="list-disc list-inside mt-2 text-sm">
+                                        <li>Real-time adaptation to new data</li>
+                                        <li>A/B testing of prompt variations</li>
+                                        <li>Automatic performance monitoring</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-200">
+                        <h3 class="text-xl font-semibold mb-3">Ethical Considerations</h3>
+                        <p class="mb-3">As prompting techniques become more sophisticated, important ethical questions emerge:</p>
+                        <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
+                            <li class="flex items-start">
+                                <span class="bg-indigo-200 rounded-full p-1 mr-2">!</span>
+                                <span>Transparency about when and how prompts are being optimized</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-indigo-200 rounded-full p-1 mr-2">!</span>
+                                <span>Preventing prompt engineering from becoming a "hidden" skill barrier</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-indigo-200 rounded-full p-1 mr-2">!</span>
+                                <span>Ensuring prompts don't inadvertently embed biases</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-indigo-200 rounded-full p-1 mr-2">!</span>
+                                <span>Developing standards for reproducible prompt engineering</span>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </article>
+        
+        <!-- Summary Card -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+            <div class="bg-indigo-800 text-white p-4">
+                <h2 class="text-xl font-bold">Key Takeaways</h2>
+            </div>
+            <div class="p-6 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="border-l-4 border-green-500 pl-4">
+                    <h3 class="font-semibold mb-2">Reasoning Techniques</h3>
+                    <p class="text-sm text-gray-700">Tree-of-Thought and Self-Reflective prompting significantly improve model reasoning capabilities.</p>
+                </div>
+                <div class="border-l-4 border-blue-500 pl-4">
+                    <h3 class="font-semibold mb-2">Domain Specialization</h3>
+                    <p class="text-sm text-gray-700">Tailoring prompts to specific domains yields dramatically better results.</p>
+                </div>
+                <div class="border-l-4 border-purple-500 pl-4">
+                    <h3 class="font-semibold mb-2">Automation</h3>
+                    <p class="text-sm text-gray-700">Prompt engineering itself is becoming automated through AI tools.</p>
+                </div>
+                <div class="border-l-4 border-yellow-500 pl-4">
+                    <h3 class="font-semibold mb-2">Multi-Modality</h3>
+                    <p class="text-sm text-gray-700">Combining text with other data types enables richer applications.</p>
+                </div>
+                <div class="border-l-4 border-red-500 pl-4">
+                    <h3 class="font-semibold mb-2">Scalability</h3>
+                    <p class="text-sm text-gray-700">New techniques help manage long contexts effectively.</p>
+                </div>
+                <div class="border-l-4 border-indigo-500 pl-4">
+                    <h3 class="font-semibold mb-2">Future Directions</h3>
+                    <p class="text-sm text-gray-700">Neuro-symbolic approaches and multi-agent systems represent the next frontier.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Next Steps -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-gray-800 text-white p-4">
+                <h2 class="text-xl font-bold">Next Steps in Your Learning</h2>
+            </div>
+            <div class="p-6">
+                <div class="grid md:grid-cols-3 gap-6">
+                    <a href="#" class="block border rounded-lg p-4 hover:bg-gray-50 transition">
+                        <h3 class="font-semibold text-indigo-700 mb-2">Practice Exercises</h3>
+                        <p class="text-sm text-gray-600">Test your skills with real-world prompt engineering challenges.</p>
+                    </a>
+                    <a href="#" class="block border rounded-lg p-4 hover:bg-gray-50 transition">
+                        <h3 class="font-semibold text-indigo-700 mb-2">Case Studies</h3>
+                        <p class="text-sm text-gray-600">See how companies are applying these techniques in production.</p>
+                    </a>
+                    <a href="#" class="block border rounded-lg p-4 hover:bg-gray-50 transition">
+                        <h3 class="font-semibold text-indigo-700 mb-2">Advanced Modules</h3>
+                        <p class="text-sm text-gray-600">Dive deeper into specific applications like legal tech or healthcare.</p>
+                    </a>
+                </div>
+                <div class="mt-6 text-center">
+                    <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition">
+                        Mark Module Complete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 border-t mt-12 py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-gray-700">© 2025 Advanced LLM Technologies</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-600 hover:text-indigo-600">Terms</a>
+                    <a href="#" class="text-gray-600 hover:text-indigo-600">Privacy</a>
+                    <a href="#" class="text-gray-600 hover:text-indigo-600">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Tree-of-Thought visualization
+        function initToTCanvas() {
+            const canvas = document.getElementById('totCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas dimensions
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            // Draw the tree structure
+            ctx.strokeStyle = '#4b5563';
+            ctx.lineWidth = 2;
+            
+            // Trunk
+            ctx.beginPath();
+            ctx.moveTo(canvas.width/2, canvas.height);
+            ctx.lineTo(canvas.width/2, canvas.height/2);
+            ctx.stroke();
+            
+            // Branches
+            const branches = [
+                {x1: canvas.width/2, y1: canvas.height/2, x2: canvas.width/4, y2: canvas.height/4, color: '#9ca3af'},
+                {x1: canvas.width/2, y1: canvas.height/2, x2: canvas.width/2, y2: canvas.height/6, color: '#10b981'},
+                {x1: canvas.width/2, y1: canvas.height/2, x2: 3*canvas.width/4, y2: canvas.height/4, color: '#9ca3af'}
+            ];
+            
+            branches.forEach(branch => {
+                ctx.beginPath();
+                ctx.moveTo(branch.x1, branch.y1);
+                ctx.lineTo(branch.x2, branch.y2);
+                ctx.strokeStyle = branch.color;
+                ctx.stroke();
+                
+                // Leaf/thought nodes
+                ctx.beginPath();
+                ctx.arc(branch.x2, branch.y2, 12, 0, Math.PI * 2);
+                ctx.fillStyle = branch.color === '#10b981' ? '#ecfdf5' : '#f3f4f6';
+                ctx.fill();
+                ctx.strokeStyle = branch.color;
+                ctx.stroke();
+                
+                // Thought labels
+                ctx.fillStyle = '#1f2937';
+                ctx.font = '10px Arial';
+                ctx.textAlign = 'center';
+                
+                const thoughts = [
+                    "Approach 1:\nDivide distance\nby time",
+                    "Best Approach:\nCheck units\nand logic",
+                    "Approach 3:\nDimensional\nanalysis"
+                ];
+                
+                const index = branches.indexOf(branch);
+                const lines = thoughts[index].split('\n');
+                
+                lines.forEach((line, i) => {
+                    ctx.fillText(line, branch.x2, branch.y2 + i * 12 + (i === 0 ? -15 : 5));
+                });
+            });
+            
+            // Root thought
+            ctx.beginPath();
+            ctx.arc(canvas.width/2, canvas.height/2, 10, 0, Math.PI * 2);
+            ctx.fillStyle = '#f3f4f6';
+            ctx.fill();
+            ctx.strokeStyle = '#4b5563';
+            ctx.stroke();
+            
+            ctx.fillStyle = '#1f2937';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Problem', canvas.width/2, canvas.height/2 + 4);
+        }
+        
+        // Explain ToT visualization
+        function explainToT() {
+            const explanation = document.getElementById('totExplanation');
+            explanation.classList.toggle('hidden');
+        }
+        
+        // Toggle code examples
+        function toggleCodeExample(exampleId) {
+            const example = document.getElementById(exampleId);
+            example.classList.toggle('hidden');
+        }
+        
+        // Initialize on load
+        window.onload = function() {
+            initToTCanvas();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                initToTCanvas();
+            });
+        };
+    </script>
+</body>
+</html>
