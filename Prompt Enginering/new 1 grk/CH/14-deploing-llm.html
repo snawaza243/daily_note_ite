@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deploying LLMs in Production | LLM Course</title>
+    <meta name="description" content="Learn how to deploy Large Language Models in production environments, including scaling, monitoring, security, and cost optimization strategies.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .mono-code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f3f4f6;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            color: #1f2937;
+        }
+        .code-block {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+        }
+        .deployment-card {
+            transition: all 0.3s ease;
+        }
+        .deployment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted #4b5563;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #4b5563;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Header -->
+    <header class="bg-blue-700 text-white py-6 shadow-md">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-bold">Deploying LLMs in Production</h1>
+            <p class="mt-2 text-blue-100">From development to scalable, monitored production systems</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-10">
+        <div class="container mx-auto px-4">
+            <div class="flex space-x-6 py-4 overflow-x-auto">
+                <a href="#deployment-overview" class="text-blue-600 hover:text-blue-800 font-medium whitespace-nowrap">Deployment Overview</a>
+                <a href="#prompt-engineering" class="text-gray-600 hover:text-blue-600 font-medium whitespace-nowrap">Prompt Engineering</a>
+                <a href="#scalability" class="text-gray-600 hover:text-blue-600 font-medium whitespace-nowrap">Scalability</a>
+                <a href="#monitoring" class="text-gray-600 hover:text-blue-600 font-medium whitespace-nowrap">Monitoring</a>
+                <a href="#security" class="text-gray-600 hover:text-blue-600 font-medium whitespace-nowrap">Security</a>
+                <a href="#cost-optimization" class="text-gray-600 hover:text-blue-600 font-medium whitespace-nowrap">Cost Optimization</a>
+                <a href="#feedback" class="text-gray-600 hover:text-blue-600 font-medium whitespace-nowrap">User Feedback</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <article class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+            <div class="p-6">
+                <p class="text-lg text-gray-700 mb-6">
+                    Moving LLMs from experimentation to production requires careful consideration of scalability,
+                    reliability, security, and cost. This module covers practical strategies for deploying and
+                    maintaining LLM applications in real-world environments as of 2025.
+                </p>
+                
+                <!-- Deployment Overview -->
+                <section id="deployment-overview" class="mb-12">
+                    <h2 class="text-2xl font-bold text-blue-800 mb-4">LLM Deployment Overview</h2>
+                    <p class="mb-4">
+                        Deploying LLMs in production involves multiple components working together to deliver
+                        reliable, scalable, and secure model access. The architecture typically includes:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Deployment Architecture</h3>
+                            <canvas id="deploymentCanvas" class="w-full h-64 bg-white rounded-lg border border-gray-300"></canvas>
+                            <p id="deploymentExplanation" class="hidden mt-2 text-sm text-gray-700 text-center">
+                                Hover over components in the diagram to learn about their role in the deployment pipeline.
+                            </p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Common Deployment Scenarios</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                                    <p class="font-medium">API Endpoints</p>
+                                    <p class="text-sm">Exposing LLM capabilities via REST/gRPC APIs for application integration</p>
+                                </div>
+                                <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                                    <p class="font-medium">Batch Processing</p>
+                                    <p class="text-sm">Scheduled jobs for processing large datasets offline</p>
+                                </div>
+                                <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                                    <p class="font-medium">Edge Deployment</p>
+                                    <p class="text-sm">Running smaller models on edge devices for low-latency applications</p>
+                                </div>
+                                <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                                    <p class="font-medium">Hybrid Approach</p>
+                                    <p class="text-sm">Combining cloud-based large models with local smaller models</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-3">Deployment Decision Factors</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                            <div class="bg-white p-3 rounded shadow">
+                                <p class="text-sm font-medium">Latency Needs</p>
+                                <p class="text-2xl font-bold">ms vs s</p>
+                            </div>
+                            <div class="bg-white p-3 rounded shadow">
+                                <p class="text-sm font-medium">Throughput</p>
+                                <p class="text-2xl font-bold">RPS</p>
+                            </div>
+                            <div class="bg-white p-3 rounded shadow">
+                                <p class="text-sm font-medium">Cost</p>
+                                <p class="text-2xl font-bold">$/1000 tokens</p>
+                            </div>
+                            <div class="bg-white p-3 rounded shadow">
+                                <p class="text-sm font-medium">Data Sensitivity</p>
+                                <p class="text-2xl font-bold">PII Level</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Prompt Engineering in Production -->
+                <section id="prompt-engineering" class="mb-12">
+                    <h2 class="text-2xl font-bold text-blue-800 mb-4">Prompt Engineering in Production</h2>
+                    <p class="mb-4">
+                        Production prompts require more structure and reliability than experimental ones. Key
+                        considerations include versioning, testing, and consistency across deployments.
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Production-Ready Prompt Example</h3>
+                            <div class="code-block">
+                                <pre><code>"""
+SYSTEM: You are a customer service assistant for an e-commerce platform.
+Your responses must adhere strictly to these guidelines:
+
+1. Tone: Professional but friendly (formal-informal scale: 4/10)
+2. Structure:
+   - Acknowledge the concern
+   - Provide accurate information
+   - Offer next steps
+3. Safety:
+   - Never share internal policies
+   - Redirect account issues to secure portal
+4. Length: 2-3 sentences maximum
+5. Fallback: "Let me connect you with a human agent"
+
+Current company policies (2025-06-01):
+- Returns: 30-day window
+- Shipping: Free over $50
+
+USER: My package hasn't arrived after 5 days
+"""</code></pre>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Prompt Management Best Practices</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Version Control</p>
+                                    <p class="text-sm text-gray-600">Track prompt changes with Git or specialized tools like PromptHub</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">A/B Testing</p>
+                                    <p class="text-sm text-gray-600">Compare prompt variations with real users before full rollout</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Environment Separation</p>
+                                    <p class="text-sm text-gray-600">Maintain distinct prompts for dev, staging, and production</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Documentation</p>
+                                    <p class="text-sm text-gray-600">Record prompt purpose, expected inputs, and success metrics</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                        <h3 class="text-xl font-semibold mb-3">Prompt Testing Framework</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full bg-white">
+                                <thead>
+                                    <tr class="bg-blue-100">
+                                        <th class="py-2 px-4 border">Test Type</th>
+                                        <th class="py-2 px-4 border">Description</th>
+                                        <th class="py-2 px-4 border">Frequency</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="py-2 px-4 border">Unit Tests</td>
+                                        <td class="py-2 px-4 border">Verify prompt produces expected output for given inputs</td>
+                                        <td class="py-2 px-4 border">Pre-deployment</td>
+                                    </tr>
+                                    <tr class="bg-gray-50">
+                                        <td class="py-2 px-4 border">Edge Cases</td>
+                                        <td class="py-2 px-4 border">Test with unusual or problematic inputs</td>
+                                        <td class="py-2 px-4 border">Weekly</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 px-4 border">Performance</td>
+                                        <td class="py-2 px-4 border">Measure latency and token usage</td>
+                                        <td class="py-2 px-4 border">Monthly</td>
+                                    </tr>
+                                    <tr class="bg-gray-50">
+                                        <td class="py-2 px-4 border">Bias Checks</td>
+                                        <td class="py-2 px-4 border">Evaluate outputs for fairness across demographics</td>
+                                        <td class="py-2 px-4 border">Quarterly</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Scalability and Performance -->
+                <section id="scalability" class="mb-12">
+                    <h2 class="text-2xl font-bold text-blue-800 mb-4">Scalability and Performance</h2>
+                    <p class="mb-4">
+                        LLM applications must handle varying loads while maintaining acceptable latency and
+                        reliability. Below are key techniques for scaling LLM deployments:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Scaling Strategies</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Horizontal Scaling</p>
+                                    <p class="text-sm text-gray-600">Add more model instances behind a load balancer</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Response Caching</p>
+                                    <p class="text-sm text-gray-600">Cache frequent or deterministic responses</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Request Batching</p>
+                                    <p class="text-sm text-gray-600">Process multiple requests simultaneously when possible</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Model Distillation</p>
+                                    <p class="text-sm text-gray-600">Use smaller distilled models for less critical tasks</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Python: Load-Tested API Endpoint</h3>
+                            <div class="code-block">
+                                <pre><code>from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from transformers import pipeline
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
+
+app = FastAPI()
+model = pipeline('text-generation', model='meta-llama/Meta-Llama-3-8B-Instruct')
+executor = ThreadPoolExecutor(max_workers=8)  # Limit concurrent requests
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["POST"]
+)
+
+@app.post("/generate")
+async def generate_text(prompt: str):
+    loop = asyncio.get_event_loop()
+    try:
+        # Process in thread pool to avoid blocking
+        result = await loop.run_in_executor(
+            executor,
+            lambda: model(prompt, max_length=150, temperature=0.7)
+        )
+        return {"response": result[0]['generated_text']}
+    except Exception as e:
+        return {"error": str(e)}
+
+# To run: uvicorn api:app --workers 4 --host 0.0.0.0 --port 8000</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-3">Performance Benchmarks (2025)</h3>
+                        <div class="grid grid-cols-3 gap-4 text-center">
+                            <div class="bg-white p-3 rounded shadow">
+                                <p class="text-sm font-medium">Small Model (8B)</p>
+                                <p class="text-xl font-bold">45ms/token</p>
+                            </div>
+                            <div class="bg-white p-3 rounded shadow">
+                                <p class="text-sm font-medium">Medium Model (70B)</p>
+                                <p class="text-xl font-bold">120ms/token</p>
+                            </div>
+                            <div class="bg-white p-3 rounded shadow">
+                                <p class="text-sm font-medium">Large Model (400B+)</p>
+                                <p class="text-xl font-bold">300ms+/token</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-3 text-center">Average latency per token on A100 GPUs (batch size 8)</p>
+                    </div>
+                </section>
+                
+                <!-- Monitoring and Maintenance -->
+                <section id="monitoring" class="mb-12">
+                    <h2 class="text-2xl font-bold text-blue-800 mb-4">Monitoring and Maintenance</h2>
+                    <p class="mb-4">
+                        Continuous monitoring is essential for maintaining LLM application quality and reliability.
+                        Key metrics and practices include:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Essential Monitoring Metrics</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Performance</p>
+                                    <p class="text-sm text-gray-600">Latency, throughput, error rates</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Quality</p>
+                                    <p class="text-sm text-gray-600">Output accuracy, relevance scores</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Cost</p>
+                                    <p class="text-sm text-gray-600">Tokens used, API costs per request</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Safety</p>
+                                    <p class="text-sm text-gray-600">Content moderation flags, bias indicators</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Python: Monitoring Script</h3>
+                            <div class="code-block">
+                                <pre><code>import pandas as pd
+from datetime import datetime
+import mlflow
+
+class LLMMonitor:
+    def __init__(self):
+        self.df = pd.DataFrame(columns=[
+            'timestamp', 'prompt', 'response', 'latency', 
+            'token_count', 'error', 'feedback_score'
+        ])
+        
+    def log_request(self, prompt, response, latency, token_count, error=None):
+        new_row = {
+            'timestamp': datetime.now(),
+            'prompt': prompt[:200],  # Truncate for storage
+            'response': response[:200] if response else None,
+            'latency': latency,
+            'token_count': token_count,
+            'error': error,
+            'feedback_score': None
+        }
+        self.df = pd.concat([self.df, pd.DataFrame([new_row])], ignore_index=True)
+        
+        # Log to MLflow for analysis
+        with mlflow.start_run():
+            mlflow.log_metric("latency_ms", latency)
+            mlflow.log_metric("tokens", token_count)
+            if error:
+                mlflow.log_metric("error", 1)
+        
+    def analyze_trends(self):
+        # Calculate hourly aggregates
+        return self.df.set_index('timestamp').resample('H').agg({
+            'latency': 'mean',
+            'token_count': 'sum',
+            'error': lambda x: x.notna().sum()
+        })
+
+# Example usage
+monitor = LLMMonitor()
+monitor.log_request(
+    prompt="Explain quantum computing",
+    response="Quantum computing uses qubits...",
+    latency=450,
+    token_count=85
+)
+print(monitor.analyze_trends())</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h3 class="text-xl font-semibold mb-3">Alert Threshold Recommendations</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full bg-white">
+                                <thead>
+                                    <tr class="bg-yellow-100">
+                                        <th class="py-2 px-4 border">Metric</th>
+                                        <th class="py-2 px-4 border">Warning</th>
+                                        <th class="py-2 px-4 border">Critical</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="py-2 px-4 border">Latency (p95)</td>
+                                        <td class="py-2 px-4 border">2x baseline</td>
+                                        <td class="py-2 px-4 border">5x baseline</td>
+                                    </tr>
+                                    <tr class="bg-gray-50">
+                                        <td class="py-2 px-4 border">Error Rate</td>
+                                        <td class="py-2 px-4 border">5%</td>
+                                        <td class="py-2 px-4 border">10%</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2 px-4 border">Token Cost</td>
+                                        <td class="py-2 px-4 border">20% over expected</td>
+                                        <td class="py-2 px-4 border">50% over expected</td>
+                                    </tr>
+                                    <tr class="bg-gray-50">
+                                        <td class="py-2 px-4 border">Feedback Score</td>
+                                        <td class="py-2 px-4 border">Avg < 3/5</td>
+                                        <td class="py-2 px-4 border">Avg < 2/5</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Security in Production -->
+                <section id="security" class="mb-12">
+                    <h2 class="text-2xl font-bold text-blue-800 mb-4">Security in Production</h2>
+                    <p class="mb-4">
+                        LLM deployments introduce unique security challenges that must be addressed to protect
+                        systems and data:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Security Risks and Mitigations</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-red-50 border border-red-200 rounded-lg">
+                                    <p class="font-medium text-red-800">Prompt Injection</p>
+                                    <p class="text-sm">Malicious inputs that subvert system instructions</p>
+                                    <p class="text-sm mt-2"><strong>Mitigation:</strong> Input sanitization, system prompt isolation</p>
+                                </div>
+                                <div class="p-4 bg-red-50 border border-red-200 rounded-lg">
+                                    <p class="font-medium text-red-800">Data Leakage</p>
+                                    <p class="text-sm">Accidental exposure of sensitive information</p>
+                                    <p class="text-sm mt-2"><strong>Mitigation:</strong> PII detection, output filtering</p>
+                                </div>
+                                <div class="p-4 bg-red-50 border border-red-200 rounded-lg">
+                                    <p class="font-medium text-red-800">Denial of Service</p>
+                                    <p class="text-sm">Resource exhaustion via excessive requests</p>
+                                    <p class="text-sm mt-2"><strong>Mitigation:</strong> Rate limiting, request validation</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Secure Configuration Example</h3>
+                            <div class="code-block">
+                                <pre><code># Secure API configuration for LLM deployment
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.security import APIKeyHeader
+from pydantic import BaseModel
+import re
+
+app = FastAPI()
+api_key_header = APIKeyHeader(name="X-API-Key")
+
+class GenerationRequest(BaseModel):
+    prompt: str
+    max_tokens: int = 100
+
+@app.post("/v1/generate")
+async def generate_text(
+    request: GenerationRequest,
+    api_key: str = Depends(api_key_header),
+    user_request: Request
+):
+    # Validate API key
+    if not validate_api_key(api_key):
+        raise HTTPException(status_code=403, detail="Invalid API key")
+    
+    # Rate limiting
+    if await check_rate_limit(user_request.client.host):
+        raise HTTPException(status_code=429, detail="Rate limit exceeded")
+    
+    # Input validation
+    if len(request.prompt) > 1000:
+        raise HTTPException(status_code=400, detail="Prompt too long")
+    if request.max_tokens > 200:
+        raise HTTPException(status_code=400, detail="Max tokens too high")
+    
+    # Sanitize prompt
+    sanitized_prompt = sanitize_input(request.prompt)
+    
+    # Process with LLM (implementation omitted)
+    response = generate_with_llm(sanitized_prompt, request.max_tokens)
+    
+    # Filter output for PII
+    clean_response = filter_pii(response)
+    
+    return {"response": clean_response}
+
+def sanitize_input(text: str) -> str:
+    """Remove potentially dangerous patterns"""
+    # Remove attempts to override system prompts
+    text = re.sub(r'(?i)ignore previous instructions', '', text)
+    # Remove excessive whitespace
+    return ' '.join(text.split())</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 bg-blue-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-3">Security Audit Checklist</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex items-start">
+                                <input type="checkbox" class="mt-1 mr-2">
+                                <span>Is all model input sanitized and validated?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <input type="checkbox" class="mt-1 mr-2">
+                                <span>Are API keys and credentials properly secured?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <input type="checkbox" class="mt-1 mr-2">
+                                <span>Is there rate limiting to prevent abuse?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <input type="checkbox" class="mt-1 mr-2">
+                                <span>Are outputs scanned for sensitive data?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <input type="checkbox" class="mt-1 mr-2">
+                                <span>Is there monitoring for prompt injection attempts?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <input type="checkbox" class="mt-1 mr-2">
+                                <span>Are systems patched against known vulnerabilities?</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Cost Optimization -->
+                <section id="cost-optimization" class="mb-12">
+                    <h2 class="text-2xl font-bold text-blue-800 mb-4">Cost Optimization</h2>
+                    <p class="mb-4">
+                        LLM operations can become expensive at scale. These strategies help control costs while
+                        maintaining performance:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Cost Reduction Techniques</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Prompt Optimization</p>
+                                    <p class="text-sm text-gray-600">Reduce unnecessary tokens in prompts and responses</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Model Selection</p>
+                                    <p class="text-sm text-gray-600">Use smallest effective model for each task</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Caching</p>
+                                    <p class="text-sm text-gray-600">Cache frequent or deterministic responses</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Batching</p>
+                                    <p class="text-sm text-gray-600">Process multiple requests together when possible</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Cost Comparison (2025)</h3>
+                            <canvas id="costCanvas" class="w-full h-64 bg-white rounded-lg border border-gray-300"></canvas>
+                            <p class="text-sm text-gray-600 mt-2 text-center">Estimated cost per 1M tokens (USD) for common models</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                        <h3 class="text-xl font-semibold mb-3">Prompt Optimization Example</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="p-4 bg-white rounded border border-red-200">
+                                <p class="font-medium text-red-800">Original Prompt</p>
+                                <p class="text-sm mt-2">"Can you please provide a detailed explanation of how photosynthesis works in plants? I'd like to understand the light-dependent reactions, the Calvin cycle, and the role of chlorophyll. Please include examples and make it comprehensive enough for a college biology student."</p>
+                                <p class="text-xs mt-2 text-red-600">~65 tokens</p>
+                            </div>
+                            <div class="p-4 bg-white rounded border border-green-200">
+                                <p class="font-medium text-green-800">Optimized Prompt</p>
+                                <p class="text-sm mt-2">"Explain photosynthesis concisely: 1) Light reactions 2) Calvin cycle 3) Chlorophyll's role. College level."</p>
+                                <p class="text-xs mt-2 text-green-600">~25 tokens (62% reduction)</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- User Feedback Integration -->
+                <section id="feedback">
+                    <h2 class="text-2xl font-bold text-blue-800 mb-4">User Feedback Integration</h2>
+                    <p class="mb-6">
+                        Continuous improvement of production LLM applications requires effective collection and
+                        utilization of user feedback:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Feedback Collection Methods</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Direct Ratings</p>
+                                    <p class="text-sm text-gray-600">"Was this response helpful?" (Thumbs up/down)</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Implicit Signals</p>
+                                    <p class="text-sm text-gray-600">User rephrasing same query, session duration</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Follow-up Prompts</p>
+                                    <p class="text-sm text-gray-600">"What could make this answer more helpful?"</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Human Review</p>
+                                    <p class="text-sm text-gray-600">Sampled interactions evaluated by experts</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Feedback Loop Implementation</h3>
+                            <div class="code-block">
+                                <pre><code>from fastapi import FastAPI
+from pydantic import BaseModel
+import pandas as pd
+
+app = FastAPI()
+feedback_db = pd.DataFrame(columns=['response_id', 'rating', 'comment', 'timestamp'])
+
+class Feedback(BaseModel):
+    response_id: str
+    rating: int  # 1-5 scale
+    comment: str = None
+
+@app.post("/feedback")
+async def submit_feedback(feedback: Feedback):
+    # Store feedback
+    new_entry = {
+        'response_id': feedback.response_id,
+        'rating': feedback.rating,
+        'comment': feedback.comment,
+        'timestamp': pd.Timestamp.now()
+    }
+    global feedback_db
+    feedback_db = pd.concat([feedback_db, pd.DataFrame([new_entry])], ignore_index=True)
+    
+    # Trigger improvement processes if rating is low
+    if feedback.rating < 3:
+        await flag_for_review(feedback.response_id)
+    
+    return {"status": "received"}
+
+async def flag_for_review(response_id: str):
+    """Trigger human review and prompt adjustment"""
+    # Implementation would connect to your review system
+    pass
+
+def get_feedback_stats():
+    """Calculate weekly feedback metrics"""
+    return {
+        'avg_rating': feedback_db['rating'].mean(),
+        'response_rate': len(feedback_db) / total_requests,
+        'common_complaints': feedback_db['comment'].value_counts().head(3)
+    }</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-3">Feedback Integration Workflow</h3>
+                        <div class="grid grid-cols-5 gap-2 text-center text-xs">
+                            <div class="bg-purple-100 p-2 rounded">1. Collect</div>
+                            <div class="bg-purple-200 p-2 rounded">2. Analyze</div>
+                            <div class="bg-purple-300 p-2 rounded">3. Identify</div>
+                            <div class="bg-purple-400 p-2 rounded">4. Implement</div>
+                            <div class="bg-purple-500 p-2 rounded text-white">5. Verify</div>
+                        </div>
+                        <p class="text-sm text-gray-700 mt-3">
+                            Continuous feedback integration allows for iterative improvement of both prompts
+                            and model selection in production environments.
+                        </p>
+                    </div>
+                </section>
+            </div>
+        </article>
+        
+        <!-- Summary Card -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+            <div class="bg-blue-800 text-white p-4">
+                <h2 class="text-xl font-bold">Production Deployment Checklist</h2>
+            </div>
+            <div class="p-6">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="flex items-start">
+                        <span class="bg-blue-200 rounded-full p-1 mr-2">✓</span>
+                        <span>Have we defined clear performance benchmarks?</span>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="bg-blue-200 rounded-full p-1 mr-2">✓</span>
+                        <span>Are prompts version-controlled and documented?</span>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="bg-blue-200 rounded-full p-1 mr-2">✓</span>
+                        <span>Is the deployment properly secured against attacks?</span>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="bg-blue-200 rounded-full p-1 mr-2">✓</span>
+                        <span>Have we implemented comprehensive monitoring?</span>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="bg-blue-200 rounded-full p-1 mr-2">✓</span>
+                        <span>Are cost controls and optimization in place?</span>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="bg-blue-200 rounded-full p-1 mr-2">✓</span>
+                        <span>Do we have mechanisms for user feedback?</span>
+                    </div>
+                </div>
+                <div class="mt-6 text-center">
+                    <button onclick="downloadDeploymentChecklist()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition">
+                        Download Full Checklist
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Next Steps -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-gray-800 text-white p-4">
+                <h2 class="text-xl font-bold">Continue Your Production Journey</h2>
+            </div>
+            <div class="p-6">
+                <div class="grid md:grid-cols-3 gap-6">
+                    <a href="#" class="block border rounded-lg p-4 hover:bg-gray-50 transition">
+                        <h3 class="font-semibold text-blue-700 mb-2">Case Studies</h3>
+                        <p class="text-sm text-gray-600">Real-world examples of LLM production deployments</p>
+                    </a>
+                    <a href="#" class="block border rounded-lg p-4 hover:bg-gray-50 transition">
+                        <h3 class="font-semibold text-blue-700 mb-2">Advanced Scaling</h3>
+                        <p class="text-sm text-gray-600">Techniques for high-volume LLM applications</p>
+                    </a>
+                    <a href="#" class="block border rounded-lg p-4 hover:bg-gray-50 transition">
+                        <h3 class="font-semibold text-blue-700 mb-2">Incident Response</h3>
+                        <p class="text-sm text-gray-600">Handling outages and issues in production</p>
+                    </a>
+                </div>
+                <div class="mt-6 text-center">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition">
+                        Complete Module
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 border-t mt-12 py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-gray-700">© 2025 Production AI Institute</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-600 hover:text-blue-600">Resources</a>
+                    <a href="#" class="text-gray-600 hover:text-blue-600">Research</a>
+                    <a href="#" class="text-gray-600 hover:text-blue-600">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Deployment Architecture Canvas
+        function initDeploymentCanvas() {
+            const canvas = document.getElementById('deploymentCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas dimensions
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            // Components data
+            const components = [
+                { x: 0.15, y: 0.5, width: 0.2, height: 0.3, color: '#93c5fd', name: "Client Apps", desc: "Web/mobile applications making requests to the LLM API" },
+                { x: 0.35, y: 0.3, width: 0.2, height: 0.15, color: '#60a5fa', name: "API Gateway", desc: "Routes requests, handles authentication and rate limiting" },
+                { x: 0.35, y: 0.6, width: 0.2, height: 0.15, color: '#60a5fa', name: "Load Balancer", desc: "Distributes requests across multiple model instances" },
+                { x: 0.6, y: 0.2, width: 0.2, height: 0.15, color: '#3b82f6', name: "LLM Service", desc: "Containerized model instances with GPU acceleration" },
+                { x: 0.6, y: 0.5, width: 0.2, height: 0.15, color: '#3b82f6', name: "Cache Layer", desc: "Stores frequent responses to reduce model load" },
+                { x: 0.6, y: 0.8, width: 0.2, height: 0.15, color: '#3b82f6', name: "Monitoring", desc: "Tracks performance, errors, and usage metrics" },
+                { x: 0.85, y: 0.5, width: 0.2, height: 0.3, color: '#1d4ed8', name: "Data Stores", desc: "Persistent storage for logs, prompts, and feedback" }
+            ];
+            
+            // Draw components
+            components.forEach(comp => {
+                const absX = comp.x * canvas.width;
+                const absY = comp.y * canvas.height;
+                const absWidth = comp.width * canvas.width;
+                const absHeight = comp.height * canvas.height;
+                
+                // Draw component box
+                ctx.fillStyle = comp.color;
+                ctx.fillRect(absX, absY, absWidth, absHeight);
+                ctx.strokeStyle = '#1e3a8a';
+                ctx.strokeRect(absX, absY, absWidth, absHeight);
+                
+                // Draw component name
+                ctx.fillStyle = '#1f2937';
+                ctx.font = 'bold 10px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(comp.name, absX + absWidth/2, absY + absHeight/2 + 3);
+                
+                // Add interactivity
+                canvas.addEventListener('mousemove', (e) => {
+                    const rect = canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    if (x >= absX && x <= absX + absWidth &&
+                        y >= absY && y <= absY + absHeight) {
+                        document.getElementById('deploymentExplanation').textContent = comp.desc;
+                        document.getElementById('deploymentExplanation').classList.remove('hidden');
+                        
+                        // Highlight component
+                        ctx.strokeStyle = '#f59e0b';
+                        ctx.lineWidth = 2;
+                        ctx.strokeRect(absX, absY, absWidth, absHeight);
+                    } else {
+                        // Redraw to remove highlight
+                        ctx.strokeStyle = '#1e3a8a';
+                        ctx.lineWidth = 1;
+                        ctx.strokeRect(absX, absY, absWidth, absHeight);
+                    }
+                });
+            });
+            
+            // Draw arrows
+            ctx.strokeStyle = '#4b5563';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            
+            // Client to API Gateway
+            ctx.moveTo(0.15 * canvas.width + 0.2 * canvas.width, 0.5 * canvas.height);
+            ctx.lineTo(0.35 * canvas.width, 0.5 * canvas.height);
+            
+            // API Gateway to Load Balancer
+            ctx.moveTo(0.35 * canvas.width + 0.2 * canvas.width, 0.3 * canvas.height + 0.15 * canvas.height/2);
+            ctx.lineTo(0.6 * canvas.width, 0.2 * canvas.height + 0.15 * canvas.height/2);
+            
+            // Load Balancer to LLM Service
+            ctx.moveTo(0.35 * canvas.width + 0.2 * canvas.width, 0.6 * canvas.height + 0.15 * canvas.height/2);
+            ctx.lineTo(0.6 * canvas.width, 0.5 * canvas.height + 0.15 * canvas.height/2);
+            
+            // LLM Service to Cache
+            ctx.moveTo(0.6 * canvas.width + 0.2 * canvas.width, 0.2 * canvas.height + 0.15 * canvas.height/2);
+            ctx.lineTo(0.6 * canvas.width + 0.2 * canvas.width, 0.5 * canvas.height);
+            ctx.moveTo(0.6 * canvas.width + 0.2 * canvas.width, 0.5 * canvas.height);
+            ctx.lineTo(0.6 * canvas.width, 0.5 * canvas.height);
+            
+            // Cache to Data Stores
+            ctx.moveTo(0.6 * canvas.width + 0.2 * canvas.width, 0.5 * canvas.height + 0.15 * canvas.height/2);
+            ctx.lineTo(0.85 * canvas.width, 0.5 * canvas.height);
+            
+            ctx.stroke();
+            
+            canvas.addEventListener('mouseout', () => {
+                document.getElementById('deploymentExplanation').classList.add('hidden');
+                initDeploymentCanvas(); // Redraw to remove highlights
+            });
+        }
+        
+        // Initialize Cost Comparison Chart
+        function initCostChart() {
+            const canvas = document.getElementById('costCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas dimensions
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            // Data
+            const models = ["Llama-3-8B", "Llama-3-70B", "GPT-5", "Claude-3"];
+            const costs = [0.40, 2.80, 4.50, 3.20];
+            const colors = ['#93c5fd', '#60a5fa', '#3b82f6', '#1d4ed8'];
+            
+            // Calculate dimensions
+            const barWidth = canvas.width / (models.length * 1.5);
+            const maxValue = Math.max(...costs);
+            const scale = (canvas.height - 40) / maxValue;
+            
+            // Draw bars
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            
+            models.forEach((model, i) => {
+                const x = (i + 0.25) * (barWidth * 1.5);
+                const barHeight = costs[i] * scale;
+                
+                // Draw bar
+                ctx.fillStyle = colors[i];
+                ctx.fillRect(x, canvas.height - barHeight - 30, barWidth, barHeight);
+                
+                // Draw label
+                ctx.fillStyle = '#1f2937';
+                ctx.fillText(model, x + barWidth/2, canvas.height - 10);
+                
+                // Draw value
+                ctx.fillText('$' + costs[i].toFixed(2), x + barWidth/2, canvas.height - barHeight - 35);
+            });
+            
+            // Draw axis
+            ctx.beginPath();
+            ctx.moveTo(30, canvas.height - 30);
+            ctx.lineTo(canvas.width - 10, canvas.height - 30);
+            ctx.strokeStyle = '#6b7280';
+            ctx.stroke();
+            
+            // Draw title
+            ctx.font = 'bold 14px Arial';
+            ctx.fillStyle = '#1f2937';
+            ctx.textAlign = 'left';
+            ctx.fillText('Cost per 1M Tokens (USD)', 10, 20);
+        }
+        
+        // Download deployment checklist
+        function downloadDeploymentChecklist() {
+            const checklistContent = `LLM Production Deployment Checklist\n\n` +
+                `1. Pre-Deployment\n` +
+                `   ☐ Define performance benchmarks (latency, throughput)\n` +
+                `   ☐ Establish monitoring and alerting systems\n` +
+                `   ☐ Implement security controls (auth, rate limiting)\n\n` +
+                `2. Deployment Architecture\n` +
+                `   ☐ Design scalable infrastructure (load balancing, auto-scaling)\n` +
+                `   ☐ Implement caching layer for frequent responses\n` +
+                `   ☐ Set up CI/CD pipeline for model updates\n\n` +
+                `3. Operational Excellence\n` +
+                `   ☐ Document incident response procedures\n` +
+                `   ☐ Establish rollback mechanisms\n` +
+                `   ☐ Configure logging and audit trails\n\n` +
+                `4. Cost Management\n` +
+                `   ☐ Implement usage tracking and cost alerts\n` +
+                `   ☐ Optimize prompts for token efficiency\n` +
+                `   ☐ Establish budget controls\n\n` +
+                `5. Feedback & Improvement\n` +
+                `   ☐ Set up user feedback collection\n` +
+                `   ☐ Create process for prompt iteration\n` +
+                `   ☐ Schedule regular model performance reviews\n\n` +
+                `Date: ${new Date().toISOString().split('T')[0]}`;
+            
+            const blob = new Blob([checklistContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'LLM_Deployment_Checklist.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // Initialize on load
+        window.onload = function() {
+            initDeploymentCanvas();
+            initCostChart();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                initDeploymentCanvas();
+                initCostChart();
+            });
+        };
+    </script>
+</body>
+</html>

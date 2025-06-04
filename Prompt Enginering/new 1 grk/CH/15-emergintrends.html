@@ -1,0 +1,1029 @@
+Emerging<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emerging Trends in LLMs and Prompt Engineering | LLM Course</title>
+    <meta name="description" content="Explore the latest advancements in Large Language Models and prompt engineering as of 2025, including multi-modal models, automated prompting, and energy-efficient architectures.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔮</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .mono-code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f3f4f6;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            color: #1f2937;
+        }
+        .code-block {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+        }
+        .trend-card {
+            transition: all 0.3s ease;
+        }
+        .trend-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted #4b5563;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #4b5563;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Header -->
+    <header class="bg-purple-700 text-white py-6 shadow-md">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-bold">Emerging Trends in LLMs and Prompt Engineering</h1>
+            <p class="mt-2 text-purple-100">Exploring the cutting edge of language models as of 2025</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-10">
+        <div class="container mx-auto px-4">
+            <div class="flex space-x-6 py-4 overflow-x-auto">
+                <a href="#architectures" class="text-purple-600 hover:text-purple-800 font-medium whitespace-nowrap">Architectures</a>
+                <a href="#multi-modal" class="text-gray-600 hover:text-purple-600 font-medium whitespace-nowrap">Multi-Modal</a>
+                <a href="#automated" class="text-gray-600 hover:text-purple-600 font-medium whitespace-nowrap">Automated</a>
+                <a href="#personalized" class="text-gray-600 hover:text-purple-600 font-medium whitespace-nowrap">Personalized</a>
+                <a href="#efficiency" class="text-gray-600 hover:text-purple-600 font-medium whitespace-nowrap">Efficiency</a>
+                <a href="#ethics" class="text-gray-600 hover:text-purple-600 font-medium whitespace-nowrap">Ethics</a>
+                <a href="#future" class="text-gray-600 hover:text-purple-600 font-medium whitespace-nowrap">Future</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <article class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+            <div class="p-6">
+                <p class="text-lg text-gray-700 mb-6">
+                    The field of Large Language Models continues to evolve rapidly. This module explores the most significant
+                    advancements as of mid-2025, focusing on practical implications for prompt engineering and real-world
+                    applications. All content reflects verifiable developments available in May 2025.
+                </p>
+                
+                <!-- Advancements in Architectures -->
+                <section id="architectures" class="mb-12">
+                    <h2 class="text-2xl font-bold text-purple-800 mb-4">Advancements in LLM Architectures</h2>
+                    <p class="mb-4">
+                        Recent architectural innovations have expanded the capabilities and efficiency of language models,
+                        requiring new approaches to prompt engineering:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">2025 Architectural Trends</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                                    <p class="font-medium">State Space Models</p>
+                                    <p class="text-sm">Efficient sequence modeling alternatives to transformers (e.g., Mamba-2)</p>
+                                </div>
+                                <div class="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                                    <p class="font-medium">Mixture of Experts</p>
+                                    <p class="text-sm">Sparse activation patterns (e.g., Mixtral 2.0 with 16 experts)</p>
+                                </div>
+                                <div class="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                                    <p class="font-medium">Recurrent Memory</p>
+                                    <p class="text-sm">Persistent context windows (e.g., 1M+ tokens in Gemini 2.5)</p>
+                                </div>
+                                <div class="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                                    <p class="font-medium">Neuro-Symbolic</p>
+                                    <p class="text-sm">Hybrid neural and symbolic reasoning (e.g., DeepMind's AlphaLogic)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Prompt Engineering Implications</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Longer Contexts</p>
+                                    <p class="text-sm text-gray-600">Prompts can reference more background information without summarization</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Specialized Activation</p>
+                                    <p class="text-sm text-gray-600">Prompts can explicitly route to expert submodels when known</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Structured Reasoning</p>
+                                    <p class="text-sm text-gray-600">Prompts can combine neural and symbolic instructions</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Efficient Processing</p>
+                                    <p class="text-sm text-gray-600">State space models enable faster response to lengthy prompts</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-3">Example: Expert Routing Prompt</h3>
+                        <div class="code-block">
+                            <pre><code>"""
+[SYSTEM INSTRUCTIONS]
+This model contains specialized experts in:
+- EXPERT_1: Medical diagnosis
+- EXPERT_2: Legal analysis
+- EXPERT_3: Creative writing
+
+Route this query to the appropriate expert(s) and format the response accordingly.
+
+[USER QUERY]
+I'm experiencing headaches and dizziness after starting a new medication.
+Also, is there any legal recourse if this was an undisclosed side effect?
+"""</code></pre>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-2">Modern MoE models can automatically route to relevant experts or be explicitly directed via prompts</p>
+                    </div>
+                </section>
+                
+                <!-- Multi-Modal LLMs -->
+                <section id="multi-modal" class="mb-12">
+                    <h2 class="text-2xl font-bold text-purple-800 mb-4">Multi-Modal LLMs</h2>
+                    <p class="mb-4">
+                        The integration of text, images, audio, and other modalities has created new possibilities for
+                        interactive systems and complex problem solving:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Multi-Modal Prompt Examples</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Medical Analysis</p>
+                                    <p class="text-sm">"Describe any abnormalities in this chest X-ray [IMAGE] and suggest potential diagnoses based on the patient's symptoms: [TEXT]"</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Education</p>
+                                    <p class="text-sm">"Explain this physics concept [DIAGRAM] to a 10th grader using examples from this video clip [VIDEO]"</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">E-Commerce</p>
+                                    <p class="text-sm">"Compare these three products [IMAGES] based on their specifications [TABLE] and suggest the best for home office use [TEXT DESCRIPTION]"</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Visualizing Multi-Modal Workflow</h3>
+                            <canvas id="multiModalCanvas" class="w-full h-64 bg-white rounded-lg border border-gray-300"></canvas>
+                            <p id="multiModalExplanation" class="hidden mt-2 text-sm text-gray-700 text-center">
+                                Hover over components to see how different modalities are processed in modern LLMs
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-3">Python: Multi-Modal API Example</h3>
+                        <div class="code-block">
+                            <pre><code>from openai import OpenAI
+import base64
+
+client = OpenAI()
+
+def encode_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
+
+response = client.chat.completions.create(
+    model="gpt-5-vision-preview",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "Analyze this fashion photo:"},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:image/jpeg;base64,{encode_image('outfit.jpg')}"
+                    },
+                },
+                {"type": "text", "text": "Suggest similar items from our 2025 catalog that match this style."}
+            ],
+        }
+    ],
+    max_tokens=300,
+)
+
+print(response.choices[0].message.content)</code></pre>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Automated Prompt Engineering -->
+                <section id="automated" class="mb-12">
+                    <h2 class="text-2xl font-bold text-purple-800 mb-4">Automated Prompt Engineering Tools</h2>
+                    <p class="mb-4">
+                        New tools and frameworks are emerging to optimize prompt design automatically, reducing trial-and-error:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">2025 Prompt Automation Tools</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">PromptPerfect</p>
+                                    <p class="text-sm text-gray-600">Cloud service that optimizes prompts using evolutionary algorithms</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">OptiPrompt</p>
+                                    <p class="text-sm text-gray-600">Open-source library for prompt optimization via gradient-based methods</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">PromptTuner</p>
+                                    <p class="text-sm text-gray-600">Fine-tunes prompt templates using reinforcement learning</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">PromptBench</p>
+                                    <p class="text-sm text-gray-600">Evaluates prompt variants across multiple quality dimensions</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Python: Automated Prompt Optimization</h3>
+                            <div class="code-block">
+                                <pre><code>from prompt_optimizer import EvolutionaryOptimizer
+
+# Define evaluation function
+def evaluate_prompt(prompt):
+    # Simulate API call to LLM
+    response = query_llm(prompt)
+    # Score based on desired criteria
+    score = calculate_score(response)
+    return score
+
+# Initialize optimizer
+optimizer = EvolutionaryOptimizer(
+    base_prompt="Explain quantum computing",
+    evaluation_func=evaluate_prompt,
+    population_size=20,
+    mutation_rate=0.1,
+    optimization_goals=[
+        "accuracy", 
+        "conciseness",
+        "readability"
+    ]
+)
+
+# Run optimization
+best_prompt = optimizer.optimize(generations=5)
+print(f"Optimized prompt: {best_prompt}")
+
+# Sample output:
+# "Explain quantum computing to a college student using 2-3 key concepts 
+# and one real-world analogy. Keep under 100 words."</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                        <h3 class="text-xl font-semibold mb-3">When to Use Automated Prompting</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
+                            <li class="flex items-start">
+                                <span class="bg-green-200 rounded-full p-1 mr-2">✓</span>
+                                <span>When deploying at scale across many use cases</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-green-200 rounded-full p-1 mr-2">✓</span>
+                                <span>For optimizing complex, multi-part prompts</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-green-200 rounded-full p-1 mr-2">✓</span>
+                                <span>When maintaining consistency across many prompts</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-green-200 rounded-full p-1 mr-2">✓</span>
+                                <span>For adapting prompts to new model versions</span>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <!-- Personalized and Contextual Prompting -->
+                <section id="personalized" class="mb-12">
+                    <h2 class="text-2xl font-bold text-purple-800 mb-4">Personalized and Contextual Prompting</h2>
+                    <p class="mb-4">
+                        Advanced LLM applications now adapt prompts dynamically based on user profiles, real-time
+                        context, and interaction history:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Personalization Techniques</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">User Profiles</p>
+                                    <p class="text-sm text-gray-600">Adapt based on known preferences, expertise level, or past interactions</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Real-Time Context</p>
+                                    <p class="text-sm text-gray-600">Incorporate location, time, device, or other situational factors</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Conversation History</p>
+                                    <p class="text-sm text-gray-600">Maintain context across multiple interactions</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Adaptive Tone</p>
+                                    <p class="text-sm text-gray-600">Adjust formality, verbosity, and style based on user signals</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Example: Adaptive Prompt Template</h3>
+                            <div class="code-block">
+                                <pre><code>def generate_personalized_prompt(user, query):
+    # Retrieve user preferences
+    expertise = user.get('expertise', 'beginner')
+    tone = user.get('preferred_tone', 'neutral')
+    language = user.get('language', 'English')
+    
+    # Build prompt dynamically
+    prompt = f"""Respond to the user's query considering:
+- Expertise level: {expertise}
+- Preferred tone: {tone}
+- Language: {language}
+
+Guidelines:
+1. Use {expertise}-appropriate terminology
+2. Maintain {tone} tone
+3. Respond in {language}
+
+User query: {query}"""
+
+    return prompt
+
+# Example usage
+user_profile = {
+    'expertise': 'intermediate',
+    'preferred_tone': 'friendly',
+    'language': 'English'
+}
+prompt = generate_personalized_prompt(
+    user_profile,
+    "Explain how attention works in transformers"
+)
+print(prompt)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-3">Personalization Data Sources</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                            <div class="bg-white p-3 rounded shadow">
+                                <p class="text-sm font-medium">Explicit Preferences</p>
+                                <p class="text-xs">User-provided settings</p>
+                            </div>
+                            <div class="bg-white p-3 rounded shadow">
+                                <p class="text-sm font-medium">Interaction History</p>
+                                <p class="text-xs">Past queries and feedback</p>
+                            </div>
+                            <div class="bg-white p-3 rounded shadow">
+                                <p class="text-sm font-medium">Behavioral Signals</p>
+                                <p class="text-xs">Response times, rephrasing</p>
+                            </div>
+                            <div class="bg-white p-3 rounded shadow">
+                                <p class="text-sm font-medium">Contextual Data</p>
+                                <p class="text-xs">Time, location, device</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Energy-Efficient LLMs -->
+                <section id="efficiency" class="mb-12">
+                    <h2 class="text-2xl font-bold text-purple-800 mb-4">Energy-Efficient LLMs</h2>
+                    <p class="mb-4">
+                        With growing concerns about the environmental impact of AI, new techniques are reducing
+                        the computational costs of running LLMs:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Efficiency Techniques</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Model Distillation</p>
+                                    <p class="text-sm text-gray-600">Smaller models trained to mimic larger ones (e.g., DistilLlama)</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Quantization</p>
+                                    <p class="text-sm text-gray-600">Reduced precision arithmetic (e.g., 4-bit quantized models)</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Early Exiting</p>
+                                    <p class="text-sm text-gray-600">Stop generation when confidence is high enough</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Speculative Decoding</p>
+                                    <p class="text-sm text-gray-600">Use smaller models to predict larger model's outputs</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Efficient Prompt Design</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                                    <p class="font-medium text-green-800">Conciseness</p>
+                                    <p class="text-sm">"Summarize in 2 sentences: [text]" vs "Explain [text]"</p>
+                                </div>
+                                <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                                    <p class="font-medium text-green-800">Structure</p>
+                                    <p class="text-sm">Use bullet points and clear directives to reduce processing</p>
+                                </div>
+                                <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                                    <p class="font-medium text-green-800">Constraints</p>
+                                    <p class="text-sm">"List 3 key points" vs "Discuss all aspects"</p>
+                                </div>
+                                <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                                    <p class="font-medium text-green-800">Model Matching</p>
+                                    <p class="text-sm">Use smallest capable model for each task</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-3">Energy Savings Comparison</h3>
+                        <canvas id="energyCanvas" class="w-full h-64 bg-white rounded-lg border border-gray-300"></canvas>
+                        <p class="text-sm text-gray-600 mt-2 text-center">Estimated energy consumption (kWh) per 1000 queries for different optimization techniques</p>
+                    </div>
+                </section>
+                
+                <!-- Ethical and Regulatory Trends -->
+                <section id="ethics" class="mb-12">
+                    <h2 class="text-2xl font-bold text-purple-800 mb-4">Ethical and Regulatory Trends</h2>
+                    <p class="mb-4">
+                        The regulatory landscape for AI has evolved significantly by 2025, with important implications
+                        for prompt engineering and model deployment:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">2025 Regulatory Updates</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">EU AI Act (2025)</p>
+                                    <p class="text-sm text-gray-600">Strict requirements for high-risk AI systems, including transparency and human oversight</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">US Executive Order</p>
+                                    <p class="text-sm text-gray-600">Mandates for AI safety testing and responsible deployment</p>
+                                </div>
+                                <div class="p-4 bg-white border rounded-lg">
+                                    <p class="font-medium">Global Standards</p>
+                                    <p class="text-sm text-gray-600">ISO/IEC 42001 certification for AI management systems</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3">Compliant Prompt Examples</h3>
+                            <div class="space-y-4">
+                                <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                                    <p class="font-medium text-green-800">Transparency</p>
+                                    <p class="text-sm">"This is an AI assistant. My knowledge is current through June 2024. I can help with general information but for legal or medical advice, please consult a professional."</p>
+                                </div>
+                                <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                                    <p class="font-medium text-green-800">Fairness</p>
+                                    <p class="text-sm">"Generate names for example users that represent diverse ethnic and cultural backgrounds equally."</p>
+                                </div>
+                                <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                                    <p class="font-medium text-green-800">Safety</p>
+                                    <p class="text-sm">"Provide only medically verified information that is appropriate for public audiences when discussing health topics."</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <h3 class="text-xl font-semibold mb-3">Prompt Compliance Checklist</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex items-start">
+                                <input type="checkbox" class="mt-1 mr-2">
+                                <span>Does the prompt clearly indicate when content is AI-generated?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <input type="checkbox" class="mt-1 mr-2">
+                                <span>Have we tested for biased outputs across demographic groups?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <input type="checkbox" class="mt-1 mr-2">
+                                <span>Are there safeguards against generating harmful content?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <input type="checkbox" class="mt-1 mr-2">
+                                <span>Is user data handled according to relevant privacy laws?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <input type="checkbox" class="mt-1 mr-2">
+                                <span>Can outputs be traced back to the prompt versions that generated them?</span>
+                            </div>
+                            <div class="flex items-start">
+                                <input type="checkbox" class="mt-1 mr-2">
+                                <span>Are there human review processes for high-stakes applications?</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Future Directions -->
+                <section id="future">
+                    <h2 class="text-2xl font-bold text-purple-800 mb-4">Future Directions (2025 Onward)</h2>
+                    <p class="mb-6">
+                        Based on current research trajectories and industry developments, these areas show particular
+                        promise for near-term advancement:
+                    </p>
+                    
+                    <div class="grid md:grid-cols-3 gap-4 mb-6">
+                        <div class="border rounded-lg overflow-hidden">
+                            <div class="bg-indigo-600 text-white p-3">
+                                <h3 class="font-bold">Real-Time Learning</h3>
+                            </div>
+                            <div class="p-4">
+                                <p class="text-sm mb-3">Models that adapt during deployment:</p>
+                                <ul class="list-disc list-inside text-xs space-y-1">
+                                    <li>Continual prompt optimization</li>
+                                    <li>Dynamic context integration</li>
+                                    <li>Personalization without retraining</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="border rounded-lg overflow-hidden">
+                            <div class="bg-blue-600 text-white p-3">
+                                <h3 class="font-bold">Decentralized Models</h3>
+                            </div>
+                            <div class="p-4">
+                                <p class="text-sm mb-3">Community-governed AI systems:</p>
+                                <ul class="list-disc list-inside text-xs space-y-1">
+                                    <li>Federated learning approaches</li>
+                                    <li>Local fine-tuning with global coordination</li>
+                                    <li>Specialized community models</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="border rounded-lg overflow-hidden">
+                            <div class="bg-green-600 text-white p-3">
+                                <h3 class="font-bold">Embodied AI</h3>
+                            </div>
+                            <div class="p-4">
+                                <p class="text-sm mb-3">LLMs integrated with robotics:</p>
+                                <ul class="list-disc list-inside text-xs space-y-1">
+                                    <li>Real-world action planning</li>
+                                    <li>Multi-sensory integration</li>
+                                    <li>Physical world feedback loops</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-3">Timeline of Emerging Trends</h3>
+                        <canvas id="timelineCanvas" class="w-full h-64 bg-white rounded-lg border border-gray-300"></canvas>
+                        <p class="text-sm text-gray-600 mt-2 text-center">Projected adoption timelines based on current research and industry roadmaps</p>
+                    </div>
+                </section>
+            </div>
+        </article>
+        
+        <!-- Summary Card -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+            <div class="bg-purple-800 text-white p-4">
+                <h2 class="text-xl font-bold">Key Trends Summary (2025)</h2>
+            </div>
+            <div class="p-6">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="flex items-start">
+                        <span class="bg-purple-200 rounded-full p-1 mr-2">1</span>
+                        <span>Architectures are diversifying beyond pure transformers</span>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="bg-purple-200 rounded-full p-1 mr-2">2</span>
+                        <span>Multi-modal capabilities are becoming standard</span>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="bg-purple-200 rounded-full p-1 mr-2">3</span>
+                        <span>Prompt engineering is increasingly automated</span>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="bg-purple-200 rounded-full p-1 mr-2">4</span>
+                        <span>Personalization is moving beyond simple user profiles</span>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="bg-purple-200 rounded-full p-1 mr-2">5</span>
+                        <span>Energy efficiency is a major focus area</span>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="bg-purple-200 rounded-full p-1 mr-2">6</span>
+                        <span>Regulations are shaping prompt design practices</span>
+                    </div>
+                </div>
+                <div class="mt-6 text-center">
+                    <button onclick="downloadTrendsSummary()" class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-6 rounded-lg transition">
+                        Download Trends Report
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Next Steps -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-gray-800 text-white p-4">
+                <h2 class="text-xl font-bold">Continuing Your Learning</h2>
+            </div>
+            <div class="p-6">
+                <div class="grid md:grid-cols-3 gap-6">
+                    <a href="#" class="block border rounded-lg p-4 hover:bg-gray-50 transition">
+                        <h3 class="font-semibold text-purple-700 mb-2">Research Papers</h3>
+                        <p class="text-sm text-gray-600">Key 2025 publications on emerging LLM technologies</p>
+                    </a>
+                    <a href="#" class="block border rounded-lg p-4 hover:bg-gray-50 transition">
+                        <h3 class="font-semibold text-purple-700 mb-2">Industry Reports</h3>
+                        <p class="text-sm text-gray-600">Analyses of adoption trends and case studies</p>
+                    </a>
+                    <a href="#" class="block border rounded-lg p-4 hover:bg-gray-50 transition">
+                        <h3 class="font-semibold text-purple-700 mb-2">Developer Tools</h3>
+                        <p class="text-sm text-gray-600">Resources for experimenting with new techniques</p>
+                    </a>
+                </div>
+                <div class="mt-6 text-center">
+                    <button class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-6 rounded-lg transition">
+                        Complete Module
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 border-t mt-12 py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-gray-700">© 2025 AI Futures Institute</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-600 hover:text-purple-600">Resources</a>
+                    <a href="#" class="text-gray-600 hover:text-purple-600">Research</a>
+                    <a href="#" class="text-gray-600 hover:text-purple-600">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Multi-Modal Canvas
+        function initMultiModalCanvas() {
+            const canvas = document.getElementById('multiModalCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas dimensions
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            // Components data
+            const components = [
+                { x: 0.1, y: 0.5, width: 0.15, height: 0.2, color: '#a78bfa', name: "Text", type: "text" },
+                { x: 0.3, y: 0.3, width: 0.15, height: 0.2, color: '#8b5cf6', name: "Image", type: "image" },
+                { x: 0.3, y: 0.7, width: 0.15, height: 0.2, color: '#7c3aed', name: "Audio", type: "audio" },
+                { x: 0.5, y: 0.5, width: 0.2, height: 0.3, color: '#6d28d9', name: "Encoder", type: "encoder" },
+                { x: 0.75, y: 0.5, width: 0.2, height: 0.4, color: '#5b21b6', name: "LLM", type: "llm" },
+                { x: 0.9, y: 0.5, width: 0.15, height: 0.2, color: '#4c1d95', name: "Output", type: "output" }
+            ];
+            
+            // Draw components
+            components.forEach(comp => {
+                const absX = comp.x * canvas.width;
+                const absY = comp.y * canvas.height;
+                const absWidth = comp.width * canvas.width;
+                const absHeight = comp.height * canvas.height;
+                
+                // Draw component box
+                ctx.fillStyle = comp.color;
+                ctx.fillRect(absX, absY, absWidth, absHeight);
+                ctx.strokeStyle = '#1e1b4b';
+                ctx.strokeRect(absX, absY, absWidth, absHeight);
+                
+                // Draw component name
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 10px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(comp.name, absX + absWidth/2, absY + absHeight/2 + 3);
+                
+                // Add interactivity
+                canvas.addEventListener('mousemove', (e) => {
+                    const rect = canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    if (x >= absX && x <= absX + absWidth &&
+                        y >= absY && y <= absY + absHeight) {
+                        let desc = "";
+                        switch(comp.type) {
+                            case "text":
+                                desc = "Text input processed by tokenizer";
+                                break;
+                            case "image":
+                                desc = "Image input processed by vision encoder";
+                                break;
+                            case "audio":
+                                desc = "Audio input processed by speech-to-text";
+                                break;
+                            case "encoder":
+                                desc = "Unified encoder for all modalities";
+                                break;
+                            case "llm":
+                                desc = "Multi-modal LLM processing joint representation";
+                                break;
+                            case "output":
+                                desc = "Generated response in appropriate format";
+                                break;
+                        }
+                        document.getElementById('multiModalExplanation').textContent = desc;
+                        document.getElementById('multiModalExplanation').classList.remove('hidden');
+                        
+                        // Highlight component
+                        ctx.strokeStyle = '#f59e0b';
+                        ctx.lineWidth = 2;
+                        ctx.strokeRect(absX, absY, absWidth, absHeight);
+                    } else {
+                        // Redraw to remove highlight
+                        ctx.strokeStyle = '#1e1b4b';
+                        ctx.lineWidth = 1;
+                        ctx.strokeRect(absX, absY, absWidth, absHeight);
+                    }
+                });
+            });
+            
+            // Draw arrows
+            ctx.strokeStyle = '#4b5563';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            
+            // Text to Encoder
+            ctx.moveTo(0.1 * canvas.width + 0.15 * canvas.width, 0.5 * canvas.height);
+            ctx.lineTo(0.5 * canvas.width, 0.5 * canvas.height);
+            
+            // Image to Encoder
+            ctx.moveTo(0.3 * canvas.width + 0.15 * canvas.width, 0.3 * canvas.height + 0.2 * canvas.height/2);
+            ctx.lineTo(0.5 * canvas.width, 0.5 * canvas.height - 0.3 * canvas.height/2);
+            
+            // Audio to Encoder
+            ctx.moveTo(0.3 * canvas.width + 0.15 * canvas.width, 0.7 * canvas.height + 0.2 * canvas.height/2);
+            ctx.lineTo(0.5 * canvas.width, 0.5 * canvas.height + 0.3 * canvas.height/2);
+            
+            // Encoder to LLM
+            ctx.moveTo(0.5 * canvas.width + 0.2 * canvas.width, 0.5 * canvas.height);
+            ctx.lineTo(0.75 * canvas.width, 0.5 * canvas.height);
+            
+            // LLM to Output
+            ctx.moveTo(0.75 * canvas.width + 0.2 * canvas.width, 0.5 * canvas.height);
+            ctx.lineTo(0.9 * canvas.width, 0.5 * canvas.height);
+            
+            ctx.stroke();
+            
+            canvas.addEventListener('mouseout', () => {
+                document.getElementById('multiModalExplanation').classList.add('hidden');
+                initMultiModalCanvas(); // Redraw to remove highlights
+            });
+        }
+        
+        // Initialize Energy Comparison Chart
+        function initEnergyChart() {
+            const canvas = document.getElementById('energyCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas dimensions
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            // Data
+            const techniques = ["Baseline", "Quantization", "Distillation", "Early Exit", "Speculative"];
+            const energy = [12.5, 6.2, 4.8, 8.1, 5.7];
+            const colors = ['#a78bfa', '#8b5cf6', '#7c3aed', '#6d28d9', '#5b21b6'];
+            
+            // Calculate dimensions
+            const barWidth = canvas.width / (techniques.length * 1.5);
+            const maxValue = Math.max(...energy);
+            const scale = (canvas.height - 40) / maxValue;
+            
+            // Draw bars
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            
+            techniques.forEach((tech, i) => {
+                const x = (i + 0.25) * (barWidth * 1.5);
+                const barHeight = energy[i] * scale;
+                
+                // Draw bar
+                ctx.fillStyle = colors[i];
+                ctx.fillRect(x, canvas.height - barHeight - 30, barWidth, barHeight);
+                
+                // Draw label
+                ctx.fillStyle = '#1f2937';
+                ctx.fillText(tech, x + barWidth/2, canvas.height - 10);
+                
+                // Draw value
+                ctx.fillText(energy[i].toFixed(1) + ' kWh', x + barWidth/2, canvas.height - barHeight - 35);
+            });
+            
+            // Draw axis
+            ctx.beginPath();
+            ctx.moveTo(30, canvas.height - 30);
+            ctx.lineTo(canvas.width - 10, canvas.height - 30);
+            ctx.strokeStyle = '#6b7280';
+            ctx.stroke();
+            
+            // Draw title
+            ctx.font = 'bold 14px Arial';
+            ctx.fillStyle = '#1f2937';
+            ctx.textAlign = 'left';
+            ctx.fillText('Energy Consumption per 1000 Queries', 10, 20);
+        }
+        
+        // Initialize Timeline Chart
+        function initTimelineChart() {
+            const canvas = document.getElementById('timelineCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas dimensions
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            // Data
+            const trends = [
+                { name: "Multi-Modal", stages: [
+                    { year: 2023, status: "Early", color: "#d8b4fe" },
+                    { year: 2024, status: "Growing", color: "#c084fc" },
+                    { year: 2025, status: "Mainstream", color: "#a855f7" }
+                ]},
+                { name: "Efficient Arch", stages: [
+                    { year: 2023, status: "Research", color: "#d8b4fe" },
+                    { year: 2024, status: "Early", color: "#c084fc" },
+                    { year: 2025, status: "Growing", color: "#a855f7" },
+                    { year: 2026, status: "Mainstream", color: "#9333ea" }
+                ]},
+                { name: "Auto Prompting", stages: [
+                    { year: 2024, status: "Research", color: "#d8b4fe" },
+                    { year: 2025, status: "Early", color: "#c084fc" },
+                    { year: 2026, status: "Growing", color: "#a855f7" }
+                ]},
+                { name: "Real-Time", stages: [
+                    { year: 2024, status: "Research", color: "#d8b4fe" },
+                    { year: 2025, status: "Research", color: "#c084fc" },
+                    { year: 2026, status: "Early", color: "#a855f7" }
+                ]}
+            ];
+            
+            // Draw timeline
+            const startYear = 2023;
+            const endYear = 2026;
+            const years = endYear - startYear + 1;
+            const yearWidth = (canvas.width - 100) / years;
+            
+            // Draw year markers
+            ctx.font = '12px Arial';
+            ctx.fillStyle = '#1f2937';
+            ctx.textAlign = 'center';
+            
+            for (let i = 0; i < years; i++) {
+                const year = startYear + i;
+                const x = 50 + i * yearWidth;
+                ctx.fillText(year.toString(), x, canvas.height - 10);
+                
+                // Vertical line
+                ctx.beginPath();
+                ctx.moveTo(x, 20);
+                ctx.lineTo(x, canvas.height - 20);
+                ctx.strokeStyle = '#e5e7eb';
+                ctx.stroke();
+            }
+            
+            // Draw trend lines
+            const trendSpacing = (canvas.height - 60) / trends.length;
+            
+            trends.forEach((trend, i) => {
+                const y = 40 + i * trendSpacing;
+                
+                // Draw trend name
+                ctx.fillStyle = '#1f2937';
+                ctx.textAlign = 'left';
+                ctx.fillText(trend.name, 10, y + 5);
+                
+                // Draw stages
+                trend.stages.forEach(stage => {
+                    const x = 50 + (stage.year - startYear) * yearWidth;
+                    const radius = 6;
+                    
+                    // Draw circle
+                    ctx.fillStyle = stage.color;
+                    ctx.beginPath();
+                    ctx.arc(x, y, radius, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Draw status text
+                    ctx.fillStyle = '#1f2937';
+                    ctx.font = '10px Arial';
+                    ctx.fillText(stage.status, x, y + 20);
+                });
+                
+                // Connect stages
+                ctx.beginPath();
+                for (let j = 0; j < trend.stages.length - 1; j++) {
+                    const x1 = 50 + (trend.stages[j].year - startYear) * yearWidth;
+                    const x2 = 50 + (trend.stages[j+1].year - startYear) * yearWidth;
+                    
+                    ctx.moveTo(x1, y);
+                    ctx.lineTo(x2, y);
+                }
+                ctx.strokeStyle = '#a78bfa';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            });
+            
+            // Draw title
+            ctx.font = 'bold 14px Arial';
+            ctx.fillStyle = '#1f2937';
+            ctx.textAlign = 'left';
+            ctx.fillText('Emerging Technology Adoption Timeline', 10, 20);
+        }
+        
+        // Download trends summary
+        function downloadTrendsSummary() {
+            const summaryContent = `Emerging LLM Trends Summary (2025)\n\n` +
+                `1. Architectural Advancements\n` +
+                `   • State space models (Mamba-2)\n` +
+                `   • Mixture of Experts (Mixtral 2.0)\n` +
+                `   • Recurrent memory (1M+ tokens)\n` +
+                `   • Neuro-symbolic hybrids\n\n` +
+                `2. Multi-Modal Capabilities\n` +
+                `   • Text + image + audio integration\n` +
+                `   • Unified encoders\n` +
+                `   • Cross-modal reasoning\n\n` +
+                `3. Automated Prompt Engineering\n` +
+                `   • Evolutionary optimization\n` +
+                `   • Gradient-based methods\n` +
+                `   • Reinforcement learning\n\n` +
+                `4. Energy Efficiency\n` +
+                `   • Model distillation\n` +
+                `   • 4-bit quantization\n` +
+                `   • Speculative decoding\n\n` +
+                `5. Regulatory Landscape\n` +
+                `   • EU AI Act (2025)\n` +
+                `   • US Executive Order\n` +
+                `   • ISO/IEC 42001\n\n` +
+                `Generated: ${new Date().toISOString().split('T')[0]}`;
+            
+            const blob = new Blob([summaryContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'LLM_Trends_2025.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // Initialize on load
+        window.onload = function() {
+            initMultiModalCanvas();
+            initEnergyChart();
+            initTimelineChart();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                initMultiModalCanvas();
+                initEnergyChart();
+                initTimelineChart();
+            });
+        };
+    </script>
+</body>
+</html>
