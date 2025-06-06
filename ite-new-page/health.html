@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health & Wellness Guide | Expert Health Tips & Medicine Information</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        teal: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            200: '#99f6e4',
+                            300: '#5eead4',
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Navigation -->
+    <nav class="bg-teal-700 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold flex items-center">
+                <i class="fas fa-heartbeat mr-2"></i> HealthGuide
+            </a>
+            <div class="hidden md:flex space-x-8">
+                <a href="#" class="hover:text-teal-200">Home</a>
+                <a href="#" class="hover:text-teal-200">Health Tips</a>
+                <a href="#" class="hover:text-teal-200">Medicine Info</a>
+                <a href="#" class="hover:text-teal-200">Wellness</a>
+                <a href="#" class="hover:text-teal-200">About</a>
+            </div>
+            <button class="md:hidden">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-teal-600 to-teal-800 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-8 md:mb-0">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">Your Trusted Health & Wellness Resource</h1>
+                <p class="text-xl mb-6">Evidence-based health tips, medicine information, and practical do's & don'ts for better living</p>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <a href="#featured" class="bg-white text-teal-700 px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-100 transition">Explore Articles</a>
+                    <a href="#search" class="bg-transparent border-2 border-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-teal-700 transition">Search Topics</a>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center">
+                <img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Healthcare professionals" class="rounded-lg shadow-xl max-w-full h-auto">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">What You'll Find in Our Health Blog</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-teal-50 p-6 rounded-xl border border-teal-200">
+                    <div class="text-teal-600 mb-4 text-4xl">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Practical Health Tips</h3>
+                    <p class="text-gray-700">Actionable advice for everyday wellness, prevention, and healthy living.</p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="bg-teal-50 p-6 rounded-xl border border-teal-200">
+                    <div class="text-teal-600 mb-4 text-4xl">
+                        <i class="fas fa-pills"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Medicine Information</h3>
+                    <p class="text-gray-700">Clear explanations about medications, dosages, side effects, and interactions.</p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="bg-teal-50 p-6 rounded-xl border border-teal-200">
+                    <div class="text-teal-600 mb-4 text-4xl">
+                        <i class="fas fa-list-check"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Do's & Don'ts</h3>
+                    <p class="text-gray-700">Clear guidelines for various health conditions and situations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Articles -->
+    <section id="featured" class="py-16 bg-teal-100">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Featured Health Articles</h2>
+            
+            <!-- Article Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Article 1 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
+                    <img src="https://images.unsplash.com/photo-1505576399279-565b52d4ac71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Cold prevention" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="bg-teal-100 text-teal-800 px-3 py-1 rounded-full text-sm">Prevention</span>
+                            <span class="text-gray-500 text-sm">May 15, 2024</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-teal-800">10 Science-Backed Ways to Boost Your Immune System</h3>
+                        <p class="text-gray-700 mb-4">Discover simple lifestyle changes that can strengthen your body's natural defenses against illnesses.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-sm"><i class="far fa-clock mr-1"></i> 5 min read</span>
+                            <a href="#" class="text-teal-600 font-medium hover:underline">Read More →</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Article 2 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
+                    <img src="https://images.unsplash.com/photo-1587854692152-cbe660dbde88?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Medicine" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="bg-teal-100 text-teal-800 px-3 py-1 rounded-full text-sm">Medication</span>
+                            <span class="text-gray-500 text-sm">May 10, 2024</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-teal-800">Understanding Antibiotics: When to Use and When to Avoid</h3>
+                        <p class="text-gray-700 mb-4">A comprehensive guide to proper antibiotic use to prevent resistance and maintain effectiveness.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-sm"><i class="far fa-clock mr-1"></i> 7 min read</span>
+                            <a href="#" class="text-teal-600 font-medium hover:underline">Read More →</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Article 3 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
+                    <img src="https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Diabetes" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="bg-teal-100 text-teal-800 px-3 py-1 rounded-full text-sm">Chronic Conditions</span>
+                            <span class="text-gray-500 text-sm">May 5, 2024</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-teal-800">Managing Diabetes: Essential Do's and Don'ts</h3>
+                        <p class="text-gray-700 mb-4">Practical guidelines for blood sugar control, diet, exercise, and medication management.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-sm"><i class="far fa-clock mr-1"></i> 8 min read</span>
+                            <a href="#" class="text-teal-600 font-medium hover:underline">Read More →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="#" class="inline-block bg-teal-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-700 transition">View All Articles</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Health Topics -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Browse by Health Topics</h2>
+            
+            <!-- Topics Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <a href="#" class="bg-teal-50 p-4 rounded-lg text-center hover:shadow-md transition">
+                    <div class="text-teal-600 mb-2 text-3xl">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <span>Heart Health</span>
+                </a>
+                <a href="#" class="bg-teal-50 p-4 rounded-lg text-center hover:shadow-md transition">
+                    <div class="text-teal-600 mb-2 text-3xl">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <span>Mental Health</span>
+                </a>
+                <a href="#" class="bg-teal-50 p-4 rounded-lg text-center hover:shadow-md transition">
+                    <div class="text-teal-600 mb-2 text-3xl">
+                        <i class="fas fa-bone"></i>
+                    </div>
+                    <span>Bone & Joint</span>
+                </a>
+                <a href="#" class="bg-teal-50 p-4 rounded-lg text-center hover:shadow-md transition">
+                    <div class="text-teal-600 mb-2 text-3xl">
+                        <i class="fas fa-lungs"></i>
+                    </div>
+                    <span>Respiratory</span>
+                </a>
+                <a href="#" class="bg-teal-50 p-4 rounded-lg text-center hover:shadow-md transition">
+                    <div class="text-teal-600 mb-2 text-3xl">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <span>Nutrition</span>
+                </a>
+                <a href="#" class="bg-teal-50 p-4 rounded-lg text-center hover:shadow-md transition">
+                    <div class="text-teal-600 mb-2 text-3xl">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <span>Fitness</span>
+                </a>
+                <a href="#" class="bg-teal-50 p-4 rounded-lg text-center hover:shadow-md transition">
+                    <div class="text-teal-600 mb-2 text-3xl">
+                        <i class="fas fa-baby"></i>
+                    </div>
+                    <span>Children's Health</span>
+                </a>
+                <a href="#" class="bg-teal-50 p-4 rounded-lg text-center hover:shadow-md transition">
+                    <div class="text-teal-600 mb-2 text-3xl">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <span>Women's Health</span>
+                </a>
+                <a href="#" class="bg-teal-50 p-4 rounded-lg text-center hover:shadow-md transition">
+                    <div class="text-teal-600 mb-2 text-3xl">
+                        <i class="fas fa-male"></i>
+                    </div>
+                    <span>Men's Health</span>
+                </a>
+                <a href="#" class="bg-teal-50 p-4 rounded-lg text-center hover:shadow-md transition">
+                    <div class="text-teal-600 mb-2 text-3xl">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </div>
+                    <span>All Topics</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section id="search" class="py-16 bg-teal-50">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="bg-white rounded-xl p-8 shadow-sm">
+                <h2 class="text-2xl font-bold text-center mb-6">Find Health Information</h2>
+                <div class="flex flex-col sm:flex-row gap-3 mb-4">
+                    <input type="text" placeholder="Search health topics..." class="flex-grow px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+                    <button class="bg-teal-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-700 transition">Search</button>
+                </div>
+                <p class="text-center text-gray-600">Example searches: "high blood pressure remedies", "vitamin D benefits", "migraine triggers"</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- All Blog Posts Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold text-teal-800">All Health Blog Posts</h2>
+                <div class="mt-4 md:mt-0">
+                    <select class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+                        <option>Sort by: Newest First</option>
+                        <option>Sort by: Most Popular</option>
+                        <option>Sort by: A-Z</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- This is where your script will populate the blog posts -->
+            <div id="blog-posts-container" class="space-y-6">
+                <!-- Sample post structure that your script will replicate -->
+                <div class="border border-gray-200 rounded-lg p-6 hover:shadow-md transition">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-semibold text-teal-700 mb-2">The Complete Guide to Heart-Healthy Foods</h3>
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="bg-teal-100 text-teal-800 px-3 py-1 rounded-full text-sm">Nutrition</span>
+                                <span class="bg-teal-100 text-teal-800 px-3 py-1 rounded-full text-sm">Heart Health</span>
+                            </div>
+                            <p class="text-gray-700 mb-4">Discover the top foods that support cardiovascular health and how to incorporate them into your daily diet.</p>
+                        </div>
+                        <div class="text-teal-600 text-2xl">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div class="text-gray-500 text-sm">
+                            <span>Apr 28, 2024</span>
+                            <span class="mx-2">•</span>
+                            <span><i class="far fa-clock"></i> 6 min read</span>
+                        </div>
+                        <a href="#" class="text-teal-600 font-medium hover:underline">Read Article →</a>
+                    </div>
+                </div>
+                
+                <!-- Additional posts will be added here by your script -->
+            </div>
+            
+            <!-- Pagination -->
+            <div class="flex justify-center mt-10">
+                <nav class="flex items-center space-x-2">
+                    <a href="#" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">&laquo; Previous</a>
+                    <a href="#" class="px-4 py-2 bg-teal-600 text-white rounded-lg">1</a>
+                    <a href="#" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">2</a>
+                    <a href="#" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">3</a>
+                    <span class="px-4 py-2">...</span>
+                    <a href="#" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">10</a>
+                    <a href="#" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">Next &raquo;</a>
+                </nav>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter CTA -->
+    <section class="py-16 bg-teal-700 text-white">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-6">Stay Updated with Health Tips</h2>
+            <p class="text-xl mb-8">Subscribe to our newsletter for weekly health insights and article updates</p>
+            <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                <input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 rounded-lg focus:outline-none text-gray-800">
+                <button type="submit" class="bg-teal-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-800 transition">Subscribe</button>
+            </form>
+            <p class="text-teal-200 mt-4 text-sm">We respect your privacy. Unsubscribe at any time.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-teal-900 text-teal-100 py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- About -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-white">About HealthGuide</h3>
+                    <p>Providing reliable, evidence-based health information to help you make informed wellness decisions since 2010.</p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-white">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white">Home</a></li>
+                        <li><a href="#" class="hover:text-white">Health Topics</a></li>
+                        <li><a href="#" class="hover:text-white">Medicine Database</a></li>
+                        <li><a href="#" class="hover:text-white">About Us</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Disclaimer -->
+                <div>
+                    <h3 class="text-xl font-semibo
