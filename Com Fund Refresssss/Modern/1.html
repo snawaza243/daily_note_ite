@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Computers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes gradient {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #ef4444, #f59e0b);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient 5s ease infinite;
+        }
+        .timeline-container {
+            scrollbar-width: none;
+        }
+        .timeline-container::-webkit-scrollbar {
+            display: none;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Mobile Hamburger Menu -->
+    <div class="lg:hidden fixed top-0 left-0 w-full bg-white shadow-md z-50">
+        <div class="flex justify-between items-center p-4">
+            <h1 class="text-xl font-bold">Intro to Computers</h1>
+            <button id="menuBtn" class="text-gray-700">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+        <div id="mobileMenu" class="hidden bg-white border-t">
+            <a href="#hero" class="block p-3 border-b hover:bg-gray-100">What is a Computer?</a>
+            <a href="#concepts" class="block p-3 border-b hover:bg-gray-100">Core Concepts</a>
+            <a href="#advantages" class="block p-3 border-b hover:bg-gray-100">Advantages vs Limitations</a>
+            <a href="#timeline" class="block p-3 border-b hover:bg-gray-100">Evolution Timeline</a>
+            <a href="#interactive" class="block p-3 border-b hover:bg-gray-100">Interactive</a>
+            <a href="#assessment" class="block p-3 hover:bg-gray-100">Assessment</a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="pt-20 lg:pt-10 pb-20 px-4 lg:px-0 bg-gradient-to-br from-blue-50 to-purple-50">
+        <div class="container mx-auto max-w-6xl text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 gradient-text">What is a Computer?</h1>
+            <p class="text-lg md:text-xl text-gray-600 mb-12">From Greek 'compute' to modern AI machines</p>
+            
+            <div class="flex flex-col md:flex-row justify-center items-center gap-8 mb-16">
+                <!-- Data Card -->
+                <div class="relative group w-full md:w-1/4 bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 h-48 flex flex-col justify-center">
+                    <div class="text-4xl mb-3 text-blue-500 group-hover:text-blue-600 transition-colors">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Data</h3>
+                    <p class="text-gray-600 text-sm">Raw facts and figures</p>
+                    <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl flex items-center justify-center p-4 text-center">
+                        <p class="text-gray-700">"Data" is plural of "datum" - Latin for "something given"</p>
+                    </div>
+                </div>
+                
+                <!-- Arrow -->
+                <div class="text-3xl text-gray-400 rotate-90 md:rotate-0 my-4 md:my-0">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                
+                <!-- Processing Card -->
+                <div class="relative group w-full md:w-1/4 bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 h-48 flex flex-col justify-center">
+                    <div class="text-4xl mb-3 text-purple-500 group-hover:text-purple-600 transition-colors">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Processing</h3>
+                    <p class="text-gray-600 text-sm">Transforming data</p>
+                    <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl flex items-center justify-center p-4 text-center">
+                        <p class="text-gray-700">The CPU acts like a chef turning ingredients (data) into meals (information)</p>
+                    </div>
+                </div>
+                
+                <!-- Arrow -->
+                <div class="text-3xl text-gray-400 rotate-90 md:rotate-0 my-4 md:my-0">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                
+                <!-- Information Card -->
+                <div class="relative group w-full md:w-1/4 bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 h-48 flex flex-col justify-center">
+                    <div class="text-4xl mb-3 text-green-500 group-hover:text-green-600 transition-colors">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Information</h3>
+                    <p class="text-gray-600 text-sm">Processed, meaningful data</p>
+                    <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl flex items-center justify-center p-4 text-center">
+                        <p class="text-gray-700">Information is data given context and meaning for decision-making</p>
+                    </div>
+                </div>
+            </div>
+            
+            <p class="text-gray-500 text-sm max-w-2xl mx-auto">
+                <span class="font-semibold">Oxford Dictionary, 2024 Edition:</span> "A computer is an electronic device for storing and processing data, typically in binary form, according to instructions given to it in a variable program."
+            </p>
+        </div>
+    </section>
+
+    <!-- Core Concepts -->
+    <section id="concepts" class="py-16 px-4 bg-white">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Core Concepts</h2>
+            
+            <div class="grid md:grid-cols-3 gap-8 mb-16">
+                <!-- Data Card -->
+                <div class="bg-gray-50 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 p-3 rounded-full mr-4">
+                            <i class="fas fa-database text-blue-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">Understanding Data</h3>
+                    </div>
+                    <blockquote class="border-l-4 border-blue-500 pl-4 py-2 mb-4 bg-blue-50 rounded-r">
+                        "Data (plural of <span class="tooltip">datum<span class="tooltiptext">Latin for "something given"</span></span>) are raw facts and figures that need processing to become meaningful."
+                    </blockquote>
+                    
+                    <div class="mb-4">
+                        <button id="rawDataBtn" class="bg-blue-100 text-blue-700 px-4 py-2 rounded-l-md font-medium">Raw Data</button>
+                        <button id="processedDataBtn" class="bg-purple-100 text-purple-700 px-4 py-2 rounded-r-md font-medium">Processed Info</button>
+                    </div>
+                    
+                    <div id="dataExample" class="bg-white p-4 rounded-md border border-gray-200 min-h-20">
+                        26, Ram, good
+                    </div>
+                    
+                    <div class="mt-4 text-sm text-gray-600">
+                        <i class="fas fa-lightbulb mr-2 text-yellow-500"></i>
+                        <span>Data becomes information when organized and given context</span>
+                    </div>
+                </div>
+                
+                <!-- Processing Card -->
+                <div class="bg-gray-50 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-purple-100 p-3 rounded-full mr-4">
+                            <i class="fas fa-microchip text-purple-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">Processing</h3>
+                    </div>
+                    
+                    <div class="mb-4 flex justify-center">
+                        <svg width="100%" height="120" viewBox="0 0 300 120" class="border border-gray-200 rounded-lg bg-white p-2">
+                            <!-- Input -->
+                            <rect x="10" y="40" width="60" height="40" rx="5" fill="#93C5FD" stroke="#3B82F6" stroke-width="2"/>
+                            <text x="40" y="65" text-anchor="middle" fill="#1E3A8A" font-size="14">Input</text>
+                            
+                            <!-- Arrow -->
+                            <path d="M75,60 L95,60" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+                            
+                            <!-- CPU -->
+                            <rect x="100" y="20" width="80" height="80" rx="5" fill="#C4B5FD" stroke="#8B5CF6" stroke-width="2"/>
+                            <text x="140" y="45" text-anchor="middle" fill="#4C1D95" font-size="12">Control Unit</text>
+                            <text x="140" y="65" text-anchor="middle" fill="#4C1D95" font-size="12" class="tooltip">ALU
+                                <title>Arithmetic Logic Unit: Performs calculations and logical operations</title>
+                            </text>
+                            <text x="140" y="85" text-anchor="middle" fill="#4C1D95" font-size="12">CPU</text>
+                            
+                            <!-- Arrow -->
+                            <path d="M185,60 L205,60" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+                            
+                            <!-- Output -->
+                            <rect x="210" y="40" width="60" height="40" rx="5" fill="#A5B4FC" stroke="#6366F1" stroke-width="2"/>
+                            <text x="240" y="65" text-anchor="middle" fill="#312E81" font-size="14">Output</text>
+                            
+                            <defs>
+                                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="#6B7280"/>
+                                </marker>
+                            </defs>
+                        </svg>
+                    </div>
+                    
+                    <div class="bg-purple-50 p-4 rounded-md">
+                        <p class="text-purple-800 text-sm">
+                            <span class="font-semibold">Real-world analogy:</span> Just as a chef transforms ingredients (data) into dishes (information), the CPU processes raw data into useful outputs.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Role of Computers -->
+                <div class="bg-gray-50 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-green-100 p-3 rounded-full mr-4">
+                            <i class="fas fa-laptop-code text-green-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">Computer Applications</h3>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-white p-3 rounded-md border border-gray-200 flex items-center">
+                            <i class="fas fa-heartbeat text-red-500 mr-2"></i>
+                            <span class="text-sm">Healthcare</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-md border border-gray-200 flex items-center">
+                            <i class="fas fa-graduation-cap text-blue-500 mr-2"></i>
+                            <span class="text-sm">Education</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-md border border-gray-200 flex items-center">
+                            <i class="fas fa-plane text-indigo-500 mr-2"></i>
+                            <span class="text-sm">Transportation</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-md border border-gray-200 flex items-center">
+                            <i class="fas fa-shopping-cart text-yellow-500 mr-2"></i>
+                            <span class="text-sm">E-commerce</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-md border border-gray-200 flex items-center">
+                            <i class="fas fa-robot text-gray-500 mr-2"></i>
+                            <span class="text-sm">AI Systems</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-md border border-gray-200 flex items-center">
+                            <i class="fas fa-cloud text-blue-300 mr-2"></i>
+                            <span class="text-sm">Cloud Computing</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-md border border-gray-200 flex items-center">
+                            <i class="fas fa-wifi text-green-500 mr-2"></i>
+                            <span class="text-sm">IoT Devices</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-md border border-gray-200 flex items-center">
+                            <i class="fas fa-video text-purple-500 mr-2"></i>
+                            <span class="text-sm">Entertainment</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-md border border-gray-200 flex items-center">
+                            <i class="fas fa-chart-pie text-orange-500 mr-2"></i>
+                            <span class="text-sm">Business</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-md border border-gray-200 flex items-center">
+                            <i class="fas fa-money-bill-wave text-green-600 mr-2"></i>
+                            <span class="text-sm">Banking</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 text-sm text-gray-600">
+                        <i class="fas fa-info-circle mr-2 text-blue-500"></i>
+                        <span>Modern applications now include AI diagnostics, smart homes, and quantum computing</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advantages vs Limitations -->
+    <section id="advantages" class="py-16 px-4 bg-gray-50">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">Advantages vs. Limitations</h2>
+            
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white rounded-lg overflow-hidden shadow-md">
+                    <thead>
+                        <tr class="bg-gray-100 text-gray-700">
+                            <th class="py-3 px-4 text-left w-1/2">Advantages</th>
+                            <th class="py-3 px-4 text-left w-1/2">Limitations</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <td class="py-4 px-4">
+                                <div class="flex items-center">
+                                    <span class="text-2xl mr-3">⚡</span>
+                                    <div>
+                                        <h4 class="font-semibold">Speed</h4>
+                                        <p class="text-sm text-gray-600">Can perform billions of calculations per second</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-4">
+                                <div class="flex items-center">
+                                    <span class="text-2xl mr-3">🤖</span>
+                                    <div>
+                                        <h4 class="font-semibold">No Intelligence</h4>
+                                        <p class="text-sm text-gray-600">Only follows instructions, can't think creatively</p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-4">
+                                <div class="flex items-center">
+                                    <span class="text-2xl mr-3">🎯</span>
+                                    <div>
+                                        <h4 class="font-semibold">Accuracy</h4>
+                                        <p class="text-sm text-gray-600">Performs tasks precisely without errors</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-4">
+                                <div class="flex items-center">
+                                    <span class="text-2xl mr-3">🔋</span>
+                                    <div>
+                                        <h4 class="font-semibold">Energy Consumption</h4>
+                                        <p class="text-sm text-gray-600">Data centers consume massive amounts of electricity</p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-4">
+                                <div class="flex items-center">
+                                    <span class="text-2xl mr-3">🔄</span>
+                                    <div>
+                                        <h4 class="font-semibold">Consistency</h4>
+                                        <p class="text-sm text-gray-600">Never gets tired or bored with repetitive tasks</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-4">
+                                <div class="flex items-center">
+                                    <span class="text-2xl mr-3">🧠</span>
+                                    <div>
+                                        <h4 class="font-semibold">Bias in AI</h4>
+                                        <p class="text-sm text-gray-600">Machine learning can inherit human biases from training data</p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-4">
+                                <div class="flex items-center">
+                                    <span class="text-2xl mr-3">💾</span>
+                                    <div>
+                                        <h4 class="font-semibold">Storage</h4>
+                                        <p class="text-sm text-gray-600">Can store vast amounts of data in small spaces</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-4">
+                                <div class="flex items-center">
+                                    <span class="text-2xl mr-3">💡</span>
+                                    <div>
+                                        <h4 class="font-semibold">No Common Sense</h4>
+                                        <p class="text-sm text-gray-600">Lacks human intuition and contextual understanding</p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="mt-8 bg-blue-50 p-6 rounded-xl border border-blue-200">
+                <h4 class="font-semibold text-blue-800 mb-2 flex items-center">
+                    <i class="fas fa-lightbulb text-blue-600 mr-2"></i>
+                    Did You Know?
+                </h4>
+                <p class="text-blue-700">
+                    While computers excel at processing structured data, humans still outperform them in tasks requiring emotional intelligence, creativity, and complex decision-making with incomplete information.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Evolution Timeline -->
+    <section id="timeline" class="py-16 px-4 bg-white">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Evolution Timeline</h2>
+            
+            <div class="relative">
+                <div class="timeline-container flex overflow-x-auto pb-6 scroll-smooth" id="timelineScroll">
+                    <div class="flex space-x-8">
+                        <!-- Abacus -->
+                        <div class="timeline-card flex-shrink-0 w-64 bg-gray-50 rounded-xl p-6 shadow-md">
+                            <div class="bg-white p-2 rounded-lg mb-4 flex justify-center">
+                                <i class="fas fa-calculator text-4xl text-amber-500"></i>
+                            </div>
+                            <h4 class="font-bold mb-1">Abacus (3000 BCE)</h4>
+                            <p class="text-sm text-gray-600 mb-2">First manual calculating tool using beads</p>
+                            <p class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full inline-block">Key Feature: Positional notation system</p>
+                        </div>
+                        
+                        <!-- Pascaline -->
+                        <div class="timeline-card flex-shrink-0 w-64 bg-gray-50 rounded-xl p-6 shadow-md">
+                            <div class="bg-white p-2 rounded-lg mb-4 flex justify-center">
+                                <i class="fas fa-cogs text-4xl text-blue-500"></i>
+                            </div>
+                            <h4 class="font-bold mb-1">Pascaline (1642)</h4>
+                            <p class="text-sm text-gray-600 mb-2">Blaise Pascal's mechanical calculator</p>
+                            <p class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full inline-block">Key Feature: First mechanical adder</p>
+                        </div>
+                        
+                        <!-- Analytical Engine -->
+                        <div class="timeline-card flex-shrink-0 w-64 bg-gray-50 rounded-xl p-6 shadow-md">
+                            <div class="bg-white p-2 rounded-lg mb-4 flex justify-center">
+                                <i class="fas fa-robot text-4xl text-purple-500"></i>
+                            </div>
+                            <h4 class="font-bold mb-1">Babbage's Engines (1837)</h4>
+                            <p class="text-sm text-gray-600 mb-2">Charles Babbage's visionary designs</p>
+                            <p class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full inline-block">Key Feature: Programmable concepts</p>
+                            <button onclick="toggleEngineDiagram()" class="mt-2 text-xs text-purple-600 hover:underline">View Diagram</button>
+                        </div>
+                        
+                        <!-- ENIAC -->
+                        <div class="timeline-card flex-shrink-0 w-64 bg-gray-50 rounded-xl p-6 shadow-md">
+                            <div class="bg-white p-2 rounded-lg mb-4 flex justify-center">
+                                <i class="fas fa-server text-4xl text-red-500"></i>
+                            </div>
+                            <h4 class="font-bold mb-1">ENIAC (1945)</h4>
+                            <p class="text-sm text-gray-600 mb-2">First general-purpose electronic computer</p>
+                            <p class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full inline-block">Key Feature: 17,468 vacuum tubes</p>
+                        </div>
+                        
+                        <!-- Transistors -->
+                        <div class="timeline-card flex-shrink-0 w-64 bg-gray-50 rounded-xl p-6 shadow-md">
+                            <div class="bg-white p-2 rounded-lg mb-4 flex justify-center">
+                                <i class="fas fa-microchip text-4xl text-green-500"></i>
+                            </div>
+                            <h4 class="font-bold mb-1">Transistors (1947)</h4>
+                            <p class="text-sm text-gray-600 mb-2">Bell Labs' revolutionary invention</p>
+                            <p class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full inline-block">Key Feature: Replaced vacuum tubes</p>
+                        </div>
+                        
+                        <!-- Integrated Circuits -->
+                        <div class="timeline-card flex-shrink-0 w-64 bg-gray-50 rounded-xl p-6 shadow-md">
+                            <div class="bg-white p-2 rounded-lg mb-4 flex justify-center">
+                                <i class="fas fa-project-diagram text-4xl text-indigo-500"></i>
+                            </div>
+                            <h4 class="font-bold mb-1">Integrated Circuits (1958)</h4>
+                            <p class="text-sm text-gray-600 mb-2">Jack Kilby's monolithic idea</p>
+                            <p class="text-xs bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full inline-block">Key Feature: Miniaturization begins</p>
+                        </div>
+                        
+                        <!-- Personal Computer -->
+                        <div class="timeline-card flex-shrink-0 w-64 bg-gray-50 rounded-xl p-6 shadow-md">
+                            <div class="bg-white p-2 rounded-lg mb-4 flex justify-center">
+                                <i class="fas fa-desktop text-4xl text-blue-600"></i>
+                            </div>
+                            <h4 class="font-bold mb-1">Personal Computer (1970s)</h4>
+                            <p class="text-sm text-gray-600 mb-2">Computers become accessible</p>
+                            <p class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full inline-block">Key Feature: Altair 8800, Apple I</p>
+                        </div>
+                        
+                        <!-- Internet -->
+                        <div class="timeline-card flex-shrink-0 w-64 bg-gray-50 rounded-xl p-6 shadow-md">
+                            <div class="bg-white p-2 rounded-lg mb-4 flex justify-center">
+                                <i class="fas fa-globe text-4xl text-teal-500"></i>
+                            </div>
+                            <h4 class="font-bold mb-1">Internet (1983)</h4>
+                            <p class="text-sm text-gray-600 mb-2">TCP/IP protocol adopted</p>
+                            <p class="text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded-full inline-block">Key Feature: Global connectivity</p>
+                        </div>
+                        
+                        <!-- Smartphones -->
+                        <div class="timeline-card flex-shrink-0 w-64 bg-gray-50 rounded-xl p-6 shadow-md">
+                            <div class="bg-white p-2 rounded-lg mb-4 flex justify-center">
+                                <i class="fas fa-mobile-alt text-4xl text-pink-500"></i>
+                            </div>
+                            <h4 class="font-bold mb-1">Smartphones (2007)</h4>
+                            <p class="text-sm text-gray-600 mb-2">iPhone revolutionizes computing</p>
+                            <p class="text-xs bg-pink-100 text-pink-800 px-2 py-1 rounded-full inline-block">Key Feature: Computer in your pocket</p>
+                        </div>
+                        
+                        <!-- Quantum -->
+                        <div class="timeline-card flex-shrink-0 w-64 bg-gray-50 rounded-xl p-6 shadow-md">
+                            <div class="bg-white p-2 rounded-lg mb-4 flex justify-center">
+                                <i class="fas fa-atom text-4xl text-purple-600"></i>
+                            </div>
+                            <h4 class="font-bold mb-1">Quantum (2019)</h4>
+                            <p class="text-sm text-gray-600 mb-2">Google's quantum supremacy</p>
+                            <p class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full inline-block">Key Feature: Qubits over bits</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="timelineLeft" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow-md p-2 -ml-4 z-10">
+                    <i class="fas fa-chevron-left text-gray-600"></i>
+                </button>
+                <button id="timelineRight" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow-md p-2 -mr-4 z-10">
+                    <i class="fas fa-chevron-right text-gray-600"></i>
+                </button>
+            </div>
+            
+            <!-- Babbage's Engine Diagram (Hidden by default) -->
+            <div id="engineDiagram" class="hidden mt-12 bg-gray-50 p-6 rounded-xl border border-gray-200">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold">Babbage's Analytical Engine</h3>
+                    <button onclick="toggleEngineDiagram()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="md:w-1/2">
+                        <p class="mb-4 text-gray-700">
+                            Charles Babbage's 19th-century "Difference Engine" was the grandfather of your smartphone! His later "Analytical Engine" design incorporated concepts we still use today.
+                        </p>
+                        <div class="bg-white p-4 rounded-lg shadow-inner">
+                            <svg width="100%" height="300" viewBox="0 0 400 300">
+                                <!-- Mill (CPU) -->
+                                <rect x="150" y="50" width="100" height="80" rx="10" fill="#C4B5FD" stroke="#8B5CF6" stroke-width="2"/>
+                                <text x="200" y="90" text-anchor="middle" fill="#4C1D95" font-size="12">Mill (ALU)</text>
+                                
+                                <!-- Store (Memory) -->
+                                <rect x="50" y="150" width="100" height="80" rx="10" fill="#A5B4FC" stroke="#6366F1" stroke-width="2"/>
+                                <text x="100" y="190" text-anchor="middle" fill="#312E81" font-size="12">Store (Memory)</text>
+                                
+                                <!-- Reader (Input) -->
+                                <rect x="250" y="50" width="60" height="40" rx="5" fill="#93C5FD" stroke="#3B82F6" stroke-width="2"/>
+                                <text x="280" y="75" text-anchor="middle" fill="#1E3A8A" font-size="10">Reader (Input)</text>
+                                
+                                <!-- Printer (Output) -->
+                                <rect x="250" y="150" width="60" height="40" rx="5" fill="#93C5FD" stroke="#3B82F6" stroke-width="2"/>
+                                <text x="280" y="175" text-anchor="middle" fill="#1E3A8A" font-size="10">Printer (Output)</text>
+                                
+                                <!-- Arrows -->
+                                <path d="M100,110 L150,110" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+                                <path d="M250,70 L200,70" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+                                <path d="M200,150 L250,150" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+                                <path d="M100,190 L150,190" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+                                
+                                <!-- Control -->
+                                <circle cx="200" cy="170" r="20" fill="#FBCFE8" stroke="#EC4899" stroke-width="2"/>
+                                <text x="200" y="173" text-anchor="middle" fill="#831843" font-size="10">Control</text>
+                                
+                                <defs>
+                                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                        <polygon points="0 0, 10 3.5, 0 7" fill="#6B7280"/>
+                                    </marker>
+                                </defs>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2">
+                        <div class="bg-white p-4 rounded-lg shadow-inner h-full">
+                            <h4 class="font-semibold mb-2 text-purple-800">Key Components:</h4>
+                            <ul class="list-disc pl-5 text-gray-700 space-y-2">
+                                <li><span class="font-medium">Mill:</span> Equivalent to modern CPU's Arithmetic Logic Unit (ALU)</li>
+                                <li><span class="font-medium">Store:</span> Memory capable of holding 1,000 numbers of 50 digits each</li>
+                                <li><span class="font-medium">Reader:</span> Input via punched cards (inspired by Jacquard loom)</li>
+                                <li><span class="font-medium">Printer:</span> Output mechanism for results</li>
+                                <li><span class="font-medium">Control:</span> Conditional branching and loops</li>
+                            </ul>
+                            
+                            <div class="mt-4 p-3 bg-purple-50 rounded-lg border border-purple-200">
+                                <p class="text-purple-800 text-sm">
+                                    <span class="font-semibold">Fun Fact:</span> Ada Lovelace wrote the first algorithm for the Analytical Engine, making her the world's first computer programmer.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Von Neumann Architecture -->
+            <div class="mt-12 bg-blue-50 p-6 rounded-xl border border-blue-200">
+                <h3 class="text-xl font-semibold mb-4 text-blue-800">Von Neumann Architecture (1945)</h3>
+                
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="md:w-1/2">
+                        <p class="mb-4 text-blue-700">
+                            John von Neumann's design forms the basis of nearly all modern computers with its stored-program concept where both instructions and data are stored in memory.
+                        </p>
+                        
+                        <div class="bg-white p-4 rounded-lg shadow-inner">
+                            <svg width="100%" height="300" viewBox="0 0 400 300">
+                                <!-- CPU -->
+                                <rect x="150" y="50" width="100" height="80" rx="10" fill="#C4B5FD" stroke="#8B5CF6" stroke-width="2"/>
+                                <text x="200" y="70" text-anchor="middle" fill="#4C1D95" font-size="12">Central Processing Unit</text>
+                                <text x="200" y="90" text-anchor="middle" fill="#4C1D95" font-size="10">(Control Unit + ALU)</text>
+                                
+                                <!-- Memory -->
+                                <rect x="50" y="150" width="100" height="80" rx="10" fill="#A5B4FC" stroke="#6366F1" stroke-width="2"/>
+                                <text x="100" y="190" text-anchor="middle" fill="#312E81" font-size="12">Memory</text>
+                                
+                                <!-- I/O -->
+                                <rect x="250" y="150" width="100" height="80" rx="10" fill="#93C5FD" stroke="#3B82F6" stroke-width="2"/>
+                                <text x="300" y="190" text-anchor="middle" fill="#1E3A8A" font-size="12">Input/Output</text>
+                                
+                                <!-- Buses -->
+                                <path d="M100,110 L150,110" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+                                <path d="M250,110 L200,110" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+                                <path d="M200,150 L200,130" stroke="#6B7280" stroke-width="2"/>
+                                <path d="M200,170 L200,190" stroke="#6B7280" stroke-width="2"/>
+                                <path d="M150,150 L170,150" stroke="#6B7280" stroke-width="2"/>
+                                <path d="M230,150 L250,150" stroke="#6B7280" stroke-width="2"/>
+                                
+                                <!-- Labels -->
+                                <text x="125" y="125" text-anchor="middle" fill="#6B7280" font-size="10">Data Bus</text>
+                                <text x="275" y="125" text-anchor="middle" fill="#6B7280" font-size="10">Control Bus</text>
+                                <text x="200" y="220" text-anchor="middle" fill="#6B7280" font-size="10">Address Bus</text>
+                                
+                                <defs>
+                                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                        <polygon points="0 0, 10 3.5, 0 7" fill="#6B7280"/>
+                                    </marker>
+                                </defs>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2">
+                        <div class="bg-white p-4 rounded-lg shadow-inner h-full">
+                            <h4 class="font-semibold mb-2 text-blue-800">Key Features:</h4>
+                            <ul class="list-disc pl-5 text-gray-700 space-y-2">
+                                <li><span class="font-medium">Stored Program Concept:</span> Both data and instructions stored in same memory</li>
+                                <li><span class="font-medium">Sequential Execution:</span> Instructions processed one after another</li>
+                                <li><span class="font-medium">Binary System:</span> Uses base-2 number system for all operations</li>
+                                <li><span class="font-medium">Four Components:</span> CPU, Memory, I/O, and Buses connecting them</li>
+                            </ul>
+                            
+                            <div class="mt-4">
+                                <button onclick="toggleFlowchart()" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                    <i class="fas fa-diagram-project mr-1"></i>
+                                    <span id="flowchartToggleText">Show Detailed Flowchart</span>
+                                </button>
+                                
+                                <div id="flowchartDiagram" class="hidden mt-3 p-3 bg-gray-50 rounded-lg">
+                                    <svg width="100%" height="200" viewBox="0 0 500 200">
+                                        <!-- Fetch -->
+                                        <rect x="50" y="50" width="100" height="40" rx="5" fill="#BFDBFE" stroke="#3B82F6" stroke-width="2"/>
+                                        <text x="100" y="75" text-anchor="middle" fill="#1E3A8A" font-size="12">Fetch</text>
+                                        
+                                        <!-- Decode -->
+                                        <rect x="200" y="50" width="100" height="40" rx="5" fill="#BFDBFE" stroke="#3B82F6" stroke-width="2"/>
+                                        <text x="250" y="75" text-anchor="middle" fill="#1E3A8A" font-size="12">Decode</text>
+                                        
+                                        <!-- Execute -->
+                                        <rect x="350" y="50" width="100" height="40" rx="5" fill="#BFDBFE" stroke="#3B82F6" stroke-width="2"/>
+                                        <text x="400" y="75" text-anchor="middle" fill="#1E3A8A" font-size="12">Execute</text>
+                                        
+                                        <!-- Arrows -->
+                                        <path d="M150,70 L200,70" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrowhead-blue)"/>
+                                        <path d="M300,70 L350,70" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrowhead-blue)"/>
+                                        <path d="M400,90 L400,150 L100,150 L100,90" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrowhead-blue)" stroke-dasharray="5,5"/>
+                                        
+                                        <!-- Memory Interaction -->
+                                        <rect x="200" y="120" width="100" height="40" rx="5" fill="#C7D2FE" stroke="#6366F1" stroke-width="2"/>
+                                        <text x="250" y="145" text-anchor="middle" fill="#312E81" font-size="12">Memory Access</text>
+                                        
+                                        <path d="M250,120 L250,90" stroke="#6366F1" stroke-width="2" marker-end="url(#arrowhead-indigo)"/>
+                                        <path d="M250,160 L250,190" stroke="#6366F1" stroke-width="2" marker-end="url(#arrowhead-indigo)"/>
+                                        
+                                        <defs>
+                                            <marker id="arrowhead-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                                <polygon points="0 0, 10 3.5, 0 7" fill="#3B82F6"/>
+                                            </marker>
+                                            <marker id="arrowhead-indigo" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                                <polygon points="0 0, 10 3.5, 0 7" fill="#6366F1"/>
+                                            </marker>
+                                        </defs>
+                                    </svg>
+                                    <p class="text-xs text-gray-600 mt-2 text-center">Instruction Cycle in Von Neumann Architecture</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Elements -->
+    <section id="interactive" class="py-16 px-4 bg-gray-50">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-indigo-600 to-pink-600 bg-clip-text text-transparent">Interactive Elements</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <!-- Quiz -->
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="fas fa-question-circle text-indigo-600 mr-2"></i>
+                        Quick Quiz
+                    </h3>
+                    
+                    <div class="mb-4">
+                        <p class="font-medium mb-3">Which was the first stored-program computer?</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                <input type="radio" name="quiz" value="eniac" class="h-4 w-4 text-indigo-600">
+                                <span>ENIAC</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                <input type="radio" name="quiz" value="edsac" class="h-4 w-4 text-indigo-600">
+                                <span>EDSAC</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                <input type="radio" name="quiz" value="colossus" class="h-4 w-4 text-indigo-600">
+                                <span>Colossus</span>
+                            </label>
+                            <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                <input type="radio" name="quiz" value="manchester" class="h-4 w-4 text-indigo-600">
+                                <span>Manchester Baby</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button id="submitQuiz" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors">
+                        Submit Answer
+                    </button>
+                    
+                    <div id="quizFeedback" class="hidden mt-4 p-3 rounded-md"></div>
+                </div>
+                
+                <!-- Computer Comparison -->
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="fas fa-laptop-code text-pink-600 mr-2"></i>
+                        Computer Comparison
+                    </h3>
+                    
+                    <div class="flex justify-center mb-4">
+                        <div class="inline-flex rounded-md shadow-sm">
+                            <button id="oldComputerBtn" class="px-4 py-2 text-sm font-medium rounded-l-lg bg-pink-600 text-white">
+                                1940s Computer
+                            </button>
+                            <button id="modernComputerBtn" class="px-4 py-2 text-sm font-medium rounded-r-lg bg-gray-200 text-gray-800 hover:bg-gray-300">
+                                Modern Computer
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="computerComparison">
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div class="font-medium">Technology:</div>
+                            <div id="tech">Vacuum tubes</div>
+                            
+                            <div class="font-medium">Speed:</div>
+                            <div id="speed">5,000 operations/sec</div>
+                            
+                            <div class="font-medium">Size:</div>
+                            <div id="size">Room-sized</div>
+                            
+                            <div class="font-medium">Memory:</div>
+                            <div id="memory">Few kilobytes</div>
+                            
+                            <div class="font-medium">Power:</div>
+                            <div id="power">150 kW</div>
+                            
+                            <div class="font-medium">Cost:</div>
+                            <div id="cost">$6M (2024 dollars)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 text-xs text-gray-500">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        <span>Modern computers are billions of times more powerful while consuming far less energy</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Data Processing Animation -->
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-project-diagram text-blue-600 mr-2"></i>
+                    Data Processing Visualization
+                </h3>
+                
+                <div class="flex justify-center mb-4">
+                    <canvas id="processingCanvas" width="600" height="200" class="border border-gray-200 rounded-lg w-full max-w-2xl"></canvas>
+                </div>
+                
+                <div class="flex justify-center space-x-4">
+                    <button id="startAnimation" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                        Start Animation
+                    </button>
+                    <button id="resetAnimation" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 transition-colors">
+                        Reset
+                    </button>
+                </div>
+                
+                <div class="mt-4 text-sm text-gray-600">
+                    <p>This visualization shows how raw data is transformed through the stages of the information processing cycle.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Assessment -->
+    <section id="assessment" class="py-16 px-4 bg-white">
+        <div class="container mx-auto max-w-3xl">
+            <h2 class="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">Knowledge Assessment</h2>
+            
+            <!-- MCQ Questions -->
+            <div class="bg-gray-50 p-6 rounded-xl shadow-md mb-8">
+                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                    Multiple Choice Questions (Select all correct answers)
+                </h3>
+                
+                <div class="space-y-6">
+                    <!-- Question 1 -->
+                    <div>
+                        <p class="font-medium mb-2">1. Which of these are components of Von Neumann architecture? (Select all that apply)</p>
+                        <div class="space-y-2 pl-4">
+                            <label class="flex items-start space-x-3">
+                                <input type="checkbox" name="q1" value="a" class="mt-1 h-4 w-4 text-green-600">
+                                <span>Arithmetic Logic Unit</span>
+                            </label>
+                            <label class="flex items-start space-x-3">
+                                <input type="checkbox" name="q1" value="b" class="mt-1 h-4 w-4 text-green-600">
+                                <span>Control Unit</span>
+                            </label>
+                            <label class="flex items-start space-x-3">
+                                <input type="checkbox" name="q1" value="c" class="mt-1 h-4 w-4 text-green-600">
+                                <span>Memory Unit</span>
+                            </label>
+                            <label class="flex items-start space-x-3">
+                                <input type="checkbox" name="q1" value="d" class="mt-1 h-4 w-4 text-green-600">
+                                <span>Input/Output Devices</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 2 -->
+                    <div>
+                        <p class="font-medium mb-2">2. What was the key innovation in the transition from mechanical to electronic computers?</p>
+                        <div class="space-y-2 pl-4">
+                            <label class="flex items-start space-x-3">
+                                <input type="radio" name="q2" value="a" class="mt-1 h-4 w-4 text-green-600">
+                                <span>Use of vacuum tubes instead of gears</span>
+                            </label>
+                            <label class="flex items-start space-x-3">
+                                <input type="radio" name="q2" value="b" class="mt-1 h-4 w-4 text-green-600">
+                                <span>Introduction of programming languages</span>
+                            </label>
+                            <label class="flex items-start space-x-3">
+                                <input type="radio" name="q2" value="c" class="mt-1 h-4 w-4 text-green-600">
+                                <span>Development of graphical user interfaces</span>
+                            </label>
+                            <label class="flex items-start space-x-3">
+                                <input type="radio" name="q2" value="d" class="mt-1 h-4 w-4 text-green-600">
+                                <span>Invention of the mouse</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 3 -->
+                    <div>
+                        <p class="font-medium mb-2">3. Which statement about data vs. information is correct?</p>
+                        <div class="space-y-2 pl-4">
+                            <label class="flex items-start space-x-3">
+                                <input type="radio" name="q3" value="a" class="mt-1 h-4 w-4 text-green-600">
+                                <span>Data is processed information</span>
+                            </label>
+                            <label class="flex items-start space-x-3">
+                                <input type="radio" name="q3" value="b" class="mt-1 h-4 w-4 text-green-600">
+                                <span>Information is processed data</span>
+                            </label>
+                            <label class="flex items-start space-x-3">
+                                <input type="radio" name="q3" value="c" class="mt-1 h-4 w-4 text-green-600">
+                                <span>They are the same thing</span>
+                            </label>
+                            <label class="flex items-start space-x-3">
+                                <input type="radio" name="q3" value="d" class="mt-1 h-4 w-4 text-green-600">
+                                <span>Information is always numerical</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 4 -->
+                    <div>
+                        <p class="font-medium mb-2">4. What was the significance of the transistor in computer development?</p>
+                        <div class="space-y-2 pl-4">
+                            <label class="flex items-start space-x-3">
+                                <input type="radio" name="q4" value="a" class="mt-1 h-4 w-4 text-green-600">
+                                <span>Enabled computers to become smaller and more reliable</span>
+                            </label>
+                            <label class="flex items-start space-x-3">
+                                <input type="radio" name="q4" value="b" class="mt-1 h-4 w-4 text-green-600">
+                                <span>Allowed for color displays</span>
+                            </label>
+                            <label class="flex items-start space-x-3">
+                                <input type="radio" name="q4" value="c" class="mt-1 h-4 w-4 text-green-600">
+                                <span>Created the first programming languages</span>
+                            </label>
+                            <label class="flex items-start space-x-3">
+                                <input type="radio" name="q4" value="d" class="mt-1 h-4 w-4 text-green-600">
+                                <span>Made the internet possible</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 5 -->
+                    <div>
+                        <p class="font-medium mb-2">5. Which of these are limitations of computers? (Select all that apply)</p>
+                        <div class="space-y-2 pl-4">
+                            <label class="flex items-start space-x-3">
+                                <input type="checkbox" name="q5" value="a" class="mt-1 h-4 w-4 text-green-600">
+                                <span>They cannot think creatively</span>
+                            </label>
+                            <label class="flex items-start space-x-3">
+                                <input type="checkbox" name="q5" value="b" class="mt-1 h-4 w-4 text-green-600">
+                                <span>They require precise instructions</span>
+                            </label>
+                            <label class="flex items-start space-x-3">
+                                <input type="checkbox" name="q5" value="c" class="mt-1 h-4 w-4 text-green-600">
+                                <span>They can be biased based on training data</span>
+                            </label>
+                            <label class="flex items-start space-x-3">
+                                <input type="checkbox" name="q5" value="d" class="mt-1 h-4 w-4 text-green-600">
+                                <span>They consume significant energy</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="submitAssessment" class="mt-6 bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors">
+                    Submit Assessment
+                </button>
+                
+                <div id="assessmentResults" class="hidden mt-4 p-4 rounded-md"></div>
+            </div>
+            
+            <!-- Written Response -->
+            <div class="bg-gray-50 p-6 rounded-xl shadow-md">
+                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-edit text-blue-600 mr-2"></i>
+                    Written Response
+                </h3>
+                
+                <div class="mb-4">
+                    <label for="writtenResponse" class="block font-medium mb-2">
+                        In your own words, explain how computers have evolved from simple calculating devices to the powerful machines we use today.
+                    </label>
+                    <textarea id="writtenResponse" rows="6" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                    <div class="flex justify-between items-center mt-1">
+                        <span id="charCount" class="text-sm text-gray-500">0/500 characters</span>
+                        <span class="text-sm text-gray-500">Minimum 200 characters</span>
+                    </div>
+                </div>
+                
+                <button id="submitWritten" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                    Submit Response
+                </button>
+                
+                <div id="writtenFeedback" class="hidden mt-4 p-3 rounded-md"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-xl font-bold mb-2">Introduction to Computers</h3>
+                    <p class="text-gray-400 text-sm">A comprehensive learning module for beginner-to-intermediate learners</p>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fas fa-book text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fas fa-info-circle text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-6 pt-6 text-sm text-gray-400">
+                <p>© 2024 Computer Education Module. All content is for educational purposes only.</p>
+                <p class="mt-2">Citations: Oxford Dictionary (2024), Computer History Museum, IEEE Annals of the History of Computing</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('menuBtn').addEventListener('click', function() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Data Example Toggle
+        document.getElementById('rawDataBtn').addEventListener('click', function() {
+            document.getElementById('dataExample').textContent = "26, Ram, good";
+            this.classList.add('bg-blue-600', 'text-white');
+            this.classList.remove('bg-blue-100', 'text-blue-700');
+            document.getElementById('processedDataBtn').classList.add('bg-purple-100', 'text-purple-700');
+            document.getElementById('processedDataBtn').classList.remove('bg-purple-600', 'text-white');
+        });
+
+        document.getElementById('processedDataBtn').addEventListener('click', function() {
+            document.getElementById('dataExample').textContent = "Ram is a 26-year-old man with good health metrics";
+            this.classList.add('bg-purple-600', 'text-white');
+            this.classList.remove('bg-purple-100', 'text-purple-700');
+            document.getElementById('rawDataBtn').classList.add('bg-blue-100', 'text-blue-700');
+            document.getElementById('rawDataBtn').classList.remove('bg-blue-600', 'text-white');
+        });
+
+        // Timeline Navigation
+        const timeline = document.getElementById('timelineScroll');
+        const timelineLeft = document.getElementById('timelineLeft');
+        const timelineRight = document.getElementById('timelineRight');
+
+        timelineLeft.addEventListener('click', () => {
+            timeline.scrollBy({ left: -200, behavior: 'smooth' });
+        });
+
+        timelineRight.addEventListener('click', () => {
+            timeline.scrollBy({ left: 200, behavior: 'smooth' });
+        });
+
+        // Engine Diagram Toggle
+        function toggleEngineDiagram() {
+            const diagram = document.getElementById('engineDiagram');
+            diagram.classList.toggle('hidden');
+        }
+
+        // Von Neumann Flowchart Toggle
+        function toggleFlowchart() {
+            const diagram = document.getElementById('flowchartDiagram');
+            const toggleText = document.getElementById('flowchartToggleText');
+            diagram.classList.toggle('hidden');
+            toggleText.textContent = diagram.classList.contains('hidden') ? 'Show Detailed Flowchart' : 'Hide Flowchart';
+        }
+
+        // Quiz Logic
+        document.getElementById('submitQuiz').addEventListener('click', function() {
+            const selected = document.querySelector('input[name="quiz"]:checked');
+            const feedback = document.getElementById('quizFeedback');
+            
+            if (!selected) {
+                feedback.textContent = "Please select an answer!";
+                feedback.className = "bg-yellow-100 text-yellow-800";
+                feedback.classList.remove('hidden');
+                return;
+            }
+            
+            if (selected.value === "manchester") {
+                feedback.textContent = "Correct! The Manchester Baby (1948) was the first stored-program computer.";
+                feedback.className = "bg-green-100 text-green-800";
+            } else {
+                feedback.textContent = "Not quite! The correct answer is the Manchester Baby (1948).";
+                feedback.className = "bg-red-100 text-red-800";
+            }
+            
+            feedback.classList.remove('hidden');
+        });
+
+        // Computer Comparison
+        document.getElementById('oldComputerBtn').addEventListener('click', function() {
+            this.classList.add('bg-pink-600', 'text-white');
+            this.classList.remove('bg-gray-200', 'text-gray-800');
+            document.getElementById('modernComputerBtn').classList.add('bg-gray-200', 'text-gray-800');
+            document.getElementById('modernComputerBtn').classList.remove('bg-pink-600', 'text-white');
+            
+            document.getElementById('tech').textContent = "Vacuum tubes";
+            document.getElementById('speed').textContent = "5,000 operations/sec";
+            document.getElementById('size').textContent = "Room-sized";
+            document.getElementById('memory').textContent = "Few kilobytes";
+            document.getElementById('power').textContent = "150 kW";
+            document.getElementById('cost').textContent = "$6M (2024 dollars)";
+        });
+
+        document.getElementById('modernComputerBtn').addEventListener('click', function() {
+            this.classList.add('bg-pink-600', 'text-white');
+            this.classList.remove('bg-gray-200', 'text-gray-800');
+            document.getElementById('oldComputerBtn').classList.add('bg-gray-200', 'text-gray-800');
+            document.getElementById('oldComputerBtn').classList.remove('bg-pink-600', 'text-white');
+            
+            document.getElementById('tech').textContent = "Nanoscale transistors";
+            document.getElementById('speed').textContent = "Billions of operations/sec";
+            document.getElementById('size').textContent = "Pocket-sized";
+            document.getElementById('memory').textContent = "Up to 128GB RAM";
+            document.getElementById('power').textContent = "Under 10W (mobile)";
+            document.getElementById('cost').textContent = "$500-$2000";
+        });
+
+        // Data Processing Animation
+        const canvas = document.getElementById('processingCanvas');
+        const ctx = canvas.getContext('2d');
+        const startBtn = document.getElementById('startAnimation');
+        const resetBtn = document.getElementById('resetAnimation');
+        
+        let animationId;
+        let progress = 0;
+        
+        function drawAnimation() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw stages
+            const stages = [
+                { x: 50, width: 100, color: '#93C5FD', text: "Raw Data", subtext: "Unorganized facts" },
+                { x: 200, width: 100, color: '#C4B5FD', text: "Processing", subtext: "CPU operations" },
+                { x: 350, width: 100, color: '#86EFAC', text: "Information", subtext: "Meaningful output" }
+            ];
+            
+            stages.forEach((stage, index) => {
+                // Draw box
+                ctx.fillStyle = stage.color;
+                ctx.strokeStyle = index === 0 ? '#3B82F6' : index === 1 ? '#8B5CF6' : '#10B981';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.roundRect(stage.x, 80, stage.width, 80, 10);
+                ctx.fill();
+                ctx.stroke();
+                
+                // Draw text
+                ctx.fillStyle = '#111827';
+                ctx.font = 'bold 14px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(stage.text, stage.x + stage.width/2, 110);
+                
+                ctx.font = '12px sans-serif';
+                ctx.fillText(stage.subtext, stage.x + stage.width/2, 130);
+            });
+            
+            // Draw arrows
+            ctx.strokeStyle = '#6B7280';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(160, 120);
+            ctx.lineTo(190, 120);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(310, 120);
+            ctx.lineTo(340, 120);
+            ctx.stroke();
+            
+            // Draw moving element based on progress
+            if (progress < 0.33) {
+                // First stage - raw data
+                const x = 50 + (progress * 3) * 100;
+                drawDataElement(x, 40, '#3B82F6', "26, Ram");
+            } else if (progress < 0.66) {
+                // Second stage - processing
+                const x = 200 + ((progress - 0.33) * 3) * 100;
+                drawProcessingElement(x, 40, '#8B5CF6');
+            } else {
+                // Third stage - information
+                const x = 350 + ((progress - 0.66) * 3) * 100;
+                drawInfoElement(x, 40, '#10B981', "Ram is 26");
+            }
+            
+            // Update progress
+            progress += 0.005;
+            if (progress >= 1) progress = 0;
+            
+            animationId = requestAnimationFrame(drawAnimation);
+        }
+        
+        function drawDataElement(x, y, color, text) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, 15, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = 'white';
+            ctx.font = '10px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, x, y);
+        }
+        
+        function drawProcessingElement(x, y, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.moveTo(x, y - 15);
+            ctx.lineTo(x + 15, y + 15);
+            ctx.lineTo(x - 15, y + 15);
+            ctx.closePath();
+            ctx.fill();
+            
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 12px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText("CPU", x, y + 5);
+        }
+        
+        function drawInfoElement(x, y, color, text) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.roundRect(x - 20, y - 15, 40, 30, 5);
+            ctx.fill();
+            
+            ctx.fillStyle = 'white';
+            ctx.font = '10px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, x, y);
+        }
+        
+        startBtn.addEventListener('click', function() {
+            if (!animationId) {
+                drawAnimation();
+                startBtn.textContent = "Pause Animation";
+            } else {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+                startBtn.textContent = "Resume Animation";
+            }
+        });
+        
+        resetBtn.addEventListener('click', function() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+            progress = 0;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            startBtn.textContent = "Start Animation";
+        });
+
+        // Assessment Character Count
+        const writtenResponse = document.getElementById('writtenResponse');
+        const charCount = document.getElementById('charCount');
+        
+        writtenResponse.addEventListener('input', function() {
+            const count = this.value.length;
+            charCount.textContent = `${count}/500 characters`;
+            
+            if (count > 500) {
+                charCount.classList.add('text-red-500');
+                charCount.classList.remove('text-gray-500');
+            } else {
+                charCount.classList.remove('text-red-500');
+                charCount.classList.add('text-gray-500');
+            }
+        });
+
+        // Submit Assessment
+        document.getElementById('submitAssessment').addEventListener('click', function() {
+            const results = document.getElementById('assessmentResults');
+            results.innerHTML = `
+                <div class="bg-green-100 text-green-800 p-4 rounded-md">
+                    <h4 class="font-bold mb-2">Assessment Submitted!</h4>
+                    <p>Your answers have been recorded. Here's a quick summary:</p>
+                    <ul class="list-disc pl-5 mt-2">
+                        <li>Multiple Choice: 5 questions answered</li>
+                        <li>Written Response: ${writtenResponse.value.length} characters</li>
+                    </ul>
+                    <p class="mt-2 font-medium">Note: This is a demo. In a real application, answers would be evaluated.</p>
+                </div>
+            `;
+            results.classList.remove('hidden');
+        });
+
+        // Submit Written Response
+        document.getElementById('submitWritten').addEventListener('click', function() {
+            const response = writtenResponse.value.trim();
+            const feedback = document.getElementById('writtenFeedback');
+            
+            if (response.length < 200) {
+                feedback.innerHTML = `
+                    <div class="bg-red-100 text-red-800 p-3 rounded-md">
+                        Please write at least 200 characters. Currently ${response.length} characters.
+                    </div>
+                `;
+            } else {
+                feedback.innerHTML = `
+                    <div class="bg-green-100 text-green-800 p-3 rounded-md">
+                        <h4 class="font-bold">Response Submitted!</h4>
+                        <p>Thank you for your detailed explanation (${response.length} characters).</p>
+                        <p class="mt-1">Note: This is a demo. In a real application, your response would be evaluated.</p>
+                    </div>
+                `;
+            }
+            
+            feedback.classList.remove('hidden');
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // Close mobile menu if open
+                    const mobileMenu = document.getElementById('mobileMenu');
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                    
+                    // Calculate offset based on fixed header
+                    const offset = 80;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - offset;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
