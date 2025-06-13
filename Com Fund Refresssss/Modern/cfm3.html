@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>From Bones to Bytes: A Journey Through Computing History</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap');
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            transition: all 0.3s ease;
+        }
+        .dark body {
+            background-color: #0f172a;
+            color: #e2e8f0;
+        }
+        .timeline-card {
+            backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark .timeline-card {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+        }
+        .impact-meter {
+            background: linear-gradient(90deg, #86efac 0%, #4ade80 20%, #22c55e 40%, #16a34a 60%, #15803d 80%, #166534 100%);
+        }
+        .dark .impact-meter {
+            background: linear-gradient(90deg, #14532d 0%, #166534 20%, #15803d 40%, #16a34a 60%, #22c55e 80%, #4ade80 100%);
+        }
+        .globe-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+        }
+        .qr-code {
+            transition: all 0.3s ease;
+        }
+        .qr-code:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .dark .qr-code:hover {
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+        }
+        .model-container {
+            width: 100%;
+            height: 300px;
+            background: rgba(0, 0, 0, 0.05);
+        }
+        .dark .model-container {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .toggle-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .toggle-content.active {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: #cbd5e1;
+            z-index: 1;
+        }
+        .dark .timeline::before {
+            background: #475569;
+        }
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 2rem;
+            }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        .animate-pulse-slow {
+            animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body class="dark:bg-slate-900 dark:text-slate-200">
+    <!-- Theme Toggle -->
+    <button id="themeToggle" class="fixed top-4 right-4 z-50 p-2 rounded-full bg-white dark:bg-slate-800 shadow-lg">
+        <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+    </button>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden min-h-screen flex items-center justify-center">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-slate-800 dark:to-slate-900 z-0"></div>
+        <div class="globe-container absolute inset-0 z-10 opacity-30 dark:opacity-20" id="globeCanvas"></div>
+        
+        <div class="container mx-auto px-6 py-20 z-20 relative text-center">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 text-slate-800 dark:text-white animate-float">
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
+                    From Bones to Bytes
+                </span>
+            </h1>
+            <p class="text-xl md:text-2xl mb-10 text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
+                How sticks and stones led to silicon chips
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#timeline-start" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-medium transition-all transform hover:scale-105 shadow-lg">
+                    Explore the Timeline
+                </a>
+                <button id="quizBtn" class="px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-full font-medium transition-all transform hover:scale-105 shadow-lg">
+                    Take the Quiz
+                </button>
+            </div>
+            
+            <div class="mt-20 animate-pulse-slow">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section id="timeline-start" class="py-20 bg-white dark:bg-slate-900">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-slate-800 dark:text-white">
+                The Evolution of Computing Machines
+            </h2>
+            
+            <div class="timeline relative max-w-5xl mx-auto">
+                <!-- Timeline Item 1: Abacus -->
+                <div class="timeline-item mb-16 relative z-10">
+                    <div class="timeline-card rounded-2xl shadow-xl p-6 md:p-8 timeline-card md:flex items-start gap-8">
+                        <div class="md:w-1/3 mb-6 md:mb-0">
+                            <div class="model-container rounded-lg overflow-hidden" id="abacusModel"></div>
+                            <div class="mt-4 flex justify-center">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzE2ODE0YSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPk11c2V1bSBvZiBNaW5nIER5bmFzdHkgQWJhY3VzPC90ZXh0Pjwvc3ZnPg==" alt="QR Code linking to Museum of Ming Dynasty Abacus" class="qr-code w-24 h-24 rounded-lg border-2 border-white dark:border-slate-700 cursor-pointer" title="Scan to view Ming Dynasty Abacus artifacts">
+                            </div>
+                        </div>
+                        <div class="md:w-2/3">
+                            <div class="flex items-center mb-2">
+                                <span class="inline-block w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold mr-3">1</span>
+                                <h3 class="text-2xl font-bold text-slate-800 dark:text-white">The Abacus</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">4000 BCE</span>
+                                <span class="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm">China</span>
+                                <span class="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm">Decimal System</span>
+                            </div>
+                            <p class="mb-4 text-slate-600 dark:text-slate-300">
+                                The abacus wasn't just a calculator - it was the spreadsheet of ancient Mesopotamia and China. Used extensively during the Ming Dynasty for trade calculations, this bead-frame device could handle addition, subtraction, multiplication, and division with surprising speed.
+                            </p>
+                            
+                            <div class="mb-4">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="font-medium">Impact on Computing:</span>
+                                    <span class="text-sm">5/5 gears</span>
+                                </div>
+                                <div class="impact-meter h-3 rounded-full w-full">
+                                    <div class="h-full rounded-full" style="width: 100%"></div>
+                                </div>
+                                <p class="text-sm mt-1 text-slate-500 dark:text-slate-400">Modern equivalent: GPU cores (parallel bead calculations)</p>
+                            </div>
+                            
+                            <button class="toggle-btn flex items-center text-blue-600 dark:text-blue-400 font-medium" data-target="abacus-details">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                                How It Worked
+                            </button>
+                            <div id="abacus-details" class="toggle-content mt-2 text-slate-600 dark:text-slate-300">
+                                <p class="mb-2">The abacus used a positional notation system with beads representing different place values. Each column represented a power of 10, with upper beads (heaven beads) worth 5 and lower beads (earth beads) worth 1. Skilled users could perform calculations faster than early electronic calculators.</p>
+                                <p><strong>Cultural Impact:</strong> The abacus was so essential that proficiency was required for civil service positions in Imperial China. Its design influenced later mechanical calculators and demonstrated the power of positional notation.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Timeline Item 2: Antikythera Mechanism -->
+                <div class="timeline-item mb-16 relative z-10">
+                    <div class="timeline-card rounded-2xl shadow-xl p-6 md:p-8 md:flex items-start gap-8">
+                        <div class="md:w-1/3 mb-6 md:mb-0">
+                            <div class="model-container rounded-lg overflow-hidden" id="antikytheraModel"></div>
+                            <div class="mt-4 flex justify-center">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzE2ODE0YSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkFudGlreXRoZXJhIE1lY2hhbmlzbSBhdCBBdGhlbnMgTXVzZXVtPC90ZXh0Pjwvc3ZnPg==" alt="QR Code linking to Antikythera Mechanism at Athens Museum" class="qr-code w-24 h-24 rounded-lg border-2 border-white dark:border-slate-700 cursor-pointer" title="Scan to view Antikythera Mechanism artifacts">
+                            </div>
+                        </div>
+                        <div class="md:w-2/3">
+                            <div class="flex items-center mb-2">
+                                <span class="inline-block w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold mr-3">2</span>
+                                <h3 class="text-2xl font-bold text-slate-800 dark:text-white">Antikythera Mechanism</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">150-100 BCE</span>
+                                <span class="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm">Greece</span>
+                                <span class="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm">Analog Computer</span>
+                            </div>
+                            <p class="mb-4 text-slate-600 dark:text-slate-300">
+                                This ancient Greek device, discovered in a shipwreck, was an astronomical calculator that could predict eclipses and track the four-year cycle of athletic games. Its complexity wouldn't be matched for over a millennium.
+                            </p>
+                            
+                            <div class="mb-4">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="font-medium">Impact on Computing:</span>
+                                    <span class="text-sm">4/5 gears</span>
+                                </div>
+                                <div class="impact-meter h-3 rounded-full w-full">
+                                    <div class="h-full rounded-full" style="width: 80%"></div>
+                                </div>
+                                <p class="text-sm mt-1 text-slate-500 dark:text-slate-400">Modern equivalent: Astronomical software (e.g., Stellarium)</p>
+                            </div>
+                            
+                            <button class="toggle-btn flex items-center text-blue-600 dark:text-blue-400 font-medium" data-target="antikythera-details">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                                How It Worked
+                            </button>
+                            <div id="antikythera-details" class="toggle-content mt-2 text-slate-600 dark:text-slate-300">
+                                <p class="mb-2">The mechanism used a complex system of at least 30 bronze gears to model astronomical cycles. It could predict lunar and solar eclipses, track the Metonic calendar (19-year lunar cycle), and even account for the irregular orbit of the Moon.</p>
+                                <p><strong>Technical Marvel:</strong> The device employed differential gearing (thought to have been invented in the 16th century) and had a level of miniaturization and complexity comparable to 18th-century clocks.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Timeline Item 3: Napier's Bones -->
+                <div class="timeline-item mb-16 relative z-10">
+                    <div class="timeline-card rounded-2xl shadow-xl p-6 md:p-8 md:flex items-start gap-8">
+                        <div class="md:w-1/3 mb-6 md:mb-0">
+                            <div class="model-container rounded-lg overflow-hidden" id="napierModel"></div>
+                            <div class="mt-4 flex justify-center">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzE2ODE0YSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPk5hcGllcidzIEJvbmVzIGF0IE5hdGlvbmFsIE11c2V1bSBvZiBTY290bGFuZDwvdGV4dD48L3N2Zz4=" alt="QR Code linking to Napier's Bones at National Museum of Scotland" class="qr-code w-24 h-24 rounded-lg border-2 border-white dark:border-slate-700 cursor-pointer" title="Scan to view Napier's Bones artifacts">
+                            </div>
+                        </div>
+                        <div class="md:w-2/3">
+                            <div class="flex items-center mb-2">
+                                <span class="inline-block w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold mr-3">3</span>
+                                <h3 class="text-2xl font-bold text-slate-800 dark:text-white">Napier's Bones</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">1617 CE</span>
+                                <span class="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm">Scotland</span>
+                                <span class="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm">Logarithmic Calculation</span>
+                            </div>
+                            <p class="mb-4 text-slate-600 dark:text-slate-300">
+                                John Napier's ingenious invention wasn't made of bones at all, but ivory rods that used logarithms to simplify complex multiplication and division. These were the Excel spreadsheets of 17th-century Scotland, revolutionizing navigation and astronomy calculations.
+                            </p>
+                            
+                            <div class="mb-4">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="font-medium">Impact on Computing:</span>
+                                    <span class="text-sm">3/5 gears</span>
+                                </div>
+                                <div class="impact-meter h-3 rounded-full w-full">
+                                    <div class="h-full rounded-full" style="width: 60%"></div>
+                                </div>
+                                <p class="text-sm mt-1 text-slate-500 dark:text-slate-400">Modern equivalent: Calculator apps (logarithm functions)</p>
+                            </div>
+                            
+                            <button class="toggle-btn flex items-center text-blue-600 dark:text-blue-400 font-medium" data-target="napier-details">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                                How It Worked
+                            </button>
+                            <div id="napier-details" class="toggle-content mt-2 text-slate-600 dark:text-slate-300">
+                                <p class="mb-2">Napier's Bones consisted of numbered rods with multiples inscribed on them. By aligning the rods, users could read off products of large numbers through simple addition. The system exploited the principle that multiplication can be reduced to addition of logarithms.</p>
+                                <p><strong>Historical Context:</strong> Napier published his invention in "Rabdologia" (1617), just as Europe's scientific revolution demanded better calculation tools for astronomy, navigation, and commerce.</p>
+                            </div>
+                            
+                            <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
+                                <h4 class="font-bold mb-2">Try It Yourself:</h4>
+                                <p class="mb-2 text-sm">How long would it take to calculate π to 10 decimal places using Napier's Bones vs. your smartphone?</p>
+                                <button id="piCalcBtn" class="text-sm px-4 py-2 bg-blue-100 dark:bg-blue-800 hover:bg-blue-200 dark:hover:bg-blue-700 rounded-lg transition-colors">
+                                    Calculate Comparison
+                                </button>
+                                <div id="piCalcResult" class="mt-2 text-sm hidden"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Timeline Item 4: Pascaline -->
+                <div class="timeline-item mb-16 relative z-10">
+                    <div class="timeline-card rounded-2xl shadow-xl p-6 md:p-8 md:flex items-start gap-8">
+                        <div class="md:w-1/3 mb-6 md:mb-0">
+                            <div class="model-container rounded-lg overflow-hidden" id="pascalineModel"></div>
+                            <div class="mt-4 flex justify-center">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzE2ODE0YSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPlBhc2NhbGluZSBhdCBNdXPDqWUgZGVzIEFydHMgZXBNdMOpdGllcnM8L3RleHQ+PC9zdmc+" alt="QR Code linking to Pascaline at Musée des Arts et Métiers" class="qr-code w-24 h-24 rounded-lg border-2 border-white dark:border-slate-700 cursor-pointer" title="Scan to view Pascaline artifacts">
+                            </div>
+                        </div>
+                        <div class="md:w-2/3">
+                            <div class="flex items-center mb-2">
+                                <span class="inline-block w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold mr-3">4</span>
+                                <h3 class="text-2xl font-bold text-slate-800 dark:text-white">Pascaline</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">1642 CE</span>
+                                <span class="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm">France</span>
+                                <span class="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm">Mechanical Calculator</span>
+                            </div>
+                            <p class="mb-4 text-slate-600 dark:text-slate-300">
+                                Blaise Pascal invented this mechanical calculator at age 19 to help his tax-collector father. The Pascaline could add and subtract directly, and perform multiplication and division through repeated additions or subtractions.
+                            </p>
+                            
+                            <div class="mb-4">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="font-medium">Impact on Computing:</span>
+                                    <span class="text-sm">4/5 gears</span>
+                                </div>
+                                <div class="impact-meter h-3 rounded-full w-full">
+                                    <div class="h-full rounded-full" style="width: 80%"></div>
+                                </div>
+                                <p class="text-sm mt-1 text-slate-500 dark:text-slate-400">Modern equivalent: Basic calculator apps</p>
+                            </div>
+                            
+                            <button class="toggle-btn flex items-center text-blue-600 dark:text-blue-400 font-medium" data-target="pascaline-details">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                                How It Worked
+                            </button>
+                            <div id="pascaline-details" class="toggle-content mt-2 text-slate-600 dark:text-slate-300">
+                                <p class="mb-2">The Pascaline used a series of gears and wheels where each wheel represented a decimal digit. A carry mechanism automatically moved the next wheel when a digit rolled from 9 to 0, similar to modern odometers. The device could handle numbers up to 999,999.999.</p>
+                                <p><strong>Innovation:</strong> Pascal overcame the challenge of mechanical carry propagation, a problem that had stumped earlier inventors. About 20 Pascalines were built, with some surviving today in museums.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Timeline Item 5: Jacquard Loom -->
+                <div class="timeline-item mb-16 relative z-10">
+                    <div class="timeline-card rounded-2xl shadow-xl p-6 md:p-8 md:flex items-start gap-8">
+                        <div class="md:w-1/3 mb-6 md:mb-0">
+                            <div class="model-container rounded-lg overflow-hidden" id="jacquardModel"></div>
+                            <div class="mt-4 flex justify-center">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzE2ODE0YSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkphY3F1YXJkIExvb20gYXQgU2NpZW5jZSBNdXNldW08L3RleHQ+PC9zdmc+" alt="QR Code linking to Jacquard Loom at Science Museum" class="qr-code w-24 h-24 rounded-lg border-2 border-white dark:border-slate-700 cursor-pointer" title="Scan to view Jacquard Loom artifacts">
+                            </div>
+                        </div>
+                        <div class="md:w-2/3">
+                            <div class="flex items-center mb-2">
+                                <span class="inline-block w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold mr-3">5</span>
+                                <h3 class="text-2xl font-bold text-slate-800 dark:text-white">Jacquard Loom</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">1804 CE</span>
+                                <span class="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm">France</span>
+                                <span class="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm">Programmable Automation</span>
+                            </div>
+                            <p class="mb-4 text-slate-600 dark:text-slate-300">
+                                Joseph Marie Jacquard's loom used punched cards to control complex weaving patterns automatically. This revolutionary concept would later inspire Charles Babbage and become fundamental to early computer programming.
+                            </p>
+                            
+                            <div class="mb-4">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="font-medium">Impact on Computing:</span>
+                                    <span class="text-sm">5/5 gears</span>
+                                </div>
+                                <div class="impact-meter h-3 rounded-full w-full">
+                                    <div class="h-full rounded-full" style="width: 100%"></div>
+                                </div>
+                                <p class="text-sm mt-1 text-slate-500 dark:text-slate-400">Modern equivalent: Computer programming (binary instructions)</p>
+                            </div>
+                            
+                            <button class="toggle-btn flex items-center text-blue-600 dark:text-blue-400 font-medium" data-target="jacquard-details">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                                How It Worked
+                            </button>
+                            <div id="jacquard-details" class="toggle-content mt-2 text-slate-600 dark:text-slate-300">
+                                <p class="mb-2">The loom used a series of punched cards where each card corresponded to one row of the design. Hooks that passed through punched holes would raise specific warp threads, while hooks blocked by unpunched areas wouldn't activate. This binary system could create intricate patterns automatically.</p>
+                                <p><strong>Legacy:</strong> The concept of storing instructions on punched cards directly influenced Charles Babbage's Analytical Engine and later early computers like the Harvard Mark I. This was effectively the first industrial application of binary programming.</p>
+                            </div>
+                            
+                            <div class="mt-4 p-4 bg-purple-50 dark:bg-purple-900/30 rounded-lg">
+                                <h4 class="font-bold mb-2">Try the Punch Card Simulator:</h4>
+                                <div class="mb-2">
+                                    <input type="text" id="punchCardInput" placeholder="Enter your name" class="px-3 py-2 border rounded-lg w-full dark:bg-slate-800 dark:border-slate-700">
+                                </div>
+                                <button id="punchCardBtn" class="px-4 py-2 bg-purple-100 dark:bg-purple-800 hover:bg-purple-200 dark:hover:bg-purple-700 rounded-lg transition-colors">
+                                    Convert to Punch Card
+                                </button>
+                                <div id="punchCardOutput" class="mt-4 grid grid-cols-8 gap-1 hidden"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Timeline Item 6: Difference Engine -->
+                <div class="timeline-item mb-16 relative z-10">
+                    <div class="timeline-card rounded-2xl shadow-xl p-6 md:p-8 md:flex items-start gap-8">
+                        <div class="md:w-1/3 mb-6 md:mb-0">
+                            <div class="model-container rounded-lg overflow-hidden" id="differenceModel"></div>
+                            <div class="mt-4 flex justify-center">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzE2ODE0YSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkRpZmZlcmVuY2UgRW5naW5lIGF0IFNjaWVuY2UgTXVzZXVtPC90ZXh0Pjwvc3ZnPg==" alt="QR Code linking to Difference Engine at Science Museum" class="qr-code w-24 h-24 rounded-lg border-2 border-white dark:border-slate-700 cursor-pointer" title="Scan to view Difference Engine artifacts">
+                            </div>
+                        </div>
+                        <div class="md:w-2/3">
+                            <div class="flex items-center mb-2">
+                                <span class="inline-block w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold mr-3">6</span>
+                                <h3 class="text-2xl font-bold text-slate-800 dark:text-white">Difference Engine</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">1822 CE</span>
+                                <span class="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm">England</span>
+                                <span class="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm">Automatic Calculation</span>
+                            </div>
+                            <p class="mb-4 text-slate-600 dark:text-slate-300">
+                                Charles Babbage's Difference Engine was designed to automatically compute polynomial functions and print mathematical tables. Though never completed in his lifetime, a working version built in 1991 proved its design was sound.
+                            </p>
+                            
+                            <div class="mb-4">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="font-medium">Impact on Computing:</span>
+                                    <span class="text-sm">5/5 gears</span>
+                                </div>
+                                <div class="impact-meter h-3 rounded-full w-full">
+                                    <div class="h-full rounded-full" style="width: 100%"></div>
+                                </div>
+                                <p class="text-sm mt-1 text-slate-500 dark:text-slate-400">Modern equivalent: Mathematical software (e.g., Mathematica)</p>
+                            </div>
+                            
+                            <button class="toggle-btn flex items-center text-blue-600 dark:text-blue-400 font-medium" data-target="difference-details">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                                How It Worked
+                            </button>
+                            <div id="difference-details" class="toggle-content mt-2 text-slate-600 dark:text-slate-300">
+                                <p class="mb-2">The Difference Engine used the method of finite differences to calculate polynomial functions without multiplication or division. It consisted of columns of gears that could store numbers and perform carries automatically. The machine could compute up to 7th-order differences to 31 decimal places.</p>
+                                <p><strong>Technical Achievement:</strong> Babbage's design called for 25,000 parts weighing 15 tons. The 1991 reconstruction at the Science Museum in London worked flawlessly, calculating numbers to 31 digits as intended.</p>
+                            </div>
+                            
+                            <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
+                                <h4 class="font-bold mb-2">Build Babbage's Machine:</h4>
+                                <p class="mb-2 text-sm">Drag the parts into the correct positions to assemble the Difference Engine</p>
+                                <div class="grid grid-cols-3 gap-2" id="differencePuzzle">
+                                    <div class="p-2 border rounded-lg text-center cursor-move bg-white dark:bg-slate-800" draggable="true" data-part="gears">Gears</div>
+                                    <div class="p-2 border rounded-lg text-center cursor-move bg-white dark:bg-slate-800" draggable="true" data-part="figure wheels">Figure Wheels</div>
+                                    <div class="p-2 border rounded-lg text-center cursor-move bg-white dark:bg-slate-800" draggable="true" data-part="carry mechanism">Carry Mechanism</div>
+                                    <div class="p-2 border rounded-lg text-center cursor-move bg-white dark:bg-slate-800" draggable="true" data-part="printing mechanism">Printing Mechanism</div>
+                                    <div class="p-2 border rounded-lg text-center cursor-move bg-white dark:bg-slate-800" draggable="true" data-part="crank">Crank</div>
+                                    <div class="p-2 border rounded-lg text-center cursor-move bg-white dark:bg-slate-800" draggable="true" data-part="number columns">Number Columns</div>
+                                </div>
+                                <div class="mt-4 p-4 border-2 border-dashed rounded-lg min-h-20" id="differencePuzzleTarget">
+                                    <p class="text-center text-slate-400">Drop parts here to build</p>
+                                </div>
+                                <div id="puzzleFeedback" class="mt-2 text-sm hidden"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Timeline Item 7: Analytical Engine -->
+                <div class="timeline-item mb-16 relative z-10">
+                    <div class="timeline-card rounded-2xl shadow-xl p-6 md:p-8 md:flex items-start gap-8">
+                        <div class="md:w-1/3 mb-6 md:mb-0">
+                            <div class="model-container rounded-lg overflow-hidden" id="analyticalModel"></div>
+                            <div class="mt-4 flex justify-center">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzE2ODE0YSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkFuYWx5dGljYWwgRW5naW5lIFBsYW5zPC90ZXh0Pjwvc3ZnPg==" alt="QR Code linking to Analytical Engine plans" class="qr-code w-24 h-24 rounded-lg border-2 border-white dark:border-slate-700 cursor-pointer" title="Scan to view Analytical Engine designs">
+                            </div>
+                        </div>
+                        <div class="md:w-2/3">
+                            <div class="flex items-center mb-2">
+                                <span class="inline-block w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold mr-3">7</span>
+                                <h3 class="text-2xl font-bold text-slate-800 dark:text-white">Analytical Engine</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">1837 CE</span>
+                                <span class="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm">England</span>
+                                <span class="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm">General-Purpose Computer</span>
+                            </div>
+                            <p class="mb-4 text-slate-600 dark:text-slate-300">
+                                Babbage's visionary Analytical Engine was the first design for a general-purpose programmable computer. Ada Lovelace wrote what's considered the first computer program for this never-built machine, recognizing its potential beyond mere calculation.
+                            </p>
+                            
+                            <div class="mb-4">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="font-medium">Impact on Computing:</span>
+                                    <span class="text-sm">5/5 gears</span>
+                                </div>
+                                <div class="impact-meter h-3 rounded-full w-full">
+                                    <div class="h-full rounded-full" style="width: 100%"></div>
+                                </div>
+                                <p class="text-sm mt-1 text-slate-500 dark:text-slate-400">Modern equivalent: Modern CPUs (central processing units)</p>
+                            </div>
+                            
+                            <button class="toggle-btn flex items-center text-blue-600 dark:text-blue-400 font-medium" data-target="analytical-details">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                                How It Worked
+                            </button>
+                            <div id="analytical-details" class="toggle-content mt-2 text-slate-600 dark:text-slate-300">
+                                <p class="mb-2">The Analytical Engine had four main components: the Mill (CPU), the Store (memory), the Reader (input), and the Printer (output). It used Jacquard's punched cards for both data and instructions, could perform conditional branching, and had memory capacity for 1,000 numbers of 50 decimal digits each.</p>
+                                <p><strong>Ada Lovelace's Contribution:</strong> Lovelace translated an article about the Engine, adding extensive notes that included an algorithm for calculating Bernoulli numbers - considered the first published computer program. She also envisioned computers creating music and art, far beyond Babbage's calculation focus.</p>
+                            </div>
+                            
+                            <div class="mt-4 p-4 bg-green-50 dark:bg-green-900/30 rounded-lg">
+                                <h4 class="font-bold mb-2">Ada Lovelace's First Program:</h4>
+                                <div class="bg-white dark:bg-slate-800 p-3 rounded-lg overflow-x-auto">
+                                    <pre class="text-sm font-mono text-slate-800 dark:text-slate-200">
+// Note G: Bernoulli Numbers Calculation
+1. V0 = 1
+2. V1 = 1/2
+3. V2 = 1/6
+4. FOR n FROM 2 TO ∞ DO
+5.    V2n = -(1/(2n+1)) * Σ[k=0 to n-1] ( (2n)! / ((2k)! (2n-2k+1)!) ) * V2k
+6.    OUTPUT V2n
+7. END FOR</pre>
+                                </div>
+                                <p class="mt-2 text-sm">This algorithm, published in 1843, would have computed Bernoulli numbers on the Analytical Engine using nested loops - a revolutionary concept at the time.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Timeline Item 8: Hollerith Tabulator -->
+                <div class="timeline-item mb-16 relative z-10">
+                    <div class="timeline-card rounded-2xl shadow-xl p-6 md:p-8 md:flex items-start gap-8">
+                        <div class="md:w-1/3 mb-6 md:mb-0">
+                            <div class="model-container rounded-lg overflow-hidden" id="hollerithModel"></div>
+                            <div class="mt-4 flex justify-center">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzE2ODE0YSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkhvbGxlcml0aCBUYWJ1bGF0b3IgYXQgU21pdGhzb25pYW48L3RleHQ+PC9zdmc+" alt="QR Code linking to Hollerith Tabulator at Smithsonian" class="qr-code w-24 h-24 rounded-lg border-2 border-white dark:border-slate-700 cursor-pointer" title="Scan to view Hollerith Tabulator artifacts">
+                            </div>
+                        </div>
+                        <div class="md:w-2/3">
+                            <div class="flex items-center mb-2">
+                                <span class="inline-block w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold mr-3">8</span>
+                                <h3 class="text-2xl font-bold text-slate-800 dark:text-white">Hollerith Tabulator</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">1890 CE</span>
+                                <span class="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm">USA</span>
+                                <span class="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm">Data Processing</span>
+                            </div>
+                            <p class="mb-4 text-slate-600 dark:text-slate-300">
+                                Herman Hollerith's electromechanical tabulator used punched cards to process data for the 1890 U.S. Census, reducing a decade's work to just one year. This technology led to the founding of IBM and revolutionized data processing.
+                            </p>
+                            
+                            <div class="mb-4">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="font-medium">Impact on Computing:</span>
+                                    <span class="text-sm">5/5 gears</span>
+                                </div>
+                                <div class="impact-meter h-3 rounded-full w-full">
+                                    <div class="h-full rounded-full" style="width: 100%"></div>
+                                </div>
+                                <p class="text-sm mt-1 text-slate-500 dark:text-slate-400">Modern equivalent: Database management systems</p>
+                            </div>
+                            
+                            <button class="toggle-btn flex items-center text-blue-600 dark:text-blue-400 font-medium" data-target="hollerith-details">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                                How It Worked
+                            </button>
+                            <div id="hollerith-details" class="toggle-content mt-2 text-slate-600 dark:text-slate-300">
+                                <p class="mb-2">The tabulator used cards with 12 rows and 24 columns that could store up to 288 bits of data. Metal pins would pass through the holes in the cards into mercury-filled cups, completing electrical circuits that incremented mechanical counters. The system could process 50-80 cards per minute.</p>
+                                <p><strong>Business Impact:</strong> Hollerith's Tabulating Machine Company eventually merged with others to form IBM in 1924. Punched card systems dominated data processing until the 1970s, with the last IBM punched card plant closing in 1984.</p>
+                            </div>
+                            
+                            <div class="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/30 rounded-lg">
+                                <h4 class="font-bold mb-2">Punch Card Data Flow:</h4>
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="text-center">
+                                        <div class="w-12 h-12 mx-auto bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-1">1</div>
+                                        <p class="text-xs">Data Collection</p>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                                    </svg>
+                                    <div class="text-center">
+                                        <div class="w-12 h-12 mx-auto bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-1">2</div>
+                                        <p class="text-xs">Card Punching</p>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                                    </svg>
+                                    <div class="text-center">
+                                        <div class="w-12 h-12 mx-auto bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-1">3</div>
+                                        <p class="text-xs">Machine Tallying</p>
+                                    </div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                                    </svg>
+                                    <div class="text-center">
+                                        <div class="w-12 h-12 mx-auto bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-1">4</div>
+                                        <p class="text-xs">Results</p>
+                                    </div>
+                                </div>
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Hollerith_punch_card_1901.jpg" alt="Hollerith punch card with holes representing data" class="rounded-lg border mt-2 w-full max-w-xs mx-auto">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Timeline Item 9: Harvard Mark I -->
+                <div class="timeline-item mb-16 relative z-10">
+                    <div class="timeline-card rounded-2xl shadow-xl p-6 md:p-8 md:flex items-start gap-8">
+                        <div class="md:w-1/3 mb-6 md:mb-0">
+                            <div class="model-container rounded-lg overflow-hidden" id="mark1Model"></div>
+                            <div class="mt-4 flex justify-center">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzE2ODE0YSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkhhcnZhcmQgTWFyayBJIGF0IEhhcnZhcmQ8L3RleHQ+PC9zdmc+" alt="QR Code linking to Harvard Mark I at Harvard University" class="qr-code w-24 h-24 rounded-lg border-2 border-white dark:border-slate-700 cursor-pointer" title="Scan to view Harvard Mark I artifacts">
+                            </div>
+                        </div>
+                        <div class="md:w-2/3">
+                            <div class="flex items-center mb-2">
+                                <span class="inline-block w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold mr-3">9</span>
+                                <h3 class="text-2xl font-bold text-slate-800 dark:text-white">Harvard Mark I</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">1944 CE</span>
+                                <span class="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm">USA</span>
+                                <span class="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm">Automatic Sequence Computer</span>
+                            </div>
+                            <p class="mb-4 text-slate-600 dark:text-slate-300">
+                                The IBM Automatic Sequence Controlled Calculator (Harvard Mark I) was the first large-scale automatic digital computer in the USA. This 5-ton behemoth with 765,000 components could perform calculations 100 times faster than humans, though your smartwatch does more with 0.0001% of the materials.
+                            </p>
+                            
+                            <div class="mb-4">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="font-medium">Impact on Computing:</span>
+                                    <span class="text-sm">5/5 gears</span>
+                                </div>
+                                <div class="impact-meter h-3 rounded-full w-full">
+                                    <div class="h-full rounded-full" style="width: 100%"></div>
+                                </div>
+                                <p class="text-sm mt-1 text-slate-500 dark:text-slate-400">Modern equivalent: Early mainframe computers</p>
+                            </div>
+                            
+                            <button class="toggle-btn flex items-center text-blue-600 dark:text-blue-400 font-medium" data-target="mark1-details">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                                How It Worked
+                            </button>
+                            <div id="mark1-details" class="toggle-content mt-2 text-slate-600 dark:text-slate-300">
+                                <p class="mb-2">The Mark I was 51 feet long, weighed 5 tons, and used 530 miles of wiring. It performed calculations using electromechanical relays (not yet fully electronic) and could store 72 numbers of 23 decimal digits each. Programs were input via punched paper tape, and it could perform 3 additions or subtractions per second.</p>
+                                <p><strong>Grace Hopper's Contribution:</strong> The pioneering computer scientist found the first actual computer "bug" - a moth stuck in the Mark I's relays. She also developed the first compiler, paving the way for modern programming languages.</p>
+                            </div>
+                            
+                            <div class="mt-4 p-4 bg-red-50 dark:bg-red-900/30 rounded-lg">
+                                <h4 class="font-bold mb-2">Spot the Anachronism:</h4>
+                                <p class="mb-2 text-sm">Which of these would NOT be found with the Harvard Mark I?</p>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button class="anachronism-btn px-3 py-2 bg-white dark:bg-slate-800 rounded-lg border text-left" data-correct="false">Punched paper tape</button>
+                                    <button class="anachronism-btn px-3 py-2 bg-white dark:bg-slate-800 rounded-lg border text-left" data-correct="false">Electromechanical relays</button>
+                                    <button class="anachronism-btn px-3 py-2 bg-white dark:bg-slate-800 rounded-lg border text-left" data-correct="true">USB ports</button>
+                                    <button class="anachronism-btn px-3 py-2 bg-white dark:bg-slate-800 rounded-lg border text-left" data-correct="false">Rotating number wheels</button>
+                                </div>
+                                <div id="anachronismFeedback" class="mt-2 text-sm hidden"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Innovations Section -->
+    <section class="py-20 bg-gray-50 dark:bg-slate-800">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-slate-800 dark:text-white">
+                Featured Innovations
+            </h2>
+            
+            <!-- Babbage Spotlight -->
+            <div class="bg-white dark:bg-slate-700 rounded-2xl shadow-xl overflow-hidden mb-16">
+                <div class="md:flex">
+                    <div class="md:w-1/2 p-8 md:p-12">
+                        <h3 class="text-2xl md:text-3xl font-bold mb-4 text-slate-800 dark:text-white">
+                            Charles Babbage: The Father of Computing
+                        </h3>
+                        <p class="mb-6 text-slate-600 dark:text-slate-300">
+                            Though his machines were never completed in his lifetime, Babbage's designs for the Difference Engine and Analytical Engine contained all the essential elements of modern computers: CPU, memory, input/output, and even primitive programming.
+                        </p>
+                        <div class="mb-6">
+                            <h4 class="font-bold mb-2">Key Contributions:</h4>
+                            <ul class="list-disc pl-5 text-slate-600 dark:text-slate-300 space-y-1">
+                                <li>First mechanical computer design (Difference Engine, 1822)</li>
+                                <li>Concept of general-purpose programmable computer (Analytical Engine, 1837)</li>
+                                <li>Pioneered the idea of conditional branching (if-then logic)</li>
+                                <li>First to recognize that computers could manipulate symbols, not just numbers</li>
+                            </ul>
+                        </div>
+                        <div class="p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
+                            <h4 class="font-bold mb-2">Did You Know?</h4>
+                            <p class="text-slate-600 dark:text-slate-300">Babbage also invented the cowcatcher for trains, the ophthalmoscope for eye exams, and was a fierce critic of street musicians - even publishing a table of their "annoyance levels"!</p>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 bg-gray-100 dark:bg-slate-600 p-8 flex items-center justify-center">
+                        <div class="w-full h-96" id="babbageDiorama"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Punch Card Revolution -->
+            <div class="bg-white dark:bg-slate-700 rounded-2xl shadow-xl overflow-hidden">
+                <div class="md:flex flex-row-reverse">
+                    <div class="md:w-1/2 p-8 md:p-12">
+                        <h3 class="text-2xl md:text-3xl font-bold mb-4 text-slate-800 dark:text-white">
+                            The Punch Card Revolution
+                        </h3>
+                        <p class="mb-6 text-slate-600 dark:text-slate-300">
+                            From Jacquard's loom to IBM's mainframes, punched cards dominated data processing for nearly 200 years. These humble cards with carefully placed holes laid the foundation for modern programming and data storage.
+                        </p>
+                        <div class="mb-6">
+                            <h4 class="font-bold mb-2">Evolution of Punch Cards:</h4>
+                            <ul class="list-disc pl-5 text-slate-600 dark:text-slate-300 space-y-1">
+                                <li>1804: Jacquard loom cards controlled weaving patterns</li>
+                                <li>1890: Hollerith cards processed US Census data</li>
+                                <li>1928: IBM standard 80-column card introduced</li>
+                                <li>1950s-70s: Primary programming medium for early computers</li>
+                            </ul>
+                        </div>
+                        <div class="p-4 bg-purple-50 dark:bg-purple-900/30 rounded-lg">
+                            <h4 class="font-bold mb-2">Legacy:</h4>
+                            <p class="text-slate-600 dark:text-slate-300">The standard 80-column card directly influenced early terminal displays (80 characters wide) and even modern programming conventions. Many data processing terms like "bug" and "debugging" originated from punch card systems.</p>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 bg-gray-100 dark:bg-slate-600 p-8 flex items-center justify-center">
+                        <div class="text-center">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Used_Punchcard_%285151286161%29.jpg/800px-Used_Punchcard_%285151286161%29.jpg" alt="IBM punch card with holes representing data" class="rounded-lg shadow-lg mb-4 max-w-full h-auto">
+                            <p class="text-sm text-slate-600 dark:text-slate-300">An IBM punch card used for programming early computers (circa 1960s)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Section -->
+    <section class="py-20 bg-white dark:bg-slate-900">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-slate-800 dark:text-white">
+                Interactive Exploration
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-8 mb-16">
+                <!-- Compare Tool -->
+                <div class="bg-gray-50 dark:bg-slate-800 rounded-2xl shadow-xl p-8">
+                    <h3 class="text-2xl font-bold mb-4 text-slate-800 dark:text-white">Compare Computing Devices</h3>
+                    <p class="mb-6 text-slate-600 dark:text-slate-300">Select two devices to see how they stack up against each other.</p>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-1 text-slate-700 dark:text-slate-300">Device 1</label>
+                            <select id="compareDevice1" class="w-full px-3 py-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600">
+                                <option value="abacus">Abacus (4000 BCE)</option>
+                                <option value="pascaline">Pascaline (1642)</option>
+                                <option value="difference">Difference Engine (1822)</option>
+                                <option value="mark1">Harvard Mark I (1944)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1 text-slate-700 dark:text-slate-300">Device 2</label>
+                            <select id="compareDevice2" class="w-full px-3 py-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600">
+                                <option value="smartphone">Modern Smartphone</option>
+                                <option value="abacus">Abacus (4000 BCE)</option>
+                                <option value="pascaline">Pascaline (1642)</option>
+                                <option value="difference">Difference Engine (1822)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button id="compareBtn" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
+                        Compare Devices
+                    </button>
+                    
+                    <div id="compareResults" class="mt-6 hidden">
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="p-4 bg-white dark:bg-slate-700 rounded-lg shadow">
+                                <h4 id="compareTitle1" class="font-bold mb-2 text-center"></h4>
+                                <ul id="compareList1" class="text-sm text-slate-600 dark:text-slate-300 space-y-1"></ul>
+                            </div>
+                            <div class="p-4 bg-white dark:bg-slate-700 rounded-lg shadow">
+                                <h4 id="compareTitle2" class="font-bold mb-2 text-center"></h4>
+                                <ul id="compareList2" class="text-sm text-slate-600 dark:text-slate-300 space-y-1"></ul>
+                            </div>
+                        </div>
+                        <div id="compareConclusion" class="p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg text-sm"></div>
+                    </div>
+                </div>
+                
+                <!-- Fix the Timeline Game -->
+                <div class="bg-gray-50 dark:bg-slate-800 rounded-2xl shadow-xl p-8">
+                    <h3 class="text-2xl font-bold mb-4 text-slate-800 dark:text-white">Fix the Timeline</h3>
+                    <p class="mb-6 text-slate-600 dark:text-slate-300">Drag these computing milestones into the correct chronological order.</p>
+                    
+                    <div class="space-y-2 mb-6" id="timelineGameItems">
+                        <div class="p-3 bg-white dark:bg-slate-700 rounded-lg shadow cursor-move" draggable="true" data-year="1642">Pascaline invented</div>
+                        <div class="p-3 bg-white dark:bg-slate-700 rounded-lg shadow cursor-move" draggable="true" data-year="1944">Harvard Mark I completed</div>
+                        <div class="p-3 bg-white dark:bg-slate-700 rounded-lg shadow cursor-move" draggable="true" data-year="1804">Jacquard Loom introduced</div>
+                        <div class="p-3 bg-white dark:bg-slate-700 rounded-lg shadow cursor-move" draggable="true" data-year="4000">Abacus invented</div>
+                        <div class="p-3 bg-white dark:bg-slate-700 rounded-lg shadow cursor-move" draggable="true" data-year="1822">Difference Engine designed</div>
+                    </div>
+                    
+                    <button id="checkTimelineBtn" class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors">
+                        Check Order
+                    </button>
+                    
+                    <div id="timelineFeedback" class="mt-4 text-center hidden"></div>
+                </div>
+            </div>
+            
+            <!-- Design Challenge -->
+            <div class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-slate-800 dark:to-slate-700 rounded-2xl shadow-xl p-8">
+                <h3 class="text-2xl font-bold mb-4 text-slate-800 dark:text-white">Design Your Ancestor</h3>
+                <p class="mb-6 text-slate-600 dark:text-slate-300">Imagine you're a 19th century inventor. Describe your hypothetical computing machine:</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium mb-1 text-slate-700 dark:text-slate-300">Machine Name</label>
+                        <input type="text" id="machineName" class="w-full px-3 py-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600" placeholder="e.g., Analytical Calculator">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1 text-slate-700 dark:text-slate-300">Year of Invention</label>
+                        <input type="number" id="machineYear" min="1800" max="1899" class="w-full px-3 py-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600" placeholder="1850">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium mb-1 text-slate-700 dark:text-slate-300">Function/Purpose</label>
+                        <textarea id="machineFunction" rows="3" class="w-full px-3 py-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600" placeholder="Describe what your machine does"></textarea>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium mb-1 text-slate-700 dark:text-slate-300">Innovative Features</label>
+                        <textarea id="machineFeatures" rows="3" class="w-full px-3 py-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600" placeholder="What makes your design special?"></textarea>
+                    </div>
+                </div>
+                
+                <button id="saveDesignBtn" class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors">
+                    Save My Design
+                </button>
+                
+                <div id="designOutput" class="mt-6 hidden bg-white dark:bg-slate-700 rounded-lg p-4 shadow-inner">
+                    <h4 class="font-bold mb-2">Your 19th Century Computer:</h4>
+                    <div id="designDetails" class="text-slate-600 dark:text-slate-300"></div>
+                    <button id="printBadgeBtn" class="mt-4 px-4 py-2 bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 rounded-lg transition-colors text-sm">
+                        Generate Completion Badge
+                    </button>
+                    <canvas id="badgeCanvas" class="mt-4 hidden mx-auto" width="300" height="150"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modern Connections Section -->
+    <section class="py-20 bg-gray-50 dark:bg-slate-800">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-slate-800 dark:text-white">
+                Modern Connections
+            </h2>
+            
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <div class="bg-white dark:bg-slate-700 rounded-2xl shadow-xl p-6">
+                    <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-slate-800 dark:text-white">From Beads to Cores</h3>
+                    <p class="text-slate-600 dark:text-slate-300">The abacus's parallel bead calculations foreshadowed modern GPU architecture, where thousands of cores perform simple operations simultaneously for massive parallelism.</p>
+                </div>
+                <div class="bg-white dark:bg-slate-700 rounded-2xl shadow-xl p-6">
+                    <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600 dark:text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-slate-800 dark:text-white">Punch Cards to Big Data</h3>
+                    <p class="text-slate-600 dark:text-slate-300">Hollerith's tabulating system established patterns for data processing that evolved into modern database systems and big data analytics frameworks.</p>
+                </div>
+                <div class="bg-white dark:bg-slate-700 rounded-2xl shadow-xl p-6">
+                    <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-slate-800 dark:text-white">Babbage's Blueprint</h3>
+                    <p class="text-slate-600 dark:text-slate-300">The Analytical Engine's separation of processing (Mill) and memory (Store) directly influenced von Neumann architecture, still the foundation of modern computers.</p>
+                </div>
+            </div>
+            
+            <!-- VR Tour Placeholder -->
+            <div class="bg-white dark:bg-slate-700 rounded-2xl shadow-xl overflow-hidden">
+                <div class="md:flex">
+                    <div class="md:w-2/3 p-8 md:p-12">
+                        <h3 class="text-2xl md:text-3xl font-bold mb-4 text-slate-800 dark:text-white">
+                            Virtual Tour: Babbage's Workshop
+                        </h3>
+                        <p class="mb-6 text-slate-600 dark:text-slate-300">
+                            Step into a recreation of Charles Babbage's London workshop where he designed his revolutionary computing engines. Explore interactive models of his machines and see working reconstructions of his designs.
+                        </p>
+                        <div class="flex flex-wrap gap-4">
+                            <button class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
+                                Start VR Tour
+                            </button>
+                            <button class="px-6 py-3 bg-gray-100 hover:bg-gray-200 dark:bg-slate-600 dark:hover:bg-slate-500 text-slate-800 dark:text-white rounded-lg font-medium transition-colors">
+                                View 360° Gallery
+                            </button>
+                        </div>
+                    </div>
+                    <div class="md:w-1/3 bg-gray-100 dark:bg-slate-600 flex items-center justify-center p-8">
+                        <div class="relative w-full h-64 rounded-lg overflow-hidden border-4 border-white dark:border-slate-500">
+                            <div class="absolute inset-0 bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 bg-black/70 text-white p-2 text-center text-sm">
+                                VR Tour Preview
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Modal -->
+    <div id="quizModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-gray-200 dark:border-slate-700">
+                <h3 class="text-2xl font-bold text-slate-800 dark:text-white">Computing History Quiz</h3>
+            </div>
+            <div class="p-6">
+                <div id="quizQuestion1" class="mb-8">
+                    <p class="font-medium mb-4 text-slate-800 dark:text-white">1. What was the primary purpose of the Jacquard Loom's punched cards?</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-slate-700 rounded-lg cursor-pointer">
+                            <input type="radio" name="q1" value="a" class="h-4 w-4 text-blue-600 dark:text-blue-400">
+                            <span class="text-slate-700 dark:text-slate-300">To store mathematical tables</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-slate-700 rounded-lg cursor-pointer">
+                            <input type="radio" name="q1" value="b" class="h-4 w-4 text-blue-600 dark:text-blue-400">
+                            <span class="text-slate-700 dark:text-slate-300">To control weaving patterns</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-slate-700 rounded-lg cursor-pointer">
+                            <input type="radio" name="q1" value="c" class="h-4 w-4 text-blue-600 dark:text-blue-400">
+                            <span class="text-slate-700 dark:text-slate-300">To perform astronomical calculations</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-slate-700 rounded-lg cursor-pointer">
+                            <input type="radio" name="q1" value="d" class="h-4 w-4 text-blue-600 dark:text-blue-400">
+                            <span class="text-slate-700 dark:text-slate-300">To encode musical compositions</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div id="quizQuestion2" class="mb-8">
+                    <p class="font-medium mb-4 text-slate-800 dark:text-white">2. What innovation did Ada Lovelace contribute to computing?</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-slate-700 rounded-lg cursor-pointer">
+                            <input type="radio" name="q2" value="a" class="h-4 w-4 text-blue-600 dark:text-blue-400">
+                            <span class="text-slate-700 dark:text-slate-300">The first compiler</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-slate-700 rounded-lg cursor-pointer">
+                            <input type="radio" name="q2" value="b" class="h-4 w-4 text-blue-600 dark:text-blue-400">
+                            <span class="text-slate-700 dark:text-slate-300">The concept of a stored program</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-slate-700 rounded-lg cursor-pointer">
+                            <input type="radio" name="q2" value="c" class="h-4 w-4 text-blue-600 dark:text-blue-400">
+                            <span class="text-slate-700 dark:text-slate-300">The first published computer algorithm</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-slate-700 rounded-lg cursor-pointer">
+                            <input type="radio" name="q2" value="d" class="h-4 w-4 text-blue-600 dark:text-blue-400">
+                            <span class="text-slate-700 dark:text-slate-300">The use of binary arithmetic</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div id="quizQuestion3" class="mb-8">
+                    <p class="font-medium mb-4 text-slate-800 dark:text-white">3. Which of these was NOT a component of Babbage's Analytical Engine?</p>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-slate-700 rounded-lg cursor-pointer">
+                            <input type="radio" name="q3" value="a" class="h-4 w-4 text-blue-600 dark:text-blue-400">
+                            <span class="text-slate-700 dark:text-slate-300">The Mill (CPU)</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-slate-700 rounded-lg cursor-pointer">
+                            <input type="radio" name="q3" value="b" class="h-4 w-4 text-blue-600 dark:text-blue-400">
+                            <span class="text-slate-700 dark:text-slate-300">The Store (memory)</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-slate-700 rounded-lg cursor-pointer">
+                            <input type="radio" name="q3" value="c" class="h-4 w-4 text-blue-600 dark:text-blue-400">
+                            <span class="text-slate-700 dark:text-slate-300">The Printer (output)</span>
+                        </label>
+                        <label class="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-slate-700 rounded-lg cursor-pointer">
+                            <input type="radio" name="q3" value="d" class="h-4 w-4 text-blue-600 dark:text-blue-400">
+                            <span class="text-slate-700 dark:text-slate-300">The Network (communication)</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <button id="submitQuizBtn" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
+                    Submit Quiz
+                </button>
+                
+                <div id="quizResults" class="mt-6 hidden p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
+                    <h4 class="font-bold mb-2 text-slate-800 dark:text-white">Your Results:</h4>
+                    <div id="quizScore" class="text-lg font-medium mb-2"></div>
+                    <div id="quizFeedback" class="text-slate-600 dark:text-slate-300"></div>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-200 dark:border-slate-700 flex justify-end">
+                <button id="closeQuizBtn" class="px-4 py-2 text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-white">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">From Bones to Bytes</h3>
+                    <p class="text-slate-400">A journey through computing history from ancient tools to modern machines.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Explore More</h3>
+                    <ul class="space-y-2 text-slate-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Computer History Museum</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Babbage Engine</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Ada Lovelace Institute</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Resources</h3>
+                    <ul class="space-y-2 text-slate-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Timeline PDF</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Lesson Plans</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Source Code</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-slate-400 hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-slate-400 hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.066 9.645c.183 4.04-2.83 8.544-8.164 8.544-1.622 0-3.131-.476-4.402-1.291 1.524.18 3.045-.244 4.252-1.189-1.256-.023-2.317-.854-2.684-1.995.451.086.895.061 1.298-.049-1.381-.278-2.335-1.522-2.304-2.853.388.215.83.344 1.301.359-1.279-.855-1.641-2.544-.889-3.835 1.416 1.738 3.533 2.881 5.92 3.001-.419-1.796.944-3.527 2.799-3.527.825 0 1.572.349 2.096.907.654-.128 1.27-.368 1.824-.697-.215.671-.67 1.233-1.263 1.589.581-.07 1.135-.224 1.649-.453-.384.578-.87 1.084-1.433 1.489z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-slate-400 hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm4.441 16.892c-2.102.144-6.784.144-8.883 0-2.276-.156-2.541-1.27-2.558-4.892.017-3.629.285-4.736 2.558-4.892 2.099-.144 6.782-.144 8.883 0 2.277.156 2.541 1.27 2.559 4.892-.018 3.629-.285 4.736-2.559 4.892zm-6.441-7.234l4.917 2.338-4.917 2.346v-4.684z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-slate-800 text-center text-slate-500 text-sm">
+                <p>© 2023 The Evolution of Computing Machines. All rights reserved.</p>
+                <p class="mt-2">Created for educational purposes. Museum QR codes link to respective institution collections.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const sunIcon = document.getElementById('sunIcon');
+        const moonIcon = document.getElementById('moonIcon');
+        
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            sunIcon.classList.add('hidden');
+            moonIcon.classList.remove('hidden');
+        } else {
+            document.documentElement.classList.remove('dark');
+            sunIcon.classList.remove('hidden');
+            moonIcon.classList.add('hidden');
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            }
+        });
+        
+        // Toggle Content
+        document.querySelectorAll('.toggle-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const targetId = button.getAttribute('data-target');
+                const content = document.getElementById(targetId);
+                content.classList.toggle('active');
+                
+                const icon = button.querySelector('svg');
+                if (content.classList.contains('active')) {
+                    icon.classList.add('rotate-180');
+                } else {
+                    icon.classList.remove('rotate-180');
+                }
+            });
+        });
+        
+        // Quiz Modal
+        const quizBtn = document.getElementById('quizBtn');
+        const quizModal = document.getElementById('quizModal');
+        const closeQuizBtn = document.getElementById('closeQuizBtn');
+        const submitQuizBtn = document.getElementById('submitQuizBtn');
+        const quizResults = document.getElementById('quizResults');
+        const quizScore = document.getElementById('quizScore');
+        const quizFeedback = document.getElementById('quizFeedback');
+        
+        quizBtn.addEventListener('click', () => {
+            quizModal.classList.remove('hidden');
+        });
+        
+        closeQuizBtn.addEventListener('click', () => {
+            quizModal.classList.add('hidden');
+            quizResults.classList.add('hidden');
+            // Reset quiz
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+        });
+        
+        submitQuizBtn.addEventListener('click', () => {
+            let score = 0;
+            const answers = {
+                q1: 'b',
+                q2: 'c',
+                q3: 'd'
+            };
+            
+            // Check answers
+            for (let i = 1; i <= 3; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if (selected && selected.value === answers[`q${i}`]) {
+                    score++;
+                }
+            }
+            
+            // Display results
+            quizScore.textContent = `You scored ${score} out of 3`;
+            
+            if (score === 3) {
+                quizFeedback.textContent = "Excellent! You're a computing history expert!";
+            } else if (score >= 1) {
+                quizFeedback.textContent = "Good job! You know quite a bit about computing history.";
+            } else {
+                quizFeedback.textContent = "Keep exploring! The timeline above can help you learn more.";
+            }
+            
+            quizResults.classList.remove('hidden');
+        });
+        
+        // Compare Tool
+        const compareBtn = document.getElementById('compareBtn');
+        const compareResults = document.getElementById('compareResults');
+        const compareTitle1 = document.getElementById('compareTitle1');
+        const compareTitle2 = document.getElementById('compareTitle2');
+        const compareList1 = document.getElementById('compareList1');
+        const compareList2 = document.getElementById('compareList2');
+        const compareConclusion = document.getElementById('compareConclusion');
+        
+        const deviceData = {
+            abacus: {
+                name: "Abacus (4000 BCE)",
+                specs: [
+                    "Type: Manual calculator",
+                    "Materials: Wood, beads",
+                    "Operations: Addition, subtraction, multiplication, division",
+                    "Speed: ~3-5 calculations per minute (skilled user)",
+                    "Memory: None",
+                    "Portability: High"
+                ]
+            },
+            pascaline: {
+                name: "Pascaline (1642)",
+                specs: [
+                    "Type: Mechanical calculator",
+                    "Materials: Metal gears, wheels",
+                    "Operations: Addition, subtraction (via complements)",
+                    "Speed: ~1 calculation every 2-3 seconds",
+                    "Memory: Stores current calculation",
+                    "Portability: Medium (desk-sized)"
+                ]
+            },
+            difference: {
+                name: "Difference Engine (1822)",
+                specs: [
+                    "Type: Mechanical computer",
+                    "Materials: Brass, steel",
+                    "Operations: Polynomial calculations",
+                    "Speed: ~1 calculation per second",
+                    "Memory: Stores intermediate results",
+                    "Portability: Low (weighed tons)"
+                ]
+            },
+            mark1: {
+                name: "Harvard Mark I (1944)",
+                specs: [
+                    "Type: Electromechanical computer",
+                    "Materials: Relays, switches, wiring",
+                    "Operations: General calculations",
+                    "Speed: ~3 additions per second",
+                    "Memory: 72 numbers (23 digits each)",
+                    "Portability: None (51 feet long, 5 tons)"
+                ]
+            },
+            smartphone: {
+                name: "Modern Smartphone",
+                specs: [
+                    "Type: Electronic computer",
+                    "Materials: Silicon, plastic, glass",
+                    "Operations: Billions per second",
+                    "Speed: ~100 billion operations/sec",
+                    "Memory: 4-12GB RAM, 64-512GB storage",
+                    "Portability: High (fits in pocket)"
+                ]
+            }
+        };
+        
+        compareBtn.addEventListener('click', () => {
+            const device1 = document.getElementById('compareDevice1').value;
+            const device2 = document.getElementById('compareDevice2').value;
+            
+            compareTitle1.textContent = deviceData[device1].name;
+            compareTitle2.textContent = deviceData[device2].name;
+            
+            compareList1.innerHTML = '';
+            compareList2.innerHTML = '';
+            
+            deviceData[device1].specs.forEach(spec => {
+                const li = document.createElement('li');
+                li.textContent = spec;
+                compareList1.appendChild(li);
+            });
+            
+            deviceData[device2].specs.forEach(spec => {
+                const li = document.createElement('li');
+                li.textContent = spec;
+                compareList2.appendChild(li);
+            });
+            
+            // Generate comparison conclusion
+            let conclusion = "";
+            if (device1 === 'smartphone' || device2 === 'smartphone') {
+                conclusion = "The smartphone's capabilities dwarf historical machines in speed and versatility, but early devices pioneered concepts still used today.";
+            } else if (device1 === 'abacus' || device2 === 'abacus') {
+                conclusion = "The abacus remained competitive with mechanical calculators for centuries, demonstrating the power of simple, well-designed tools.";
+            } else {
+                conclusion = "Each machine represented a significant leap forward in computing technology, building on previous innovations.";
+            }
+            
+            compareConclusion.textContent = conclusion;
+            compareResults.classList.remove('hidden');
+        });
+        
+        // Fix the Timeline Game
+        const timelineGameItems = document.getElementById('timelineGameItems');
+        const checkTimelineBtn = document.getElementById('checkTimelineBtn');
+        const timelineFeedback = document.getElementById('timelineFeedback');
+        
+        let draggedItem = null;
+        
+        // Make items draggable
+        document.querySelectorAll('#timelineGameItems div').forEach(item => {
+            item.addEventListener('dragstart', () => {
+                draggedItem = item;
+                setTimeout(() => item.classList.add('opacity-50'), 0);
+            });
+            
+            item.addEventListener('dragend', () => {
+                setTimeout(() => {
+                    item.classList.remove('opacity-50');
+                    draggedItem = null;
+                }, 0);
+            });
+        });
+        
+        // Handle drop
+        timelineGameItems.addEventListener('dragover', e => {
+            e.preventDefault();
+        });
+        
+        timelineGameItems.addEventListener('drop', e => {
+            e.preventDefault();
+            if (draggedItem) {
+                const afterElement = getDragAfterElement(timelineGameItems, e.clientY);
+                if (afterElement) {
+                    timelineGameItems.insertBefore(draggedItem, afterElement);
+                } else {
+                    timelineGameItems.appendChild(draggedItem);
+                }
+            }
+        });
+        
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('div:not(.opacity-50)')];
+            
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+        
+        // Check order
+        checkTimelineBtn.addEventListener('click', () => {
+            const items = [...timelineGameItems.querySelectorAll('div')];
+            const correctOrder = [4000, 1642, 1804, 1822, 1944];
+            const userOrder = items.map(item => parseInt(item.getAttribute('data-year')));
+            
+            let correct = true;
+            for (let i = 0; i < correctOrder.length; i++) {
+                if (userOrder[i] !== correctOrder[i]) {
+                    correct = false;
+                    break;
+                }
+            }
+            
+            if (correct) {
+                timelineFeedback.textContent = "Correct! You've arranged the timeline perfectly.";
+                timelineFeedback.classList.remove('hidden', 'text-red-500');
+                timelineFeedback.classList.add('text-green-500');
+            } else {
+                timelineFeedback.textContent = "Not quite right. Try again or check the timeline above for hints.";
+                timelineFeedback.classList.remove('hidden', 'text-green-500');
+                timelineFeedback.classList.add('text-red-500');
+            }
+        });
+        
+        // Design Challenge
+        const saveDesignBtn = document.getElementById('saveDesignBtn');
+        const designOutput = document.getElementById('designOutput');
+        const designDetails = document.getElementById('designDetails');
+        const printBadgeBtn = document.getElementById('printBadgeBtn');
+        const badgeCanvas = document.getElementById('badgeCanvas');
+        
+        saveDesignBtn.addEventListener('click', () => {
+            const name = document.getElementById('machineName').value || "Unnamed Machine";
+            const year = document.getElementById('machineYear').value || "18XX";
+            const func = document.getElementById('machineFunction').value || "No specific function described";
+            const features = document.getElementById('machineFeatures').value || "No innovative features listed";
+            
+            designDetails.innerHTML = `
+                <p><strong>Name:</strong> ${name}</p>
+                <p><strong>Year:</strong> ${year}</p>
+                <p><strong>Function:</strong> ${func}</p>
+                <p><strong>Innovative Features:</strong> ${features}</p>
+            `;
+            
+            designOutput.classList.remove('hidden');
+            
+            // Save to localStorage
+            localStorage.setItem('machineDesign', JSON.stringify({
+                name, year, func, features
+            }));
+        });
+        
+        // Load saved design if exists
+        if (localStorage.getItem('machineDesign')) {
+            const savedDesign = JSON.parse(localStorage.getItem('machineDesign'));
+            document.getElementById('machineName').value = savedDesign.name;
+            document.getElementById('machineYear').value = savedDesign.year;
+            document.getElementById('machineFunction').value = savedDesign.func;
+            document.getElementById('machineFeatures').value = savedDesign.features;
+        }
+        
+        // Generate badge
+        printBadgeBtn.addEventListener('click', () => {
+            const ctx = badgeCanvas.getContext('2d');
+            
+            // Draw badge
+            ctx.fillStyle = '#1e3a8a';
+            ctx.fillRect(0, 0, 300, 150);
+            
+            // Add text
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 20px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Computing History Innovator', 150, 30);
+            
+            ctx.font = '16px Arial';
+            ctx.fillText('Designer of:', 150, 60);
+            
+            const name = document.getElementById('machineName').value || "Unnamed Machine";
+            ctx.font = 'italic 18px Arial';
+            ctx.fillText(name, 150, 90);
+            
+            ctx.font = '14px Arial';
+            ctx.fillText('Awarded for visionary thinking', 150, 120);
+            
+            badgeCanvas.classList.remove('hidden');
+            
+            // Add print button
+            const printBtn = document.createElement('button');
+            printBtn.textContent = 'Print Badge';
+            printBtn.className = 'mt-2 px-4 py-2 bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 rounded-lg transition-colors text-sm';
+            printBtn.addEventListener('click', () => {
+                const dataUrl = badgeCanvas.toDataURL('image/png');
+                const windowContent = '<!DOCTYPE html><html><head><title>Print Badge</title></head><body style="text-align:center;"><img src="' + dataUrl + '" style="max-width:100%;"></body></html>';
+                const printWin = window.open('', '', 'width=350,height=200');
+                printWin.document.open();
+                printWin.document.write(windowContent);
+                printWin.document.close();
+                printWin.focus();
+                printWin.print();
+            });
+            
+            const badgeContainer = document.querySelector('#designOutput');
+            if (!document.getElementById('printBtn')) {
+                printBtn.id = 'printBtn';
+                badgeContainer.appendChild(printBtn);
+            }
+        });
+        
+        // Punch Card Simulator
+        const punchCardBtn = document.getElementById('punchCardBtn');
+        const punchCardInput = document.getElementById('punchCardInput');
+        const punchCardOutput = document.getElementById('punchCardOutput');
+        
+        punchCardBtn.addEventListener('click', () => {
+            const text = punchCardInput.value.trim();
+            if (!text) {
+                alert('Please enter some text to convert');
+                return;
+            }
+            
+            punchCardOutput.innerHTML = '';
+            punchCardOutput.classList.remove('hidden');
+            
+            // Convert to binary representation (simplified)
+            for (let i = 0; i < Math.min(text.length, 8); i++) {
+                const char = text[i];
+                const charCode = char.charCodeAt(0);
+                
+                const card = document.createElement('div');
+                card.className = 'bg-white dark:bg-slate-800 p-2 rounded text-center';
+                
+                // Create holes based on character code
+                for (let j = 0; j < 8; j++) {
+                    const hole = document.createElement('div');
+                    hole.className = 'w-4 h-4 rounded-full mx-auto mb-1 ';
+                    
+                    // Simple pattern based on bits (not actual Hollerith encoding)
+                    if (charCode & (1 << j)) {
+                        hole.classList.add('bg-black');
+                    } else {
+                        hole.classList.add('bg-gray-200', 'dark:bg-slate-600');
+                    }
+                    
+                    card.appendChild(hole);
+                }
+                
+                // Add character label
+                const charLabel = document.createElement('div');
+                charLabel.className = 'text-xs mt-1 font-mono';
+                charLabel.textContent = char;
+                card.appendChild(charLabel);
+                
+                punchCardOutput.appendChild(card);
+            }
+        });
+        
+        // π Calculation Comparison
+        const piCalcBtn = document.getElementById('piCalcBtn');
+        const piCalcResult = document.getElementById('piCalcResult');
+        
+        piCalcBtn.addEventListener('click', () => {
+            piCalcResult.classList.remove('hidden');
+            piCalcResult.innerHTML = `
+                <p class="mb-1">Calculating π to 10 decimal places:</p>
+                <p class="mb-1">- Napier's Bones: ~3-4 hours (skilled user)</p>
+                <p class="mb-1">- Smartphone: ~0.0001 seconds</p>
+                <p class="mt-2 text-sm">Your phone is about <strong>100 million times faster</strong> than 17th-century methods!</p>
+            `;
+        });
+        
+        // Anachronism Game
+        document.querySelectorAll('.anachronism-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const feedback = document.getElementById('anachronismFeedback');
+                if (btn.getAttribute('data-correct') === 'true') {
+                    feedback.textContent = "Correct! USB ports wouldn't appear until decades later.";
+                    feedback.classList.remove('hidden', 'text-red-500');
+                    feedback.classList.add('text-green-500');
+                } else {
+                    feedback.textContent = "Try again! Think about when this technology was developed.";
+                    feedback.classList.remove('hidden', 'text-green-500');
+                    feedback.classList.add('text-red-500');
+                }
+            });
+        });
+        
+        // Difference Engine Puzzle
+        const differencePuzzle = document.getElementById('differencePuzzle');
+        const differencePuzzleTarget = document.getElementById('differencePuzzleTarget');
+        const puzzleFeedback = document.getElementById('puzzleFeedback');
+        
+        let draggedPart = null;
+        
+        differencePuzzle.querySelectorAll('div').forEach(part => {
+            part.addEventListener('dragstart', () => {
+                draggedPart = part;
+                setTimeout(() => part.classList.add('opacity-50'), 0);
+            });
+            
+            part.addEventListener('dragend', () => {
+                setTimeout(() => {
+                    part.classList.remove('opacity-50');
+                    draggedPart = null;
+                }, 0);
+            });
+        });
+        
+        differencePuzzleTarget.addEventListener('dragover', e => {
+            e.preventDefault();
+        });
+        
+        differencePuzzleTarget.addEventListener('drop', e => {
+            e.preventDefault();
+            if (draggedPart) {
+                // Check if part is already in target
+                if (!differencePuzzleTarget.contains(draggedPart)) {
+                    const clone = draggedPart.cloneNode(true);
+                    clone.classList.remove('opacity-50');
+                    clone.addEventListener('click', () => {
+                        clone.remove();
+                        checkPuzzleCompletion();
+                    });
+                    
+                    differencePuzzleTarget.innerHTML = '';
+                    differencePuzzleTarget.appendChild(clone);
+                    
+                    // Check if correct parts were added (simplified check)
+                    checkPuzzleCompletion();
+                }
+            }
+        });
+        
+        function checkPuzzleCompletion() {
+            const partsInTarget = [...differencePuzzleTarget.querySelectorAll('div')];
+            if (partsInTarget.length > 0) {
+                puzzleFeedback.classList.remove('hidden');
+                puzzleFeedback.textContent = "Great start! The Difference Engine used all these parts together.";
+                puzzleFeedback.classList.remove('text-red-500');
+                puzzleFeedback.classList.add('text-green-500');
+            } else {
+                puzzleFeedback.classList.add('hidden');
+            }
+        }
+        
+        // Simple 3D model placeholders (would be replaced with actual Three.js code)
+        function initModel(containerId, color = 0xaaaaaa) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true });
+            renderer.setSize(width, height);
+            container.appendChild(renderer.domElement);
+            
+            const geometry = new THREE.BoxGeometry(1, 1, 1);
+            const material = new THREE.MeshBasicMaterial({ color: color });
+            const cube = new THREE.Mesh(geometry, material);
+            scene.add(cube);
+            
+            camera.position.z = 2;
+            
+            function animate() {
+                requestAnimationFrame(animate);
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.01;
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Handle resize
+            window.addEventListener('resize', () => {
+                const width = container.clientWidth;
+                const height = container.clientHeight;
+                renderer.setSize(width, height);
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+            });
+        }
+        
+        // Initialize models when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize simple 3D models
+            if (typeof THREE !== 'undefined') {
+                initModel('abacusModel', 0x8B4513);  // Brown for wood
+                initModel('antikytheraModel', 0xCD7F32);  // Bronze
+                initModel('napierModel', 0xF5DEB3);  // Ivory
+                initModel('pascalineModel', 0xC0C0C0);  // Metal
+                initModel('jacquardModel', 0x556B2F);  // Dark green for loom
+                initModel('differenceModel', 0xD2691E);  // Brass
+                initModel('analyticalModel', 0x4682B4);  // Steel blue
+                initModel('hollerithModel', 0x708090);  // Slate gray
+                initModel('mark1Model', 0x2F4F4F);  // Dark slate gray
+                
+                // Babbage diorama would be more complex
+                initModel('babbageDiorama', 0x6B8E23);
+            }
+            
+            // Intersection Observer for timeline animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fadeIn');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('.timeline-item').forEach(item => {
+                observer.observe(item);
+            });
+        });
+        
+        // Simple globe visualization (placeholder)
+        function initGlobe() {
+            const container = document.getElementById('globeCanvas');
+            if (!container || typeof THREE === 'undefined') return;
+            
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(width, height);
+            container.appendChild(renderer.domElement);
+            
+            // Create globe
+            const geometry = new THREE.SphereGeometry(2, 32, 32);
+            const texture = new THREE.TextureLoader().load('https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/The_Earth_seen_from_Apollo_17.jpg/1200px-The_Earth_seen_from_Apollo_17.jpg');
+            const material = new THREE.MeshBasicMaterial({ map: texture });
+            const globe = new THREE.Mesh(geometry, material);
+            scene.add(globe);
+            
+            // Add path from China to USA
+            const curve = new THREE.EllipseCurve(
+                0, 0,            // ax, aY
+                3, 3,           // xRadius, yRadius
+                4.2, 1.8,       // aStartAngle, aEndAngle
+                false,          // aClockwise
+                0               // aRotation
+            );
+            
+            const points = curve.getPoints(50);
+            const pathGeometry = new THREE.BufferGeometry().setFromPoints(points);
+            const pathMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
+            const ellipse = new THREE.Line(pathGeometry, pathMaterial);
+            ellipse.rotation.x = Math.PI / 2;
+            scene.add(ellipse);
+            
+            // Add markers
+            function addMarker(lat, lon, color, size = 0.1) {
+                const phi = (90 - lat) * (Math.PI / 180);
+                const theta = (lon + 180) * (Math.PI / 180);
+                
+                const markerGeometry = new THREE.SphereGeometry(size, 16, 16);
+                const markerMaterial = new THREE.MeshBasicMaterial({ color: color });
+                const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+                
+                marker.position.set(
+                    -Math.sin(phi) * Math.cos(theta) * 2.05,
+                    Math.cos(phi) * 2.05,
+                    Math.sin(phi) * Math.sin(theta) * 2.05
+                );
+                
+                scene.add(marker);
+                return marker;
+            }
+            
+            // China marker (origin of abacus)
+            addMarker(35, 105, 0xff0000);
+            
+            // USA marker (later computing developments)
+            addMarker(39, -98, 0x0000ff);
+            
+            camera.position.z = 5;
+            
+            function animate() {
+                requestAnimationFrame(animate);
+                globe.rotation.y += 0.002;
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Handle resize
+            window.addEventListener('resize', () => {
+                const width = container.clientWidth;
+                const height = container.clientHeight;
+                renderer.setSize(width, height);
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+            });
+        }
+        
+        // Initialize globe
+        if (typeof THREE !== 'undefined') {
+            initGlobe();
+        }
+    </script>
+</body>
+</html>

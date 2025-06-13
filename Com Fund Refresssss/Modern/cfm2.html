@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classification of Computers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes gradient {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #ef4444, #f59e0b);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient 5s ease infinite;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        .pyramid {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(20deg) rotateY(30deg);
+            transition: transform 1s;
+        }
+        .pyramid div {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 5px #000;
+        }
+        .pyramid .base {
+            transform: translateZ(-100px) rotateY(180deg);
+            background: rgba(79, 70, 229, 0.7);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+        .pyramid .side1 {
+            transform: rotateY(0deg) rotateX(30deg) translateZ(100px);
+            background: rgba(99, 102, 241, 0.7);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+        .pyramid .side2 {
+            transform: rotateY(90deg) rotateX(30deg) translateZ(100px);
+            background: rgba(129, 140, 248, 0.7);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+        .pyramid .side3 {
+            transform: rotateY(180deg) rotateX(30deg) translateZ(100px);
+            background: rgba(165, 180, 252, 0.7);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+        .pyramid .side4 {
+            transform: rotateY(270deg) rotateX(30deg) translateZ(100px);
+            background: rgba(199, 210, 254, 0.7);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .dark-mode {
+            background-color: #1a202c;
+            color: #f7fafc;
+        }
+        .dark-mode .bg-white {
+            background-color: #2d3748 !important;
+            color: #f7fafc !important;
+        }
+        .dark-mode .text-gray-800 {
+            color: #f7fafc !important;
+        }
+        .dark-mode .border-gray-200 {
+            border-color: #4a5568 !important;
+        }
+        .dark-mode .bg-gray-50 {
+            background-color: #2d3748 !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans transition-colors duration-200">
+    <!-- Dark Mode Toggle -->
+    <div class="fixed top-4 right-4 z-50">
+        <button id="darkModeToggle" class="bg-gray-800 text-white p-2 rounded-full shadow-lg">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="lg:hidden fixed top-0 left-0 w-full bg-white shadow-md z-40 dark-mode">
+        <div class="flex justify-between items-center p-4">
+            <h1 class="text-xl font-bold">Computer Classification</h1>
+            <button id="mobileMenuBtn" class="text-gray-700 dark-mode:text-white">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+        <div id="mobileMenu" class="hidden bg-white border-t dark-mode dark-mode:border-gray-700">
+            <a href="#hero" class="block p-3 border-b hover:bg-gray-100 dark-mode:hover:bg-gray-700">Overview</a>
+            <a href="#data-handling" class="block p-3 border-b hover:bg-gray-100 dark-mode:hover:bg-gray-700">Data Handling</a>
+            <a href="#functionality" class="block p-3 border-b hover:bg-gray-100 dark-mode:hover:bg-gray-700">Functionality</a>
+            <a href="#anatomy" class="block p-3 border-b hover:bg-gray-100 dark-mode:hover:bg-gray-700">CPU Anatomy</a>
+            <a href="#assessment" class="block p-3 hover:bg-gray-100 dark-mode:hover:bg-gray-700">Assessment</a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="pt-24 lg:pt-12 pb-16 px-4 bg-gradient-to-br from-blue-50 to-purple-50 dark-mode:from-gray-800 dark-mode:to-gray-900">
+        <div class="container mx-auto max-w-6xl text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 gradient-text">From Palmtops to Supercomputers</h1>
+            <p class="text-lg md:text-xl text-gray-600 dark-mode:text-gray-300 mb-8">Understanding the Classification of Computers</p>
+            
+            <div class="flex flex-col lg:flex-row items-center justify-center gap-8 mb-12">
+                <!-- 3D Pyramid -->
+                <div class="relative">
+                    <div class="pyramid mb-8 mx-auto">
+                        <div class="base">Supercomputers</div>
+                        <div class="side1">Mainframes</div>
+                        <div class="side2">Minicomputers</div>
+                        <div class="side3">Microcomputers</div>
+                        <div class="side4">Mobile Devices</div>
+                    </div>
+                    <div class="flex justify-center space-x-4">
+                        <button id="rotateLeft" class="bg-indigo-600 text-white p-2 rounded-full">
+                            <i class="fas fa-undo"></i>
+                        </button>
+                        <button id="rotateRight" class="bg-indigo-600 text-white p-2 rounded-full">
+                            <i class="fas fa-redo"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Timeline Toggle -->
+                <div class="lg:w-1/2">
+                    <button id="timelineToggle" class="mb-6 bg-purple-600 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-purple-700 transition-colors flex items-center mx-auto">
+                        <i class="fas fa-history mr-2"></i>
+                        Show Timeline Evolution
+                    </button>
+                    
+                    <div id="computerTimeline" class="hidden bg-white p-6 rounded-xl shadow-md dark-mode dark-mode:bg-gray-800">
+                        <div class="flex items-start mb-4">
+                            <div class="bg-indigo-100 p-2 rounded-full mr-4 dark-mode:bg-indigo-900">
+                                <i class="fas fa-desktop text-indigo-600 dark-mode:text-indigo-300"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">1960s - Minicomputers</h4>
+                                <p class="text-sm text-gray-600 dark-mode:text-gray-300">Room-sized, used by businesses and universities</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start mb-4">
+                            <div class="bg-purple-100 p-2 rounded-full mr-4 dark-mode:bg-purple-900">
+                                <i class="fas fa-microchip text-purple-600 dark-mode:text-purple-300"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">1970s - Microcomputers</h4>
+                                <p class="text-sm text-gray-600 dark-mode:text-gray-300">Personal computers enter homes</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start mb-4">
+                            <div class="bg-pink-100 p-2 rounded-full mr-4 dark-mode:bg-pink-900">
+                                <i class="fas fa-laptop text-pink-600 dark-mode:text-pink-300"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">1990s - Mobile Computing</h4>
+                                <p class="text-sm text-gray-600 dark-mode:text-gray-300">Laptops and PDAs become portable</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 p-2 rounded-full mr-4 dark-mode:bg-blue-900">
+                                <i class="fas fa-atom text-blue-600 dark-mode:text-blue-300"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">2020s - Quantum Era</h4>
+                                <p class="text-sm text-gray-600 dark-mode:text-gray-300">Qubits revolutionize computing power</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow-md dark-mode dark-mode:bg-gray-800">
+                <p class="text-gray-700 dark-mode:text-gray-300">
+                    <span class="font-semibold">Did you know?</span> Your smartphone is technically a microcomputer - but NASA's Pleiades supercomputer could simulate 100,000 mobile games at once! Computers are classified by size, power, and data handling capabilities.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Handling Section -->
+    <section id="data-handling" class="py-16 px-4 bg-white dark-mode dark-mode:bg-gray-900">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">How Computers Handle Data</h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Analog Card -->
+                <div class="bg-gray-50 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow dark-mode dark-mode:bg-gray-800">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-green-100 p-3 rounded-full mr-4 dark-mode:bg-green-900">
+                            <i class="fas fa-tachometer-alt text-green-600 dark-mode:text-green-300"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">Analog Computers</h3>
+                    </div>
+                    
+                    <div class="mb-4 flex justify-center">
+                        <svg width="150" height="150" viewBox="0 0 200 200" class="border border-gray-200 rounded-lg bg-white p-4 dark-mode:border-gray-700">
+                            <!-- Speedometer -->
+                            <circle cx="100" cy="100" r="80" fill="none" stroke="#e5e7eb" stroke-width="10"/>
+                            <circle cx="100" cy="100" r="70" fill="none" stroke="#10b981" stroke-width="10" stroke-dasharray="220 440" stroke-linecap="round" transform="rotate(-70 100 100)"/>
+                            <circle cx="100" cy="100" r="5" fill="#10b981"/>
+                            <line x1="100" y1="100" x2="100" y2="40" stroke="#10b981" stroke-width="4" transform="rotate(45 100 100)">
+                                <animateTransform attributeName="transform" type="rotate" from="0 100 100" to="180 100 100" dur="3s" repeatCount="indefinite"/>
+                            </line>
+                            <text x="100" y="180" text-anchor="middle" font-size="14" fill="#6b7280">Continuous Data</text>
+                        </svg>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-4 dark-mode:text-gray-300">
+                        Analog computers measure continuous physical quantities like voltage, speed, or temperature. They're like mercury thermometers - the level changes smoothly with temperature.
+                    </p>
+                    
+                    <div class="bg-green-50 p-3 rounded-lg dark-mode:bg-green-900 dark-mode:bg-opacity-30">
+                        <p class="text-green-700 dark-mode:text-green-200 text-sm">
+                            <span class="font-semibold">Modern Use:</span> Still used in specialized applications like flight simulators and medical monitoring equipment.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Digital Card -->
+                <div class="bg-gray-50 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow dark-mode dark-mode:bg-gray-800">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 p-3 rounded-full mr-4 dark-mode:bg-blue-900">
+                            <i class="fas fa-digital-tachograph text-blue-600 dark-mode:text-blue-300"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">Digital Computers</h3>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div id="binaryAnimation" class="bg-black text-green-400 p-4 rounded-lg font-mono text-center text-xl overflow-hidden h-20 flex items-center justify-center">
+                            01001000 01100101 01101100 01101100 01101111
+                        </div>
+                        <button id="animateBinary" class="mt-2 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors">
+                            Animate Conversion
+                        </button>
+                    </div>
+                    
+                    <div class="overflow-x-auto mb-4">
+                        <table class="min-w-full bg-white rounded-lg overflow-hidden dark-mode:bg-gray-700">
+                            <thead class="bg-gray-100 dark-mode:bg-gray-600">
+                                <tr>
+                                    <th class="py-2 px-4 text-left">Feature</th>
+                                    <th class="py-2 px-4 text-left">Analog</th>
+                                    <th class="py-2 px-4 text-left">Digital</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 dark-mode:divide-gray-600">
+                                <tr>
+                                    <td class="py-2 px-4">Speed</td>
+                                    <td class="py-2 px-4">🐢 Slower</td>
+                                    <td class="py-2 px-4">🚀 Faster</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4">Precision</td>
+                                    <td class="py-2 px-4">Low</td>
+                                    <td class="py-2 px-4">High</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4">Data Type</td>
+                                    <td class="py-2 px-4">Continuous</td>
+                                    <td class="py-2 px-4">Discrete</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4">Example</td>
+                                    <td class="py-2 px-4">Speedometer</td>
+                                    <td class="py-2 px-4">Smartphone</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Hybrid Card -->
+                <div class="bg-gray-50 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow dark-mode dark-mode:bg-gray-800">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-purple-100 p-3 rounded-full mr-4 dark-mode:bg-purple-900">
+                            <i class="fas fa-robot text-purple-600 dark-mode:text-purple-300"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">Hybrid Computers</h3>
+                    </div>
+                    
+                    <div class="mb-4 flex justify-center">
+                        <svg width="100%" height="150" viewBox="0 0 300 150" class="border border-gray-200 rounded-lg bg-white p-2 dark-mode:border-gray-700">
+                            <!-- Analog Part -->
+                            <rect x="20" y="50" width="80" height="60" rx="5" fill="#C6F6D5" stroke="#10B981" stroke-width="2"/>
+                            <text x="60" y="85" text-anchor="middle" font-size="12" fill="#065F46">Analog</text>
+                            
+                            <!-- Digital Part -->
+                            <rect x="120" y="50" width="80" height="60" rx="5" fill="#BEE3F8" stroke="#3B82F6" stroke-width="2"/>
+                            <text x="160" y="85" text-anchor="middle" font-size="12" fill="#1E40AF">Digital</text>
+                            
+                            <!-- Converter -->
+                            <rect x="90" y="70" width="20" height="20" rx="3" fill="#E9D8FD" stroke="#8B5CF6" stroke-width="2"/>
+                            <text x="100" y="83" text-anchor="middle" font-size="10" fill="#5B21B6">A/D</text>
+                            
+                            <!-- Arrows -->
+                            <path d="M100,50 L100,70" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+                            <path d="M120,80 L140,80" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+                            
+                            <!-- NASA Logo -->
+                            <text x="220" y="90" text-anchor="middle" font-size="12" font-weight="bold" fill="#DC2626">NASA</text>
+                            <text x="220" y="110" text-anchor="middle" font-size="10" fill="#6B7280">Space Simulations</text>
+                            
+                            <defs>
+                                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="#6B7280"/>
+                                </marker>
+                            </defs>
+                        </svg>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-4 dark-mode:text-gray-300">
+                        Hybrid computers combine analog and digital components. NASA uses them for space mission simulations where real-time sensor data (analog) needs digital processing.
+                    </p>
+                    
+                    <div class="bg-purple-50 p-3 rounded-lg flex items-center dark-mode:bg-purple-900 dark-mode:bg-opacity-30">
+                        <div class="bg-white p-2 rounded-lg mr-3 dark-mode:bg-gray-700">
+                            <i class="fas fa-video text-purple-600"></i>
+                        </div>
+                        <p class="text-purple-700 dark-mode:text-purple-200 text-sm">
+                            <span class="font-semibold">Video:</span> "Hybrid Computers in ICU Monitoring Systems" (placeholder)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Functionality Classification -->
+    <section id="functionality" class="py-16 px-4 bg-gray-50 dark-mode dark-mode:bg-gray-800">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">Functionality Classification</h2>
+            
+            <!-- Accordion -->
+            <div class="space-y-4 max-w-4xl mx-auto">
+                <!-- Microcomputers -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden dark-mode dark-mode:bg-gray-700">
+                    <button class="accordion-btn w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 dark-mode:hover:bg-gray-600">
+                        <div class="flex items-center">
+                            <div class="bg-blue-100 p-3 rounded-full mr-4 dark-mode:bg-blue-900">
+                                <i class="fas fa-laptop text-blue-600 dark-mode:text-blue-300"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold">Microcomputers</h3>
+                        </div>
+                        <i class="fas fa-chevron-down transform transition-transform"></i>
+                    </button>
+                    
+                    <div class="accordion-content px-6">
+                        <div class="pb-6">
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                                <div class="bg-gray-100 p-4 rounded-lg text-center dark-mode:bg-gray-600">
+                                    <i class="fas fa-desktop text-3xl mb-2 text-gray-700 dark-mode:text-gray-300"></i>
+                                    <p class="text-sm">Desktop PC</p>
+                                </div>
+                                <div class="bg-gray-100 p-4 rounded-lg text-center dark-mode:bg-gray-600">
+                                    <i class="fas fa-laptop text-3xl mb-2 text-gray-700 dark-mode:text-gray-300"></i>
+                                    <p class="text-sm">Laptop</p>
+                                </div>
+                                <div class="bg-gray-100 p-4 rounded-lg text-center dark-mode:bg-gray-600">
+                                    <i class="fas fa-tablet-alt text-3xl mb-2 text-gray-700 dark-mode:text-gray-300"></i>
+                                    <p class="text-sm">Tablet</p>
+                                </div>
+                                <div class="bg-gray-100 p-4 rounded-lg text-center dark-mode:bg-gray-600">
+                                    <i class="fas fa-smartwatch text-3xl mb-2 text-gray-700 dark-mode:text-gray-300"></i>
+                                    <p class="text-sm">Smartwatch</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-blue-50 p-4 rounded-lg mb-4 dark-mode:bg-blue-900 dark-mode:bg-opacity-30">
+                                <p class="text-blue-700 dark-mode:text-blue-200">
+                                    <span class="font-semibold">Did You Know?</span> Your smartphone is about 1,000 times faster than the computer that landed Apollo 11 on the moon! Modern microcomputers pack incredible power into tiny form factors.
+                                </p>
+                            </div>
+                            
+                            <p class="text-gray-600 dark-mode:text-gray-300">
+                                Microcomputers are single-user systems with a microprocessor as their CPU. They range from desktop PCs to embedded systems in smart refrigerators and IoT devices. Tesla's car computers are advanced microcomputers that process sensor data in real-time.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mainframes -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden dark-mode dark-mode:bg-gray-700">
+                    <button class="accordion-btn w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 dark-mode:hover:bg-gray-600">
+                        <div class="flex items-center">
+                            <div class="bg-green-100 p-3 rounded-full mr-4 dark-mode:bg-green-900">
+                                <i class="fas fa-server text-green-600 dark-mode:text-green-300"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold">Mainframe Computers</h3>
+                        </div>
+                        <i class="fas fa-chevron-down transform transition-transform"></i>
+                    </button>
+                    
+                    <div class="accordion-content px-6">
+                        <div class="pb-6">
+                            <div class="flex flex-col md:flex-row gap-6 mb-6">
+                                <div class="md:w-1/2">
+                                    <h4 class="font-semibold mb-2">Bank Transaction Flow</h4>
+                                    <svg width="100%" height="200" viewBox="0 0 400 200" class="border border-gray-200 rounded-lg bg-white p-2 dark-mode:border-gray-600">
+                                        <!-- ATM -->
+                                        <rect x="20" y="80" width="60" height="40" rx="5" fill="#A7F3D0" stroke="#10B981" stroke-width="2"/>
+                                        <text x="50" y="105" text-anchor="middle" font-size="12">ATM</text>
+                                        
+                                        <!-- Branch -->
+                                        <rect x="100" y="80" width="60" height="40" rx="5" fill="#A7F3D0" stroke="#10B981" stroke-width="2"/>
+                                        <text x="130" y="105" text-anchor="middle" font-size="12">Branch</text>
+                                        
+                                        <!-- Mobile -->
+                                        <rect x="180" y="80" width="60" height="40" rx="5" fill="#A7F3D0" stroke="#10B981" stroke-width="2"/>
+                                        <text x="210" y="105" text-anchor="middle" font-size="12">Mobile</text>
+                                        
+                                        <!-- Mainframe -->
+                                        <rect x="280" y="40" width="100" height="120" rx="5" fill="#6EE7B7" stroke="#059669" stroke-width="2"/>
+                                        <text x="330" y="70" text-anchor="middle" font-size="12">Mainframe</text>
+                                        <text x="330" y="90" text-anchor="middle" font-size="10">Processes</text>
+                                        <text x="330" y="110" text-anchor="middle" font-size="10">1000s of</text>
+                                        <text x="330" y="130" text-anchor="middle" font-size="10">Transactions</text>
+                                        
+                                        <!-- Arrows -->
+                                        <path d="M80,100 L100,100" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+                                        <path d="M160,100 L180,100" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+                                        <path d="M240,100 L280,100" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+                                        <path d="M210,120 L210,160 L330,160" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+                                        <path d="M130,120 L130,160 L280,160" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+                                        <path d="M50,120 L50,160 L280,160" stroke="#6B7280" stroke-width="2" marker-end="url(#arrowhead)"/>
+                                        
+                                        <defs>
+                                            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                                <polygon points="0 0, 10 3.5, 0 7" fill="#6B7280"/>
+                                            </marker>
+                                        </defs>
+                                    </svg>
+                                </div>
+                                <div class="md:w-1/2">
+                                    <h4 class="font-semibold mb-2">IBM ES/9000 (1990)</h4>
+                                    <div class="bg-gray-100 p-4 rounded-lg flex justify-center dark-mode:bg-gray-600">
+                                        <div class="text-center">
+                                            <i class="fas fa-image text-5xl text-gray-400 mb-2"></i>
+                                            <p class="text-sm text-gray-500 dark-mode:text-gray-400">Historical Mainframe Photo</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-gray-500 mt-2 dark-mode:text-gray-400">Could process 1,000 MIPS (million instructions per second)</p>
+                                </div>
+                            </div>
+                            
+                            <p class="text-gray-600 dark-mode:text-gray-300">
+                                Mainframes are powerful computers used by large organizations for critical applications like banking transactions. They can handle thousands of users simultaneously with high reliability. Modern mainframes like IBM z16 can process 19 billion transactions per day.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Supercomputers -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden dark-mode dark-mode:bg-gray-700">
+                    <button class="accordion-btn w-full flex justify-between items-center p-6 text-left hover:bg-gray-50 dark-mode:hover:bg-gray-600">
+                        <div class="flex items-center">
+                            <div class="bg-red-100 p-3 rounded-full mr-4 dark-mode:bg-red-900">
+                                <i class="fas fa-atom text-red-600 dark-mode:text-red-300"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold">Supercomputers</h3>
+                        </div>
+                        <i class="fas fa-chevron-down transform transition-transform"></i>
+                    </button>
+                    
+                    <div class="accordion-content px-6">
+                        <div class="pb-6">
+                            <div class="flex flex-col md:flex-row gap-6 mb-6">
+                                <div class="md:w-1/2">
+                                    <h4 class="font-semibold mb-2">Specs Comparison</h4>
+                                    <div class="overflow-x-auto">
+                                        <table class="min-w-full bg-white rounded-lg overflow-hidden dark-mode:bg-gray-600">
+                                            <thead class="bg-gray-100 dark-mode:bg-gray-700">
+                                                <tr>
+                                                    <th class="py-2 px-4 text-left">Feature</th>
+                                                    <th class="py-2 px-4 text-left">PARAM Siddhi-AI</th>
+                                                    <th class="py-2 px-4 text-left">CRAY-3 (1990)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-gray-200 dark-mode:divide-gray-500">
+                                                <tr>
+                                                    <td class="py-2 px-4">Speed</td>
+                                                    <td class="py-2 px-4">5.26 petaFLOPS</td>
+                                                    <td class="py-2 px-4">16 gigaFLOPS</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="py-2 px-4">Cores</td>
+                                                    <td class="py-2 px-4">221,184</td>
+                                                    <td class="py-2 px-4">16</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="py-2 px-4">Power</td>
+                                                    <td class="py-2 px-4">2.5 MW</td>
+                                                    <td class="py-2 px-4">150 kW</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="py-2 px-4">Use Case</td>
+                                                    <td class="py-2 px-4">AI Research</td>
+                                                    <td class="py-2 px-4">Nuclear Simulation</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-2 dark-mode:text-gray-400">India's PARAM Siddhi-AI ranks among world's fastest supercomputers</p>
+                                </div>
+                                <div class="md:w-1/2">
+                                    <h4 class="font-semibold mb-2">Weather Forecasting</h4>
+                                    <div class="bg-gray-100 p-4 rounded-lg flex justify-center dark-mode:bg-gray-600">
+                                        <div class="text-center">
+                                            <i class="fas fa-cloud-sun-rain text-5xl text-blue-400 mb-2"></i>
+                                            <p class="text-sm text-gray-500 dark-mode:text-gray-400">Simulation Visualization</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mt-2 dark-mode:text-gray-300">
+                                        Supercomputers process petabytes of atmospheric data to predict weather patterns with increasing accuracy.
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-red-50 p-4 rounded-lg dark-mode:bg-red-900 dark-mode:bg-opacity-30">
+                                <p class="text-red-700 dark-mode:text-red-200">
+                                    <span class="font-semibold">Quantum Leap:</span> New supercomputers like IBM's Quantum System One use qubits instead of traditional bits, potentially solving problems impossible for classical computers.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Anatomy of Computer -->
+    <section id="anatomy" class="py-16 px-4 bg-white dark-mode dark-mode:bg-gray-900">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">CPU Anatomy Explained</h2>
+            
+            <div class="flex flex-col lg:flex-row gap-8">
+                <div class="lg:w-1/2">
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-md mb-6 dark-mode dark-mode:bg-gray-800">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center">
+                            <i class="fas fa-puzzle-piece text-indigo-600 mr-2 dark-mode:text-indigo-300"></i>
+                            Drag-and-Drop CPU Components
+                        </h3>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div id="alu" draggable="true" class="bg-indigo-100 p-4 rounded-lg text-center cursor-move dark-mode:bg-indigo-900">
+                                <i class="fas fa-calculator text-2xl mb-2 text-indigo-600 dark-mode:text-indigo-300"></i>
+                                <p class="font-medium">ALU</p>
+                                <p class="text-xs text-gray-600 dark-mode:text-gray-300">Arithmetic Logic Unit</p>
+                            </div>
+                            <div id="cu" draggable="true" class="bg-purple-100 p-4 rounded-lg text-center cursor-move dark-mode:bg-purple-900">
+                                <i class="fas fa-cogs text-2xl mb-2 text-purple-600 dark-mode:text-purple-300"></i>
+                                <p class="font-medium">Control Unit</p>
+                                <p class="text-xs text-gray-600 dark-mode:text-gray-300">CPU's "traffic cop"</p>
+                            </div>
+                            <div id="registers" draggable="true" class="bg-pink-100 p-4 rounded-lg text-center cursor-move dark-mode:bg-pink-900">
+                                <i class="fas fa-sticky-note text-2xl mb-2 text-pink-600 dark-mode:text-pink-300"></i>
+                                <p class="font-medium">Registers</p>
+                                <p class="text-xs text-gray-600 dark-mode:text-gray-300">Temporary storage</p>
+                            </div>
+                            <div id="cache" draggable="true" class="bg-blue-100 p-4 rounded-lg text-center cursor-move dark-mode:bg-blue-900">
+                                <i class="fas fa-bolt text-2xl mb-2 text-blue-600 dark-mode:text-blue-300"></i>
+                                <p class="font-medium">Cache</p>
+                                <p class="text-xs text-gray-600 dark-mode:text-gray-300">Fast memory</p>
+                            </div>
+                        </div>
+                        
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center dark-mode:border-gray-600" id="cpuDropzone">
+                            <p class="text-gray-500 mb-2 dark-mode:text-gray-400">Drop CPU components here</p>
+                            <i class="fas fa-microchip text-3xl text-gray-400"></i>
+                            <div id="cpuDiagram" class="mt-4 hidden">
+                                <svg width="100%" height="200" viewBox="0 0 300 200" id="cpuSvg"></svg>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-md dark-mode dark-mode:bg-gray-800">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center">
+                            <i class="fas fa-project-diagram text-blue-600 mr-2 dark-mode:text-blue-300"></i>
+                            Data Flow Animation
+                        </h3>
+                        
+                        <div class="flex justify-center mb-4">
+                            <svg width="100%" height="150" viewBox="0 0 400 150" class="border border-gray-200 rounded-lg bg-white p-2 dark-mode:border-gray-600">
+                                <!-- Input -->
+                                <rect x="20" y="50" width="80" height="50" rx="5" fill="#BFDBFE" stroke="#3B82F6" stroke-width="2"/>
+                                <text x="60" y="80" text-anchor="middle" font-size="12">Input</text>
+                                
+                                <!-- CPU -->
+                                <rect x="150" y="30" width="100" height="90" rx="5" fill="#C7D2FE" stroke="#6366F1" stroke-width="2"/>
+                                <text x="200" y="60" text-anchor="middle" font-size="12">Processing</text>
+                                <text x="200" y="80" text-anchor="middle" font-size="10">(CPU)</text>
+                                
+                                <!-- Output -->
+                                <rect x="300" y="50" width="80" height="50" rx="5" fill="#A5B4FC" stroke="#818CF8" stroke-width="2"/>
+                                <text x="340" y="80" text-anchor="middle" font-size="12">Output</text>
+                                
+                                <!-- Arrows -->
+                                <path d="M100,75 L150,75" stroke="#3B82F6" stroke-width="2" marker-end="url(#arrowhead-blue)">
+                                    <animate attributeName="stroke-dashoffset" from="100" to="0" dur="2s" repeatCount="indefinite"/>
+                                    <animate attributeName="stroke-dasharray" values="10,5;0,15;10,5" dur="2s" repeatCount="indefinite"/>
+                                </path>
+                                <path d="M250,75 L300,75" stroke="#6366F1" stroke-width="2" marker-end="url(#arrowhead-indigo)">
+                                    <animate attributeName="stroke-dashoffset" from="100" to="0" dur="2s" repeatCount="indefinite" begin="1s"/>
+                                    <animate attributeName="stroke-dasharray" values="10,5;0,15;10,5" dur="2s" repeatCount="indefinite" begin="1s"/>
+                                </path>
+                                
+                                <defs>
+                                    <marker id="arrowhead-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                        <polygon points="0 0, 10 3.5, 0 7" fill="#3B82F6"/>
+                                    </marker>
+                                    <marker id="arrowhead-indigo" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                        <polygon points="0 0, 10 3.5, 0 7" fill="#6366F1"/>
+                                    </marker>
+                                </defs>
+                            </svg>
+                        </div>
+                        
+                        <p class="text-gray-600 dark-mode:text-gray-300">
+                            Data flows from input devices through the CPU (where processing occurs) to output devices. The <span class="tooltip">ALU<span class="tooltiptext">Arithmetic Logic Unit: Performs all calculations</span></span> is the math wizard inside your CPU, while the <span class="tooltip">Control Unit<span class="tooltiptext">Manages instruction execution and data flow</span></span> coordinates everything.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="lg:w-1/2">
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-md h-full dark-mode dark-mode:bg-gray-800">
+                        <h3 class="text-xl font-semibold mb-4 flex items-center">
+                            <i class="fas fa-gamepad text-green-600 mr-2 dark-mode:text-green-300"></i>
+                            Build Your CPU Sandbox
+                        </h3>
+                        
+                        <div class="mb-4">
+                            <canvas id="cpuCanvas" width="400" height="300" class="border border-gray-200 rounded-lg w-full dark-mode:border-gray-600"></canvas>
+                        </div>
+                        
+                        <div class="grid grid-cols-3 gap-3 mb-4">
+                            <button id="addALU" class="bg-indigo-100 text-indigo-800 py-2 rounded-md dark-mode:bg-indigo-900 dark-mode:text-indigo-200">
+                                Add ALU
+                            </button>
+                            <button id="addCU" class="bg-purple-100 text-purple-800 py-2 rounded-md dark-mode:bg-purple-900 dark-mode:text-purple-200">
+                                Add CU
+                            </button>
+                            <button id="addRegisters" class="bg-pink-100 text-pink-800 py-2 rounded-md dark-mode:bg-pink-900 dark-mode:text-pink-200">
+                                Add Registers
+                            </button>
+                            <button id="addCache" class="bg-blue-100 text-blue-800 py-2 rounded-md dark-mode:bg-blue-900 dark-mode:text-blue-200">
+                                Add Cache
+                            </button>
+                            <button id="connectComponents" class="bg-green-100 text-green-800 py-2 rounded-md dark-mode:bg-green-900 dark-mode:text-green-200">
+                                Connect
+                            </button>
+                            <button id="resetSandbox" class="bg-gray-200 text-gray-800 py-2 rounded-md dark-mode:bg-gray-700 dark-mode:text-gray-200">
+                                Reset
+                            </button>
+                        </div>
+                        
+                        <div class="bg-yellow-50 p-4 rounded-lg dark-mode:bg-yellow-900 dark-mode:bg-opacity-30">
+                            <p class="text-yellow-700 dark-mode:text-yellow-200">
+                                <span class="font-semibold">Challenge:</span> Try building a complete CPU with all components connected properly. Modern CPUs like Apple's M2 chip contain over 20 billion transistors in an area smaller than a postage stamp!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Assessment -->
+    <section id="assessment" class="py-16 px-4 bg-gray-50 dark-mode dark-mode:bg-gray-800">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">Knowledge Check</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <!-- Matching Quiz -->
+                <div class="bg-white p-6 rounded-xl shadow-md dark-mode dark-mode:bg-gray-700">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="fas fa-puzzle-piece text-red-600 mr-2 dark-mode:text-red-300"></i>
+                        Matching Quiz
+                    </h3>
+                    
+                    <p class="text-gray-600 mb-4 dark-mode:text-gray-300">Match each computer type to its primary use case:</p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-gray-100 rounded-lg dark-mode:bg-gray-600">
+                            <span class="font-medium">Supercomputer</span>
+                            <select class="ml-2 p-2 border rounded-md bg-white dark-mode:bg-gray-500 dark-mode:border-gray-600">
+                                <option value="">Select match</option>
+                                <option value="weather">Weather Forecasting</option>
+                                <option value="bank">Bank Transactions</option>
+                                <option value="personal">Personal Computing</option>
+                            </select>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-gray-100 rounded-lg dark-mode:bg-gray-600">
+                            <span class="font-medium">Mainframe</span>
+                            <select class="ml-2 p-2 border rounded-md bg-white dark-mode:bg-gray-500 dark-mode:border-gray-600">
+                                <option value="">Select match</option>
+                                <option value="weather">Weather Forecasting</option>
+                                <option value="bank">Bank Transactions</option>
+                                <option value="personal">Personal Computing</option>
+                            </select>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-gray-100 rounded-lg dark-mode:bg-gray-600">
+                            <span class="font-medium">Microcomputer</span>
+                            <select class="ml-2 p-2 border rounded-md bg-white dark-mode:bg-gray-500 dark-mode:border-gray-600">
+                                <option value="">Select match</option>
+                                <option value="weather">Weather Forecasting</option>
+                                <option value="bank">Bank Transactions</option>
+                                <option value="personal">Personal Computing</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button id="checkMatching" class="mt-4 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors">
+                        Check Answers
+                    </button>
+                    
+                    <div id="matchingFeedback" class="hidden mt-4 p-3 rounded-md"></div>
+                </div>
+                
+                <!-- Scenario Analyzer -->
+                <div class="bg-white p-6 rounded-xl shadow-md dark-mode dark-mode:bg-gray-700">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="fas fa-brain text-orange-600 mr-2 dark-mode:text-orange-300"></i>
+                        Scenario Analyzer
+                    </h3>
+                    
+                    <div class="mb-4">
+                        <label class="block font-medium mb-2">Select a scenario:</label>
+                        <select id="scenarioSelect" class="w-full p-2 border rounded-md bg-white dark-mode:bg-gray-500 dark-mode:border-gray-600">
+                            <option value="">Choose scenario</option>
+                            <option value="hospital">Large Hospital System</option>
+                            <option value="space">NASA Space Laboratory</option>
+                            <option value="home">Smart Home Network</option>
+                            <option value="university">University Campus</option>
+                        </select>
+                    </div>
+                    
+                    <div id="scenarioDescription" class="bg-gray-100 p-4 rounded-lg mb-4 dark-mode:bg-gray-600">
+                        <p class="text-gray-600 dark-mode:text-gray-300">Select a scenario to see details</p>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <label class="flex items-center space-x-3">
+                            <input type="radio" name="computerChoice" value="super" class="h-4 w-4 text-orange-600">
+                            <span>Supercomputer</span>
+                        </label>
+                        <label class="flex items-center space-x-3">
+                            <input type="radio" name="computerChoice" value="mainframe" class="h-4 w-4 text-orange-600">
+                            <span>Mainframe</span>
+                        </label>
+                        <label class="flex items-center space-x-3">
+                            <input type="radio" name="computerChoice" value="micro" class="h-4 w-4 text-orange-600">
+                            <span>Microcomputer Network</span>
+                        </label>
+                        <label class="flex items-center space-x-3">
+                            <input type="radio" name="computerChoice" value="hybrid" class="h-4 w-4 text-orange-600">
+                            <span>Hybrid System</span>
+                        </label>
+                    </div>
+                    
+                    <button id="analyzeScenario" class="mt-4 bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition-colors">
+                        Analyze
+                    </button>
+                    
+                    <div id="scenarioFeedback" class="hidden mt-4 p-3 rounded-md"></div>
+                </div>
+            </div>
+            
+            <!-- Flashcards -->
+            <div class="bg-white p-6 rounded-xl shadow-md dark-mode dark-mode:bg-gray-700">
+                <h3 class="text-xl font-semibold mb-4 flex items-center">
+                    <i class="fas fa-layer-group text-purple-600 mr-2 dark-mode:text-purple-300"></i>
+                    Computer Science Flashcards
+                </h3>
+                
+                <div class="flex flex-col items-center">
+                    <div id="flashcard" class="w-full max-w-md h-48 bg-indigo-100 rounded-xl shadow-inner flex items-center justify-center cursor-pointer mb-6 dark-mode:bg-indigo-900">
+                        <p class="text-xl font-medium text-indigo-800 dark-mode:text-indigo-200">Click to flip</p>
+                    </div>
+                    
+                    <div class="flex space-x-4">
+                        <button id="prevCard" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md dark-mode:bg-gray-600 dark-mode:text-gray-200">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <button id="nextCard" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <button data-term="cpu" class="flashcard-term bg-blue-100 text-blue-800 px-3 py-2 rounded-md text-sm dark-mode:bg-blue-900 dark-mode:text-blue-200">
+                        CPU
+                    </button>
+                    <button data-term="alu" class="flashcard-term bg-purple-100 text-purple-800 px-3 py-2 rounded-md text-sm dark-mode:bg-purple-900 dark-mode:text-purple-200">
+                        ALU
+                    </button>
+                    <button data-term="cu" class="flashcard-term bg-green-100 text-green-800 px-3 py-2 rounded-md text-sm dark-mode:bg-green-900 dark-mode:text-green-200">
+                        Control Unit
+                    </button>
+                    <button data-term="vlsi" class="flashcard-term bg-red-100 text-red-800 px-3 py-2 rounded-md text-sm dark-mode:bg-red-900 dark-mode:text-red-200">
+                        VLSI
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-xl font-bold mb-2">Classification of Computers</h3>
+                    <p class="text-gray-400 text-sm">Interactive Learning Module</p>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fas fa-print text-xl" onclick="window.print()"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fas fa-info-circle text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-6 pt-6 text-sm text-gray-400">
+                <p>© 2024 Computer Science Education. All content is for educational purposes.</p>
+                <p class="mt-2">Print this page (Ctrl+P) for a handy cheat sheet on computer classification.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        });
+
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Pyramid Rotation
+        const pyramid = document.querySelector('.pyramid');
+        const rotateLeft = document.getElementById('rotateLeft');
+        const rotateRight = document.getElementById('rotateRight');
+        let rotationY = 30;
+
+        rotateLeft.addEventListener('click', () => {
+            rotationY -= 90;
+            pyramid.style.transform = `rotateX(20deg) rotateY(${rotationY}deg)`;
+        });
+
+        rotateRight.addEventListener('click', () => {
+            rotationY += 90;
+            pyramid.style.transform = `rotateX(20deg) rotateY(${rotationY}deg)`;
+        });
+
+        // Timeline Toggle
+        document.getElementById('timelineToggle').addEventListener('click', function() {
+            const timeline = document.getElementById('computerTimeline');
+            timeline.classList.toggle('hidden');
+            this.innerHTML = timeline.classList.contains('hidden') 
+                ? '<i class="fas fa-history mr-2"></i>Show Timeline Evolution' 
+                : '<i class="fas fa-times mr-2"></i>Hide Timeline';
+        });
+
+        // Binary Animation
+        const binaryAnimation = document.getElementById('binaryAnimation');
+        const animateBinaryBtn = document.getElementById('animateBinary');
+        
+        animateBinaryBtn.addEventListener('click', function() {
+            binaryAnimation.textContent = "01001000 01100101 01101100 01101100 01101111";
+            let i = 0;
+            const originalBinary = binaryAnimation.textContent;
+            const finalText = "Hello";
+            
+            const interval = setInterval(() => {
+                if (i < originalBinary.length) {
+                    if (Math.random() > 0.7) {
+                        const randomBinary = Math.random().toString(2).substr(2, 1);
+                        binaryAnimation.textContent = binaryAnimation.textContent.substring(0, i) + randomBinary + binaryAnimation.textContent.substring(i + 1);
+                    }
+                    i++;
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        binaryAnimation.textContent = finalText;
+                    }, 500);
+                }
+            }, 50);
+        });
+
+        // Accordion Functionality
+        const accordionBtns = document.querySelectorAll('.accordion-btn');
+        
+        accordionBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.querySelector('i').classList.toggle('rotate-180');
+                const content = this.nextElementSibling;
+                
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            });
+        });
+
+        // Drag and Drop CPU Components
+        const components = document.querySelectorAll('[draggable="true"]');
+        const dropzone = document.getElementById('cpuDropzone');
+        let draggedItem = null;
+        
+        components.forEach(component => {
+            component.addEventListener('dragstart', function() {
+                draggedItem = this;
+                setTimeout(() => {
+                    this.style.opacity = "0.4";
+                }, 0);
+            });
+            
+            component.addEventListener('dragend', function() {
+                this.style.opacity = "1";
+            });
+        });
+        
+        dropzone.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.borderColor = "#3b82f6";
+            this.style.backgroundColor = "#f0f9ff";
+        });
+        
+        dropzone.addEventListener('dragleave', function() {
+            this.style.borderColor = "#d1d5db";
+            this.style.backgroundColor = "";
+        });
+        
+        dropzone.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.borderColor = "#d1d5db";
+            this.style.backgroundColor = "";
+            
+            if (draggedItem) {
+                // Show CPU diagram
+                document.getElementById('cpuDiagram').classList.remove('hidden');
+                const cpuSvg = document.getElementById('cpuSvg');
+                
+                // Add component to SVG
+                const componentId = draggedItem.id;
+                let componentText = "";
+                let componentDesc = "";
+                
+                switch(componentId) {
+                    case "alu":
+                        componentText = "ALU";
+                        componentDesc = "Performs all calculations";
+                        break;
+                    case "cu":
+                        componentText = "Control Unit";
+                        componentDesc = "Manages execution";
+                        break;
+                    case "registers":
+                        componentText = "Registers";
+                        componentDesc = "Temporary storage";
+                        break;
+                    case "cache":
+                        componentText = "Cache";
+                        componentDesc = "Fast memory";
+                        break;
+                }
+                
+                // Clear existing SVG
+                cpuSvg.innerHTML = '';
+                
+                // Add new component
+                const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                
+                const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                rect.setAttribute("x", "50");
+                rect.setAttribute("y", "50");
+                rect.setAttribute("width", "200");
+                rect.setAttribute("height", "100");
+                rect.setAttribute("rx", "5");
+                rect.setAttribute("fill", "#e0e7ff");
+                rect.setAttribute("stroke", "#6366f1");
+                rect.setAttribute("stroke-width", "2");
+                g.appendChild(rect);
+                
+                const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                text.setAttribute("x", "150");
+                text.setAttribute("y", "90");
+                text.setAttribute("text-anchor", "middle");
+                text.setAttribute("font-size", "16");
+                text.setAttribute("fill", "#4f46e5");
+                text.textContent = componentText;
+                g.appendChild(text);
+                
+                const desc = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                desc.setAttribute("x", "150");
+                desc.setAttribute("y", "110");
+                desc.setAttribute("text-anchor", "middle");
+                desc.setAttribute("font-size", "12");
+                desc.setAttribute("fill", "#6b7280");
+                desc.textContent = componentDesc;
+                g.appendChild(desc);
+                
+                cpuSvg.appendChild(g);
+            }
+        });
+
+        // CPU Sandbox Game
+        const canvas = document.getElementById('cpuCanvas');
+        const ctx = canvas.getContext('2d');
+        let componentsInSandbox = [];
+        let connections = [];
+        
+        // Component buttons
+        document.getElementById('addALU').addEventListener('click', () => {
+            addComponentToSandbox('ALU', 50, 50, '#c7d2fe');
+        });
+        
+        document.getElementById('addCU').addEventListener('click', () => {
+            addComponentToSandbox('Control Unit', 150, 50, '#ddd6fe');
+        });
+        
+        document.getElementById('addRegisters').addEventListener('click', () => {
+            addComponentToSandbox('Registers', 50, 150, '#fbcfe8');
+        });
+        
+        document.getElementById('addCache').addEventListener('click', () => {
+            addComponentToSandbox('Cache', 150, 150, '#bfdbfe');
+        });
+        
+        document.getElementById('connectComponents').addEventListener('click', () => {
+            if (componentsInSandbox.length >= 2) {
+                // Simple connection logic - connect all components
+                connections = [];
+                for (let i = 0; i < componentsInSandbox.length - 1; i++) {
+                    connections.push({
+                        from: componentsInSandbox[i],
+                        to: componentsInSandbox[i + 1]
+                    });
+                }
+                drawSandbox();
+            }
+        });
+        
+        document.getElementById('resetSandbox').addEventListener('click', () => {
+            componentsInSandbox = [];
+            connections = [];
+            drawSandbox();
+        });
+        
+        function addComponentToSandbox(name, x, y, color) {
+            componentsInSandbox.push({ name, x, y, color, width: 100, height: 60 });
+            drawSandbox();
+        }
+        
+        function drawSandbox() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw connections first
+            connections.forEach(conn => {
+                ctx.beginPath();
+                ctx.moveTo(conn.from.x + conn.from.width/2, conn.from.y + conn.from.height);
+                ctx.lineTo(conn.to.x + conn.to.width/2, conn.to.y);
+                ctx.strokeStyle = '#6b7280';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                // Arrowhead
+                ctx.beginPath();
+                ctx.moveTo(conn.to.x + conn.to.width/2 - 5, conn.to.y + 5);
+                ctx.lineTo(conn.to.x + conn.to.width/2, conn.to.y);
+                ctx.lineTo(conn.to.x + conn.to.width/2 + 5, conn.to.y + 5);
+                ctx.stroke();
+            });
+            
+            // Draw components
+            componentsInSandbox.forEach(comp => {
+                ctx.fillStyle = comp.color;
+                ctx.strokeStyle = '#4f46e5';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.roundRect(comp.x, comp.y, comp.width, comp.height, 5);
+                ctx.fill();
+                ctx.stroke();
+                
+                ctx.fillStyle = '#1e1b4b';
+                ctx.font = '12px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(comp.name, comp.x + comp.width/2, comp.y + comp.height/2 + 5);
+            });
+        }
+
+        // Matching Quiz
+        document.getElementById('checkMatching').addEventListener('click', function() {
+            const feedback = document.getElementById('matchingFeedback');
+            feedback.innerHTML = `
+                <div class="bg-green-100 text-green-800 p-3 rounded-md dark-mode:bg-green-900 dark-mode:text-green-200">
+                    <p>In a real implementation, this would check your answers. The correct matches are:</p>
+                    <ul class="list-disc pl-5 mt-2">
+                        <li>Supercomputer → Weather Forecasting</li>
+                        <li>Mainframe → Bank Transactions</li>
+                        <li>Microcomputer → Personal Computing</li>
+                    </ul>
+                </div>
+            `;
+            feedback.classList.remove('hidden');
+        });
+
+        // Scenario Analyzer
+        const scenarios = {
+            hospital: {
+                description: "A large hospital system needs to manage patient records, process medical imaging data, and handle thousands of daily transactions across multiple locations.",
+                bestChoice: "mainframe",
+                explanation: "Mainframes are ideal for handling large-scale transaction processing with high reliability requirements."
+            },
+            space: {
+                description: "NASA needs to process real-time data from space probes, run complex simulations of planetary atmospheres, and analyze terabytes of scientific data.",
+                bestChoice: "super",
+                explanation: "Supercomputers provide the massive computational power needed for complex scientific simulations and data analysis."
+            },
+            home: {
+                description: "A smart home needs to coordinate various IoT devices (thermostats, lights, security) while providing media streaming and basic computing capabilities.",
+                bestChoice: "micro",
+                explanation: "A network of microcomputers (like smart hubs and IoT controllers) is perfect for home automation tasks."
+            },
+            university: {
+                description: "A university needs to provide computing resources for thousands of students and faculty, from basic word processing to advanced research computing.",
+                bestChoice: "hybrid",
+                explanation: "A hybrid system with mainframes for administrative tasks, microcomputers for general use, and supercomputers for research provides the best solution."
+            }
+        };
+
+        document.getElementById('scenarioSelect').addEventListener('change', function() {
+            const scenario = this.value;
+            const description = document.getElementById('scenarioDescription');
+            
+            if (scenario && scenarios[scenario]) {
+                description.innerHTML = `
+                    <p class="font-medium">${this.options[this.selectedIndex].text}</p>
+                    <p class="text-sm mt-2">${scenarios[scenario].description}</p>
+                `;
+            } else {
+                description.innerHTML = `<p class="text-gray-600 dark-mode:text-gray-300">Select a scenario to see details</p>`;
+            }
+        });
+
+        document.getElementById('analyzeScenario').addEventListener('click', function() {
+            const scenario = document.getElementById('scenarioSelect').value;
+            const selectedChoice = document.querySelector('input[name="computerChoice"]:checked');
+            const feedback = document.getElementById('scenarioFeedback');
+            
+            if (!scenario) {
+                feedback.innerHTML = `
+                    <div class="bg-yellow-100 text-yellow-800 p-3 rounded-md dark-mode:bg-yellow-900 dark-mode:text-yellow-200">
+                        Please select a scenario first!
+                    </div>
+                `;
+                feedback.classList.remove('hidden');
+                return;
+            }
+            
+            if (!selectedChoice) {
+                feedback.innerHTML = `
+                    <div class="bg-yellow-100 text-yellow-800 p-3 rounded-md dark-mode:bg-yellow-900 dark-mode:text-yellow-200">
+                        Please select a computer type!
+                    </div>
+                `;
+                feedback.classList.remove('hidden');
+                return;
+            }
+            
+            const scenarioData = scenarios[scenario];
+            if (selectedChoice.value === scenarioData.bestChoice) {
+                feedback.innerHTML = `
+                    <div class="bg-green-100 text-green-800 p-3 rounded-md dark-mode:bg-green-900 dark-mode:text-green-200">
+                        <p class="font-bold">Excellent choice!</p>
+                        <p class="mt-2">${scenarioData.explanation}</p>
+                    </div>
+                `;
+            } else {
+                feedback.innerHTML = `
+                    <div class="bg-blue-100 text-blue-800 p-3 rounded-md dark-mode:bg-blue-900 dark-mode:text-blue-200">
+                        <p class="font-bold">Good attempt, but there's a better option.</p>
+                        <p class="mt-2">For this scenario, ${scenarioData.bestChoice === 'super' ? 'a supercomputer' : 
+                                          scenarioData.bestChoice === 'mainframe' ? 'a mainframe' : 
+                                          scenarioData.bestChoice === 'micro' ? 'microcomputers' : 
+                                          'a hybrid system'} would be more appropriate.</p>
+                        <p class="mt-2">${scenarioData.explanation}</p>
+                    </div>
+                `;
+            }
+            
+            feedback.classList.remove('hidden');
+        });
+
+        // Flashcards
+        const flashcards = {
+            cpu: {
+                term: "CPU",
+                definition: "Central Processing Unit: The 'brain' of the computer that executes instructions"
+            },
+            alu: {
+                term: "ALU",
+                definition: "Arithmetic Logic Unit: The part of the CPU that performs all calculations and logical operations"
+            },
+            cu: {
+                term: "Control Unit",
+                definition: "The component of the CPU that manages the execution of instructions and coordinates other components"
+            },
+            vlsi: {
+                term: "VLSI",
+                definition: "Very Large-Scale Integration: The process of creating integrated circuits by combining thousands of transistors into a single chip"
+            }
+        };
+
+        let currentCard = 'cpu';
+        const flashcardElement = document.getElementById('flashcard');
+        let isShowingTerm = true;
+
+        function updateFlashcard() {
+            const card = flashcards[currentCard];
+            flashcardElement.innerHTML = `
+                <p class="text-xl font-medium text-indigo-800 dark-mode:text-indigo-200">
+                    ${isShowingTerm ? card.term : card.definition}
+                </p>
+            `;
+        }
+
+        flashcardElement.addEventListener('click', function() {
+            isShowingTerm = !isShowingTerm;
+            updateFlashcard();
+        });
+
+        document.getElementById('nextCard').addEventListener('click', function() {
+            const keys = Object.keys(flashcards);
+            const currentIndex = keys.indexOf(currentCard);
+            currentCard = keys[(currentIndex + 1) % keys.length];
+            isShowingTerm = true;
+            updateFlashcard();
+        });
+
+        document.getElementById('prevCard').addEventListener('click', function() {
+            const keys = Object.keys(flashcards);
+            const currentIndex = keys.indexOf(currentCard);
+            currentCard = keys[(currentIndex - 1 + keys.length) % keys.length];
+            isShowingTerm = true;
+            updateFlashcard();
+        });
+
+        // Term buttons
+        document.querySelectorAll('.flashcard-term').forEach(btn => {
+            btn.addEventListener('click', function() {
+                currentCard = this.getAttribute('data-term');
+                isShowingTerm = true;
+                updateFlashcard();
+            });
+        });
+
+        // Initialize
+        updateFlashcard();
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // Close mobile menu if open
+                    const mobileMenu = document.getElementById('mobileMenu');
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                    
+                    // Calculate offset based on fixed header
+                    const offset = 80;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - offset;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

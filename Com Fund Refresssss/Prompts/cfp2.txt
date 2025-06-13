@@ -1,0 +1,72 @@
+Create an interactive HTML learning module titled "Classification of Computers" with Tailwind CSS and JavaScript. Transform the provided content into a visually engaging, modern format with these sections:
+
+1. **Classification Overview (Hero Section)**:
+   - Animated title: "From Palmtops to Supercomputers"
+   - Interactive 3D pyramid graphic showing computer types by size/power (Micro → Super)
+   - Toggle button: "Show Timeline Evolution" (1960s Minis → 2020s Quantum)
+
+2. **Data Handling Section (Card Grid)**:
+   - **Analog**: 
+     - SVG of speedometer/voltmeter with hover explanation
+     - Real-world example: "Like a mercury thermometer"
+   - **Digital**: 
+     - Binary animation (0101 → ASCII "Hello")
+     - Comparison table: "Analog vs. Digital" (Speed: 🐢 vs. 🚀)
+   - **Hybrid**: 
+     - NASA use-case diagram (space simulations)
+     - Embedded video placeholder: "Hybrid Computers in Action"
+
+3. **Functionality Classification (Accordion UI)**:
+   - Expandable cards for each type:
+     - **Microcomputers**: 
+       - Gallery of devices (Desktop → Smartwatch)
+       - "Did You Know?" callout: "Your phone is 1000x faster than 1969 Apollo computers"
+     - **Mainframes**: 
+       - Bank transaction flowchart
+       - IBM ES/9000 historical photo
+     - **Supercomputers**: 
+       - PARAM & CRAY-3 specs comparison
+       - Weather forecasting simulation GIF
+
+4. **Anatomy of Computer (Interactive Diagram)**:
+   - Drag-and-drop CPU components (ALU, CU, Registers)
+   - Animated data flow: Input → Processing → Output
+   - "Build Your CPU" sandbox game (JS canvas)
+
+5. **Assessment Tools**:
+   - Matching quiz: "Pair the computer type to its use-case"
+   - Scenario analyzer: "Which computer fits? (Hospital vs. Space Lab)"
+   - Flashcard mode for acronyms (CPU, ALU, etc.)
+
+**Styling Requirements**:
+- Tailwind CSS for:
+  - Gradient cards with icon headers
+  - Responsive 3-col grid (md: 2-col on mobile)
+  - Animated section transitions (Framer Motion CDN)
+- JavaScript for:
+  - Interactive 3D pyramid (Three.js lightweight)
+  - Accordion toggle logic
+  - Assessment auto-grading
+
+**Content Rules**:
+- Modernize examples:
+  - Replace "VCR" with "Smart Refrigerators"
+  - Add "Quantum Computing" in supercomputers
+- Add real-world context:
+  - "Microcontrollers in Tesla vs. Toyota"
+  - "India’s PARAM Siddhi AI Supercomputer"
+- Tooltips for jargon:
+  - "VLSI: Very Large-Scale Integration"
+  - "Register: CPU’s temporary notepad"
+
+**Output**: Single HTML file with:
+- Embedded SVGs (no external links)
+- Mobile-first responsive design
+- Dark/light mode toggle
+- Printable cheat sheet (Ctrl+P)
+
+**Tone**: Conversational yet precise. Examples:
+- "Your gaming PC is a microcomputer – but NASA’s Pleiades is a supercomputer that could simulate 100,000 games at once!"
+- "ALU: The math wizard inside your phone’s CPU."
+
+**Excluded**: Outdated references (e.g., "punched cards" in modern contexts). 
