@@ -3,9 +3,290 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Chapter 16: Operating System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+        }
+        nav {
+            background: #444;
+            padding: 10px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+        section {
+            margin: 20px 0;
+        }
+        h2, h3 {
+            color: #333;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 10px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 10px 0;
+        }
+        footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-    
+    <header>
+        <h1>Chapter 16: Operating System</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#types-os">Types of Operating Systems</a></li>
+            <li><a href="#functions-os">Functions of Operating System</a></li>
+            <li><a href="#system-files">System Files and Disk</a></li>
+            <li><a href="#booting">Booting</a></li>
+            <li><a href="#popular-os">Popular Operating Systems</a></li>
+            <li><a href="#os-categories">Operating System Categories</a></li>
+            <li><a href="#multi-concepts">Multiprogramming, Multiprocessing, Multitasking</a></li>
+            <li><a href="#modern-features">Modern OS Features</a></li>
+            <li><a href="#importance">Importance in Computing</a></li>
+            <li><a href="#questions">Questions</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <section id="introduction">
+            <h2>Introduction to Operating System</h2>
+            <p>An Operating System (OS) is the first software loaded into a computer, serving as a set of control programs that manage both hardware and software. It provides a platform for other applications to run, acting as an intermediary between users and hardware. This chapter explores types of operating systems based on users, their functions, system files, booting processes, popular OSes, categories like batch and real-time systems, and concepts like multiprogramming, multiprocessing, and multitasking, along with their significance in modern computing.</p>
+        </section>
+
+        <section id="types-os">
+            <h2>Types of Operating Systems Based on Users</h2>
+            <p>Operating systems are classified based on the number of users they support:</p>
+            <ul>
+                <li><strong>Single-User Operating System:</strong> Allows only one user to interact at a time.</li>
+                <li><strong>Multi-User Operating System:</strong> Supports multiple users simultaneously.</li>
+            </ul>
+            <h3>Single-User Operating Systems</h3>
+            <p>Single-user OSes are further divided into:</p>
+            <ul>
+                <li><strong>Single-User, Single-Tasking OS:</strong> One user can perform one task at a time (e.g., MS-DOS).</li>
+                <li><strong>Single-User, Multi-Tasking OS:</strong> One user can perform multiple tasks simultaneously (e.g., Windows 98, 2000, Me, XP, Vista).</li>
+            </ul>
+            <h3>Multi-User Operating Systems</h3>
+            <p>Multi-user OSes allow multiple users to interact concurrently (e.g., UNIX, Linux, Novell NetWare, VAX).</p>
+        </section>
+
+        <section id="functions-os">
+            <h2>Functions of Operating System</h2>
+            <p>The OS performs critical functions to ensure system efficiency:</p>
+            <ul>
+                <li><strong>Device Management:</strong> Controls peripherals like keyboards, printers, and disks.</li>
+                <li><strong>File Management:</strong> Organizes, stores, and retrieves files.</li>
+                <li><strong>Memory Management:</strong> Allocates and deallocates memory for processes.</li>
+                <li><strong>Command Validation:</strong> Checks and interprets user or system commands.</li>
+                <li><strong>Time Scheduling:</strong> Manages CPU time allocation for tasks.</li>
+            </ul>
+        </section>
+
+        <section id="system-files">
+            <h2>System Files and System Disk</h2>
+            <h3>System Files</h3>
+            <p>System files, also known as bootable files, are essential for OS operation. Key system files include:</p>
+            <ul>
+                <li><strong>IO.SYS:</strong> Handles input/output operations.</li>
+                <li><strong>MSDOS.SYS:</strong> Core OS functions for MS-DOS-based systems.</li>
+                <li><strong>COMMAND.COM:</strong> Command-line interpreter.</li>
+            </ul>
+            <h3>System Disk</h3>
+            <p>A disk containing system files is called a system disk, used to boot the OS.</p>
+        </section>
+
+        <section id="booting">
+            <h2>Booting</h2>
+            <p>Booting is the process of loading the OS from secondary storage (e.g., hard disk) to primary memory (RAM).</p>
+            <h3>Types of Booting</h3>
+            <ul>
+                <li><strong>Cold Booting:</strong> Starting the computer from a powered-off state using the power button.</li>
+                <li><strong>Warm Booting:</strong> Restarting the computer without powering it off, often via software (e.g., Ctrl+Alt+Del).</li>
+            </ul>
+        </section>
+
+        <section id="popular-os">
+            <h2>Most Popular Operating Systems</h2>
+            <p>Widely used OSes include:</p>
+            <ul>
+                <li><strong>Windows:</strong> GUI-based, user-friendly, dominant in personal computing.</li>
+                <li><strong>macOS:</strong> Apple’s OS, known for stability and design.</li>
+                <li><strong>Linux:</strong> Open-source, flexible, used in servers and desktops.</li>
+            </ul>
+        </section>
+
+        <section id="os-categories">
+            <h2>Operating System Categories</h2>
+            <h3>1. Batch Operating System</h3>
+            <p>Batch OSes process jobs in batches without direct user interaction, using offline devices like punch cards. Jobs with similar needs are grouped for efficiency.</p>
+            <img src="file:///C:/Users/Himanshu%20Gupta/Desktop/BatchOS.jpeg" alt="Batch Operating System Diagram" style="display: none;" />
+            <p><em>Note: Diagram referenced but not embedded due to file path limitation.</em></p>
+            <ul>
+                <li><strong>Advantages:</strong> Predictable queuing, minimal idle time, supports multiple users, easy to manage repetitive tasks.</li>
+                <li><strong>Disadvantages:</strong> Difficult to debug, costly, job failures cause delays.</li>
+                <li><strong>Examples:</strong> Payroll systems, bank statements.</li>
+            </ul>
+            <h3>2. Time-Sharing Operating System</h3>
+            <p>Time-sharing OSes allocate CPU time (quantum) to tasks, enabling multitasking. Users share CPU resources on a single system.</p>
+            <ul>
+                <li><strong>Advantages:</strong> Equal task opportunities, reduced software duplication, low CPU idle time.</li>
+                <li><strong>Disadvantages:</strong> Reliability, security, and data communication issues.</li>
+                <li><strong>Examples:</strong> Multics, UNIX.</li>
+            </ul>
+            <h3>3. Distributed Operating System</h3>
+            <p>Distributed OSes manage interconnected, independent systems communicating via a network, allowing resource sharing and remote access.</p>
+            <ul>
+                <li><strong>Advantages:</strong> Independent system resilience, fast computation, scalability, reduced delays.</li>
+                <li><strong>Disadvantages:</strong> Network dependency, complex software, high cost.</li>
+                <li><strong>Examples:</strong> LOCUS.</li>
+            </ul>
+            <h3>4. Network Operating System</h3>
+            <p>Network OSes run on servers, managing data, users, and networking functions over a private network, known as tightly coupled systems.</p>
+            <img src="file:///C:/Users/Himanshu%20Gupta/Desktop/Network-OS.jpeg" alt="Network Operating System Diagram" style="display: none;" />
+            <p><em>Note: Diagram referenced but not embedded due to file path limitation.</em></p>
+            <ul>
+                <li><strong>Advantages:</strong> Stable servers, easy hardware upgrades, remote access, centralized security.</li>
+                <li><strong>Disadvantages:</strong> High server costs, dependency on central systems, regular maintenance.</li>
+                <li><strong>Examples:</strong> Windows Server 2003/2008, UNIX, Linux, Novell NetWare.</li>
+            </ul>
+            <h3>5. Real-Time Operating System (RTOS)</h3>
+            <p>RTOSes process inputs with minimal response time, used in time-critical applications. They are divided into:</p>
+            <ul>
+                <li><strong>Hard Real-Time:</strong> Guarantees task completion within strict deadlines, with limited storage (e.g., ROM-based).</li>
+                <li><strong>Soft Real-Time:</strong> Prioritizes critical tasks but allows flexibility (e.g., multimedia).</li>
+            </ul>
+            <ul>
+                <li><strong>Advantages:</strong> Maximum resource utilization, fast task switching, error-free, efficient memory allocation.</li>
+                <li><strong>Disadvantages:</strong> Limited tasks, resource-intensive, complex algorithms, specific driver needs.</li>
+                <li><strong>Examples:</strong> Medical imaging, industrial control, robotics.</li>
+            </ul>
+        </section>
+
+        <section id="multi-concepts">
+            <h2>Multiprogramming, Multiprocessing, and Multitasking</h2>
+            <p>These concepts enhance OS efficiency by managing multiple tasks or processors.</p>
+            <table>
+                <tr><th>Characteristic</th><th>Multiprogramming</th><th>Multiprocessing</th><th>Multitasking</th></tr>
+                <tr><td>Definition</td><td>Multiple programs reside in memory concurrently.</td><td>Multiple processors execute instructions in parallel.</td><td>Multiple tasks execute simultaneously.</td></tr>
+                <tr><td>Number of CPUs</td><td>One</td><td>More than one</td><td>One</td></tr>
+                <tr><td>Job Processing Time</td><td>More</td><td>Less</td><td>Moderate</td></tr>
+                <tr><td>Processes Executed</td><td>One at a time</td><td>Multiple at a time</td><td>One by one</td></tr>
+                <tr><td>Economical</td><td>Yes</td><td>Less</td><td>Yes</td></tr>
+                <tr><td>Number of Users</td><td>One</td><td>One or more</td><td>More than one</td></tr>
+                <tr><td>Throughput</td><td>Less</td><td>Maximum</td><td>Moderate</td></tr>
+                <tr><td>Efficiency</td><td>Less</td><td>Maximum</td><td>Moderate</td></tr>
+                <tr><td>Categories</td><td>None</td><td>Symmetric, Asymmetric</td><td>Single-User, Multi-User</td></tr>
+            </table>
+        </section>
+
+        <section id="modern-features">
+            <h2>Modern Operating System Features</h2>
+            <p>Modern OSes have evolved to include:</p>
+            <ul>
+                <li><strong>Cloud Integration:</strong> Seamless access to cloud storage (e.g., OneDrive in Windows).</li>
+                <li><strong>Virtualization:</strong> Running multiple OSes or environments (e.g., WSL in Windows).</li>
+                <li><strong>AI Assistants:</strong> Voice-activated helpers like Cortana or Siri.</li>
+                <li><strong>Security Enhancements:</strong> Biometric authentication, encryption.</li>
+                <li><strong>Cross-Platform Support:</strong> Apps running across devices (e.g., Universal Windows Platform).</li>
+            </ul>
+        </section>
+
+        <section id="importance">
+            <h2>Importance of Operating Systems in Computing</h2>
+            <p>The OS is the foundation of computing, enabling hardware-software interaction and user productivity. From single-tasking MS-DOS to multitasking Windows and distributed Linux, OSes have driven technological progress. They optimize resource usage, support diverse applications, and ensure reliability in critical systems like medical or aerospace. Modern features like cloud integration and AI enhance user experiences, while concepts like multiprocessing boost performance, making OSes indispensable in personal, enterprise, and embedded computing.</p>
+        </section>
+
+        <section id="questions">
+            <h2>Questions</h2>
+            <p><em>Note: The provided content did not include explicit questions for this unit. The following questions are derived from the context to align with the format of previous chapters.</em></p>
+            <ul>
+                <li>What is an operating system?</li>
+                <li>What are the types of operating systems based on users?</li>
+                <li>What is a single-user, single-tasking operating system?</li>
+                <li>What is a single-user, multi-tasking operating system?</li>
+                <li>What is a multi-user operating system?</li>
+                <li>What are examples of single-user and multi-user OSes?</li>
+                <li>What are the main functions of an operating system?</li>
+                <li>What are system files, and what are their names?</li>
+                <li>What is a system disk?</li>
+                <li>What is booting, and what are its types?</li>
+                <li>What is cold booting?</li>
+                <li>What is warm booting?</li>
+                <li>What are the most popular operating systems?</li>
+                <li>What is a batch operating system, and what are its advantages and disadvantages?</li>
+                <li>What is a time-sharing operating system, and what are its features?</li>
+                <li>What is a distributed operating system, and how does it work?</li>
+                <li>What is a network operating system, and what are its benefits?</li>
+                <li>What is a real-time operating system, and what are its types?</li>
+                <li>What are the advantages and disadvantages of RTOS?</li>
+                <li>What is multiprogramming, and how does it differ from multiprocessing?</li>
+                <li>What is multitasking, and how does it compare to multiprogramming?</li>
+                <li>What are the key characteristics of multiprocessing?</li>
+            </ul>
+        </section>
+    </div>
+    <footer>
+        <p>© 2025 IndianTechnoEra. All rights reserved.</p>
+    </footer>
 </body>
 </html>

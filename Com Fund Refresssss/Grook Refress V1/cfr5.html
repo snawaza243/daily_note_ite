@@ -3,9 +3,359 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Chapter 5: Number Systems</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+        }
+        nav {
+            background: #444;
+            padding: 10px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+        section {
+            margin: 20px 0;
+        }
+        h2, h3 {
+            color: #333;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 10px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        .faq-item {
+            margin-bottom: 15px;
+        }
+        .faq-item h4 {
+            margin: 0;
+            color: #444;
+        }
+        .faq-item p {
+            margin: 5px 0;
+        }
+        footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-    
+    <header>
+        <h1>Chapter 5: Number Systems</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#non-positional">Non-Positional Number Systems</a></li>
+            <li><a href="#positional">Positional Number Systems</a></li>
+            <li><a href="#decimal">Decimal Number System</a></li>
+            <li><a href="#binary">Binary Number System</a></li>
+            <li><a href="#octal">Octal Number System</a></li>
+            <li><a href="#hexadecimal">Hexadecimal Number System</a></li>
+            <li><a href="#conversion">Number Base Conversion</a></li>
+            <li><a href="#fractional">Fractional Numbers</a></li>
+            <li><a href="#applications">Applications of Number Systems</a></li>
+            <li><a href="#questions">Questions</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <section id="introduction">
+            <h2>Introduction to Number Systems</h2>
+            <p>A number system is a mathematical notation for representing numbers using digits or symbols in a consistent manner. Different number systems use distinct rules to express values, and the same sequence of symbols can represent different numbers depending on the system. Number systems are broadly classified into two types:</p>
+            <ul>
+                <li><strong>Non-Positional Number Systems:</strong> Use symbols where the position does not affect the value.</li>
+                <li><strong>Positional Number Systems:</strong> Use digits where the value depends on both the digit and its position.</li>
+            </ul>
+            <p>This chapter explores these systems, their characteristics, and methods for converting between them, with a focus on their relevance to computing.</p>
+        </section>
+
+        <section id="non-positional">
+            <h2>Non-Positional Number Systems</h2>
+            <h3>Characteristics</h3>
+            <ul>
+                <li>Use symbols like I for 1, II for 2, III for 3, IIII for 4, IIIII for 5, etc.</li>
+                <li>Each symbol represents the same value regardless of its position.</li>
+                <li>The value of a number is determined by adding the symbols.</li>
+            </ul>
+            <h3>Difficulties</h3>
+            <ul>
+                <li>Arithmetic operations (e.g., addition, multiplication) are cumbersome.</li>
+                <li>Large numbers require many symbols, making them impractical for complex calculations.</li>
+            </ul>
+        </section>
+
+        <section id="positional">
+            <h2>Positional Number Systems</h2>
+            <p>In positional number systems, the value of a digit depends on:</p>
+            <ul>
+                <li>The digit itself.</li>
+                <li>Its position in the number.</li>
+                <li>The base of the number system (the total number of digits available).</li>
+            </ul>
+            <p>The maximum value of a single digit is always one less than the base (e.g., 9 for base 10, 1 for base 2).</p>
+            <h3>Characteristics</h3>
+            <ul>
+                <li>Use a limited set of symbols called digits.</li>
+                <li>Digits represent different values based on their position.</li>
+            </ul>
+        </section>
+
+        <section id="decimal">
+            <h2>Decimal Number System</h2>
+            <h3>Characteristics</h3>
+            <ul>
+                <li>Positional system with 10 digits (0, 1, 2, 3, 4, 5, 6, 7, 8, 9); base = 10.</li>
+                <li>Maximum digit value is 9 (base - 1).</li>
+                <li>Each position represents a power of 10 (e.g., units, tens, hundreds).</li>
+                <li>Widely used in everyday life.</li>
+            </ul>
+            <h3>Example</h3>
+            <p>2586<sub>10</sub> = (2 × 10³) + (5 × 10²) + (8 × 10¹) + (6 × 10⁰)</p>
+            <p>= 2000 + 500 + 80 + 6 = 2586<sub>10</sub></p>
+        </section>
+
+        <section id="binary">
+            <h2>Binary Number System</h2>
+            <h3>Characteristics</h3>
+            <ul>
+                <li>Positional system with 2 digits (0, 1); base = 2.</li>
+                <li>Maximum digit value is 1 (base - 1).</li>
+                <li>Each position represents a power of 2.</li>
+                <li>Fundamental to computers, representing on/off states.</li>
+            </ul>
+            <h3>Example</h3>
+            <p>10101<sub>2</sub> = (1 × 2⁴) + (0 × 2³) + (1 × 2²) + (0 × 2¹) + (1 × 2⁰)</p>
+            <p>= 16 + 0 + 4 + 0 + 1 = 21<sub>10</sub></p>
+            <h3>Bit (Binary Digit)</h3>
+            <p>A bit is a single binary digit (0 or 1). An n-bit number consists of n binary digits. Bits are the smallest unit of data in computing.</p>
+        </section>
+
+        <section id="octal">
+            <h2>Octal Number System</h2>
+            <h3>Characteristics</h3>
+            <ul>
+                <li>Positional system with 8 digits (0, 1, 2, 3, 4, 5, 6, 7); base = 8.</li>
+                <li>Maximum digit value is 7 (base - 1).</li>
+                <li>Each position represents a power of 8.</li>
+                <li>Three bits (2³ = 8) represent one octal digit in binary.</li>
+            </ul>
+            <h3>Example</h3>
+            <p>2057<sub>8</sub> = (2 × 8³) + (0 × 8²) + (5 × 8¹) + (7 × 8⁰)</p>
+            <p>= 1024 + 0 + 40 + 7 = 1071<sub>10</sub></p>
+        </section>
+
+        <section id="hexadecimal">
+            <h2>Hexadecimal Number System</h2>
+            <h3>Characteristics</h3>
+            <ul>
+                <li>Positional system with 16 digits (0–9, A–F); base = 16.</li>
+                <li>Letters A, B, C, D, E, F represent decimal values 10, 11, 12, 13, 14, 15.</li>
+                <li>Maximum digit value is 15 (base - 1).</li>
+                <li>Each position represents a power of 16.</li>
+                <li>Four bits (2⁴ = 16) represent one hexadecimal digit in binary.</li>
+            </ul>
+            <h3>Example</h3>
+            <p>1AF<sub>16</sub> = (1 × 16²) + (A × 16¹) + (F × 16⁰)</p>
+            <p>= 256 + (10 × 16) + 15 = 256 + 160 + 15 = 431<sub>10</sub></p>
+        </section>
+
+        <section id="conversion">
+            <h2>Converting Between Number Bases</h2>
+            <h3>Another Base to Decimal Base</h3>
+            <ol>
+                <li>Determine the positional value of each digit (power of the base).</li>
+                <li>Multiply each digit by its positional value.</li>
+                <li>Sum the products.</li>
+            </ol>
+            <h4>Example</h4>
+            <p>4706<sub>8</sub> = (4 × 8³) + (7 × 8²) + (0 × 8¹) + (6 × 8⁰)</p>
+            <p>= 2048 + 448 + 0 + 6 = 2502<sub>10</sub></p>
+
+            <h3>Decimal Base to Another Base (Division-Remainder Method)</h3>
+            <ol>
+                <li>Divide the decimal number by the new base.</li>
+                <li>Record the remainder as the least significant digit.</li>
+                <li>Divide the quotient by the new base, recording the remainder as the next digit.</li>
+                <li>Repeat until the quotient is zero; the last remainder is the most significant digit.</li>
+            </ol>
+            <h4>Example</h4>
+            <p>952<sub>10</sub> to base 8:</p>
+            <table>
+                <tr><th>Division</th><th>Quotient</th><th>Remainder</th></tr>
+                <tr><td>952 ÷ 8</td><td>119</td><td>0</td></tr>
+                <tr><td>119 ÷ 8</td><td>14</td><td>7</td></tr>
+                <tr><td>14 ÷ 8</td><td>1</td><td>6</td></tr>
+                <tr><td>1 ÷ 8</td><td>0</td><td>1</td></tr>
+            </table>
+            <p>Result: 952<sub>10</sub> = 1670<sub>8</sub></p>
+
+            <h3>Some Base to Another Base</h3>
+            <ol>
+                <li>Convert the original number to decimal (base 10).</li>
+                <li>Convert the decimal number to the new base.</li>
+            </ol>
+            <h4>Example</h4>
+            <p>545<sub>6</sub> to base 4:</p>
+            <p>Step 1: 545<sub>6</sub> = (5 × 6²) + (4 × 6¹) + (5 × 6⁰) = 180 + 24 + 5 = 209<sub>10</sub></p>
+            <p>Step 2: Convert 209<sub>10</sub> to base 4:</p>
+            <table>
+                <tr><th>Division</th><th>Quotient</th><th>Remainder</th></tr>
+                <tr><td>209 ÷ 4</td><td>52</td><td>1</td></tr>
+                <tr><td>52 ÷ 4</td><td>13</td><td>0</td></tr>
+                <tr><td>13 ÷ 4</td><td>3</td><td>1</td></tr>
+                <tr><td>3 ÷ 4</td><td>0</td><td>3</td></tr>
+            </table>
+            <p>Result: 209<sub>10</sub> = 3101<sub>4</sub>, so 545<sub>6</sub> = 3101<sub>4</sub></p>
+
+            <h3>Shortcut Methods</h3>
+            <h4>Binary to Octal</h4>
+            <ol>
+                <li>Group binary digits into sets of three, starting from the right.</li>
+                <li>Convert each group to an octal digit.</li>
+            </ol>
+            <h5>Example</h5>
+            <p>1101010<sub>2</sub> = 001|101|010 → 1<sub>8</sub>|5<sub>8</sub>|2<sub>8</sub> = 152<sub>8</sub></p>
+
+            <h4>Octal to Binary</h4>
+            <ol>
+                <li>Convert each octal digit to a 3-bit binary number.</li>
+                <li>Combine the binary groups.</li>
+            </ol>
+            <h5>Example</h5>
+            <p>562<sub>8</sub> = 5→101, 6→110, 2→010 = 101110010<sub>2</sub></p>
+
+            <h4>Binary to Hexadecimal</h4>
+            <ol>
+                <li>Group binary digits into sets of four, starting from the right.</li>
+                <li>Convert each group to a hexadecimal digit.</li>
+            </ol>
+            <h5>Example</h5>
+            <p>111101<sub>2</sub> = 0011|1101 → 3<sub>16</sub>|D<sub>16</sub> = 3D<sub>16</sub></p>
+
+            <h4>Hexadecimal to Binary</h4>
+            <ol>
+                <li>Convert each hexadecimal digit to a 4-bit binary number.</li>
+                <li>Combine the binary groups.</li>
+            </ol>
+            <h5>Example</h5>
+            <p>2AB<sub>16</sub> = 2→0010, A→1010, B→1011 = 001010101011<sub>2</sub></p>
+        </section>
+
+        <section id="fractional">
+            <h2>Fractional Numbers</h2>
+            <p>Fractional numbers in any base follow the same positional principles as whole numbers, with digits to the right of the point representing negative powers of the base.</p>
+            <p>General form: a<sub>n</sub>a<sub>n-1</sub>...a<sub>0</sub>.a<sub>-1</sub>a<sub>-2</sub>...a<sub>-m</sub></p>
+            <p>Value: a<sub>n</sub> × b<sup>n</sup> + ... + a<sub>0</sub> × b<sup>0</sup> + a<sub>-1</sub> × b<sup>-1</sup> + ... + a<sub>-m</sub> × b<sup>-m</sup></p>
+            <h3>Binary Fractional Numbers</h3>
+            <p>Example: 110.101<sub>2</sub> = (1 × 2²) + (1 × 2¹) + (0 × 2⁰) + (1 × 2⁻¹) + (0 × 2⁻²) + (1 × 2⁻³)</p>
+            <p>= 4 + 2 + 0 + 0.5 + 0 + 0.125 = 6.625<sub>10</sub></p>
+            <h3>Octal Fractional Numbers</h3>
+            <p>Example: 127.54<sub>8</sub> = (1 × 8²) + (2 × 8¹) + (7 × 8⁰) + (5 × 8⁻¹) + (4 × 8⁻²)</p>
+            <p>= 64 + 16 + 7 + 0.625 + 0.0625 = 87.6875<sub>10</sub></p>
+        </section>
+
+        <section id="applications">
+            <h2>Applications of Number Systems in Computing</h2>
+            <p>Number systems are fundamental to computing:</p>
+            <ul>
+                <li><strong>Binary:</strong> Used in digital circuits, memory, and processor operations, as computers operate on 0s and 1s.</li>
+                <li><strong>Octal:</strong> Simplifies binary representation in early computers and Unix file permissions.</li>
+                <li><strong>Hexadecimal:</strong> Used in memory dumps, color codes (e.g., #FFFFFF), and programming for compact binary representation.</li>
+                <li><strong>ASCII Code:</strong> A character encoding standard using 7 or 8 bits to represent text (e.g., 'A' = 65<sub>10</sub> = 41<sub>16</sub>), enabling computers to process and display text.</li>
+            </ul>
+            <p>Understanding number systems and conversions is crucial for programming, debugging, and hardware design.</p>
+        </section>
+
+        <section id="questions">
+            <h2>Questions</h2>
+            <ul>
+                <li>What is a number system?</li>
+                <li>How many types of number systems are there?</li>
+                <li>What is a non-positional number system?</li>
+                <li>What are the characteristics of a non-positional number system?</li>
+                <li>What are the difficulties of a non-positional number system?</li>
+                <li>What is a positional number system?</li>
+                <li>What are the characteristics of a positional number system?</li>
+                <li>What are the difficulties of a positional number system?</li>
+                <li>How many types of representations of number systems are there?</li>
+                <li>What is the decimal number system?</li>
+                <li>What is the binary number system?</li>
+                <li>What is the octal number system?</li>
+                <li>What is the hexadecimal number system?</li>
+                <li>What is ASCII code?</li>
+                <li>What is a BIT?</li>
+                <li>What is the full form of BIT?</li>
+                <li>What is a binary digit?</li>
+                <li>What are the characteristics of a binary digit?</li>
+                <li>How do you convert a number's base?</li>
+                <li>How do you convert another number base into decimal base?</li>
+                <li>How do you convert a decimal number base into another base?</li>
+                <li>How do you convert from one base to another base?</li>
+                <li>How do you convert a binary number to its equivalent octal number?</li>
+                <li>How do you convert an octal number to its equivalent binary number?</li>
+                <li>How do you convert a binary number to a hexadecimal number?</li>
+                <li>How do you convert a hexadecimal number to its equivalent binary number?</li>
+                <li>What are fractional numbers?</li>
+                <li>What is the formation of fractional numbers in the binary number system?</li>
+            </ul>
+        </section>
+    </div>
+    <footer>
+        <p>© 2025 IndianTechnoEra. All rights reserved.</p>
+    </footer>
 </body>
 </html>

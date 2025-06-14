@@ -3,9 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Chapter 12: Secondary Storage Devices</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+        }
+        nav {
+            background: #444;
+            padding: 10px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+        section {
+            margin: 20px 0;
+        }
+        h2, h3 {
+            color: #333;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 10px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-    
+    <header>
+        <h1>Chapter 12: Secondary Storage Devices</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#access-methods">Sequential and Direct-Access Devices</a></li>
+            <li><a href="#sequential-devices">Sequential Access Devices</a></li>
+            <li><a href="#direct-devices">Direct-Access Devices</a></li>
+            <li><a href="#bus">System Bus</a></li>
+            <li><a href="#role">Role in Modern Computing</a></li>
+            <li><a href="#questions">Questions</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <section id="introduction">
+            <h2>Introduction to Secondary Storage Devices</h2>
+            <p>Secondary storage devices are essential components of a computer system, providing non-volatile storage for data and programs when not in active use by the processor. Unlike primary memory (RAM), secondary storage retains data even when the system is powered off. These devices vary in access methods, capacity, and speed, with the choice depending on the application’s needs. This chapter explores sequential and direct-access devices, their types, characteristics, the system bus, and their role in modern computing, along with a comprehensive list of related questions.</p>
+        </section>
+
+        <section id="access-methods">
+            <h2>Sequential and Direct-Access Devices</h2>
+            <p>Secondary storage devices are classified based on how data is accessed: sequential (serial) or direct (random). <strong>Sequential-access devices</strong> retrieve data in the order it was stored, requiring navigation through preceding data, making access time variable. They are suitable for applications like payroll or billing, where data is processed in sequence. <strong>Direct-access devices</strong>, also called random-access devices, allow immediate access to any data location with approximately equal access time, similar to selecting a specific track on a music CD. Magnetic and optical disks are examples of direct-access devices.</p>
+        </section>
+
+        <section id="sequential-devices">
+            <h2>Sequential Access Devices</h2>
+            <h3>Magnetic Tape</h3>
+            <p>Magnetic tape is a widely used sequential-access storage medium for large datasets processed in order. It consists of a ½-inch or ¼-inch wide plastic ribbon, 50 to 2,400 feet long, coated with a magnetic material like iron oxide or chromium dioxide. Data is stored as tiny magnetized (1s) and non-magnetized (0s) spots. Magnetic tapes are stored in reels, cartridges, or cassettes, and can be erased and reused indefinitely, similar to audio or videotapes.</p>
+            <h3>Tape Drive</h3>
+            <p>A tape drive is a device used to read from and write to magnetic tape. It operates similarly to audio or video recorders, with read/write heads that interact with the tape ribbon as it passes. Tape drives support reels, cartridges, or cassettes, and require the tape to be loaded (online) for data access. When processing is complete, the tape is removed for offline storage, making data inaccessible until reloaded. Commands like "read" and "write" control data transfer to and from primary storage.</p>
+        </section>
+
+        <section id="direct-devices">
+            <h2>Direct-Access Devices</h2>
+            <h3>Magnetic Disk</h3>
+            <p>Magnetic disks are the most popular direct-access secondary storage devices due to their random-access capability, making them ideal for online use. They consist of thin, circular platters made of metal or plastic, coated on both sides with a magnetic material like iron oxide. Data is stored as magnetized spots representing binary 1s and 0s.</p>
+            <h4>Storage Organization</h4>
+            <p>The disk surface is divided into concentric circles called <strong>tracks</strong>, numbered from outermost (0) to innermost. Tracks are further subdivided into <strong>sectors</strong> by dividing the disk into pie-shaped segments. For example, with eight segments, each track has eight sectors, allowing precise data addressing.</p>
+            <h4>Types of Magnetic Disks</h4>
+            <p>Magnetic disks are broadly classified into <strong>floppy disks</strong> and <strong>hard disks</strong>, with variations based on size, packaging, and material.</p>
+            <ul>
+                <li><strong>Floppy Disks:</strong> Encased in protective envelopes or plastic cases, floppy disks are portable and flexible.</li>
+                <li><strong>Hard Disks:</strong> Rigid metal platters, packaged individually or in multiples (e.g., Zip/Bernoulli disks, disk packs, Winchester disks).</li>
+            </ul>
+            <h4>Floppy Drive ABCs</h4>
+            <p>Invented by IBM in 1967, floppy disks use a flexible magnetic medium encased in a protective casing. Data is written similarly to hard disks, with read/write heads contacting the disk surface, causing wear over time. Modern successors include LS-120 diskette drives, offering higher capacity.</p>
+            <h4>Floppy History</h4>
+            <ul>
+                <li><strong>8” Disk (1971):</strong> The first floppy disk, 8 inches in diameter, stored 1 MB in a cardboard case.</li>
+                <li><strong>5.25” Disk (1976):</strong> Introduced with 160 KB capacity, later standardized in 1978 with variants: single-sided (160 KB), double-sided (360 KB), and high-density (1.2 MB).</li>
+                <li><strong>3.5” Disk (1984):</strong> Developed by IBM, with capacities of double-density (720 KB), high-density (1.44 MB), and extended-density (2.88 MB, IBM only). Still used today for compatibility.</li>
+            </ul>
+            <h4>Hard Disk Drive ABCs</h4>
+            <p>Hard disk drives (HDDs) are the primary storage for permanent data, housed internally and connected via ATA or SCSI cables. Key components include platters, head arm, chassis, and head actuator. Unlike floppy or CD-ROM drives, HDDs are not physically accessed by users.</p>
+            <h3>Optical Disk</h3>
+            <p>Optical disks are a newer secondary storage medium, offering high-capacity random-access storage. They use a rotating disk coated with a highly reflective material, with data recorded and read using laser beam technology, earning them the name "laser disks."</p>
+            <h4>Optical Disk Drive</h4>
+            <p>An optical disk drive mounts the disk for reading or writing, containing a tray, laser beam assembly, and motor to rotate the disk. It includes mechanical and electronic components to facilitate data access.</p>
+            <h4>Types of Optical Disks</h4>
+            <p>The two most popular optical disks are <strong>CD-ROM</strong> and <strong>WORM disks</strong>.</p>
+            <ul>
+                <li><strong>CD-ROM (Compact Disk-Read-Only Memory):</strong> A 5.25-inch (12 cm) silver metal disk with ~650 MB capacity, pre-recorded and unalterable. It supports music playback with appropriate hardware and resembles audio CDs.</li>
+                <li><strong>WORM Disk (Write-Once, Read-Many):</strong> Allows users to record data once using a CD-recordable (CD-R) drive. Blank WORM disks are encoded with permanent data, readable by standard CD-ROM drives, but cannot be altered or written in multiple sessions.</li>
+            </ul>
+            <h3>Comparison of Direct-Access Devices</h3>
+            <table>
+                <tr><th>Device</th><th>Type</th><th>Capacity</th><th>Access Method</th></tr>
+                <tr><td>Magnetic Disk (Floppy)</td><td>Magnetic</td><td>160 KB–2.88 MB</td><td>Random</td></tr>
+                <tr><td>Magnetic Disk (Hard)</td><td>Magnetic</td><td>GBs–TBs</td><td>Random</td></tr>
+                <tr><td>CD-ROM</td><td>Optical</td><td>~650 MB</td><td>Random</td></tr>
+                <tr><td>WORM Disk</td><td>Optical</td><td>~650 MB</td><td>Write-once, read-many</td></tr>
+            </table>
+        </section>
+
+        <section id="bus">
+            <h2>System Bus</h2>
+            <p>The system bus is an electrical pathway that transfers data and signals between the CPU and peripherals, ensuring communication within the computer. It consists of three main types: <strong>data bus</strong>, <strong>address bus</strong>, and <strong>control bus</strong>.</p>
+            <h3>Full Form of Bus</h3>
+            <p>Bus stands for Binary Unit System (though often used as a general term for data pathways).</p>
+            <h3>Data Bus</h3>
+            <p>The data bus connects the CPU, memory, and other motherboard devices, transferring data in parallel. Its width (number of lines) determines transfer speed; a 16-bit bus moves 2 bytes at once, while a 32-bit bus moves 4 bytes.</p>
+            <h3>Address Bus</h3>
+            <p>The address bus connects the CPU and memory, specifying memory locations for data access. A 32-bit address bus can address over 4 GB of memory, determining the system’s memory capacity.</p>
+            <h3>Control Bus</h3>
+            <p>The control bus manages the direction, flow, and timing of operations, using signals to identify device types and coordinate communication with the CPU.</p>
+        </section>
+
+        <section id="role">
+            <h2>Role of Secondary Storage in Modern Computing</h2>
+            <p>Secondary storage devices are critical for persistent data storage, enabling systems to retain programs and data when powered off. Magnetic disks (HDDs and SSDs) and optical disks (CDs, DVDs) provide high-capacity, cost-effective solutions for personal and enterprise use. Sequential-access devices like magnetic tapes remain relevant for archival and backup due to their low cost and durability. The system bus ensures efficient data transfer between storage and the CPU, optimizing performance. Modern trends, such as solid-state drives (SSDs) and cloud storage, build on these foundations, offering faster access and scalability.</p>
+        </section>
+
+        <section id="questions">
+            <h2>Questions</h2>
+            <ul>
+                <li>What are direct-access devices?</li>
+                <li>What is magnetic tape?</li>
+                <li>What is a tape drive?</li>
+                <li>What is a magnetic disk?</li>
+                <li>What is storage organization?</li>
+                <li>How many types of magnetic disks are there?</li>
+                <li>What are floppy drive ABCs?</li>
+                <li>What is the history of floppy disks?</li>
+                <li>What are hard disk drive ABCs?</li>
+                <li>What is an optical disk?</li>
+                <li>What is an optical disk drive?</li>
+                <li>How many types of optical disks are there?</li>
+                <li>What is a CD-ROM?</li>
+                <li>What is a compact disk?</li>
+                <li>What is the full form of CD-ROM?</li>
+                <li>What is read-only memory?</li>
+                <li>What is a WORM disk?</li>
+                <li>What is a bus?</li>
+                <li>What is the full form of bus?</li>
+                <li>What is a data bus?</li>
+                <li>What is an address bus?</li>
+                <li>What is a control bus?</li>
+            </ul>
+        </section>
+    </div>
+    <footer>
+        <p>© 2025 IndianTechnoEra. All rights reserved.</p>
+    </footer>
 </body>
 </html>

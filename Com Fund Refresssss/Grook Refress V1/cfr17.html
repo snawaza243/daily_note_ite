@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 17: Computer Networking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+        }
+        nav {
+            background: #444;
+            padding: 10px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+        section {
+            margin: 20px 0;
+        }
+        h2, h3 {
+            color: #333;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 10px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Chapter 17: Computer Networking</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#definition">Definition</a></li>
+            <li><a href="#types-networking">Types of Computer Networking</a></li>
+            <li><a href="#advantages-disadvantages">Advantages and Disadvantages</a></li>
+            <li><a href="#characteristics">Characteristics</a></li>
+            <li><a href="#hardware">Hardware Requirements</a></li>
+            <li><a href="#topology">Network Topology</a></li>
+            <li><a href="#protocols">Network Protocols</a></li>
+            <li><a href="#security">Network Security</a></li>
+            <li><a href="#trends">Modern Networking Trends</a></li>
+            <li><a href="#importance">Importance in Computing</a></li>
+            <li><a href="#questions">Questions</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <section id="introduction">
+            <h2>Introduction to Computer Networking</h2>
+            <p>Computer networking enables communication and resource sharing among multiple computers, allowing data transfer, printer sharing, and access to shared storage devices. Networks can span a single room, a building, or even connect systems across cities and countries. Controlled by a server, networks facilitate data exchange between nodes (clients or workstations) using communication media like coaxial cables, optical fibers, microwaves, or satellites. This chapter explores the definition, types, advantages, disadvantages, characteristics, hardware requirements, topologies, protocols, security, modern trends, and significance of computer networking.</p>
+        </section>
+
+        <section id="definition">
+            <h2>Definition of Computer Networking</h2>
+            <p>A computer network is a system where multiple computers are interconnected to share information and resources, enabling efficient communication and collaboration.</p>
+        </section>
+
+        <section id="types-networking">
+            <h2>Types of Computer Networking</h2>
+            <p>Computer networks are classified based on their geographic scope:</p>
+            <ul>
+                <li><strong>Local Area Network (LAN):</strong> Connects devices within a limited area, like an office or home, offering high-speed communication.</li>
+                <li><strong>Metropolitan Area Network (MAN):</strong> Spans a city or large campus, connecting multiple LANs for broader coverage.</li>
+                <li><strong>Wide Area Network (WAN):</strong> Covers large geographic areas, such as countries, often using public infrastructure (e.g., the Internet).</li>
+            </ul>
+            <table>
+                <tr><th>Type</th><th>Scope</th><th>Example</th></tr>
+                <tr><td>LAN</td><td>Building or campus</td><td>Office network</td></tr>
+                <tr><td>MAN</td><td>City</td><td>City-wide ISP</td></tr>
+                <tr><td>WAN</td><td>Country or global</td><td>Internet</td></tr>
+            </table>
+        </section>
+
+        <section id="advantages-disadvantages">
+            <h2>Advantages and Disadvantages of Computer Networking</h2>
+            <h3>Advantages</h3>
+            <ul>
+                <li><strong>Information Sharing:</strong> Enables seamless data exchange between devices.</li>
+                <li><strong>Cost-Effective Data Transfer:</strong> Reduces costs compared to physical media.</li>
+                <li><strong>Resource Sharing:</strong> Shares printers, hard disks, and other equipment.</li>
+                <li><strong>Multimedia Transfer:</strong> Supports video, audio, and image sharing.</li>
+                <li><strong>Instant Data Access:</strong> Provides immediate access to shared resources.</li>
+            </ul>
+            <h3>Disadvantages</h3>
+            <ul>
+                <li><strong>Data Security Risks:</strong> Vulnerable to unauthorized access or breaches.</li>
+                <li><strong>Complexity:</strong> Requires technical expertise for setup and maintenance.</li>
+                <li><strong>High Installation Costs:</strong> Initial setup can be expensive.</li>
+            </ul>
+        </section>
+
+        <section id="characteristics">
+            <h2>Characteristics of a Computer Network</h2>
+            <ul>
+                <li><strong>Resource Sharing:</strong> Allows devices to share hardware and software resources.</li>
+                <li><strong>File Storage and Access:</strong> Enables centralized file storage accessible across the network.</li>
+                <li><strong>Peripheral Sharing:</strong> Connects printers, scanners, or fax machines for shared use.</li>
+            </ul>
+        </section>
+
+        <section id="hardware">
+            <h2>Hardware Requirements for Computer Networking</h2>
+            <p>Setting up a computer network requires specific hardware components:</p>
+            <ul>
+                <li><strong>Network Cables:</strong> Typically Category 5 (Cat5) RJ-45 cables for wired connections.</li>
+                <li><strong>Distributors (Hubs/Switches):</strong> Central devices that manage network traffic by connecting multiple devices.</li>
+                <li><strong>Routers:</strong> Devices with ports that connect computers and peripherals, directing data traffic. Modern routers support wireless connections.</li>
+                <li><strong>Network Cards (NICs):</strong> Essential for network connectivity, available as:</li>
+                <ul>
+                    <li><strong>Internal Network Cards:</strong> Inserted into motherboard slots (PCI or ISA), requiring network cables.</li>
+                    <li><strong>External Network Cards:</strong> Wireless (inserted into motherboard) or USB-based (plug-and-play with automatic driver installation).</li>
+                </ul>
+            </ul>
+            <table>
+                <tr><th>Hardware</th><th>Function</th></tr>
+                <tr><td>Network Cables</td><td>Connect devices physically</td></tr>
+                <tr><td>Distributors</td><td>Manage network traffic</td></tr>
+                <tr><td>Routers</td><td>Direct data between devices</td></tr>
+                <tr><td>Network Cards</td><td>Enable network connectivity</td></tr>
+            </table>
+        </section>
+
+        <section id="topology">
+            <h2>Network Topology</h2>
+            <p>Network topology refers to the physical or logical arrangement of devices in a network. Common topologies include:</p>
+            <ul>
+                <li><strong>Linear (Bus) Topology:</strong> All devices share a single cable, simple but prone to failure if the cable breaks.</li>
+                <li><strong>Ring Topology:</strong> Devices form a closed loop, with data traveling in one direction, reducing collisions.</li>
+                <li><strong>Star Topology:</strong> Devices connect to a central hub or switch, offering reliability but dependent on the central device.</li>
+                <li><strong>Mesh Topology:</strong> Every device connects to every other, providing redundancy but requiring many cables.</li>
+                <li><strong>Tree Topology:</strong> Hierarchical structure combining bus and star, suitable for large networks.</li>
+                <li><strong>Wireless Topology:</strong> Devices connect via wireless signals, offering flexibility but susceptible to interference.</li>
+            </ul>
+            <table>
+                <tr><th>Topology</th><th>Structure</th><th>Advantages</th><th>Disadvantages</th></tr>
+                <tr><td>Bus</td><td>Single cable</td><td>Simple, low cost</td><td>Single point of failure</td></tr>
+                <tr><td>Ring</td><td>Closed loop</td><td>No collisions</td><td>Difficult to add devices</td></tr>
+                <tr><td>Star</td><td>Central hub</td><td>Easy to manage</td><td>Hub failure affects all</td></tr>
+                <tr><td>Mesh</td><td>Fully connected</td><td>High reliability</td><td>High cost, complex</td></tr>
+                <tr><td>Tree</td><td>Hierarchical</td><td>Scalable</td><td>Complex maintenance</td></tr>
+                <tr><td>Wireless</td><td>Radio signals</td><td>Flexible</td><td>Interference risks</td></tr>
+            </table>
+        </section>
+
+        <section id="protocols">
+            <h2>Network Protocols</h2>
+            <p>Protocols are rules governing data communication in networks. Common protocols include:</p>
+            <ul>
+                <li><strong>TCP/IP (Transmission Control Protocol/Internet Protocol):</strong> Ensures reliable data transfer and addressing.</li>
+                <li><strong>HTTP/HTTPS (Hypertext Transfer Protocol/Secure):</strong> Facilitates web browsing.</li>
+                <li><strong>FTP (File Transfer Protocol):</strong> Transfers files between systems.</li>
+                <li><strong>SMTP (Simple Mail Transfer Protocol):</strong> Handles email transmission.</li>
+                <li><strong>DHCP (Dynamic Host Configuration Protocol):</strong> Assigns IP addresses automatically.</li>
+            </ul>
+            <p>Protocols operate within the OSI (Open Systems Interconnection) model, which divides networking into seven layers: Physical, Data Link, Network, Transport, Session, Presentation, and Application.</p>
+        </section>
+
+        <section id="security">
+            <h2>Network Security</h2>
+            <p>Network security protects data and resources from threats. Key measures include:</p>
+            <ul>
+                <li><strong>Firewalls:</strong> Block unauthorized access to the network.</li>
+                <li><strong>Encryption:</strong> Secures data during transmission (e.g., AES, SSL/TLS).</li>
+                <li><strong>Authentication:</strong> Verifies user identities (e.g., passwords, biometrics).</li>
+                <li><strong>Intrusion Detection Systems (IDS):</strong> Monitor for suspicious activity.</li>
+                <li><strong>VPNs (Virtual Private Networks):</strong> Provide secure remote access.</li>
+            </ul>
+            <p>Security addresses the disadvantages of data insecurity and ensures safe communication.</p>
+        </section>
+
+        <section id="trends">
+            <h2>Modern Networking Trends</h2>
+            <p>Networking continues to evolve with advancements like:</p>
+            <ul>
+                <li><strong>5G Networks:</strong> Offer ultra-fast speeds and low latency for mobile devices.</li>
+                <li><strong>Software-Defined Networking (SDN):</strong> Centralizes network control for flexibility.</li>
+                <li><strong>Internet of Things (IoT):</strong> Connects billions of devices, from smart homes to industrial sensors.</li>
+                <li><strong>Cloud Networking:</strong> Integrates networks with cloud services for scalability.</li>
+                <li><strong>Zero Trust Architecture:</strong> Assumes no device is trusted, enhancing security.</li>
+            </ul>
+        </section>
+
+        <section id="importance">
+            <h2>Importance of Computer Networking in Computing</h2>
+            <p>Computer networking is the backbone of modern computing, enabling global communication, resource sharing, and collaboration. From LANs in small offices to WANs powering the Internet, networks facilitate instant data access and multimedia transfer. Despite challenges like security risks and installation costs, advancements in protocols, topologies, and security measures ensure reliable connectivity. Modern trends like 5G and IoT expand networking’s role in smart cities, healthcare, and industry, making it indispensable for personal, enterprise, and societal progress.</p>
+        </section>
+
+        <section id="questions">
+            <h2>Questions</h2>
+            <p><em>Note: The provided content did not include explicit questions for this unit. The following questions are derived from the context to align with the format of previous chapters.</em></p>
+            <ul>
+                <li>What is computer networking?</li>
+                <li>What is the definition of a computer network?</li>
+                <li>What are the types of computer networking?</li>
+                <li>What is a Local Area Network (LAN)?</li>
+                <li>What is a Metropolitan Area Network (MAN)?</li>
+                <li>What is a Wide Area Network (WAN)?</li>
+                <li>What are the advantages of computer networking?</li>
+                <li>What are the disadvantages of computer networking?</li>
+                <li>What are the characteristics of a computer network?</li>
+                <li>What hardware is required to set up a computer network?</li>
+                <li>What is the role of network cables in networking?</li>
+                <li>What is a distributor in a network?</li>
+                <li>What is a router, and how does it function?</li>
+                <li>What are the types of network cards?</li>
+                <li>What is a network topology?</li>
+                <li>What are the different types of network topologies?</li>
+                <li>What are the advantages and disadvantages of bus topology?</li>
+                <li>What is a network protocol, and why is it important?</li>
+                <li>What are common network protocols?</li>
+                <li>What are key network security measures?</li>
+                <li>What are modern networking trends?</li>
+                <li>Why is computer networking important in computing?</li>
+            </ul>
+        </section>
+    </div>
+    <footer>
+        <p>© 2025 IndianTechnoEra. All rights reserved.</p>
+    </footer>
+</body>
+</html>

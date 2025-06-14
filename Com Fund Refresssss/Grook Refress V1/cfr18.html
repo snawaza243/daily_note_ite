@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 18: Computer Virus</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            background: #fff;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+        }
+        nav {
+            background: #444;
+            padding: 10px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+        section {
+            margin: 20px 0;
+        }
+        h2, h3 {
+            color: #333;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 10px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Chapter 18: Computer Virus</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#definition">Definition</a></li>
+            <li><a href="#history">History</a></li>
+            <li><a href="#file-effects">Effects on Files</a></li>
+            <li><a href="#system-effects">Effects on the System</a></li>
+            <li><a href="#detection">Detecting Viruses</a></li>
+            <li><a href="#myths">Virus Myths</a></li>
+            <li><a href="#antivirus">Antivirus Programs</a></li>
+            <li><a href="#formatting">Formatting and Virus Removal</a></li>
+            <li><a href="#terms">Computer Terms</a></li>
+            <li><a href="#malware-types">Types of Malware</a></li>
+            <li><a href="#prevention">Preventing Virus Infections</a></li>
+            <li><a href="#evolution">Evolution of Viruses</a></li>
+            <li><a href="#importance">Importance</a></li>
+            <li><a href="#questions">Questions</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <section id="introduction">
+            <h2>Introduction to Computer Viruses</h2>
+            <p>Computer viruses are a major concern for users, as these malicious programs are designed to disrupt, damage, or destroy data and spread to other systems. First emerging in the early 1980s, viruses pose significant threats to personal and organizational data. Antivirus software is essential for protection, but understanding how viruses work and their impact is equally important. This chapter explores the definition, history, effects, detection, myths, antivirus solutions, formatting as a removal method, related computer terms, types of malware, prevention strategies, and the evolution of computer viruses.</p>
+        </section>
+
+        <section id="definition">
+            <h2>Definition of a Computer Virus</h2>
+            <p>A computer virus is a malicious software program intentionally created to cause harm, spread to other computers, or corrupt data. It attaches itself to legitimate files or programs, often without the user’s knowledge, and can replicate across systems. Antivirus programs are designed to detect and remove viruses, but many computers lack pre-installed protection, and bundled antivirus software may expire after a trial period (e.g., 90 days).</p>
+        </section>
+
+        <section id="history">
+            <h2>History of Computer Viruses</h2>
+            <p>The first computer virus, known as Elk Cloner, was written in 1982 by 15-year-old high school student Rich Skrenta. It targeted Apple II systems, spreading via floppy disks by monitoring the drive and copying itself to any inserted diskette. Infected computers would infect other disks, and every 50th boot displayed a short poem. This marked the beginning of viruses as a disruptive force in computing.</p>
+        </section>
+
+        <section id="file-effects">
+            <h2>How Viruses Affect Files</h2>
+            <p>Viruses primarily target executable and data files, causing various forms of damage:</p>
+            <ul>
+                <li><strong>Targets:</strong> Commonly infects .com, .exe, .sys, .bin, .pif, or data files (e.g., Word, Excel documents).</li>
+                <li><strong>File Size Increase:</strong> Adds code to files, increasing their size, though sophisticated viruses may hide this change.</li>
+                <li><strong>File Deletion:</strong> Deletes the original file after loading into memory.</li>
+                <li><strong>Random Corruption:</strong> Randomly corrupts or deletes files, disrupting data integrity.</li>
+                <li><strong>Write-Protect Errors:</strong> Causes errors when attempting to write to write-protected disks.</li>
+                <li><strong>File Conversion:</strong> Converts .exe files to .com to prioritize virus execution.</li>
+            </ul>
+        </section>
+
+        <section id="system-effects">
+            <h2>What Viruses May Do to a Computer</h2>
+            <p>Virus infections can cause a range of system issues, though some symptoms may stem from non-viral causes:</p>
+            <ul>
+                <li>Deletes files or displays altered messages in files or programs.</li>
+                <li>Changes the volume label or marks disk clusters as bad in the File Allocation Table (FAT).</li>
+                <li>Randomly overwrites hard disk sectors or replaces the Master Boot Record (MBR).</li>
+                <li>Creates multiple partitions or reduces partition sizes.</li>
+                <li>Triggers errors like “invalid drive specification” or “sector not found.”</li>
+                <li>Slows system performance, creates cross-linked files, or modifies directory structures.</li>
+                <li>Causes hardware issues (e.g., unresponsive keyboards, printer malfunctions).</li>
+                <li>Disables ports (LPT, COM), remaps keyboard keys, or alters system time/date.</li>
+                <li>Causes random freezes, reboots, or unusual noises (e.g., beeps, music).</li>
+                <li>Displays images or error messages unexpectedly.</li>
+            </ul>
+        </section>
+
+        <section id="detection">
+            <h2>Detecting Viruses</h2>
+            <p>The most reliable method for detecting and removing viruses is using an antivirus protection program, which scans files and system areas for malicious code. Manual detection by observing symptoms (e.g., slow performance, unusual errors) is possible but unreliable, as it cannot identify specific viruses or clean infections effectively.</p>
+        </section>
+
+        <section id="myths">
+            <h2>Virus Myths</h2>
+            <p>Common misconceptions about viruses include:</p>
+            <ul>
+                <li><strong>Myth:</strong> Downloading files to a disk prevents virus infection. <em>Fact:</em> Viruses can reside in memory and infect disks inserted into the computer.</li>
+                <li><strong>Myth:</strong> Sealed or registered software is virus-free. <em>Fact:</em> Software can be infected during production, though rare.</li>
+                <li><strong>Myth:</strong> Avoiding Internet downloads eliminates virus risks. <em>Fact:</em> Viruses can spread via unverified files from any source.</li>
+                <li><strong>Myth:</strong> Reading emails is safe. <em>Fact:</em> Email attachments or embedded scripts can carry viruses.</li>
+                <li><strong>Myth:</strong> Staying offline prevents viruses. <em>Fact:</em> Floppy disks or other media can introduce viruses.</li>
+                <li><strong>Myth:</strong> Viewing web pages alone causes virus infections. <em>Fact:</em> Viruses require file execution, though spyware may run via scripts.</li>
+            </ul>
+        </section>
+
+        <section id="antivirus">
+            <h2>Antivirus Programs</h2>
+            <h3>McAfee VirusScan</h3>
+            <p>McAfee VirusScan is a popular antivirus program that loads into memory at boot, continuously monitoring for virus activity. It detects and removes viruses from files and system areas, offering robust protection.</p>
+            <h3>Norton Antivirus 2000</h3>
+            <p>Norton Antivirus 2000 (version 6.0) provides enhanced features over previous versions, including automatic scanning of emails, ZIP files, and executable files, ensuring comprehensive virus detection.</p>
+        </section>
+
+        <section id="formatting">
+            <h2>Formatting and Virus Removal</h2>
+            <p>Formatting or erasing a hard drive typically removes viruses by wiping all data, including malicious code. However, risks remain if:</p>
+            <ul>
+                <li>Infected backups are restored.</li>
+                <li>Other connected media or drives carry the virus.</li>
+                <li>The computer is networked with an infected system.</li>
+                <li>Software or firmware retains the virus.</li>
+            </ul>
+            <p><strong>Should you format a virus-affected drive?</strong> Formatting is effective but should be a last resort due to data loss. Use antivirus software first to attempt cleaning the system. If formatting, ensure backups are virus-free and reinstall a trusted OS.</p>
+            <p><strong>What happens after formatting?</strong> The drive is cleared of all data, including the virus, but the system must be reinstalled, and precautions taken to prevent reinfection.</p>
+        </section>
+
+        <section id="terms">
+            <h2>Computer Terms and Acronyms</h2>
+            <p>Key terms related to viruses and computing include:</p>
+            <ul>
+                <li><strong>BIOS (Basic Input Output System):</strong> Instructions on a motherboard chip that initialize hardware.</li>
+                <li><strong>Bit:</strong> Smallest unit of digital information (0 or 1).</li>
+                <li><strong>BPS (Bits Per Second):</strong> Measures data transmission speed (e.g., modem rates like 28.8Kbps).</li>
+                <li><strong>CMOS (Complementary Metal Oxide Semiconductor):</strong> Low-power chip storing system setup data, powered by a battery.</li>
+                <li><strong>Floppy Disk:</strong> Removable storage medium (3.5" or 5.25") used with floppy drives.</li>
+                <li><strong>GB (Gigabyte):</strong> 1,000 megabytes, a unit of storage capacity.</li>
+                <li><strong>GIF:</strong> Graphics Interchange Format, a common image file type (susceptible to virus attachment).</li>
+            </ul>
+        </section>
+
+        <section id="malware-types">
+            <h2>Types of Malware</h2>
+            <p>Beyond viruses, other malware types threaten systems:</p>
+            <ul>
+                <li><strong>Worms:</strong> Self-replicating programs that spread without user interaction, often clogging networks.</li>
+                <li><strong>Trojans:</strong> Disguised as legitimate software, they create backdoors for attackers.</li>
+                <li><strong>Spyware:</strong> Collects user data secretly, compromising privacy.</li>
+                <li><strong>Ransomware:</strong> Encrypts files, demanding payment for access.</li>
+                <li><strong>Adware:</strong> Displays unwanted ads, often bundled with free software.</li>
+            </ul>
+            <table>
+                <tr><th>Malware Type</th><th>Behavior</th></tr>
+                <tr><td>Virus</td><td>Attaches to files, spreads via execution</td></tr>
+                <tr><td>Worm</td><td>Self-replicates, spreads independently</td></tr>
+                <tr><td>Trojan</td><td>Poses as legitimate software</td></tr>
+                <tr><td>Spyware</td><td>Steals user data</td></tr>
+                <tr><td>Ransomware</td><td>Locks files for ransom</td></tr>
+                <tr><td>Adware</td><td>Displays intrusive ads</td></tr>
+            </table>
+        </section>
+
+        <section id="prevention">
+            <h2>Preventing Virus Infections</h2>
+            <p>Proactive measures reduce virus risks:</p>
+            <ul>
+                <li><strong>Install Antivirus Software:</strong> Use reputable programs like McAfee or Norton, keeping them updated.</li>
+                <li><strong>Regular Updates:</strong> Patch OS and software to fix vulnerabilities.</li>
+                <li><strong>Email Caution:</strong> Avoid opening unverified attachments or links.</li>
+                <li><strong>Safe Downloads:</strong> Use trusted sources for files and software.</li>
+                <li><strong>Firewalls:</strong> Enable network protection to block unauthorized access.</li>
+                <li><strong>Backups:</strong> Regularly back up data to external, virus-free storage.</li>
+            </ul>
+        </section>
+
+        <section id="evolution">
+            <h2>Evolution of Computer Viruses</h2>
+            <p>Viruses have evolved significantly since Elk Cloner:</p>
+            <ul>
+                <li><strong>1980s–1990s:</strong> Floppy-based viruses like Elk Cloner and boot sector viruses dominated.</li>
+                <li><strong>1990s–2000s:</strong> Macro viruses (e.g., Melissa) targeted Office documents, spreading via email.</li>
+                <li><strong>2000s–2010s:</strong> Worms (e.g., CodeRed) and Trojans exploited network vulnerabilities.</li>
+                <li><strong>2010s–Present:</strong> Ransomware (e.g., WannaCry) and advanced persistent threats (APTs) target financial gain or espionage.</li>
+            </ul>
+            <p>Modern viruses leverage AI and social engineering, requiring advanced defenses.</p>
+        </section>
+
+        <section id="importance">
+            <h2>Importance of Understanding Computer Viruses</h2>
+            <p>Computer viruses pose a persistent threat to data security and system integrity, impacting individuals, businesses, and governments. Understanding their behavior, detection, and prevention is crucial for safeguarding digital assets. Antivirus software, informed user practices, and robust security measures mitigate risks, while knowledge of virus myths prevents misinformation. As viruses evolve with technology, staying educated ensures resilience against cyber threats, making virus awareness a cornerstone of modern computing.</p>
+        </section>
+
+        <section id="questions">
+            <h2>Questions</h2>
+            <ul>
+                <li>What is a virus?</li>
+                <li>What is a computer virus?</li>
+                <li>How do viruses affect files?</li>
+                <li>What can viruses do to a computer?</li>
+                <li>How can viruses be detected?</li>
+                <li>What are common virus myths?</li>
+                <li>What is McAfee VirusScan, and how does it work?</li>
+                <li>What is Norton Antivirus, and what are its features?</li>
+                <li>Will formatting or erasing a hard drive remove a virus?</li>
+                <li>What happens if you format a virus-affected drive?</li>
+                <li>Should you format or erase a virus-affected drive or computer?</li>
+            </ul>
+        </section>
+    </div>
+    <footer>
+        <p>© 2025 IndianTechnoEra. All rights reserved.</p>
+    </footer>
+</body>
+</html>

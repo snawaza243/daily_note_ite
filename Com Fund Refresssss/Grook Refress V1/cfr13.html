@@ -3,9 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Chapter 13: Processing Unit</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+        }
+        nav {
+            background: #444;
+            padding: 10px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+        section {
+            margin: 20px 0;
+        }
+        h2, h3 {
+            color: #333;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 10px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        footer {
+            background: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-    
+    <header>
+        <h1>Chapter 13: Processing Unit</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#introduction">Introduction</a></li>
+            <li><a href="#microprocessor">Microprocessor</a></li>
+            <li><a href="#memory-processor">Memory Processor</a></li>
+            <li><a href="#registers">Registers</a></li>
+            <li><a href="#importance">Importance in Computing</a></li>
+            <li><a href="#questions">Questions</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <section id="introduction">
+            <h2>Introduction to Processing Unit</h2>
+            <p>The processing unit is the core component of a computer system responsible for executing instructions by taking input, processing it, and producing output. It interprets and performs operations on data, enabling the computer to run programs and perform tasks. There are two primary types of processing units: the <strong>microprocessor</strong>, often referred to as the Central Processing Unit (CPU), and the <strong>memory processor</strong>, which manages data storage. This chapter explores the microprocessor, its components (ALU and CU), the memory processor (internal and external memory), additional components like registers, and their significance in modern computing.</p>
+        </section>
+
+        <section id="microprocessor">
+            <h2>Microprocessor</h2>
+            <p>The microprocessor, often called the CPU, is the brain of the computer, responsible for fetching, decoding, and executing instructions at high speed. It processes data and sends it to other units for further handling. Developed by <strong>Ted Hoff</strong> at Intel in 1969 and introduced in 1971, the first microprocessor was the <strong>Intel 4004</strong>. Subsequent Intel processors included the 8085, 8086, 8088, 80186, 80286, 80386, 80486, Pentium, Pentium Pro, Pentium II, Pentium III, Pentium IV, Core, Core 2 Duo, and modern Core i-series (e.g., i3, i5, i7, i9).</p>
+            <p>The microprocessor consists of two main units:</p>
+            <h3>Arithmetic and Logical Unit (ALU)</h3>
+            <p><strong>Full Form:</strong> Arithmetic and Logical Unit</p>
+            <p>The ALU performs arithmetic operations (e.g., addition, subtraction) and logical operations (e.g., AND, OR, NOT) on data retrieved from primary memory. After processing, it sends the results back to primary memory for storage or further use.</p>
+            <h3>Control Unit (CU)</h3>
+            <p><strong>Full Form:</strong> Control Unit</p>
+            <p>The CU coordinates and controls all computer components, directing data flow between the CPU, memory, and peripherals. It does not participate in data processing but ensures operations are executed correctly.</p>
+            <h3>Microprocessor Evolution</h3>
+            <table>
+                <tr><th>Processor</th><th>Year</th><th>Key Features</th></tr>
+                <tr><td>Intel 4004</td><td>1971</td><td>4-bit, 2,300 transistors, 740 kHz</td></tr>
+                <tr><td>Intel 8086</td><td>1978</td><td>16-bit, 29,000 transistors, 5–10 MHz</td></tr>
+                <tr><td>Intel 80386</td><td>1985</td><td>32-bit, 275,000 transistors, 12–40 MHz</td></tr>
+                <tr><td>Pentium</td><td>1993</td><td>32-bit, 3.1 million transistors, 60–300 MHz</td></tr>
+                <tr><td>Core i7</td><td>2008</td><td>64-bit, multi-core, up to 731 million transistors</td></tr>
+            </table>
+        </section>
+
+        <section id="memory-processor">
+            <h2>Memory Processor (Memory Unit)</h2>
+            <p>The memory processor, or memory unit, is responsible for storing data and instructions, either temporarily or permanently. It is divided into two main categories: <strong>internal memory</strong> (primary memory) and <strong>external memory</strong> (secondary memory).</p>
+            <h3>Internal Memory (Primary Memory)</h3>
+            <p>Internal memory stores data temporarily in the form of electronic charges, making it volatile (data is lost when power is off). It is fast and directly accessible by the CPU. There are two types:</p>
+            <h4>Random Access Memory (RAM)</h4>
+            <p><strong>Full Form:</strong> Random Access Memory</p>
+            <p>RAM is a read-and-write memory, also known as user memory, where the operating system, applications, and data in use are stored for quick CPU access. It allows random access to any memory location, enhancing speed.</p>
+            <h4>Read-Only Memory (ROM)</h4>
+            <p><strong>Full Form:</strong> Read-Only Memory</p>
+            <p>ROM stores data permanently, retaining it even when the computer is powered off (as long as the system is functional). It holds critical system instructions, such as the BIOS. Variants include PROM (Programmable ROM), EPROM (Erasable Programmable ROM), and EEPROM (Electrically Erasable Programmable ROM).</p>
+            <h3>External Memory (Secondary Memory)</h3>
+            <p>External memory stores data permanently using magnetic charges or optical pits and lands, making it non-volatile. Examples include hard disk drives (HDDs), solid-state drives (SSDs), magnetic tapes, and optical disks (e.g., CD-ROM, DVD). Secondary memory is slower than primary memory but offers higher capacity and durability.</p>
+            <h3>Comparison of Memory Types</h3>
+            <table>
+                <tr><th>Memory Type</th><th>Volatility</th><th>Speed</th><th>Capacity</th><th>Use Case</th></tr>
+                <tr><td>RAM</td><td>Volatile</td><td>Fast (ns)</td><td>MB–GB</td><td>Active programs</td></tr>
+                <tr><td>ROM</td><td>Non-volatile</td><td>Fast</td><td>KB–MB</td><td>System firmware</td></tr>
+                <tr><td>Secondary Memory</td><td>Non-volatile</td><td>Slower (ms)</td><td>GB–TB</td><td>Long-term storage</td></tr>
+            </table>
+        </section>
+
+        <section id="registers">
+            <h2>Registers</h2>
+            <p>Registers are small, high-speed storage locations within the microprocessor, used to hold temporary data and instructions during processing. They are faster than RAM and critical for CPU efficiency. Key types include:</p>
+            <ul>
+                <li><strong>Program Counter (PC):</strong> Stores the address of the next instruction to fetch.</li>
+                <li><strong>Instruction Register (IR):</strong> Holds the current instruction being decoded.</li>
+                <li><strong>Accumulator:</strong> Stores intermediate results from ALU operations.</li>
+                <li><strong>Memory Address Register (MAR):</strong> Holds the address of data to be accessed in memory.</li>
+                <li><strong>Memory Data Register (MDR):</strong> Holds data being transferred to or from memory.</li>
+            </ul>
+            <p>Registers enhance processing speed by minimizing memory access delays.</p>
+        </section>
+
+        <section id="importance">
+            <h2>Importance of Processing Units in Computing</h2>
+            <p>The processing unit, encompassing the microprocessor and memory unit, is the heart of a computer system. The microprocessor’s ALU and CU enable rapid execution of complex tasks, while registers optimize performance. Primary memory (RAM and ROM) provides fast access to active data and critical firmware, and secondary memory ensures long-term storage. Modern advancements, such as multi-core CPUs, GPUs, and high-capacity SSDs, have expanded the capabilities of processing units, supporting applications from artificial intelligence to gaming. Efficient processing units are essential for performance, scalability, and innovation in computing.</p>
+        </section>
+
+        <section id="questions">
+            <h2>Questions</h2>
+            <p><em>Note: The provided content did not include explicit questions for this unit. The following questions are derived from the context to align with the format of previous chapters.</em></p>
+            <ul>
+                <li>What is a processing unit?</li>
+                <li>What are the types of processing units?</li>
+                <li>What is a microprocessor?</li>
+                <li>What is the full form of CPU?</li>
+                <li>Who developed the first microprocessor, and when?</li>
+                <li>What are the main units of a microprocessor?</li>
+                <li>What is the Arithmetic and Logical Unit (ALU)?</li>
+                <li>What is the full form of ALU?</li>
+                <li>What is the Control Unit (CU)?</li>
+                <li>What is the full form of CU?</li>
+                <li>What is a memory processor (memory unit)?</li>
+                <li>What are the types of memory units?</li>
+                <li>What is internal memory (primary memory)?</li>
+                <li>What are the types of internal memory?</li>
+                <li>What is Random Access Memory (RAM)?</li>
+                <li>What is the full form of RAM?</li>
+                <li>What is Read-Only Memory (ROM)?</li>
+                <li>What is the full form of ROM?</li>
+                <li>What are examples of ROM variants?</li>
+                <li>What is external memory (secondary memory)?</li>
+                <li>What are examples of secondary memory devices?</li>
+                <li>What are registers, and why are they important?</li>
+                <li>How have microprocessors evolved over time?</li>
+            </ul>
+        </section>
+    </div>
+    <footer>
+        <p>© 2025 IndianTechnoEra. All rights reserved.</p>
+    </footer>
 </body>
 </html>
