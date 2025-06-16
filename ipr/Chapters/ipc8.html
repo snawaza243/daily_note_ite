@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 8: Financial Transaction Security</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        .emv-chip {
+            background: linear-gradient(135deg, #fcd34d, #f59e0b);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .chip-sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle 1.5s infinite;
+        }
+        @keyframes sparkle {
+            0% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0); }
+        }
+        .card-back {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+        }
+        .cvv-strip {
+            background: repeating-linear-gradient(45deg, #d1d5db, #d1d5db 2px, #9ca3af 2px, #9ca3af 4px);
+        }
+        .step {
+            display: none;
+        }
+        .step.active {
+            display: block;
+        }
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <header class="bg-green-900 text-white p-6">
+        <h1 class="text-3xl font-bold">Chapter 8: Financial Transaction Security</h1>
+        <p class="mt-2 opacity-90">Payment Protocols, Fraud Prevention, and Transaction Protections</p>
+    </header>
+
+    <main class="container mx-auto p-4">
+        <!-- ONLINE BANKING SECURITY -->
+        <section id="online-banking" class="mb-12 p-6 bg-blue-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Online Banking Protections</h2>
+            
+            <div class="security-mechanisms grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="mechanism-card bg-white p-4 rounded-lg shadow">
+                    <div class="icon bg-blue-100 text-blue-600 w-12 h-12 rounded-full flex items-center justify-center mb-2 mx-auto">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="font-bold text-center">2FA Systems</h3>
+                    <div class="types mt-2 space-y-1">
+                        <div class="type-item flex items-center">
+                            <div class="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                            <span class="text-sm">SMS OTP</span>
+                            <span class="ml-auto text-xs bg-gray-100 px-1 rounded">Risk: Medium</span>
+                        </div>
+                        <div class="type-item flex items-center">
+                            <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                            <span class="text-sm">TOTP (Google Authenticator)</span>
+                            <span class="ml-auto text-xs bg-gray-100 px-1 rounded">Risk: Low</span>
+                        </div>
+                        <div class="type-item flex items-center">
+                            <div class="w-2 h-2 bg-purple-500 rounded-full mr-2"></div>
+                            <span class="text-sm">Push Notifications</span>
+                            <span class="ml-auto text-xs bg-gray-100 px-1 rounded">Risk: Low</span>
+                        </div>
+                    </div>
+                    <button onclick="simulate2FA()" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white p-2 w-full text-sm transition">Test 2FA Flow</button>
+                </div>
+                
+                <div class="mechanism-card bg-white p-4 rounded-lg shadow">
+                    <div class="icon bg-green-100 text-green-600 w-12 h-12 rounded-full flex items-center justify-center mb-2 mx-auto">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h3 class="font-bold text-center">Behavioral Analysis</h3>
+                    <div class="factors mt-2">
+                        <div class="factor flex justify-between text-sm">
+                            <span>Typing Pattern:</span>
+                            <span class="font-mono">98% match</span>
+                        </div>
+                        <div class="factor flex justify-between text-sm">
+                            <span>Location:</span>
+                            <span class="font-mono">Usual</span>
+                        </div>
+                        <div class="factor flex justify-between text-sm">
+                            <span>Time of Day:</span>
+                            <span class="font-mono">Typical</span>
+                        </div>
+                        <div class="factor flex justify-between text-sm">
+                            <span>Device:</span>
+                            <span class="font-mono">Recognized</span>
+                        </div>
+                    </div>
+                    <button onclick="simulateBehaviorAnalysis()" class="mt-4 bg-green-500 hover:bg-green-600 text-white p-2 w-full text-sm transition">Run Analysis</button>
+                </div>
+                
+                <div class="mechanism-card bg-white p-4 rounded-lg shadow">
+                    <div class="icon bg-purple-100 text-purple-600 w-12 h-12 rounded-full flex items-center justify-center mb-2 mx-auto">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3 class="font-bold text-center">Transaction Signing</h3>
+                    <div class="methods mt-2 space-y-1">
+                        <div class="method-item flex items-center">
+                            <div class="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
+                            <span class="text-sm">eMandates</span>
+                        </div>
+                        <div class="method-item flex items-center">
+                            <div class="w-2 h-2 bg-yellow-500 rounded-full mr-2"></div>
+                            <span class="text-sm">Digital Signatures</span>
+                        </div>
+                        <div class="method-item flex items-center">
+                            <div class="w-2 h-2 bg-indigo-500 rounded-full mr-2"></div>
+                            <span class="text-sm">QR Code Auth</span>
+                        </div>
+                        <div class="method-item flex items-center">
+                            <div class="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                            <span class="text-sm">Biometric Approval</span>
+                        </div>
+                    </div>
+                    <button onclick="simulateTransactionSigning()" class="mt-4 bg-purple-500 hover:bg-purple-600 text-white p-2 w-full text-sm transition">Test Signing</button>
+                </div>
+            </div>
+            
+            <div class="banking-simulator border-2 border-blue-300 p-4 rounded-lg bg-white mt-6">
+                <h3 class="font-bold mb-2">Online Banking Security Simulator</h3>
+                <div class="steps">
+                    <div class="step active" id="step1">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-medium">1. Login Credentials</span>
+                            <span class="status-badge bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs">Pending</span>
+                        </div>
+                        <input type="text" placeholder="Username" class="w-full border p-2 mb-2 rounded" id="bankUsername">
+                        <input type="password" placeholder="Password" class="w-full border p-2 rounded" id="bankPassword">
+                        <div class="mt-2 flex items-center">
+                            <input type="checkbox" id="rememberMe" class="mr-2">
+                            <label for="rememberMe" class="text-sm">Remember this device</label>
+                        </div>
+                    </div>
+                    <div class="step hidden" id="step2">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-medium">2. Two-Factor Authentication</span>
+                            <span class="status-badge bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs">Pending</span>
+                        </div>
+                        <div class="text-center mb-4">
+                            <p class="text-sm">Enter the 6-digit code sent to your registered device</p>
+                            <div class="flex justify-center mt-2">
+                                <input type="text" maxlength="1" class="w-10 h-12 border text-center text-xl mx-1 rounded" pattern="\d*">
+                                <input type="text" maxlength="1" class="w-10 h-12 border text-center text-xl mx-1 rounded" pattern="\d*">
+                                <input type="text" maxlength="1" class="w-10 h-12 border text-center text-xl mx-1 rounded" pattern="\d*">
+                                <input type="text" maxlength="1" class="w-10 h-12 border text-center text-xl mx-1 rounded" pattern="\d*">
+                                <input type="text" maxlength="1" class="w-10 h-12 border text-center text-xl mx-1 rounded" pattern="\d*">
+                                <input type="text" maxlength="1" class="w-10 h-12 border text-center text-xl mx-1 rounded" pattern="\d*">
+                            </div>
+                            <p class="text-xs mt-2 text-gray-500">Code expires in 2:00</p>
+                        </div>
+                    </div>
+                    <div class="step hidden" id="step3">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-medium">3. Transaction Verification</span>
+                            <span class="status-badge bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs">Pending</span>
+                        </div>
+                        <div class="transaction-details bg-gray-50 p-3 rounded mb-4">
+                            <div class="flex justify-between mb-1">
+                                <span>Recipient:</span>
+                                <span class="font-medium">John Doe</span>
+                            </div>
+                            <div class="flex justify-between mb-1">
+                                <span>Account:</span>
+                                <span class="font-mono">XX3456</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Amount:</span>
+                                <span class="font-bold">$1,250.00</span>
+                            </div>
+                        </div>
+                        <div class="verification-methods">
+                            <label class="flex items-center mb-2">
+                                <input type="radio" name="verification" class="mr-2" checked> SMS OTP
+                            </label>
+                            <label class="flex items-center mb-2">
+                                <input type="radio" name="verification" class="mr-2"> Push Notification
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="verification" class="mr-2"> Hardware Token
+                            </label>
+                        </div>
+                    </div>
+                    <div class="step hidden" id="step4">
+                        <div class="text-center py-8">
+                            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-check text-green-600 text-2xl"></i>
+                            </div>
+                            <h4 class="font-bold text-lg mb-1">Transaction Approved</h4>
+                            <p class="text-sm text-gray-600">$1,250.00 to John Doe (XX3456)</p>
+                            <p class="text-xs mt-4 text-gray-500">Reference: TXN-987654321</p>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="nextBankingStep()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white p-2 w-full rounded transition" id="bankingButton">Continue</button>
+            </div>
+        </section>
+
+        <!-- CARD SECURITY LAB -->
+        <section id="card-security" class="mb-12 p-6 bg-purple-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Card Payment Security</h2>
+            
+            <div class="card-tech grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="tech-card emv bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold">EMV Chip Technology</h3>
+                    <div class="chip-visualization mt-4 h-24 relative">
+                        <div class="emv-chip absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-10 rounded-sm flex items-center justify-center">
+                            <span class="text-xs font-bold text-gray-800">EMV</span>
+                        </div>
+                        <div class="chip-sparkle" style="top: 30%; left: 30%; animation-delay: 0s;"></div>
+                        <div class="chip-sparkle" style="top: 70%; left: 60%; animation-delay: 0.3s;"></div>
+                        <div class="chip-sparkle" style="top: 40%; left: 70%; animation-delay: 0.6s;"></div>
+                    </div>
+                    <p class="text-sm mt-2">Dynamic authentication per transaction</p>
+                    <button onclick="simulateEmvTransaction()" class="mt-3 bg-amber-500 hover:bg-amber-600 text-white p-1 w-full text-xs rounded transition">Simulate Transaction</button>
+                </div>
+                
+                <div class="tech-card tokenization bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold">Tokenization</h3>
+                    <div class="token-flow mt-4">
+                        <div class="mermaid">
+                            graph LR
+                                PAN[Primary Account Number] -->|Original| TSP[Token Service Provider]
+                                TSP -->|Token| Merchant
+                                TSP -->|PAN| Bank
+                                Merchant -->|Token| Payment[Payment Processor]
+                                Payment -->|Token| TSP
+                                TSP -->|PAN| Bank
+                        </div>
+                    </div>
+                    <p class="text-sm mt-2">Replaces sensitive card data with tokens</p>
+                    <button onclick="showTokenization()" class="mt-3 bg-purple-500 hover:bg-purple-600 text-white p-1 w-full text-xs rounded transition">Tokenize Card</button>
+                </div>
+                
+                <div class="tech-card cvv bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold">CVV Security</h3>
+                    <div class="cvv-example mt-4 flex justify-center">
+                        <div class="card-back w-32 h-20 rounded-lg border-2 border-gray-300 relative">
+                            <div class="cvv-strip absolute bottom-4 left-2 right-2 h-6 flex items-center justify-end pr-2">
+                                <span class="text-sm text-white">CVV: <span id="cvvValue">***</span></span>
+                                <button onclick="revealCVV()" class="ml-2 bg-gray-200 p-1 text-xs rounded">Show</button>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-sm mt-2">Not stored by merchants (PCI DSS Requirement)</p>
+                    <div class="mt-3 text-xs bg-yellow-50 p-2 rounded">
+                        <i class="fas fa-exclamation-triangle text-yellow-500 mr-1"></i>
+                        Never share your CVV with anyone
+                    </div>
+                </div>
+            </div>
+            
+            <div class="fraud-simulator border-2 border-purple-300 p-4 rounded-lg bg-white">
+                <h3 class="font-bold mb-2">Card Fraud Detection</h3>
+                <div class="transaction-list space-y-2 mb-4">
+                    <div class="transaction flex justify-between items-center p-2 bg-green-50 rounded">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-2">
+                                <i class="fas fa-shopping-bag text-green-600 text-sm"></i>
+                            </div>
+                            <span>Amazon Purchase • $29.99 • US</span>
+                        </div>
+                        <div class="text-green-600 font-medium">✓ Approved</div>
+                    </div>
+                    <div class="transaction flex justify-between items-center p-2 bg-yellow-50 rounded">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center mr-2">
+                                <i class="fas fa-gas-pump text-yellow-600 text-sm"></i>
+                            </div>
+                            <span>Gas Station • $45.00 • Next State</span>
+                        </div>
+                        <div class="text-yellow-600 font-medium">? Review</div>
+                    </div>
+                    <div class="transaction flex justify-between items-center p-2 bg-red-50 rounded">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center mr-2">
+                                <i class="fas fa-plane text-red-600 text-sm"></i>
+                            </div>
+                            <span>International Airline • $1,200 • France</span>
+                        </div>
+                        <div class="text-red-600 font-medium">✗ Flagged</div>
+                    </div>
+                    <div class="transaction flex justify-between items-center p-2 bg-green-50 rounded">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-2">
+                                <i class="fas fa-utensils text-green-600 text-sm"></i>
+                            </div>
+                            <span>Restaurant • $32.50 • Local</span>
+                        </div>
+                        <div class="text-green-600 font-medium">✓ Approved</div>
+                    </div>
+                </div>
+                <button onclick="analyzeFraudPatterns()" class="bg-purple-600 hover:bg-purple-700 text-white p-2 w-full rounded transition">Run Fraud Analysis</button>
+                <div id="fraudAnalysisResult" class="mt-4 hidden">
+                    <div class="fraud-chart h-48">
+                        <canvas id="fraudChart"></canvas>
+                    </div>
+                    <div class="fraud-factors mt-3 p-3 bg-gray-50 rounded">
+                        <h4 class="font-medium mb-1">Detection Factors:</h4>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span>Geographic Velocity:</span>
+                            <span class="font-bold text-red-600">High Risk</span>
+                        </div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span>Purchase Pattern:</span>
+                            <span class="font-bold text-yellow-600">Medium Risk</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span>Merchant Reputation:</span>
+                            <span class="font-bold text-green-600">Low Risk</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- UPI SECURITY ARCHITECTURE -->
+        <section id="upi-security" class="mb-12 p-6 bg-green-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">UPI Security Framework</h2>
+            
+            <div class="upi-flow mb-6">
+                <div class="mermaid">
+                    sequenceDiagram
+                        participant C as Customer
+                        participant P as PSP App
+                        participant N as NPCI
+                        participant B as Bank
+                        C->>P: Initiate Payment (MPIN)
+                        Note right of C: MPIN encrypted with<br/>device-specific key
+                        P->>N: Encrypted Payment Request
+                        N->>B: Authorization Request
+                        B->>N: Authorization Response
+                        N->>P: Transaction Status
+                        P->>C: Payment Confirmation
+                        Note left of B: Multi-factor check:<br/>MPIN, device binding,<br/>transaction limits
+                </div>
+            </div>
+            
+            <div class="security-features grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="feature-card bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold">MPIN Security</h3>
+                    <ul class="list-disc pl-5 mt-2 text-sm space-y-1">
+                        <li>Never transmitted in plaintext</li>
+                        <li>Device binding with device ID</li>
+                        <li>Limited attempt lockout (3-5 attempts)</li>
+                        <li>Encrypted local storage</li>
+                        <li>Not recoverable via customer service</li>
+                    </ul>
+                </div>
+                <div class="feature-card bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold">Transaction Safeguards</h3>
+                    <ul class="list-disc pl-5 mt-2 text-sm space-y-1">
+                        <li>Default ₹5,000 limit for new payees</li>
+                        <li>OTP for high-value transactions</li>
+                        <li>Mandatory beneficiary cooling period (24-48 hrs)</li>
+                        <li>Transaction velocity monitoring</li>
+                        <li>Device location verification</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="upi-simulator border-2 border-green-300 p-4 rounded-lg bg-white">
+                <h3 class="font-bold mb-2">UPI Fraud Prevention</h3>
+                <div class="scenario-selector mb-4">
+                    <label class="block mb-2">Fraud Scenario:</label>
+                    <select id="fraudScenario" class="w-full border p-2 rounded">
+                        <option value="sim">SIM Swap Attack</option>
+                        <option value="phish">Phishing Attack</option>
+                        <option value="malware">App Tampering</option>
+                        <option value="mitm">Man-in-the-Middle</option>
+                    </select>
+                </div>
+                <button onclick="simulateUPIFraud()" class="bg-green-600 hover:bg-green-700 text-white p-2 w-full rounded transition mb-4">Run Simulation</button>
+                <div id="upiProtectionResult" class="hidden p-4 bg-gray-50 rounded-lg">
+                    <div class="protection-steps space-y-3">
+                        <div class="step flex items-start">
+                            <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-2 mt-0.5">
+                                <i class="fas fa-check text-green-600 text-xs"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">Device Binding Check</h4>
+                                <p class="text-xs text-gray-600">Verified device ID matches registration</p>
+                            </div>
+                        </div>
+                        <div class="step flex items-start">
+                            <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-2 mt-0.5">
+                                <i class="fas fa-check text-green-600 text-xs"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">MPIN Encryption</h4>
+                                <p class="text-xs text-gray-600">MPIN never transmitted in clear text</p>
+                            </div>
+                        </div>
+                        <div class="step flex items-start" id="velocityCheck">
+                            <!-- Dynamically filled based on scenario -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="upi-limits mt-6 p-4 bg-white rounded-lg shadow">
+                <h3 class="font-bold mb-2">UPI Transaction Limits</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="limit-card p-3 bg-blue-50 rounded">
+                        <h4 class="font-medium text-sm">Default per transaction</h4>
+                        <p class="font-bold">₹5,000</p>
+                        <p class="text-xs mt-1">For new beneficiaries</p>
+                    </div>
+                    <div class="limit-card p-3 bg-green-50 rounded">
+                        <h4 class="font-medium text-sm">Enhanced limit</h4>
+                        <p class="font-bold">₹1,00,000</p>
+                        <p class="text-xs mt-1">After beneficiary cooling period</p>
+                    </div>
+                    <div class="limit-card p-3 bg-purple-50 rounded">
+                        <h4 class="font-medium text-sm">Daily limit</h4>
+                        <p class="font-bold">₹1,00,000</p>
+                        <p class="text-xs mt-1">Varies by bank</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FINANCIAL SECURITY CHALLENGES -->
+    <div class="challenges fixed bottom-4 right-4 bg-white p-4 shadow-xl rounded-lg border-2 border-green-600" style="width: 300px;">
+        <h3 class="font-bold text-lg mb-2">Security Challenges</h3>
+        <div class="space-y-3">
+            <div class="challenge-item p-2 bg-gray-100 rounded cursor-pointer" onclick="startChallenge(1)">
+                <h4 class="font-medium">1. Configure Optimal 2FA</h4>
+                <p class="text-sm mt-1">Select methods for a high-net-worth banking client</p>
+            </div>
+            <div class="challenge-item p-2 bg-gray-100 rounded cursor-pointer" onclick="startChallenge(2)">
+                <h4 class="font-medium">2. Detect EMV Skimming</h4>
+                <p class="text-sm mt-1">Analyze transaction patterns for cloned cards</p>
+            </div>
+            <div class="challenge-item p-2 bg-gray-100 rounded cursor-pointer" onclick="startChallenge(3)">
+                <h4 class="font-medium">3. Prevent UPI Phishing</h4>
+                <p class="text-sm mt-1">Implement protections against social engineering</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: { useMaxWidth: false }
+        });
+
+        // Banking Simulator
+        let currentBankingStep = 1;
+        const maxBankingSteps = 4;
+        
+        function nextBankingStep() {
+            document.getElementById(`step${currentBankingStep}`).classList.remove('active');
+            document.getElementById(`step${currentBankingStep}`).classList.add('hidden');
+            
+            currentBankingStep++;
+            
+            if (currentBankingStep > maxBankingSteps) {
+                currentBankingStep = 1;
+                resetBankingSimulator();
+            }
+            
+            document.getElementById(`step${currentBankingStep}`).classList.remove('hidden');
+            document.getElementById(`step${currentBankingStep}`).classList.add('active');
+            
+            // Update button text
+            const button = document.getElementById('bankingButton');
+            if (currentBankingStep === maxBankingSteps) {
+                button.textContent = 'Start New Session';
+            } else {
+                button.textContent = currentBankingStep === 3 ? 'Authorize Transaction' : 'Continue';
+            }
+        }
+        
+        function resetBankingSimulator() {
+            document.getElementById('bankUsername').value = '';
+            document.getElementById('bankPassword').value = '';
+            document.getElementById('rememberMe').checked = false;
+        }
+
+        // 2FA Simulation
+        function simulate2FA() {
+            const methods = [
+                { name: 'SMS OTP', risk: 'Medium', icon: 'fa-sms', color: 'blue' },
+                { name: 'TOTP (Google Authenticator)', risk: 'Low', icon: 'fa-mobile-alt', color: 'green' },
+                { name: 'Push Notifications', risk: 'Low', icon: 'fa-bell', color: 'purple' },
+                { name: 'Biometric Verification', risk: 'Very Low', icon: 'fa-fingerprint', color: 'indigo' }
+            ];
+            
+            let html = '<div class="p-3 bg-blue-50 rounded-lg mt-4"><h4 class="font-medium mb-2">2FA Method Comparison</h4><div class="space-y-2">';
+            
+            methods.forEach(method => {
+                html += `
+                    <div class="flex items-center justify-between p-2 bg-white rounded">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 bg-${method.color}-100 rounded-full flex items-center justify-center mr-2">
+                                <i class="fas ${method.icon} text-${method.color}-600"></i>
+                            </div>
+                            <span class="text-sm">${method.name}</span>
+                        </div>
+                        <span class="text-xs bg-gray-100 px-2 py-1 rounded">${method.risk} Risk</span>
+                    </div>
+                `;
+            });
+            
+            html += '</div></div>';
+            
+            // Show in a modal or alert - simplified for this example
+            alert('2FA simulation would show detailed comparison here');
+        }
+
+        // EMV Chip Simulation
+        function simulateEmvTransaction() {
+            // Generate dynamic cryptogram
+            const arqc = generateRandomHex(16);
+            const atc = Math.floor(Math.random() * 65536).toString(16).padStart(4, '0');
+            const tvr = generateRandomHex(5);
+            
+            // Show result
+            const resultHtml = `
+                <div class="mt-3 p-3 bg-amber-50 rounded">
+                    <h4 class="font-medium mb-1">EMV Transaction Data</h4>
+                    <div class="text-xs space-y-1">
+                        <div class="flex justify-between">
+                            <span>ARQC:</span>
+                            <span class="font-mono">${arqc}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>ATC:</span>
+                            <span class="font-mono">${atc}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>TVR:</span>
+                            <span class="font-mono">${tvr}</span>
+                        </div>
+                    </div>
+                    <p class="text-xs mt-2">Unique per transaction, preventing replay attacks</p>
+                </div>
+            `;
+            
+            // For demo, just alert - in real implementation would insert into DOM
+            alert('EMV transaction simulated with dynamic cryptogram:\nARQC: ' + arqc);
+        }
+
+        // Tokenization Demo
+        function showTokenization() {
+            const pan = '4111111111111111';
+            const token = 'tok_' + generateRandomHex(12);
+            
+            const html = `
+                <div class="mt-3 p-3 bg-purple-50 rounded">
+                    <h4 class="font-medium mb-2">Tokenization Example</h4>
+                    <div class="flex justify-between items-center mb-2">
+                        <span>Original PAN:</span>
+                        <span class="font-mono bg-red-100 px-2 py-1 rounded">${pan}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Token:</span>
+                        <span class="font-mono bg-green-100 px-2 py-1 rounded">${token}</span>
+                    </div>
+                    <p class="text-xs mt-2">Token is merchant-specific and device-bound</p>
+                </div>
+            `;
+            
+            // For demo, just alert - in real implementation would insert into DOM
+            alert('Tokenization example:\nPAN: ' + pan + '\nToken: ' + token);
+        }
+
+        // CVV Reveal
+        function revealCVV() {
+            const cvv = Math.floor(Math.random() * 900 + 100); // Random 3-digit number
+            const button = event.target;
+            
+            if (button.textContent === 'Show') {
+                document.getElementById('cvvValue').textContent = cvv;
+                button.textContent = 'Hide';
+                button.classList.remove('bg-gray-200');
+                button.classList.add('bg-red-200', 'text-red-800');
+                
+                // Auto-hide after 3 seconds
+                setTimeout(() => {
+                    document.getElementById('cvvValue').textContent = '***';
+                    button.textContent = 'Show';
+                    button.classList.remove('bg-red-200', 'text-red-800');
+                    button.classList.add('bg-gray-200');
+                }, 3000);
+            } else {
+                document.getElementById('cvvValue').textContent = '***';
+                button.textContent = 'Show';
+                button.classList.remove('bg-red-200', 'text-red-800');
+                button.classList.add('bg-gray-200');
+            }
+        }
+
+        // Fraud Analysis
+        function analyzeFraudPatterns() {
+            // Initialize chart if not already exists
+            if (!window.fraudChart) {
+                const ctx = document.getElementById('fraudChart').getContext('2d');
+                window.fraudChart = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Geographic Anomaly', 'Time Pattern', 'Amount Deviation', 'Merchant Risk', 'Velocity'],
+                        datasets: [{
+                            label: 'Transaction Risk',
+                            data: [85, 45, 70, 30, 90],
+                            backgroundColor: 'rgba(220, 38, 38, 0.2)',
+                            borderColor: 'rgba(220, 38, 38, 1)',
+                            pointBackgroundColor: 'rgba(220, 38, 38, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(220, 38, 38, 1)'
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            r: {
+                                angleLines: { display: true },
+                                suggestedMin: 0,
+                                suggestedMax: 100
+                            }
+                        }
+                    }
+                });
+            }
+            
+            document.getElementById('fraudAnalysisResult').classList.remove('hidden');
+        }
+
+        // UPI Fraud Simulation
+        function simulateUPIFraud() {
+            const scenario = document.getElementById('fraudScenario').value;
+            let resultText = '';
+            let protectionSteps = '';
+            
+            switch(scenario) {
+                case 'sim':
+                    resultText = 'SIM Swap Attack Detected';
+                    protectionSteps = `
+                        <div class="step flex items-start">
+                            <div class="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center mr-2 mt-0.5">
+                                <i class="fas fa-times text-red-600 text-xs"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">Device Changed</h4>
+                                <p class="text-xs text-gray-600">Transaction blocked - device doesn't match registered device</p>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'phish':
+                    resultText = 'Phishing Attempt Blocked';
+                    protectionSteps = `
+                        <div class="step flex items-start">
+                            <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-2 mt-0.5">
+                                <i class="fas fa-check text-green-600 text-xs"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">MPIN Not Shared</h4>
+                                <p class="text-xs text-gray-600">Genuine UPI apps never ask for MPIN via links</p>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'malware':
+                    resultText = 'App Tampering Detected';
+                    protectionSteps = `
+                        <div class="step flex items-start">
+                            <div class="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center mr-2 mt-0.5">
+                                <i class="fas fa-times text-red-600 text-xs"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">App Integrity Check</h4>
+                                <p class="text-xs text-gray-600">Modified app detected - transaction blocked</p>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'mitm':
+                    resultText = 'MITM Protection Active';
+                    protectionSteps = `
+                        <div class="step flex items-start">
+                            <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-2 mt-0.5">
+                                <i class="fas fa-check text-green-600 text-xs"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">End-to-End Encryption</h4>
+                                <p class="text-xs text-gray-600">All communications encrypted with TLS 1.3</p>
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+            
+            document.getElementById('velocityCheck').innerHTML = protectionSteps;
+            document.getElementById('upiProtectionResult').classList.remove('hidden');
+        }
+
+        // Challenge Starter
+        function startChallenge(number) {
+            alert(`Starting Challenge ${number} - This would open an interactive lab in a full implementation`);
+        }
+
+        // Helper functions
+        function generateRandomHex(length) {
+            let result = '';
+            const chars = '0123456789ABCDEF';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        // Initialize components when page loads
+        window.onload = function() {
+            // Initialize any charts or visualizations
+            mermaid.init();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,335 @@
+**Role:** Financial Security Architect and Fraud Prevention Specialist  
+**Task:** Create an interactive HTML tutorial for Chapter 8 with transaction security labs and payment protocol analyzers  
+**Output Requirements:**  
+
+1. **Technical Specifications:**  
+   - Single HTML5 file with embedded Tailwind CSS  
+   - JavaScript-powered payment protocol simulators  
+   - Mermaid.js for transaction flows  
+   - Canvas-based EMV chip transaction visualization  
+   - UPI security challenge generator  
+   - Responsive fraud detection dashboard  
+
+2. **Content Structure:**  
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Head with Tailwind, Mermaid, Chart.js, CryptoJS -->
+</head>
+<body class="bg-gray-50">
+    <header class="bg-green-900 text-white p-6">
+        <h1 class="text-3xl font-bold">Chapter 8: Financial Transaction Security</h1>
+    </header>
+
+    <main class="container mx-auto p-4">
+        <!-- ONLINE BANKING SECURITY -->
+        <section id="online-banking" class="mb-12 p-6 bg-blue-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Online Banking Protections</h2>
+            
+            <div class="security-mechanisms grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="mechanism-card bg-white p-4 rounded-lg shadow">
+                    <div class="icon bg-blue-100 text-blue-600 w-12 h-12 rounded-full flex items-center justify-center mb-2 mx-auto">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="font-bold text-center">2FA Systems</h3>
+                    <div class="types mt-2 space-y-1">
+                        <div class="type-item flex items-center">
+                            <div class="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                            <span class="text-sm">SMS OTP</span>
+                        </div>
+                        <div class="type-item flex items-center">
+                            <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                            <span class="text-sm">TOTP (Google Authenticator)</span>
+                        </div>
+                        <div class="type-item flex items-center">
+                            <div class="w-2 h-2 bg-purple-500 rounded-full mr-2"></div>
+                            <span class="text-sm">Push Notifications</span>
+                        </div>
+                    </div>
+                    <button onclick="simulate2FA()" class="mt-4 bg-blue-500 text-white p-2 w-full text-sm">Test 2FA Flow</button>
+                </div>
+                
+                <div class="mechanism-card bg-white p-4 rounded-lg shadow">
+                    <div class="icon bg-green-100 text-green-600 w-12 h-12 rounded-full flex items-center justify-center mb-2 mx-auto">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h3 class="font-bold text-center">Behavioral Analysis</h3>
+                    <div class="factors mt-2">
+                        <div class="factor flex justify-between text-sm">
+                            <span>Typing Pattern:</span>
+                            <span class="font-mono">98% match</span>
+                        </div>
+                        <div class="factor flex justify-between text-sm">
+                            <span>Location:</span>
+                            <span class="font-mono">Usual</span>
+                        </div>
+                        <div class="factor flex justify-between text-sm">
+                            <span>Time of Day:</span>
+                            <span class="font-mono">Typical</span>
+                        </div>
+                    </div>
+                    <button onclick="simulateBehaviorAnalysis()" class="mt-4 bg-green-500 text-white p-2 w-full text-sm">Run Analysis</button>
+                </div>
+                
+                <div class="mechanism-card bg-white p-4 rounded-lg shadow">
+                    <div class="icon bg-purple-100 text-purple-600 w-12 h-12 rounded-full flex items-center justify-center mb-2 mx-auto">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3 class="font-bold text-center">Transaction Signing</h3>
+                    <div class="methods mt-2 space-y-1">
+                        <div class="method-item flex items-center">
+                            <div class="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
+                            <span class="text-sm">eMandates</span>
+                        </div>
+                        <div class="method-item flex items-center">
+                            <div class="w-2 h-2 bg-yellow-500 rounded-full mr-2"></div>
+                            <span class="text-sm">Digital Signatures</span>
+                        </div>
+                        <div class="method-item flex items-center">
+                            <div class="w-2 h-2 bg-indigo-500 rounded-full mr-2"></div>
+                            <span class="text-sm">QR Code Auth</span>
+                        </div>
+                    </div>
+                    <button onclick="simulateTransactionSigning()" class="mt-4 bg-purple-500 text-white p-2 w-full text-sm">Test Signing</button>
+                </div>
+            </div>
+            
+            <div class="banking-simulator border-2 border-blue-300 p-4 rounded-lg bg-white mt-6">
+                <h3 class="font-bold mb-2">Online Banking Security Simulator</h3>
+                <div class="steps">
+                    <div class="step active" id="step1">
+                        <div class="flex justify-between items-center mb-2">
+                            <span>1. Login Credentials</span>
+                            <span class="status-badge bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs">Pending</span>
+                        </div>
+                        <input type="text" placeholder="Username" class="w-full border p-2 mb-2">
+                        <input type="password" placeholder="Password" class="w-full border p-2">
+                    </div>
+                    <div class="step" id="step2">
+                        <!-- 2FA Step -->
+                    </div>
+                    <div class="step" id="step3">
+                        <!-- Transaction Verification -->
+                    </div>
+                </div>
+                <button onclick="nextBankingStep()" class="mt-4 bg-blue-600 text-white p-2 w-full">Continue</button>
+            </div>
+        </section>
+
+        <!-- CARD SECURITY LAB -->
+        <section id="card-security" class="mb-12 p-6 bg-purple-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Card Payment Security</h2>
+            
+            <div class="card-tech grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="tech-card emv bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold">EMV Chip</h3>
+                    <div class="chip-visualization mt-4 h-24 relative">
+                        <!-- EMV chip transaction animation -->
+                        <div class="chip absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-10 bg-gold-200 rounded-sm"></div>
+                        <div class="sparkles absolute animate-ping"></div>
+                    </div>
+                    <p class="text-sm mt-2">Dynamic authentication per transaction</p>
+                </div>
+                
+                <div class="tech-card tokenization bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold">Tokenization</h3>
+                    <div class="token-flow mt-4">
+                        <div class="mermaid">
+                            graph LR
+                                PAN[Primary Account Number] --> TSP[Token Service Provider]
+                                TSP --> Token[Device-Specific Token]
+                                Token --> Merchant
+                        </div>
+                    </div>
+                    <p class="text-sm mt-2">Replaces sensitive card data with tokens</p>
+                </div>
+                
+                <div class="tech-card cvv bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold">CVV Security</h3>
+                    <div class="cvv-example mt-4 flex justify-center">
+                        <div class="card-back w-32 h-20 bg-gray-100 rounded-lg border-2 border-gray-300 relative">
+                            <div class="cvv-strip absolute bottom-4 left-2 right-2 h-6 bg-white flex items-center justify-end pr-2">
+                                <span class="text-sm">CVV: ***</span>
+                                <button onclick="revealCVV()" class="ml-2 bg-gray-200 p-1 text-xs">Show</button>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-sm mt-2">Not stored by merchants (PCI DSS Requirement)</p>
+                </div>
+            </div>
+            
+            <div class="fraud-simulator border-2 border-purple-300 p-4 rounded-lg bg-white">
+                <h3 class="font-bold mb-2">Card Fraud Detection</h3>
+                <div class="transaction-list space-y-2 mb-4">
+                    <!-- List of transactions with fraud indicators -->
+                    <div class="transaction flex justify-between items-center p-2 bg-green-50 rounded">
+                        <div>Amazon Purchase • $29.99</div>
+                        <div class="text-green-600">✓ Approved</div>
+                    </div>
+                    <div class="transaction flex justify-between items-center p-2 bg-red-50 rounded">
+                        <div>International Wire • $5,000</div>
+                        <div class="text-red-600">✗ Flagged</div>
+                    </div>
+                </div>
+                <button onclick="analyzeFraudPatterns()" class="bg-purple-600 text-white p-2 w-full">Run Fraud Analysis</button>
+                <div id="fraudAnalysisResult" class="mt-4 hidden">
+                    <!-- Fraud pattern visualization -->
+                </div>
+            </div>
+        </section>
+
+        <!-- UPI SECURITY ARCHITECTURE -->
+        <section id="upi-security" class="mb-12 p-6 bg-green-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">UPI Security Framework</h2>
+            
+            <div class="upi-flow mb-6">
+                <div class="mermaid">
+                    sequenceDiagram
+                        participant C as Customer
+                        participant P as PSP App
+                        participant N as NPCI
+                        participant B as Bank
+                        C->>P: Initiate Payment (MPIN)
+                        P->>N: Encrypted Payment Request
+                        N->>B: Authorization Request
+                        B->>N: Authorization Response
+                        N->>P: Transaction Status
+                        P->>C: Payment Confirmation
+                </div>
+            </div>
+            
+            <div class="security-features grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="feature-card bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold">MPIN Security</h3>
+                    <ul class="list-disc pl-5 mt-2 text-sm space-y-1">
+                        <li>Never transmitted in plaintext</li>
+                        <li>Device binding with device ID</li>
+                        <li>Limited attempt lockout</li>
+                    </ul>
+                </div>
+                <div class="feature-card bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold">Transaction Safeguards</h3>
+                    <ul class="list-disc pl-5 mt-2 text-sm space-y-1">
+                        <li>Default ₹5,000 limit for new payees</li>
+                        <li>OTP for high-value transactions</li>
+                        <li>Mandatory beneficiary cooling period</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="upi-simulator border-2 border-green-300 p-4 rounded-lg bg-white">
+                <h3 class="font-bold mb-2">UPI Fraud Prevention</h3>
+                <div class="scenario-selector mb-4">
+                    <label class="block mb-2">Fraud Scenario:</label>
+                    <select id="fraudScenario" class="w-full border p-2">
+                        <option value="sim">SIM Swap</option>
+                        <option value="phish">Phishing Attack</option>
+                        <option value="malware">App Tampering</option>
+                    </select>
+                </div>
+                <button onclick="simulateUPIFraud()" class="bg-green-600 text-white p-2 w-full mb-4">Run Simulation</button>
+                <div id="upiProtectionResult" class="hidden p-4 bg-gray-50 rounded-lg">
+                    <!-- Protection mechanisms activated -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FINANCIAL SECURITY CHALLENGES -->
+    <div class="challenges fixed bottom-4 right-4 bg-white p-4 shadow-xl rounded-lg border-2 border-green-600">
+        <h3 class="font-bold text-lg mb-2">Security Challenges</h3>
+        <!-- Interactive exercises:
+             - Configure optimal 2FA methods
+             - Detect EMV skimming attempts
+             - Prevent UPI phishing attacks -->
+    </div>
+
+    <script>
+        // JavaScript implementations for:
+        // - Banking authentication flow simulator
+        // - EMV chip transaction visualizer
+        // - UPI fraud prevention mechanisms
+        // - Card tokenization process
+        // - Fraud pattern detection
+    </script>
+</body>
+</html>
+Content Generation Rules:
+
+Online Banking Security:
+• Interactive 2FA method comparison
+• Behavioral biometrics analyzer
+• Step-by-step transaction signing flow
+
+Card Security:
+• EMV chip transaction animation
+• Tokenization process visualizer
+• CVV security best practices
+
+UPI Architecture:
+• End-to-end encrypted transaction flow
+• MPIN security mechanisms
+• Fraud scenario simulator
+
+Interactivity Requirements:
+
+Banking authentication step simulator
+
+EMV chip dynamic data visualization
+
+Card fraud pattern detection
+
+UPI phishing attack prevention
+
+Security control configuration
+
+Design Specifications:
+
+Color scheme: Financial green (#065f46) + security blue (#1e40af)
+
+Transaction flow animations
+
+Responsive card security displays
+
+Fraud detection heatmaps
+
+Dark mode with high-contrast security alerts
+
+Special Features:
+
+EMV Chip Simulator:
+• Dynamic cryptogram generation visualization
+• Chip-and-PIN vs contactless comparison
+
+Tokenization Lab:
+• PAN-to-token conversion demo
+• Token scope restrictions
+
+UPI Security:
+• MPIN encryption process
+• Transaction velocity checks
+
+Fraud Detection:
+• Anomaly scoring system
+• Geographic velocity analysis
+
+Deliverable: Self-contained HTML file with functional financial security demonstrations
+
+Example Visualizations:
+
+Diagram
+Code sequenceDiagram
+    Customer->>+PSP: UPI Payment Request (MPIN)
+    PSP->>+NPCI: Encrypted Transaction
+    NPCI->>+Bank: Authorization Request
+    Bank-->>-NPCI: Authorization Response
+    NPCI-->>-PSP: Transaction Status
+    PSP-->>-Customer: Payment Confirmation
+Recent Financial Threats:
+
+2022: UPI phishing scams (₹200cr losses)
+
+2023: EMV relay attacks
+
+2024: AI-powered voice phishing

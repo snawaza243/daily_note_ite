@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 4: Key Management Systems</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        .mermaid { margin: 20px 0; }
+        .dh-value { font-family: monospace; }
+        .protocol-step { display: none; }
+        .protocol-step.active { display: block; }
+        .cert-field { cursor: pointer; transition: all 0.2s ease; }
+        .cert-field:hover { background-color: #f0fdf4; }
+        .cert-field.active { background-color: #dcfce7; }
+        .dark .dark\:bg-gray-900 { background-color: #111827; }
+        .dark .dark\:text-white { color: #fff; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .pulse { animation: pulse 1.5s infinite; }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans dark:bg-gray-900 dark:text-white transition-colors duration-300">
+    <header class="bg-teal-900 text-white p-6 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-bold">Chapter 4: Key Management Systems</h1>
+            <button id="darkModeToggle" class="bg-teal-700 hover:bg-teal-800 px-4 py-2 rounded-lg">
+                <i class="fas fa-moon"></i> Dark Mode
+            </button>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4">
+        <!-- DIFFIE-HELLMAN INTERACTIVE LAB -->
+        <section id="diffie-hellman" class="mb-12 p-6 bg-blue-50 rounded-xl dark:bg-gray-800">
+            <h2 class="text-2xl font-semibold mb-4">Diffie-Hellman Key Exchange</h2>
+            
+            <div class="dh-principles grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="math-explanation">
+                    <h3 class="text-xl font-medium mb-2">Mathematical Foundation</h3>
+                    <div class="math-steps space-y-2 p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                        <p>1. Public parameters: Prime \(p\), Generator \(g\)</p>
+                        <p>2. Alice: Private \(a\), Public \(A = g^a \mod p\)</p>
+                        <p>3. Bob: Private \(b\), Public \(B = g^b \mod p\)</p>
+                        <p>4. Shared secret: \(s = A^b \mod p = B^a \mod p\)</p>
+                        <div class="mt-4 p-3 bg-blue-100 rounded text-sm dark:bg-blue-900 dark:bg-opacity-20">
+                            <p><strong>Security Note:</strong> The difficulty of computing \(a\) from \(A = g^a \mod p\) (discrete logarithm problem) makes this secure.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mermaid">
+                    sequenceDiagram
+                        participant Alice
+                        participant Bob
+                        Alice->>Bob: A = g^a mod p
+                        Bob->>Alice: B = g^b mod p
+                        Note right of Alice: s = B^a mod p
+                        Note left of Bob: s = A^b mod p
+                </div>
+            </div>
+            
+            <div class="dh-simulator border-2 border-gray-300 p-4 rounded-lg dark:border-gray-600">
+                <div class="controls grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Prime modulus (p)</label>
+                        <input type="number" id="dh-p" value="23" class="w-full border p-2 rounded dark:bg-gray-700">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Generator (g)</label>
+                        <input type="number" id="dh-g" value="5" class="w-full border p-2 rounded dark:bg-gray-700">
+                    </div>
+                    <div class="flex items-end">
+                        <button onclick="runDHSimulation()" class="bg-teal-600 hover:bg-teal-700 text-white p-2 w-full rounded">
+                            <i class="fas fa-exchange-alt mr-1"></i> Run Exchange
+                        </button>
+                    </div>
+                </div>
+                <div class="participants grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="alice bg-blue-100 p-4 rounded-lg dark:bg-blue-900 dark:bg-opacity-20">
+                        <h4 class="font-bold text-blue-800 dark:text-blue-200 mb-2">Alice</h4>
+                        <div class="space-y-2">
+                            <p class="text-sm">Private key (a): <span id="alice-private" class="dh-value">?</span></p>
+                            <p class="text-sm">Public key (A = g<sup>a</sup> mod p): <span id="alice-public" class="dh-value">?</span></p>
+                            <p class="text-sm">Computed secret (B<sup>a</sup> mod p): <span id="alice-secret" class="dh-value">?</span></p>
+                        </div>
+                    </div>
+                    <div class="bob bg-green-100 p-4 rounded-lg dark:bg-green-900 dark:bg-opacity-20">
+                        <h4 class="font-bold text-green-800 dark:text-green-200 mb-2">Bob</h4>
+                        <div class="space-y-2">
+                            <p class="text-sm">Private key (b): <span id="bob-private" class="dh-value">?</span></p>
+                            <p class="text-sm">Public key (B = g<sup>b</sup> mod p): <span id="bob-public" class="dh-value">?</span></p>
+                            <p class="text-sm">Computed secret (A<sup>b</sup> mod p): <span id="bob-secret" class="dh-value">?</span></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 flex space-x-2">
+                    <button onclick="showMitmAttack()" class="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded">
+                        <i class="fas fa-user-secret mr-1"></i> Show MITM Attack
+                    </button>
+                    <button onclick="showMitmPrevention()" class="bg-purple-500 hover:bg-purple-600 text-white p-2 rounded">
+                        <i class="fas fa-shield-alt mr-1"></i> Show Prevention
+                    </button>
+                </div>
+                
+                <div class="man-in-middle mt-4 p-4 bg-yellow-100 rounded-lg hidden dark:bg-yellow-900 dark:bg-opacity-20" id="mitm-warning">
+                    <h4 class="font-bold text-yellow-800 dark:text-yellow-200 mb-2">Man-in-the-Middle Attack</h4>
+                    <div class="mermaid">
+                        sequenceDiagram
+                            participant Alice
+                            participant Mallory
+                            participant Bob
+                            Alice->>Mallory: A = g^a mod p
+                            Mallory->>Bob: A' = g^m mod p
+                            Bob->>Mallory: B = g^b mod p
+                            Mallory->>Alice: B' = g^m mod p
+                            Note right of Alice: s1 = B'^a mod p
+                            Note left of Bob: s2 = A'^b mod p
+                            Note over Mallory: Knows both s1 and s2
+                    </div>
+                    <p class="text-sm mt-2">Without authentication, Mallory can establish separate keys with Alice and Bob.</p>
+                </div>
+                
+                <div class="mitm-prevention mt-4 p-4 bg-green-100 rounded-lg hidden dark:bg-green-900 dark:bg-opacity-20" id="mitm-prevention">
+                    <h4 class="font-bold text-green-800 dark:text-green-200 mb-2">MITM Prevention Techniques</h4>
+                    <ul class="list-disc pl-5 text-sm">
+                        <li class="mb-1"><strong>Digital Signatures:</strong> Sign DH public keys with certified keys</li>
+                        <li class="mb-1"><strong>Public Key Infrastructure (PKI):</strong> Use certificates from trusted CAs</li>
+                        <li class="mb-1"><strong>Authenticated DH:</strong> Incorporate authentication into the protocol</li>
+                        <li><strong>Pre-shared secrets:</strong> Use a small shared secret to verify keys</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEEDHAM-SCHROEDER PROTOCOL VISUALIZER -->
+        <section id="needham-schroeder" class="mb-12 p-6 bg-purple-50 rounded-xl dark:bg-gray-800">
+            <h2 class="text-2xl font-semibold mb-4">Needham-Schroeder Protocol</h2>
+            
+            <div class="protocol-steps">
+                <div class="mermaid">
+                    sequenceDiagram
+                        participant Alice
+                        participant KDC
+                        participant Bob
+                        Alice->>KDC: IDa, IDb, Na
+                        KDC->>Alice: {Na, Kab, IDb, {Kab, IDa}Kb}Ka
+                        Alice->>Bob: {Kab, IDa}Kb
+                        Bob->>Alice: {Nb}Kab
+                        Alice->>Bob: {Nb-1}Kab
+                </div>
+                
+                <div class="ns-simulator mt-6">
+                    <div class="step-buttons grid grid-cols-5 gap-2 mb-4">
+                        <button onclick="showProtocolStep(1)" class="protocol-step-btn bg-purple-500 hover:bg-purple-600 text-white p-2 rounded text-sm active">1. Init</button>
+                        <button onclick="showProtocolStep(2)" class="protocol-step-btn bg-purple-500 hover:bg-purple-600 text-white p-2 rounded text-sm">2. KDC Reply</button>
+                        <button onclick="showProtocolStep(3)" class="protocol-step-btn bg-purple-500 hover:bg-purple-600 text-white p-2 rounded text-sm">3. To Bob</button>
+                        <button onclick="showProtocolStep(4)" class="protocol-step-btn bg-purple-500 hover:bg-purple-600 text-white p-2 rounded text-sm">4. Challenge</button>
+                        <button onclick="showProtocolStep(5)" class="protocol-step-btn bg-purple-500 hover:bg-purple-600 text-white p-2 rounded text-sm">5. Response</button>
+                    </div>
+                    
+                    <div class="message-flow bg-white p-4 rounded-lg min-h-[200px] shadow dark:bg-gray-700">
+                        <div id="protocol-step-1" class="protocol-step active">
+                            <h4 class="font-medium mb-2">Step 1: Alice contacts KDC</h4>
+                            <div class="p-3 bg-gray-100 rounded dark:bg-gray-600">
+                                <p class="font-mono text-sm">Alice → KDC: IDa, IDb, Na</p>
+                            </div>
+                            <p class="text-sm mt-2">Alice sends her identity (IDa), Bob's identity (IDb), and a nonce (Na) to the Key Distribution Center.</p>
+                        </div>
+                        
+                        <div id="protocol-step-2" class="protocol-step">
+                            <h4 class="font-medium mb-2">Step 2: KDC responds to Alice</h4>
+                            <div class="p-3 bg-gray-100 rounded dark:bg-gray-600">
+                                <p class="font-mono text-sm">KDC → Alice: {Na, Kab, IDb, {Kab, IDa}Kb}Ka</p>
+                            </div>
+                            <p class="text-sm mt-2">KDC sends back Alice's nonce (proving freshness), a new session key (Kab), Bob's ID, and a ticket encrypted with Bob's key.</p>
+                        </div>
+                        
+                        <div id="protocol-step-3" class="protocol-step">
+                            <h4 class="font-medium mb-2">Step 3: Alice sends ticket to Bob</h4>
+                            <div class="p-3 bg-gray-100 rounded dark:bg-gray-600">
+                                <p class="font-mono text-sm">Alice → Bob: {Kab, IDa}Kb</p>
+                            </div>
+                            <p class="text-sm mt-2">Alice forwards the ticket (encrypted with Bob's key) which contains the session key and her identity.</p>
+                        </div>
+                        
+                        <div id="protocol-step-4" class="protocol-step">
+                            <h4 class="font-medium mb-2">Step 4: Bob challenges Alice</h4>
+                            <div class="p-3 bg-gray-100 rounded dark:bg-gray-600">
+                                <p class="font-mono text-sm">Bob → Alice: {Nb}Kab</p>
+                            </div>
+                            <p class="text-sm mt-2">Bob sends a new nonce encrypted with the session key to verify Alice possesses the same key.</p>
+                        </div>
+                        
+                        <div id="protocol-step-5" class="protocol-step">
+                            <h4 class="font-medium mb-2">Step 5: Alice proves knowledge of key</h4>
+                            <div class="p-3 bg-gray-100 rounded dark:bg-gray-600">
+                                <p class="font-mono text-sm">Alice → Bob: {Nb-1}Kab</p>
+                            </div>
+                            <p class="text-sm mt-2">Alice decrements the nonce and returns it to prove she can decrypt messages with Kab.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="attack-options mt-4">
+                        <button onclick="demoReplayAttack()" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded mr-2">
+                            <i class="fas fa-bug mr-1"></i> Simulate Replay Attack
+                        </button>
+                        <button onclick="showProtocolFix()" class="bg-green-500 hover:bg-green-600 text-white p-2 rounded">
+                            <i class="fas fa-shield-alt mr-1"></i> Show Fix (Nonces)
+                        </button>
+                    </div>
+                    
+                    <div id="replay-attack" class="mt-4 p-4 bg-red-100 rounded-lg hidden dark:bg-red-900 dark:bg-opacity-20">
+                        <h4 class="font-bold text-red-800 dark:text-red-200 mb-2">Replay Attack Vulnerability</h4>
+                        <p class="text-sm">Original Needham-Schroeder was vulnerable to replay of old session keys. An attacker could record message 3 and replay it later to establish a session with Bob using an old key.</p>
+                        <div class="mermaid mt-2">
+                            sequenceDiagram
+                                participant Attacker
+                                participant Bob
+                                Attacker->>Bob: {Kab_old, IDa}Kb (replayed)
+                                Bob->>Attacker: {Nb}Kab_old
+                                Note over Attacker: Can't decrypt, but Bob thinks he's talking to Alice
+                        </div>
+                    </div>
+                    
+                    <div id="protocol-fix" class="mt-4 p-4 bg-green-100 rounded-lg hidden dark:bg-green-900 dark:bg-opacity-20">
+                        <h4 class="font-bold text-green-800 dark:text-green-200 mb-2">Needham-Schroeder Fixed Version</h4>
+                        <p class="text-sm">The fixed version includes Bob's nonce in the ticket to prevent replay attacks:</p>
+                        <div class="p-3 bg-white rounded mt-2 dark:bg-gray-700">
+                            <p class="font-mono text-sm">{Kab, IDa, Nb}Kb</p>
+                        </div>
+                        <p class="text-sm mt-2">Now Bob can verify freshness by checking the nonce matches what he expects.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PKI ARCHITECTURE EXPLORER -->
+        <section id="pki" class="mb-12 p-6 bg-amber-50 rounded-xl dark:bg-gray-800">
+            <h2 class="text-2xl font-semibold mb-4">Public Key Infrastructure (PKI)</h2>
+            
+            <div class="pki-hierarchy mb-6">
+                <h3 class="text-xl font-medium mb-2">Trust Hierarchy</h3>
+                <div class="mermaid">
+                    graph TD
+                        RootCA[Root CA] -->|Issues| SubCA1[Subordinate CA 1]
+                        RootCA -->|Issues| SubCA2[Subordinate CA 2]
+                        SubCA1 -->|Issues| EE1[End Entity Cert]
+                        SubCA1 -->|Issues| EE2[End Entity Cert]
+                        SubCA2 -->|Issues| EE3[End Entity Cert]
+                        style RootCA fill:#0f766e,color:white
+                        style SubCA1 fill:#1e40af,color:white
+                        style SubCA2 fill:#1e40af,color:white
+                </div>
+            </div>
+            
+            <div class="pki-components grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                    <h4 class="font-bold mb-2 flex items-center">
+                        <i class="fas fa-certificate mr-2"></i> Certificate Authority (CA)
+                    </h4>
+                    <p class="text-sm">Issues and signs digital certificates. Root CAs are the ultimate trust anchors.</p>
+                </div>
+                <div class="p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                    <h4 class="font-bold mb-2 flex items-center">
+                        <i class="fas fa-user-check mr-2"></i> Registration Authority (RA)
+                    </h4>
+                    <p class="text-sm">Verifies identities before certificates are issued by the CA.</p>
+                </div>
+                <div class="p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                    <h4 class="font-bold mb-2 flex items-center">
+                        <i class="fas fa-database mr-2"></i> Repository
+                    </h4>
+                    <p class="text-sm">Stores certificates and Certificate Revocation Lists (CRLs).</p>
+                </div>
+                <div class="p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                    <h4 class="font-bold mb-2 flex items-center">
+                        <i class="fas fa-laptop mr-2"></i> Relying Party
+                    </h4>
+                    <p class="text-sm">Validates certificates using PKI components (e.g., web browsers).</p>
+                </div>
+            </div>
+            
+            <div class="certificate-lifecycle">
+                <h3 class="text-xl font-medium mb-2">Certificate Lifecycle</h3>
+                <div class="lifecycle-steps grid grid-cols-4 gap-2 text-center">
+                    <div class="p-3 bg-white rounded-lg shadow dark:bg-gray-700">
+                        <h4 class="font-medium text-sm mb-1">1. Enrollment</h4>
+                        <p class="text-xs">Entity generates key pair and submits CSR to RA/CA</p>
+                    </div>
+                    <div class="p-3 bg-white rounded-lg shadow dark:bg-gray-700">
+                        <h4 class="font-medium text-sm mb-1">2. Validation</h4>
+                        <p class="text-xs">RA verifies identity according to CA policy</p>
+                    </div>
+                    <div class="p-3 bg-white rounded-lg shadow dark:bg-gray-700">
+                        <h4 class="font-medium text-sm mb-1">3. Issuance</h4>
+                        <p class="text-xs">CA signs and publishes certificate</p>
+                    </div>
+                    <div class="p-3 bg-white rounded-lg shadow dark:bg-gray-700">
+                        <h4 class="font-medium text-sm mb-1">4. Expiration/Revocation</h4>
+                        <p class="text-xs">Certificate expires or is revoked if compromised</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="real-world-cas mt-6">
+                <h3 class="text-xl font-medium mb-2">Real-world CAs</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                        <h4 class="font-bold mb-2">Commercial CAs</h4>
+                        <ul class="list-disc pl-5 text-sm">
+                            <li>DigiCert</li>
+                            <li>Sectigo</li>
+                            <li>GlobalSign</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                        <h4 class="font-bold mb-2">Free CAs</h4>
+                        <ul class="list-disc pl-5 text-sm">
+                            <li>Let's Encrypt</li>
+                            <li>SSL.com Free</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                        <h4 class="font-bold mb-2">Government CAs</h4>
+                        <ul class="list-disc pl-5 text-sm">
+                            <li>DoD PKI</li>
+                            <li>EU Trusted Lists</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DIGITAL CERTIFICATE INSPECTOR -->
+        <section id="certificates" class="mb-12 p-6 bg-emerald-50 rounded-xl dark:bg-gray-800">
+            <h2 class="text-2xl font-semibold mb-4">Digital Certificates & CAs</h2>
+            
+            <div class="certificate-lab grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="cert-structure">
+                    <h3 class="text-xl font-medium mb-2">X.509 Certificate Structure</h3>
+                    <div class="cert-tree mt-4 border-l-2 pl-4">
+                        <div class="cert-field mb-2 p-2 rounded" onclick="showFieldDetails('version')">
+                            <span class="font-medium">Version</span>
+                            <p class="text-xs hidden field-details">Identifies X.509 version (usually v3)</p>
+                        </div>
+                        <div class="cert-field mb-2 p-2 rounded" onclick="showFieldDetails('serial')">
+                            <span class="font-medium">Serial Number</span>
+                            <p class="text-xs hidden field-details">Unique identifier assigned by CA</p>
+                        </div>
+                        <div class="cert-field mb-2 p-2 rounded" onclick="showFieldDetails('sig-alg')">
+                            <span class="font-medium">Signature Algorithm</span>
+                            <p class="text-xs hidden field-details">Algorithm used by CA to sign (e.g., SHA256WithRSA)</p>
+                        </div>
+                        <div class="cert-field mb-2 p-2 rounded" onclick="showFieldDetails('issuer')">
+                            <span class="font-medium">Issuer</span>
+                            <p class="text-xs hidden field-details">Distinguished Name of issuing CA</p>
+                        </div>
+                        <div class="cert-field mb-2 p-2 rounded" onclick="showFieldDetails('validity')">
+                            <span class="font-medium">Validity Period</span>
+                            <p class="text-xs hidden field-details">Not Before/Not After dates</p>
+                        </div>
+                        <div class="cert-field mb-2 p-2 rounded" onclick="showFieldDetails('subject')">
+                            <span class="font-medium">Subject</span>
+                            <p class="text-xs hidden field-details">Entity the certificate belongs to</p>
+                        </div>
+                        <div class="cert-field mb-2 p-2 rounded" onclick="showFieldDetails('pubkey')">
+                            <span class="font-medium">Public Key</span>
+                            <p class="text-xs hidden field-details">Subject's public key and algorithm</p>
+                        </div>
+                        <div class="cert-field mb-2 p-2 rounded" onclick="showFieldDetails('extensions')">
+                            <span class="font-medium">Extensions (v3)</span>
+                            <p class="text-xs hidden field-details">KeyUsage, SubjectAltName, etc.</p>
+                        </div>
+                        <div class="cert-field mb-2 p-2 rounded" onclick="showFieldDetails('signature')">
+                            <span class="font-medium">CA Signature</span>
+                            <p class="text-xs hidden field-details">Digital signature over all fields</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cert-inspector">
+                    <h3 class="text-xl font-medium mb-2">Certificate Inspector</h3>
+                    <textarea id="certPem" class="w-full border p-2 mt-2 h-40 rounded dark:bg-gray-700" placeholder="Paste PEM certificate here (between -----BEGIN/END CERTIFICATE-----)"></textarea>
+                    <button onclick="inspectCertificate()" class="bg-teal-600 hover:bg-teal-700 text-white p-2 mt-2 w-full rounded">
+                        <i class="fas fa-search mr-1"></i> Inspect Certificate
+                    </button>
+                    <div id="certDetails" class="mt-4 p-3 bg-white rounded-lg shadow font-mono text-xs max-h-60 overflow-y-auto dark:bg-gray-700"></div>
+                </div>
+                
+                <div class="ca-hierarchy">
+                    <h3 class="text-xl font-medium mb-2">CA Trust Chain</h3>
+                    <div class="chain-visualization mt-4 p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                        <div class="chain-list space-y-2">
+                            <div class="chain-item p-2 bg-gray-100 rounded dark:bg-gray-600">
+                                <p class="font-medium">End Entity Certificate</p>
+                                <p class="text-xs">example.com</p>
+                            </div>
+                            <div class="chain-item p-2 bg-gray-100 rounded dark:bg-gray-600">
+                                <p class="font-medium">Intermediate CA</p>
+                                <p class="text-xs">R3 (Let's Encrypt)</p>
+                            </div>
+                            <div class="chain-item p-2 bg-gray-100 rounded dark:bg-gray-600">
+                                <p class="font-medium">Root CA</p>
+                                <p class="text-xs">ISRG Root X1</p>
+                            </div>
+                        </div>
+                        <button onclick="buildTrustChain()" class="mt-4 bg-blue-500 hover:bg-blue-600 text-white p-2 rounded w-full">
+                            <i class="fas fa-link mr-1"></i> Build Trust Chain
+                        </button>
+                        <div id="chainValidation" class="mt-4 p-3 bg-green-100 rounded text-sm hidden dark:bg-green-900 dark:bg-opacity-20">
+                            <p>Chain validates successfully to a trusted root.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="trust-stores mt-4 p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                        <h4 class="font-medium mb-2">Trust Stores</h4>
+                        <ul class="list-disc pl-5 text-sm">
+                            <li class="mb-1">Browser trust stores (Mozilla, Microsoft, Apple)</li>
+                            <li class="mb-1">Operating system trust stores</li>
+                            <li class="mb-1">Java keystores</li>
+                            <li>Enterprise private trust stores</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="ca-operations mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="cert-validation bg-blue-100 p-4 rounded-lg dark:bg-blue-900 dark:bg-opacity-20">
+                    <h4 class="font-bold mb-2">Certificate Validation Process</h4>
+                    <ol class="list-decimal pl-5 text-sm">
+                        <li class="mb-1">Verify certificate signature using issuer's public key</li>
+                        <li class="mb-1">Check validity period (not expired)</li>
+                        <li class="mb-1">Verify certificate hasn't been revoked</li>
+                        <li class="mb-1">Check intended usage matches actual usage</li>
+                        <li>Validate trust chain to known root</li>
+                    </ol>
+                </div>
+                <div class="crl-ocsp bg-red-100 p-4 rounded-lg dark:bg-red-900 dark:bg-opacity-20">
+                    <h4 class="font-bold mb-2">Revocation Checking</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <h5 class="font-medium text-sm">CRL (Certificate Revocation List)</h5>
+                            <ul class="list-disc pl-5 text-xs">
+                                <li>Periodically published list</li>
+                                <li>Can become large</li>
+                                <li>Stale until next update</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h5 class="font-medium text-sm">OCSP (Online Certificate Status Protocol)</h5>
+                            <ul class="list-disc pl-5 text-xs">
+                                <li>Real-time queries</li>
+                                <li>Smaller network traffic</li>
+                                <li>Privacy concerns</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mt-3 p-2 bg-white rounded text-xs dark:bg-gray-700">
+                        <p>OCSP Stapling combines benefits of both approaches.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- KEY MANAGEMENT CHALLENGES -->
+    <div class="challenges  bottom-4 right-4 bg-white p-4 shadow-xl rounded-lg border-2 border-teal-600 no-print dark:bg-gray-800" >
+        <h3 class="font-bold text-lg mb-2">Key Challenges</h3>
+        
+        <div class="challenge-tabs flex border-b border-gray-200 mb-3">
+            <button class="challenge-tab active px-3 py-1 text-sm font-medium" data-tab="dh-challenge">DH</button>
+            <button class="challenge-tab px-3 py-1 text-sm font-medium" data-tab="pki-challenge">PKI</button>
+            <button class="challenge-tab px-3 py-1 text-sm font-medium" data-tab="protocol-challenge">Protocol</button>
+        </div>
+        
+        <!-- DH Challenge -->
+        <div class="challenge-content" id="dh-challenge">
+            <p class="text-sm mb-3">Given p=23, g=5, and Bob's public key B=19, find Bob's private key b:</p>
+            <input type="number" id="dhPrivateGuess" class="w-full border p-2 rounded mb-2 dark:bg-gray-700" placeholder="Enter private key b">
+            <button id="checkDhKey" class="bg-teal-600 hover:bg-teal-700 text-white p-2 rounded w-full">
+                Check Answer
+            </button>
+            <p id="dhChallengeResult" class="mt-2 text-sm hidden"></p>
+        </div>
+        
+        <!-- PKI Challenge -->
+        <div class="challenge-content hidden" id="pki-challenge">
+            <p class="text-sm mb-3">Which extension prevents a CA cert from being used for TLS?</p>
+            <select id="pkiExtensionSelect" class="w-full border p-2 rounded mb-2 dark:bg-gray-700">
+                <option value="">Select extension</option>
+                <option value="keyUsage">Key Usage</option>
+                <option value="basicConstraints">Basic Constraints</option>
+                <option value="extKeyUsage">Extended Key Usage</option>
+                <option value="nameConstraints">Name Constraints</option>
+            </select>
+            <button id="checkPkiAnswer" class="bg-teal-600 hover:bg-teal-700 text-white p-2 rounded w-full">
+                Submit
+            </button>
+            <p id="pkiChallengeResult" class="mt-2 text-sm hidden"></p>
+        </div>
+        
+        <!-- Protocol Challenge -->
+        <div class="challenge-content hidden" id="protocol-challenge">
+            <p class="text-sm mb-3">What's missing from this Needham-Schroeder message?</p>
+            <div class="mb-2 p-2 bg-gray-100 rounded text-xs dark:bg-gray-700">
+                <p>Alice → Bob: {Kab, IDa}Kb</p>
+            </div>
+            <select id="protocolMissingSelect" class="w-full border p-2 rounded mb-2 dark:bg-gray-700">
+                <option value="">Select missing element</option>
+                <option value="nonce">Bob's nonce</option>
+                <option value="timestamp">Timestamp</option>
+                <option value="signature">Signature</option>
+                <option value="nothing">Nothing - it's complete</option>
+            </select>
+            <button id="checkProtocolAnswer" class="bg-teal-600 hover:bg-teal-700 text-white p-2 rounded w-full">
+                Check
+            </button>
+            <p id="protocolChallengeResult" class="mt-2 text-sm hidden"></p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            }
+        });
+        
+        // Dark mode toggle
+        document.getElementById('darkModeToggle').addEventListener('click', function() {
+            document.documentElement.classList.toggle('dark');
+            const icon = this.querySelector('i');
+            if (document.documentElement.classList.contains('dark')) {
+                icon.classList.replace('fa-moon', 'fa-sun');
+                this.textContent = ' Light Mode';
+            } else {
+                icon.classList.replace('fa-sun', 'fa-moon');
+                this.textContent = ' Dark Mode';
+            }
+            this.prepend(icon);
+        });
+        
+        // Diffie-Hellman Simulation
+        function runDHSimulation() {
+            const p = parseInt(document.getElementById('dh-p').value) || 23;
+            const g = parseInt(document.getElementById('dh-g').value) || 5;
+            
+            // Generate private keys (a and b)
+            const a = Math.floor(Math.random() * (p-2)) + 1;  // 1 <= a <= p-2
+            const b = Math.floor(Math.random() * (p-2)) + 1;
+            
+            // Calculate public keys
+            const A = modExp(g, a, p);
+            const B = modExp(g, b, p);
+            
+            // Calculate shared secret
+            const sAlice = modExp(B, a, p);
+            const sBob = modExp(A, b, p);
+            
+            // Update UI
+            document.getElementById('alice-private').textContent = a;
+            document.getElementById('alice-public').textContent = A;
+            document.getElementById('alice-secret').textContent = sAlice;
+            
+            document.getElementById('bob-private').textContent = b;
+            document.getElementById('bob-public').textContent = B;
+            document.getElementById('bob-secret').textContent = sBob;
+            
+            // Hide attack demonstrations
+            document.getElementById('mitm-warning').classList.add('hidden');
+            document.getElementById('mitm-prevention').classList.add('hidden');
+        }
+        
+        function showMitmAttack() {
+            document.getElementById('mitm-warning').classList.remove('hidden');
+            document.getElementById('mitm-prevention').classList.add('hidden');
+        }
+        
+        function showMitmPrevention() {
+            document.getElementById('mitm-warning').classList.add('hidden');
+            document.getElementById('mitm-prevention').classList.remove('hidden');
+        }
+        
+        // Needham-Schroeder Protocol
+        function showProtocolStep(step) {
+            document.querySelectorAll('.protocol-step').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.getElementById(`protocol-step-${step}`).classList.add('active');
+            
+            document.querySelectorAll('.protocol-step-btn').forEach(btn => {
+                btn.classList.remove('bg-purple-700');
+                btn.classList.add('bg-purple-500');
+            });
+            event.target.classList.remove('bg-purple-500');
+            event.target.classList.add('bg-purple-700');
+        }
+        
+        function demoReplayAttack() {
+            document.getElementById('replay-attack').classList.remove('hidden');
+            document.getElementById('protocol-fix').classList.add('hidden');
+        }
+        
+        function showProtocolFix() {
+            document.getElementById('replay-attack').classList.add('hidden');
+            document.getElementById('protocol-fix').classList.remove('hidden');
+        }
+        
+        // Certificate Inspector
+        function showFieldDetails(field) {
+            document.querySelectorAll('.field-details').forEach(el => {
+                el.classList.add('hidden');
+            });
+            document.querySelectorAll('.cert-field').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            const fieldElement = event.currentTarget;
+            fieldElement.classList.add('active');
+            fieldElement.querySelector('.field-details').classList.remove('hidden');
+        }
+        
+        function inspectCertificate() {
+            const pem = document.getElementById('certPem').value.trim();
+            if (!pem) {
+                alert('Please paste a PEM certificate');
+                return;
+            }
+            
+            // Simulate parsing (in real implementation, use a proper parser)
+            const certDetails = document.getElementById('certDetails');
+            certDetails.innerHTML = '<p class="text-green-600">Parsing certificate...</p>';
+            
+            setTimeout(() => {
+                // Mock parsed certificate data
+                certDetails.innerHTML = 
+                    '<p><span class="font-medium">Subject:</span> CN=example.com</p>' +
+                    '<p><span class="font-medium">Issuer:</span> CN=Let\'s Encrypt R3, O=Let\'s Encrypt</p>' +
+                    '<p><span class="font-medium">Valid:</span> 2023-01-01 to 2023-04-01</p>' +
+                    '<p><span class="font-medium">Public Key:</span> RSA 2048 bits</p>' +
+                    '<p><span class="font-medium">Key Usage:</span> Digital Signature, Key Encipherment</p>' +
+                    '<p><span class="font-medium">Extended Key Usage:</span> TLS Web Server Authentication</p>' +
+                    '<p><span class="font-medium">Subject Alternative Name:</span> DNS:example.com, DNS:www.example.com</p>';
+            }, 500);
+        }
+        
+        function buildTrustChain() {
+            const chainValidation = document.getElementById('chainValidation');
+            chainValidation.classList.remove('hidden');
+            chainValidation.innerHTML = '<p class="text-green-600">Validating certificate chain...</p>';
+            
+            setTimeout(() => {
+                chainValidation.innerHTML = 
+                    '<p class="text-green-600">✓ Chain validates successfully to trusted root</p>' +
+                    '<p class="text-xs mt-1">End Entity → Let\'s Encrypt R3 → ISRG Root X1 (trusted)</p>';
+            }, 800);
+        }
+        
+        // Challenge tabs
+        document.querySelectorAll('.challenge-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.challenge-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                const tabId = this.getAttribute('data-tab');
+                document.querySelectorAll('.challenge-content').forEach(content => {
+                    content.classList.add('hidden');
+                });
+                document.getElementById(tabId).classList.remove('hidden');
+            });
+        });
+        
+        // DH Challenge
+        document.getElementById('checkDhKey').addEventListener('click', function() {
+            const guess = parseInt(document.getElementById('dhPrivateGuess').value);
+            const resultDiv = document.getElementById('dhChallengeResult');
+            
+            // The correct answer is b=7 (5^7 mod 23 = 19)
+            if (guess === 7) {
+                resultDiv.textContent = 'Correct! 5^7 mod 23 = 19';
+                resultDiv.className = 'mt-2 text-sm text-green-600';
+            } else {
+                resultDiv.textContent = 'Incorrect. Try testing possible values of b.';
+                resultDiv.className = 'mt-2 text-sm text-red-600';
+            }
+            resultDiv.classList.remove('hidden');
+        });
+        
+        // PKI Challenge
+        document.getElementById('checkPkiAnswer').addEventListener('click', function() {
+            const selection = document.getElementById('pkiExtensionSelect').value;
+            const resultDiv = document.getElementById('pkiChallengeResult');
+            
+            if (selection === 'basicConstraints') {
+                resultDiv.textContent = 'Correct! Basic Constraints with CA:TRUE/FALSE determines if a cert can issue other certs.';
+                resultDiv.className = 'mt-2 text-sm text-green-600';
+            } else if (selection) {
+                resultDiv.textContent = 'Not quite. The Basic Constraints extension controls CA capabilities.';
+                resultDiv.className = 'mt-2 text-sm text-red-600';
+            } else {
+                resultDiv.textContent = 'Please select an answer';
+                resultDiv.className = 'mt-2 text-sm text-yellow-600';
+            }
+            resultDiv.classList.remove('hidden');
+        });
+        
+        // Protocol Challenge
+        document.getElementById('checkProtocolAnswer').addEventListener('click', function() {
+            const selection = document.getElementById('protocolMissingSelect').value;
+            const resultDiv = document.getElementById('protocolChallengeResult');
+            
+            if (selection === 'nonce') {
+                resultDiv.textContent = 'Correct! The fixed version includes Bob\'s nonce to prevent replay attacks.';
+                resultDiv.className = 'mt-2 text-sm text-green-600';
+            } else if (selection) {
+                resultDiv.textContent = 'Not quite. The vulnerability was replay attacks prevented by adding a nonce.';
+                resultDiv.className = 'mt-2 text-sm text-red-600';
+            } else {
+                resultDiv.textContent = 'Please select an answer';
+                resultDiv.className = 'mt-2 text-sm text-yellow-600';
+            }
+            resultDiv.classList.remove('hidden');
+        });
+        
+        // Helper functions
+        function modExp(base, exp, mod) {
+            if (mod === 1) return 0;
+            let result = 1;
+            base = base % mod;
+            
+            while (exp > 0) {
+                if (exp % 2 === 1) result = (result * base) % mod;
+                exp = Math.floor(exp / 2);
+                base = (base * base) % mod;
+            }
+            
+            return result;
+        }
+        
+        // Initialize first protocol step as active
+        document.addEventListener('DOMContentLoaded', function() {
+            showProtocolStep(1);
+        });
+    </script>
+</body>
+</html>

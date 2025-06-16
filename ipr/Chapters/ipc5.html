@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 5: Authentication & Hashing Protocols</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        indigo: {
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        .hash-visualization {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+            margin-top: 10px;
+        }
+        .hash-block {
+            width: 20px;
+            height: 20px;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            font-weight: bold;
+        }
+        .kerberos-step {
+            transition: all 0.3s ease;
+        }
+        .kerberos-step.active {
+            background-color: #4f46e5;
+            color: white;
+        }
+        .dark-mode {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        .dark-mode .section-dark {
+            background-color: #2d3748;
+            color: #e2e8f0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <header class="bg-indigo-900 text-white p-6">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-bold">Chapter 5: Authentication & Hashing Protocols</h1>
+            <button onclick="toggleDarkMode()" class="bg-gray-800 text-white px-4 py-2 rounded-lg">Toggle Dark Mode</button>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4">
+        <!-- PASSWORD SECURITY LAB -->
+        <section id="password-security" class="mb-12 p-6 bg-blue-50 rounded-xl section-dark">
+            <h2 class="text-2xl font-semibold mb-4">Password-based Authentication</h2>
+            
+            <div class="password-lab grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="hashing-demo">
+                    <h3 class="text-xl font-medium">Hashing & Salting</h3>
+                    <div class="demo-area p-4 border rounded-lg bg-white">
+                        <div class="input-group mb-4">
+                            <label class="block mb-2">Password:</label>
+                            <input type="text" id="passwordInput" value="P@ssw0rd!" class="w-full border p-2 rounded">
+                            <div class="password-strength mt-2">
+                                <div class="strength-meter h-2 bg-gray-200 rounded-full overflow-hidden">
+                                    <div id="strengthBar" class="h-full bg-green-500 w-0"></div>
+                                </div>
+                                <p id="strengthText" class="text-xs mt-1"></p>
+                            </div>
+                        </div>
+                        <div class="input-group mb-4">
+                            <label class="block mb-2">Salt:</label>
+                            <div class="flex">
+                                <input type="text" id="saltInput" value="" class="w-full border p-2 rounded" placeholder="Auto-generated">
+                                <button onclick="generateSalt()" class="bg-gray-200 p-2 ml-2 rounded hover:bg-gray-300">Generate</button>
+                            </div>
+                        </div>
+                        <button onclick="hashPassword()" class="bg-indigo-600 text-white p-2 w-full rounded hover:bg-indigo-700">Compute Hash</button>
+                        <div id="hashResults" class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-2"></div>
+                    </div>
+                </div>
+                
+                <div class="storage-methods">
+                    <h3 class="text-xl font-medium">Storage Methods</h3>
+                    <div class="storage-comparison grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                        <div class="storage-card bg-red-100 p-4 rounded-lg">
+                            <h4 class="font-bold">Plaintext (Dangerous)</h4>
+                            <div class="risk-meter h-2 bg-gradient-to-r from-green-400 via-yellow-400 to-red-500 mt-2 rounded-full"></div>
+                            <p class="text-sm mt-2">Stored exactly as entered. Immediate compromise if breached.</p>
+                        </div>
+                        <div class="storage-card bg-yellow-100 p-4 rounded-lg">
+                            <h4 class="font-bold">Hashed Only</h4>
+                            <div class="risk-meter h-2 bg-gradient-to-r from-green-400 via-yellow-400 to-red-500 mt-2 rounded-full" style="background-position: 66%"></div>
+                            <p class="text-sm mt-2">Vulnerable to rainbow tables and dictionary attacks.</p>
+                        </div>
+                        <div class="storage-card bg-green-100 p-4 rounded-lg">
+                            <h4 class="font-bold">Salted & Hashed</h4>
+                            <div class="risk-meter h-2 bg-gradient-to-r from-green-400 via-yellow-400 to-red-500 mt-2 rounded-full" style="background-position: 0%"></div>
+                            <p class="text-sm mt-2">Unique salt per password defeats rainbow tables.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="breach-simulator mt-6 p-4 bg-gray-100 rounded-lg">
+                        <h4 class="font-bold mb-2">Rainbow Table Attack Simulator</h4>
+                        <p class="text-sm mb-2">Simulate cracking hashed passwords with and without salt:</p>
+                        <button onclick="simulateRainbowAttack()" class="bg-red-500 text-white p-2 rounded hover:bg-red-600">Run Simulation</button>
+                        <div id="attackResults" class="mt-4"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KERBEROS PROTOCOL VISUALIZER -->
+        <section id="kerberos" class="mb-12 p-6 bg-purple-50 rounded-xl section-dark">
+            <h2 class="text-2xl font-semibold mb-4">Kerberos Authentication Protocol</h2>
+            
+            <div class="kerberos-flow">
+                <div class="mermaid mb-6">
+                    sequenceDiagram
+                        participant Client
+                        participant AS as Authentication Server
+                        participant TGS as Ticket Granting Server
+                        participant Service
+                        Client->>AS: Authenticate (Username)
+                        AS->>Client: TGT (Encrypted with client key)
+                        Client->>TGS: Request service ticket (TGT + Service ID)
+                        TGS->>Client: Service Ticket (Encrypted with service key)
+                        Client->>Service: Access request (Service Ticket)
+                        Service->>Client: Grant access
+                </div>
+                
+                <div class="protocol-simulator">
+                    <div class="step-buttons grid grid-cols-6 gap-2 mb-4">
+                        <button onclick="showKerberosStep(1)" class="kerberos-step p-2 border rounded hover:bg-indigo-100">1. Request TGT</button>
+                        <button onclick="showKerberosStep(2)" class="kerberos-step p-2 border rounded hover:bg-indigo-100">2. Receive TGT</button>
+                        <button onclick="showKerberosStep(3)" class="kerberos-step p-2 border rounded hover:bg-indigo-100">3. Request ST</button>
+                        <button onclick="showKerberosStep(4)" class="kerberos-step p-2 border rounded hover:bg-indigo-100">4. Receive ST</button>
+                        <button onclick="showKerberosStep(5)" class="kerberos-step p-2 border rounded hover:bg-indigo-100">5. Access Service</button>
+                        <button onclick="showKerberosStep(6)" class="kerberos-step p-2 border rounded hover:bg-indigo-100">6. Grant Access</button>
+                    </div>
+                    <div class="message-flow bg-white p-4 rounded-lg min-h-[200px] border">
+                        <div id="kerberosStepContent" class="text-center py-8">
+                            <p class="text-gray-500">Click on a step to view the Kerberos authentication details</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="ticket-granting mt-6">
+                <h3 class="text-xl font-medium">Ticket Granting Process</h3>
+                <div class="ticket-structure grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div class="tgt bg-blue-100 p-4 rounded-lg">
+                        <h4 class="font-bold">Ticket Granting Ticket (TGT)</h4>
+                        <div class="mt-2">
+                            <p class="text-sm"><span class="font-semibold">Session Key:</span> Encrypted with client's password hash</p>
+                            <p class="text-sm"><span class="font-semibold">Client ID:</span> User principal name</p>
+                            <p class="text-sm"><span class="font-semibold">Timestamp:</span> Issue and expiration time</p>
+                            <p class="text-sm"><span class="font-semibold">Lifetime:</span> Typically 8-10 hours</p>
+                        </div>
+                        <div class="hash-visualization mt-3">
+                            <div class="hash-block" style="background-color: #93c5fd;">SK</div>
+                            <div class="hash-block" style="background-color: #bfdbfe;">CID</div>
+                            <div class="hash-block" style="background-color: #93c5fd;">TS</div>
+                            <div class="hash-block" style="background-color: #bfdbfe;">LT</div>
+                        </div>
+                    </div>
+                    <div class="st bg-green-100 p-4 rounded-lg">
+                        <h4 class="font-bold">Service Ticket (ST)</h4>
+                        <div class="mt-2">
+                            <p class="text-sm"><span class="font-semibold">Service Session Key:</span> Encrypted with service's secret key</p>
+                            <p class="text-sm"><span class="font-semibold">Client ID:</span> User principal name</p>
+                            <p class="text-sm"><span class="font-semibold">Timestamp:</span> Issue and expiration time</p>
+                            <p class="text-sm"><span class="font-semibold">Permissions:</span> Granted privileges</p>
+                        </div>
+                        <div class="hash-visualization mt-3">
+                            <div class="hash-block" style="background-color: #86efac;">SSK</div>
+                            <div class="hash-block" style="background-color: #bbf7d0;">CID</div>
+                            <div class="hash-block" style="background-color: #86efac;">TS</div>
+                            <div class="hash-block" style="background-color: #bbf7d0;">PERM</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KERBEROS REALMS EXPLAINER -->
+        <section id="realms" class="mb-12 p-6 bg-amber-50 rounded-xl section-dark">
+            <h2 class="text-2xl font-semibold mb-4">Kerberos Realms</h2>
+            
+            <div class="realm-visualization grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="realm-concept">
+                    <h3 class="text-xl font-medium">Realm Architecture</h3>
+                    <div class="mermaid">
+                        graph LR
+                            RealmA[Realm A: DOMAIN.LOCAL] -->|Trust| RealmB[Realm B: CORP.ORG]
+                            RealmA -->|Trust| RealmC[Realm C: DEPT.DOMAIN]
+                            RealmB -->|Trust| RealmD[Realm D: PARTNER.NET]
+                    </div>
+                    <div class="mt-4">
+                        <h4 class="font-semibold">Key Concepts:</h4>
+                        <ul class="list-disc pl-5 mt-2 text-sm">
+                            <li>Realms define administrative domains</li>
+                            <li>Trust relationships enable cross-realm authentication</li>
+                            <li>Hierarchical realms simplify trust configuration</li>
+                            <li>Each realm has its own KDC (Key Distribution Center)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="realm-demo">
+                    <h3 class="text-xl font-medium">Cross-Realm Authentication</h3>
+                    <div class="cross-realm-simulator border p-4 rounded-lg mt-4 bg-white">
+                        <div class="flex mb-4">
+                            <div class="w-1/2 pr-2">
+                                <label class="block">Source Realm</label>
+                                <select id="sourceRealm" class="w-full border p-2 rounded">
+                                    <option>DOMAIN.LOCAL</option>
+                                    <option>CORP.ORG</option>
+                                    <option>DEPT.DOMAIN</option>
+                                </select>
+                            </div>
+                            <div class="w-1/2 pl-2">
+                                <label class="block">Target Realm</label>
+                                <select id="targetRealm" class="w-full border p-2 rounded">
+                                    <option>CORP.ORG</option>
+                                    <option>DOMAIN.LOCAL</option>
+                                    <option>PARTNER.NET</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button onclick="simulateCrossRealm()" class="bg-indigo-600 text-white p-2 w-full rounded hover:bg-indigo-700">Authenticate</button>
+                        <div id="realmResult" class="mt-4 p-3 rounded hidden"></div>
+                    </div>
+                    <div class="mt-4 p-4 bg-yellow-50 rounded-lg">
+                        <h4 class="font-semibold">Active Directory Example:</h4>
+                        <p class="text-sm mt-1">In Windows domains, all domains in a forest automatically have two-way transitive trusts. The root domain acts as the top-level realm.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HASHING ALGORITHMS VULNERABILITY LAB -->
+        <section id="hashing" class="mb-12 p-6 bg-red-50 rounded-xl section-dark">
+            <h2 class="text-2xl font-semibold mb-4">Hashing Algorithms & Vulnerabilities</h2>
+            
+            <div class="algorithm-comparison grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="hash-card md5 bg-yellow-100 p-4 rounded-lg">
+                    <h3 class="font-bold text-lg">MD5</h3>
+                    <p class="text-sm">(Message Digest Algorithm 5)</p>
+                    <div class="structure-diagram mt-2 h-24">
+                        <canvas id="md5Canvas" width="200" height="80"></canvas>
+                    </div>
+                    <div class="vulns mt-2">
+                        <span class="inline-block bg-red-500 text-white px-2 py-1 rounded text-xs">Collision Vulnerable</span>
+                        <span class="inline-block bg-red-500 text-white px-2 py-1 rounded text-xs mt-1">Deprecated</span>
+                    </div>
+                    <p class="text-xs mt-2">128-bit hash, 64 rounds</p>
+                </div>
+                <div class="hash-card sha1 bg-orange-100 p-4 rounded-lg">
+                    <h3 class="font-bold text-lg">SHA-1</h3>
+                    <p class="text-sm">(Secure Hash Algorithm 1)</p>
+                    <div class="structure-diagram mt-2 h-24">
+                        <canvas id="sha1Canvas" width="200" height="80"></canvas>
+                    </div>
+                    <div class="vulns mt-2">
+                        <span class="inline-block bg-red-500 text-white px-2 py-1 rounded text-xs">Theoretical Collisions</span>
+                        <span class="inline-block bg-yellow-500 text-white px-2 py-1 rounded text-xs mt-1">Weak</span>
+                    </div>
+                    <p class="text-xs mt-2">160-bit hash, 80 rounds</p>
+                </div>
+                <div class="hash-card sha256 bg-green-100 p-4 rounded-lg">
+                    <h3 class="font-bold text-lg">SHA-256</h3>
+                    <p class="text-sm">(Secure Hash Algorithm 256-bit)</p>
+                    <div class="structure-diagram mt-2 h-24">
+                        <canvas id="sha256Canvas" width="200" height="80"></canvas>
+                    </div>
+                    <div class="vulns mt-2">
+                        <span class="inline-block bg-green-500 text-white px-2 py-1 rounded text-xs">Secure</span>
+                        <span class="inline-block bg-blue-500 text-white px-2 py-1 rounded text-xs mt-1">Recommended</span>
+                    </div>
+                    <p class="text-xs mt-2">256-bit hash, 64 rounds</p>
+                </div>
+            </div>
+            
+            <div class="vulnerability-demos">
+                <div class="collision-demo mb-6">
+                    <h3 class="text-xl font-medium">Collision Attack Demo</h3>
+                    <div class="demo-box border p-4 rounded-lg mt-2 bg-white">
+                        <p>Input 1: <span id="collision1" class="font-mono">d131dd02c5e6eec4</span></p>
+                        <p>Input 2: <span id="collision2" class="font-mono">d131dd02c5e6eec4</span></p>
+                        <button onclick="showMD5Collision()" class="bg-red-500 text-white p-2 mt-2 rounded hover:bg-red-600">Generate Collision</button>
+                        <div id="collisionResult" class="mt-4 hidden">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <p class="font-semibold">Input 1 MD5:</p>
+                                    <p id="collisionHash1" class="font-mono text-sm"></p>
+                                </div>
+                                <div>
+                                    <p class="font-semibold">Input 2 MD5:</p>
+                                    <p id="collisionHash2" class="font-mono text-sm"></p>
+                                </div>
+                            </div>
+                            <div class="mt-4 p-3 bg-yellow-100 rounded">
+                                <p class="text-sm">These are known MD5 collision blocks. Different inputs produce the same hash value, demonstrating MD5's vulnerability to collision attacks.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="comparison-tool">
+                    <h3 class="text-xl font-medium">Algorithm Comparison</h3>
+                    <table class="min-w-full mt-2 border">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="border p-2">Algorithm</th>
+                                <th class="border p-2">Output Size</th>
+                                <th class="border p-2">Rounds</th>
+                                <th class="border p-2">Collision Resistance</th>
+                                <th class="border p-2">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border p-2">MD5</td>
+                                <td class="border p-2">128-bit</td>
+                                <td class="border p-2">64</td>
+                                <td class="border p-2 text-red-600">Broken</td>
+                                <td class="border p-2">Deprecated</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="border p-2">SHA-1</td>
+                                <td class="border p-2">160-bit</td>
+                                <td class="border p-2">80</td>
+                                <td class="border p-2 text-orange-600">Theoretical Break</td>
+                                <td class="border p-2">Weak</td>
+                            </tr>
+                            <tr>
+                                <td class="border p-2">SHA-256</td>
+                                <td class="border p-2">256-bit</td>
+                                <td class="border p-2">64</td>
+                                <td class="border p-2 text-green-600">Secure</td>
+                                <td class="border p-2">Recommended</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="border p-2">SHA-3</td>
+                                <td class="border p-2">Variable</td>
+                                <td class="border p-2">24</td>
+                                <td class="border p-2 text-green-600">Secure</td>
+                                <td class="border p-2">Future Standard</td>
+                            </tr>
+                            <tr>
+                                <td class="border p-2">bcrypt</td>
+                                <td class="border p-2">184-bit</td>
+                                <td class="border p-2">Variable</td>
+                                <td class="border p-2 text-green-600">Secure</td>
+                                <td class="border p-2">Password Hashing</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- AUTHENTICATION CHALLENGES -->
+    <div class="challenges  bottom-4 right-4 bg-white p-4 shadow-xl rounded-lg border-2 border-indigo-600">
+        <h3 class="font-bold text-lg mb-2">Security Challenges</h3>
+        <div class="space-y-3">
+            <div class="challenge p-2 border rounded hover:bg-gray-50 cursor-pointer" onclick="showChallenge(1)">
+                <h4 class="font-semibold">1. Crack Weak Hashes</h4>
+                <p class="text-xs">Use rainbow tables to crack unsalted MD5 hashes</p>
+            </div>
+            <div class="challenge p-2 border rounded hover:bg-gray-50 cursor-pointer" onclick="showChallenge(2)">
+                <h4 class="font-semibold">2. Detect Replay Attacks</h4>
+                <p class="text-xs">Identify reused Kerberos tickets</p>
+            </div>
+            <div class="challenge p-2 border rounded hover:bg-gray-50 cursor-pointer" onclick="showChallenge(3)">
+                <h4 class="font-semibold">3. Hash Identification</h4>
+                <p class="text-xs">Determine which algorithm created a hash</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode toggle
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            document.querySelectorAll('.section-dark').forEach(el => {
+                el.classList.toggle('bg-gray-800');
+                el.classList.toggle('text-white');
+            });
+        }
+
+        // Password strength analyzer
+        document.getElementById('passwordInput').addEventListener('input', function() {
+            const password = this.value;
+            let strength = 0;
+            
+            // Length check
+            if (password.length >= 8) strength += 1;
+            if (password.length >= 12) strength += 1;
+            
+            // Complexity checks
+            if (/[A-Z]/.test(password)) strength += 1;
+            if (/[a-z]/.test(password)) strength += 1;
+            if (/[0-9]/.test(password)) strength += 1;
+            if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+            
+            // Update UI
+            const strengthBar = document.getElementById('strengthBar');
+            const strengthText = document.getElementById('strengthText');
+            let width = '0%';
+            let text = 'Very Weak';
+            let color = 'bg-red-500';
+            
+            if (strength >= 6) {
+                width = '100%';
+                text = 'Very Strong';
+                color = 'bg-green-500';
+            } else if (strength >= 4) {
+                width = '75%';
+                text = 'Strong';
+                color = 'bg-blue-500';
+            } else if (strength >= 2) {
+                width = '50%';
+                text = 'Moderate';
+                color = 'bg-yellow-500';
+            } else if (strength >= 1) {
+                width = '25%';
+                text = 'Weak';
+                color = 'bg-orange-500';
+            }
+            
+            strengthBar.style.width = width;
+            strengthBar.className = `h-full ${color} w-0`;
+            strengthText.textContent = `Strength: ${text}`;
+        });
+
+        // Password hashing lab
+        function generateSalt() {
+            const salt = CryptoJS.lib.WordArray.random(16).toString(CryptoJS.enc.Hex);
+            document.getElementById('saltInput').value = salt;
+        }
+
+        function hashPassword() {
+            const password = document.getElementById('passwordInput').value;
+            const salt = document.getElementById('saltInput').value || "NOSALT";
+            
+            // Compute hashes
+            const md5 = CryptoJS.MD5(password + salt).toString();
+            const sha1 = CryptoJS.SHA1(password + salt).toString();
+            const sha256 = CryptoJS.SHA256(password + salt).toString();
+            const sha512 = CryptoJS.SHA512(password + salt).toString();
+            
+            // Display results
+            const hashResults = document.getElementById('hashResults');
+            hashResults.innerHTML = `
+                <div class="p-3 bg-gray-100 rounded">
+                    <h4 class="font-bold">MD5</h4>
+                    <p class="font-mono text-sm break-all">${md5}</p>
+                </div>
+                <div class="p-3 bg-gray-100 rounded">
+                    <h4 class="font-bold">SHA-1</h4>
+                    <p class="font-mono text-sm break-all">${sha1}</p>
+                </div>
+                <div class="p-3 bg-gray-100 rounded">
+                    <h4 class="font-bold">SHA-256</h4>
+                    <p class="font-mono text-sm break-all">${sha256}</p>
+                </div>
+                <div class="p-3 bg-gray-100 rounded hidden md:block">
+                    <h4 class="font-bold">SHA-512</h4>
+                    <p class="font-mono text-sm break-all">${sha512}</p>
+                </div>
+            `;
+        }
+
+        function simulateRainbowAttack() {
+            const attackResults = document.getElementById('attackResults');
+            attackResults.innerHTML = `
+                <div class="p-3 bg-white border rounded-lg">
+                    <h4 class="font-bold">Rainbow Table Attack Simulation</h4>
+                    <div class="mt-2">
+                        <p class="text-sm"><span class="font-semibold">Unsalted MD5:</span> Cracked in 2.3 seconds</p>
+                        <p class="text-sm"><span class="font-semibold">Salted MD5:</span> Not cracked (requires brute force)</p>
+                    </div>
+                    <div class="mt-3 bg-yellow-50 p-2 rounded">
+                        <p class="text-sm">Salting prevents rainbow table attacks by making each hash unique, even for identical passwords.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Kerberos protocol simulator
+        function showKerberosStep(step) {
+            // Reset all steps
+            document.querySelectorAll('.kerberos-step').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Activate current step
+            document.querySelectorAll('.kerberos-step')[step-1].classList.add('active');
+            
+            const stepContent = document.getElementById('kerberosStepContent');
+            const steps = [
+                {
+                    title: "1. Request TGT",
+                    content: "Client sends username to Authentication Server (AS) to request a Ticket Granting Ticket (TGT). No password is sent at this stage."
+                },
+                {
+                    title: "2. Receive TGT",
+                    content: "AS verifies user exists and responds with:<br><br>- TGT encrypted with the TGS secret key<br>- Session key encrypted with the user's password hash"
+                },
+                {
+                    title: "3. Request ST",
+                    content: "Client decrypts session key with their password hash, then requests Service Ticket (ST) from Ticket Granting Server (TGS) by sending:<br><br>- TGT<br>- Authenticator encrypted with session key<br>- Service ID"
+                },
+                {
+                    title: "4. Receive ST",
+                    content: "TGS verifies TGT and responds with:<br><br>- Service Ticket encrypted with service's secret key<br>- Service session key encrypted with client's session key"
+                },
+                {
+                    title: "5. Access Service",
+                    content: "Client sends to application server:<br><br>- Service Ticket<br>- Authenticator encrypted with service session key"
+                },
+                {
+                    title: "6. Grant Access",
+                    content: "Service verifies ticket and authenticator, then grants access. Mutual authentication can be performed if needed."
+                }
+            ];
+            
+            stepContent.innerHTML = `
+                <h4 class="font-bold text-lg mb-2">${steps[step-1].title}</h4>
+                <p>${steps[step-1].content}</p>
+            `;
+        }
+
+        // Cross-realm authentication
+        function simulateCrossRealm() {
+            const source = document.getElementById('sourceRealm').value;
+            const target = document.getElementById('targetRealm').value;
+            const resultDiv = document.getElementById('realmResult');
+            
+            if (source === target) {
+                resultDiv.className = "mt-4 p-3 rounded bg-red-100";
+                resultDiv.innerHTML = "<p>Cannot authenticate within the same realm. Choose different source and target realms.</p>";
+            } else if ((source === "DOMAIN.LOCAL" && target === "PARTNER.NET") || 
+                      (source === "DEPT.DOMAIN" && target === "PARTNER.NET")) {
+                resultDiv.className = "mt-4 p-3 rounded bg-red-100";
+                resultDiv.innerHTML = `
+                    <p>Cross-realm authentication failed!</p>
+                    <p class="mt-1 text-sm">No direct trust relationship between ${source} and ${target}. A transitive trust through CORP.ORG is required.</p>
+                `;
+            } else {
+                resultDiv.className = "mt-4 p-3 rounded bg-green-100";
+                resultDiv.innerHTML = `
+                    <p>Cross-realm authentication successful!</p>
+                    <p class="mt-1 text-sm">Client from ${source} authenticated to service in ${target} via Kerberos trust relationship.</p>
+                    <div class="mt-2 p-2 bg-white rounded">
+                        <p class="text-xs font-mono">KRB_AP_REQ ticket issued with cross-realm session key</p>
+                    </div>
+                `;
+            }
+            
+            resultDiv.classList.remove('hidden');
+        }
+
+        // Hash vulnerability demo
+        function showMD5Collision() {
+            // These are the first blocks of the famous MD5 collision examples
+            const collision1 = "d131dd02c5e6eec4693d9a0698aff95c2fcab58712467eab4004583eb8fb7f8955ad340609f4b30283e488832571415a085125e8f7cdc99fd91dbdf280373c5bd8823e3156348f5bae6dacd436c919c6dd53e2b487da03fd02396306d248cda0e99f33420f577ee8ce54b67080a80d1ec69821bcb6a8839396f9652b6ff72a70";
+            const collision2 = "d131dd02c5e6eec4693d9a0698aff95c2fcab50712467eab4004583eb8fb7f8955ad340609f4b30283e4888325f1415a085125e8f7cdc99fd91dbd7280373c5bd8823e3156348f5bae6dacd436c919c6dd53e23487da03fd02396306d248cda0e99f33420f577ee8ce54b67080280d1ec69821bcb6a8839396f965ab6ff72a70";
+            
+            document.getElementById('collision1').textContent = collision1.substring(0, 16) + "...";
+            document.getElementById('collision2').textContent = collision2.substring(0, 16) + "...";
+            
+            // Compute hashes
+            const hash1 = CryptoJS.MD5(CryptoJS.enc.Hex.parse(collision1)).toString();
+            const hash2 = CryptoJS.MD5(CryptoJS.enc.Hex.parse(collision2)).toString();
+            
+            document.getElementById('collisionHash1').textContent = hash1;
+            document.getElementById('collisionHash2').textContent = hash2;
+            
+            document.getElementById('collisionResult').classList.remove('hidden');
+        }
+
+        // Security challenges
+        function showChallenge(num) {
+            const challenges = [
+                {
+                    title: "Crack Weak Hashes",
+                    content: `
+                        <p>Given these unsalted MD5 hashes:</p>
+                        <div class="mt-2 grid grid-cols-2 gap-2">
+                            <div class="p-2 bg-gray-100 rounded">
+                                <p class="font-mono text-sm">5f4dcc3b5aa765d61d8327deb882cf99</p>
+                                <p class="text-xs">(password)</p>
+                            </div>
+                            <div class="p-2 bg-gray-100 rounded">
+                                <p class="font-mono text-sm">482c811da5d5b4bc6d497ffa98491e38</p>
+                                <p class="text-xs">(password123)</p>
+                            </div>
+                        </div>
+                        <p class="mt-3 text-sm">Rainbow tables can instantly reverse these common password hashes. Always use salt!</p>
+                    `
+                },
+                {
+                    title: "Detect Replay Attacks",
+                    content: `
+                        <p>Kerberos tickets include timestamps to prevent replay attacks. A replayed ticket would have:</p>
+                        <ul class="list-disc pl-5 mt-2 text-sm">
+                            <li>Same ticket contents</li>
+                            <li>Same authenticator</li>
+                            <li>Timestamp outside allowed clock skew (typically 5 minutes)</li>
+                        </ul>
+                        <p class="mt-3 text-sm">Servers should maintain a cache of recent authenticators to detect replays.</p>
+                    `
+                },
+                {
+                    title: "Hash Identification",
+                    content: `
+                        <p>Identify these hashes:</p>
+                        <div class="mt-2 grid grid-cols-1 gap-2">
+                            <div class="p-2 bg-gray-100 rounded">
+                                <p class="font-mono text-sm">5f4dcc3b5aa765d61d8327deb882cf99</p>
+                                <p class="text-xs">(MD5 - 32 hex chars)</p>
+                            </div>
+                            <div class="p-2 bg-gray-100 rounded">
+                                <p class="font-mono text-sm">a94a8fe5ccb19ba61c4c0873d391e987982fbbd3</p>
+                                <p class="text-xs">(SHA-1 - 40 hex chars)</p>
+                            </div>
+                            <div class="p-2 bg-gray-100 rounded">
+                                <p class="font-mono text-sm">$2a$10$N9qo8uLOickgx2ZMRZoMy.Mrq4L9Wf7JGBrJicYF2nR9VgR6YrFKO</p>
+                                <p class="text-xs">(bcrypt - $2a$ prefix)</p>
+                            </div>
+                        </div>
+                    `
+                }
+            ];
+            
+            alert(challenges[num-1].title + "\n\n" + challenges[num-1].content.replace(/<[^>]*>/g, ''));
+        }
+
+        // Draw hash algorithm structures
+        function drawHashStructures() {
+            const md5Canvas = document.getElementById('md5Canvas');
+            const sha1Canvas = document.getElementById('sha1Canvas');
+            const sha256Canvas = document.getElementById('sha256Canvas');
+            
+            drawBlocks(md5Canvas, 4, ['IV', 'Msg', 'Round', 'Add'], ['#fef08a', '#fde047', '#facc15', '#eab308']);
+            drawBlocks(sha1Canvas, 5, ['IV', 'Msg', 'Round', 'Add', 'Pad'], ['#fed7aa', '#fdba74', '#fb923c', '#f97316', '#ea580c']);
+            drawBlocks(sha256Canvas, 8, ['IV', 'Msg', 'Round', 'Add', 'Pad', 'Σ0', 'Σ1', 'Maj'], ['#bbf7d0', '#86efac', '#4ade80', '#22c55e', '#16a34a', '#15803d', '#166534', '#14532d']);
+        }
+        
+        function drawBlocks(canvas, blocks, labels, colors) {
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            const blockWidth = width / blocks;
+            
+            ctx.clearRect(0, 0, width, height);
+            
+            for (let i = 0; i < blocks; i++) {
+                // Draw block
+                ctx.fillStyle = colors[i];
+                ctx.fillRect(i * blockWidth, 0, blockWidth - 2, height);
+                ctx.strokeRect(i * blockWidth, 0, blockWidth - 2, height);
+                
+                // Draw label
+                ctx.fillStyle = '#000';
+                ctx.font = '8px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(labels[i], i * blockWidth + blockWidth/2, height/2);
+            }
+        }
+
+        // Initialize
+        window.onload = function() {
+            drawHashStructures();
+            generateSalt();
+        };
+    </script>
+</body>
+</html>

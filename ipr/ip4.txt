@@ -1,0 +1,343 @@
+**Role:** Cryptography Architect and Security Educator  
+**Task:** Create an interactive HTML tutorial for Chapter 4 with key exchange simulations and PKI visualizations  
+**Output Requirements:**  
+
+1. **Technical Specifications:**  
+   - Single HTML5 file with embedded Tailwind CSS  
+   - JavaScript-powered protocol simulators  
+   - Mermaid.js for sequence diagrams  
+   - MathJax for cryptographic mathematics  
+   - Interactive certificate inspector  
+   - Web Crypto API for key exchange demos  
+
+2. **Content Structure:**  
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Head with Tailwind, MathJax, Mermaid, Web Crypto API -->
+</head>
+<body class="bg-gray-50">
+    <header class="bg-teal-900 text-white p-6">
+        <h1 class="text-3xl font-bold">Chapter 4: Key Management Systems</h1>
+    </header>
+
+    <main class="container mx-auto p-4">
+        <!-- DIFFIE-HELLMAN INTERACTIVE LAB -->
+        <section id="diffie-hellman" class="mb-12 p-6 bg-blue-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Diffie-Hellman Key Exchange</h2>
+            
+            <div class="dh-principles grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="math-explanation">
+                    <h3 class="text-xl font-medium">Mathematical Foundation</h3>
+                    <div class="math-steps space-y-2">
+                        <p>1. Public parameters: Prime \(p\), Generator \(g\)</p>
+                        <p>2. Alice: Private \(a\), Public \(A = g^a \mod p\)</p>
+                        <p>3. Bob: Private \(b\), Public \(B = g^b \mod p\)</p>
+                        <p>4. Shared secret: \(s = A^b \mod p = B^a \mod p\)</p>
+                    </div>
+                </div>
+                <div class="mermaid">
+                    sequenceDiagram
+                        participant Alice
+                        participant Bob
+                        Alice->>Bob: A = g^a mod p
+                        Bob->>Alice: B = g^b mod p
+                        Note right of Alice: s = B^a mod p
+                        Note left of Bob: s = A^b mod p
+                </div>
+            </div>
+            
+            <div class="dh-simulator border-2 border-gray-300 p-4 rounded-lg">
+                <div class="controls grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label class="block">Prime modulus (p)</label>
+                        <input type="number" id="dh-p" value="23" class="w-full border p-2">
+                    </div>
+                    <div>
+                        <label class="block">Generator (g)</label>
+                        <input type="number" id="dh-g" value="5" class="w-full border p-2">
+                    </div>
+                    <div class="flex items-end">
+                        <button onclick="runDHSimulation()" class="bg-teal-600 text-white p-2 w-full">Run Exchange</button>
+                    </div>
+                </div>
+                <div class="participants grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="alice bg-blue-100 p-4 rounded-lg">
+                        <h4 class="font-bold text-blue-800">Alice</h4>
+                        <!-- Dynamic values will populate here -->
+                    </div>
+                    <div class="bob bg-green-100 p-4 rounded-lg">
+                        <h4 class="font-bold text-green-800">Bob</h4>
+                        <!-- Dynamic values will populate here -->
+                    </div>
+                </div>
+                <div class="man-in-middle mt-4 p-4 bg-yellow-100 rounded-lg hidden" id="mitm-warning">
+                    <!-- MITM attack demonstration -->
+                </div>
+            </div>
+        </section>
+
+        <!-- NEEDHAM-SCHROEDER PROTOCOL VISUALIZER -->
+        <section id="needham-schroeder" class="mb-12 p-6 bg-purple-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Needham-Schroeder Protocol</h2>
+            
+            <div class="protocol-steps">
+                <div class="mermaid">
+                    sequenceDiagram
+                        participant Alice
+                        participant KDC
+                        participant Bob
+                        Alice->>KDC: Request session with Bob
+                        KDC->>Alice: {Kab, {Kab, Alice}Kb}Ka
+                        Alice->>Bob: {Kab, Alice}Kb
+                        Bob->>Alice: {Nb}Kab
+                        Alice->>Bob: {Nb-1}Kab
+                </div>
+                
+                <div class="ns-simulator mt-6">
+                    <div class="step-buttons grid grid-cols-5 gap-2 mb-4">
+                        <!-- Protocol step navigation -->
+                    </div>
+                    <div class="message-flow bg-white p-4 rounded-lg min-h-[200px]">
+                        <!-- Animated message flow visualization -->
+                    </div>
+                    <div class="attack-options mt-4">
+                        <button onclick="demoReplayAttack()" class="bg-red-500 text-white p-2">Simulate Replay Attack</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PKI ARCHITECTURE EXPLORER -->
+        <section id="pki" class="mb-12 p-6 bg-amber-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Public Key Infrastructure (PKI)</h2>
+            
+            <div class="pki-hierarchy mb-6">
+                <h3 class="text-xl font-medium mb-2">Trust Hierarchy</h3>
+                <div class="mermaid">
+                    graph TD
+                        RootCA[Root Certificate Authority] -->|Issues| SubCA1[Subordinate CA 1]
+                        RootCA -->|Issues| SubCA2[Subordinate CA 2]
+                        SubCA1 -->|Issues| EE1[End Entity Certificate]
+                        SubCA1 -->|Issues| EE2[End Entity Certificate]
+                        SubCA2 -->|Issues| EE3[End Entity Certificate]
+                </div>
+            </div>
+            
+            <div class="pki-components grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <!-- Cards for CA/RA/Repository/Client -->
+            </div>
+            
+            <div class="certificate-lifecycle">
+                <h3 class="text-xl font-medium mb-2">Certificate Lifecycle</h3>
+                <div class="lifecycle-steps grid grid-cols-4 gap-2 text-center">
+                    <!-- Enrollment/Validation/Expiration/Revocation -->
+                </div>
+            </div>
+        </section>
+
+        <!-- DIGITAL CERTIFICATE INSPECTOR -->
+        <section id="certificates" class="mb-12 p-6 bg-emerald-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Digital Certificates & CAs</h2>
+            
+            <div class="certificate-lab grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="cert-structure">
+                    <h3 class="text-xl font-medium">X.509 Certificate Structure</h3>
+                    <div class="cert-tree mt-4 border-l-2 pl-4">
+                        <!-- Interactive certificate field explorer -->
+                    </div>
+                </div>
+                
+                <div class="cert-inspector">
+                    <h3 class="text-xl font-medium">Certificate Inspector</h3>
+                    <textarea id="certPem" class="w-full border p-2 mt-2 h-40" placeholder="Paste PEM certificate"></textarea>
+                    <button onclick="inspectCertificate()" class="bg-teal-600 text-white p-2 mt-2 w-full">Inspect</button>
+                    <div id="certDetails" class="mt-4 font-mono text-sm"></div>
+                </div>
+                
+                <div class="ca-hierarchy">
+                    <h3 class="text-xl font-medium">CA Trust Chain</h3>
+                    <div class="chain-visualization mt-4 p-4 bg-white rounded-lg">
+                        <!-- Interactive trust chain builder -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="ca-operations mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="cert-validation bg-blue-100 p-4 rounded-lg">
+                    <h4 class="font-bold">Certificate Validation Process</h4>
+                    <!-- Step-by-step validation flow -->
+                </div>
+                <div class="crl-ocsp bg-red-100 p-4 rounded-lg">
+                    <h4 class="font-bold">Revocation Checking</h4>
+                    <!-- CRL vs OCSP comparison -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- KEY MANAGEMENT CHALLENGES -->
+    <div class="challenges fixed bottom-4 right-4 bg-white p-4 shadow-xl rounded-lg border-2 border-teal-600">
+        <h3 class="font-bold text-lg mb-2">Key Challenges</h3>
+        <!-- Interactive exercises:
+             - MITM detection in DH
+             - Certificate chain validation
+             - Protocol vulnerability identification -->
+    </div>
+
+    <script>
+        // JavaScript implementations for:
+        // - Diffie-Hellman key exchange simulation
+        // - Needham-Schroeder protocol animator
+        // - Certificate parser and inspector
+        // - PKI trust chain builder
+        // - Attack simulations
+    </script>
+</body>
+</html>
+Content Generation Rules:
+
+Diffie-Hellman Section:
+• Modular arithmetic visualizer with prime/generator controls
+• Real-time key exchange simulation
+• MITM attack demonstration with prevention techniques
+
+Needham-Schroeder Protocol:
+• Step-by-step animated message flow
+• Replay attack simulation
+• Comparison with Kerberos
+
+PKI Architecture:
+• Interactive trust hierarchy diagram
+• Certificate lifecycle visual timeline
+• Component roles with real-world examples (DigiCert, Let's Encrypt)
+
+Digital Certificates:
+• X.509 certificate structure explorer
+• Live certificate inspector (supports PEM input)
+• Revocation checking (CRL/OCSP) comparison
+
+Interactivity Requirements:
+
+Adjustable DH parameters with real-time calculations
+
+Protocol step controller with pause/resume
+
+Certificate trust chain builder
+
+Certificate field explorer with tooltips
+
+Attack simulation toggles (MITM, replay)
+
+Key management challenge exercises
+
+Design Specifications:
+
+Color scheme: Trust teal (#0f766e) + security amber (#d97706)
+
+Clean, hierarchical layouts for PKI visualization
+
+Animated transitions for protocol steps
+
+Responsive card layouts for PKI components
+
+Certificate structure tree with collapsible nodes
+
+Dark mode with high-contrast security indicators
+
+Special Features:
+
+Web Crypto API Integration: For realistic key generation
+
+Dynamic Math Rendering:
+g
+a
+m
+o
+d
+ 
+ 
+p
+g 
+a
+ modp → 
+A
+A
+g
+b
+m
+o
+d
+ 
+ 
+p
+g 
+b
+ modp → 
+B
+B
+B
+a
+m
+o
+d
+ 
+ 
+p
+=
+A
+b
+m
+o
+d
+ 
+ 
+p
+=
+s
+B 
+a
+ modp=A 
+b
+ modp=s
+
+Mermaid Sequence Diagrams: For all protocol flows
+
+Real Certificate Inspection: Parse and display actual certificate fields
+
+Attack Simulations:
+• MITM in Diffie-Hellman
+• Replay attacks on Needham-Schroeder
+• Certificate spoofing
+
+Trust Chain Visualizer: Interactive CA hierarchy builder
+
+Deliverable: Self-contained HTML file with functional key management simulations
+
+Example Visualizations:
+
+Diagram
+Code
+graph LR
+    RootCA --> SubCA1
+    RootCA --> SubCA2
+    SubCA1 --> UserCert1
+    SubCA1 --> UserCert2
+    SubCA2 --> UserCert3
+
+
+
+
+
+Diagram
+Code
+sequenceDiagram
+    participant Alice
+    participant KDC
+    participant Bob
+    Alice->>KDC: IDa, IDb, Na
+    KDC->>Alice: {Na, Kab, IDb, {Kab, IDa}Kb}Ka
+    Alice->>Bob: {Kab, IDa}Kb
+    Bob->>Alice: {Nb}Kab
+    Alice->>Bob: {Nb-1}Kab

@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2: Cryptography Fundamentals</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        .mermaid { margin: 20px 0; }
+        .crypto-tab { display: none; }
+        .crypto-tab.active { display: block; }
+        .terminal {
+            background-color: #1e293b;
+            color: #f8fafc;
+            font-family: monospace;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+        }
+        .diffusion-demo {
+            background: conic-gradient(from 180deg at 50% 50%, #7e22ce 0%, #9333ea 25%, #a855f7 50%, #c084fc 75%, #d8b4fe 100%);
+            background-size: 200% 200%;
+            animation: diffusion 3s infinite alternate;
+        }
+        @keyframes diffusion {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        .dark .dark\:bg-gray-900 {
+            background-color: #111827;
+        }
+        .dark .dark\:text-white {
+            color: #fff;
+        }
+        .encrypted-text {
+            position: relative;
+        }
+        .encrypted-text::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(126, 34, 206, 0.3), transparent);
+            animation: shine 2s infinite;
+        }
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-mono dark:bg-gray-900 dark:text-white transition-colors duration-300">
+    <header class="bg-purple-900 text-white p-6 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-bold">Chapter 2: Cryptography Fundamentals</h1>
+            <button id="darkModeToggle" class="bg-purple-700 hover:bg-purple-800 px-4 py-2 rounded-lg">
+                <i class="fas fa-moon"></i> Dark Mode
+            </button>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4">
+        <!-- CRYPTOSYSTEM COMPONENTS -->
+        <section id="cryptosystem" class="mb-12 p-6 bg-indigo-50 rounded-xl dark:bg-gray-800">
+            <h2 class="text-2xl font-semibold mb-4">Cryptosystem Components</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                <!-- Plaintext Card -->
+                <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow dark:bg-gray-700">
+                    <div class="text-purple-600 mb-2 text-center dark:text-purple-400">
+                        <i class="fas fa-file-alt text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-center mb-2">Plaintext (P)</h3>
+                    <p class="text-sm text-center">Original readable message</p>
+                    <div class="mt-3 p-2 bg-gray-100 rounded text-xs dark:bg-gray-600">
+                        <p id="plaintext-example" class="text-center">Hello World</p>
+                    </div>
+                </div>
+                
+                <!-- Algorithm Card -->
+                <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow dark:bg-gray-700">
+                    <div class="text-amber-500 mb-2 text-center dark:text-amber-400">
+                        <i class="fas fa-cogs text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-center mb-2">Algorithm (E/D)</h3>
+                    <p class="text-sm text-center">Encryption/Decryption rules</p>
+                    <div class="mt-3 p-2 bg-gray-100 rounded text-xs dark:bg-gray-600">
+                        <p class="text-center">AES-256</p>
+                    </div>
+                </div>
+                
+                <!-- Key Card -->
+                <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow dark:bg-gray-700">
+                    <div class="text-green-600 mb-2 text-center dark:text-green-400">
+                        <i class="fas fa-key text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-center mb-2">Key (K)</h3>
+                    <p class="text-sm text-center">Secret parameter</p>
+                    <div class="mt-3 p-2 bg-gray-100 rounded text-xs overflow-x-auto dark:bg-gray-600">
+                        <p class="text-center font-mono text-xs">3a7d4f8e2b...</p>
+                    </div>
+                </div>
+                
+                <!-- Ciphertext Card -->
+                <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow dark:bg-gray-700">
+                    <div class="text-red-600 mb-2 text-center dark:text-red-400">
+                        <i class="fas fa-lock text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-center mb-2">Ciphertext (C)</h3>
+                    <p class="text-sm text-center">Encrypted message</p>
+                    <div class="mt-3 p-2 bg-gray-100 rounded text-xs overflow-x-auto dark:bg-gray-600">
+                        <p id="ciphertext-example" class="text-center font-mono text-xs">U2FsdGVkX1+...</p>
+                    </div>
+                </div>
+                
+                <!-- Decryption Card -->
+                <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow dark:bg-gray-700">
+                    <div class="text-blue-600 mb-2 text-center dark:text-blue-400">
+                        <i class="fas fa-unlock text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-center mb-2">Decryption (D)</h3>
+                    <p class="text-sm text-center">Recovery process</p>
+                    <div class="mt-3 p-2 bg-gray-100 rounded text-xs dark:bg-gray-600">
+                        <p id="decrypted-example" class="text-center">Hello World</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mermaid">
+                flowchart LR
+                    A[Plaintext\nP] --> B[Encryption\nE(K,P)]
+                    B --> C[Ciphertext\nC]
+                    C --> D[Decryption\nD(K,C)]
+                    D --> E[Plaintext\nP]
+                    F[Key\nK] --> B
+                    F --> D
+            </div>
+            
+            <div class="mt-6">
+                <h3 class="font-bold mb-2">Cryptosystem Formula</h3>
+                <div class="p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                    <p class="text-center">\[ C = E(K, P) \]</p>
+                    <p class="text-center">\[ P = D(K, C) \]</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CRYPTOGRAPHY TYPES COMPARISON -->
+        <section id="types" class="mb-12">
+            <h2 class="text-2xl font-semibold mb-4">Types of Cryptography</h2>
+            
+            <div class="crypto-tabs flex border-b border-gray-200 mb-6 dark:border-gray-700">
+                <button class="crypto-tab-btn px-4 py-2 font-medium text-purple-600 border-b-2 border-purple-600 active dark:text-purple-400" data-tab="symmetric">Symmetric</button>
+                <button class="crypto-tab-btn px-4 py-2 font-medium text-gray-500 hover:text-purple-600 dark:text-gray-400" data-tab="asymmetric">Asymmetric</button>
+                <button class="crypto-tab-btn px-4 py-2 font-medium text-gray-500 hover:text-purple-600 dark:text-gray-400" data-tab="hash">Hash Functions</button>
+            </div>
+            
+            <!-- Symmetric Tab -->
+            <div id="symmetric" class="crypto-tab active">
+                <h3 class="text-xl font-bold mb-3">Symmetric Cryptography</h3>
+                <p class="mb-4">Same key used for encryption and decryption:</p>
+                <p class="text-center mb-4">\[ C = E(K, P) \]</p>
+                <p class="text-center">\[ P = D(K, C) \]</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div>
+                        <h4 class="font-bold mb-2">AES Demonstration</h4>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Message:</label>
+                            <textarea id="sym-message" class="w-full border p-2 rounded dark:bg-gray-700" rows="2">Secret message</textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Key:</label>
+                            <input id="sym-key" type="text" class="w-full border p-2 rounded dark:bg-gray-700" value="mySecretKey123">
+                        </div>
+                        <div class="flex space-x-2">
+                            <button onclick="encryptAES()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Encrypt</button>
+                            <button onclick="decryptAES()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Decrypt</button>
+                        </div>
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium mb-1">Result:</label>
+                            <div id="sym-result" class="terminal p-3 rounded"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-bold mb-2">Algorithm Comparison</h4>
+                        <table class="min-w-full bg-white rounded-lg overflow-hidden dark:bg-gray-700">
+                            <thead class="bg-gray-100 dark:bg-gray-600">
+                                <tr>
+                                    <th class="px-4 py-2 text-left">Algorithm</th>
+                                    <th class="px-4 py-2 text-left">Key Size</th>
+                                    <th class="px-4 py-2 text-left">Security</th>
+                                    <th class="px-4 py-2 text-left">Speed</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-gray-200 dark:border-gray-600">
+                                    <td class="px-4 py-2">AES-256</td>
+                                    <td class="px-4 py-2">256 bits</td>
+                                    <td class="px-4 py-2">★★★★★</td>
+                                    <td class="px-4 py-2">★★★★☆</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 dark:border-gray-600">
+                                    <td class="px-4 py-2">ChaCha20</td>
+                                    <td class="px-4 py-2">256 bits</td>
+                                    <td class="px-4 py-2">★★★★★</td>
+                                    <td class="px-4 py-2">★★★★★</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 dark:border-gray-600">
+                                    <td class="px-4 py-2">3DES</td>
+                                    <td class="px-4 py-2">168 bits</td>
+                                    <td class="px-4 py-2">★★☆☆☆</td>
+                                    <td class="px-4 py-2">★★☆☆☆</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2">Blowfish</td>
+                                    <td class="px-4 py-2">32-448 bits</td>
+                                    <td class="px-4 py-2">★★★☆☆</td>
+                                    <td class="px-4 py-2">★★★☆☆</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="mermaid mt-6">
+                    sequenceDiagram
+                        participant Alice
+                        participant Bob
+                        Alice->>Bob: Shared secret key K
+                        Note over Alice,Bob: Key exchange must be secure
+                        Alice->>Bob: C = E(K, P)
+                        Bob->>Bob: P = D(K, C)
+                </div>
+            </div>
+            
+            <!-- Asymmetric Tab -->
+            <div id="asymmetric" class="crypto-tab">
+                <h3 class="text-xl font-bold mb-3">Asymmetric Cryptography</h3>
+                <p class="mb-4">Different keys for encryption and decryption:</p>
+                <p class="text-center mb-4">\[ C = E(K_{pub}, P) \]</p>
+                <p class="text-center">\[ P = D(K_{priv}, C) \]</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div>
+                        <h4 class="font-bold mb-2">RSA Simulation</h4>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Message:</label>
+                            <textarea id="asym-message" class="w-full border p-2 rounded dark:bg-gray-700" rows="2">Confidential data</textarea>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Public Key (e,n):</label>
+                                <div class="terminal p-2 rounded text-xs">
+                                    <p>e: 65537</p>
+                                    <p>n: 2389...4213</p>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Private Key (d,n):</label>
+                                <div class="terminal p-2 rounded text-xs">
+                                    <p>d: 1489...8573</p>
+                                    <p>n: 2389...4213</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button onclick="simulateRSAEncrypt()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Encrypt</button>
+                            <button onclick="simulateRSADecrypt()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Decrypt</button>
+                        </div>
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium mb-1">Result:</label>
+                            <div id="asym-result" class="terminal p-3 rounded"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-bold mb-2">RSA Key Generation</h4>
+                        <p class="mb-2">1. Choose primes p and q</p>
+                        <p class="mb-2">2. Compute n = p × q</p>
+                        <p class="mb-2">3. Compute φ(n) = (p-1)(q-1)</p>
+                        <p class="mb-2">4. Choose e where 1 < e < φ(n) and gcd(e, φ(n)) = 1</p>
+                        <p class="mb-2">5. Compute d ≡ e⁻¹ mod φ(n)</p>
+                        
+                        <div class="mt-4 p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                            <p class="text-center">\[ \phi(n) = (p-1)(q-1) \]</p>
+                            <p class="text-center">\[ d \equiv e^{-1} \mod \phi(n) \]</p>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h4 class="font-bold mb-2">Algorithm Comparison</h4>
+                            <table class="min-w-full bg-white rounded-lg overflow-hidden dark:bg-gray-700">
+                                <thead class="bg-gray-100 dark:bg-gray-600">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left">Algorithm</th>
+                                        <th class="px-4 py-2 text-left">Key Size</th>
+                                        <th class="px-4 py-2 text-left">Security</th>
+                                        <th class="px-4 py-2 text-left">Speed</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-gray-200 dark:border-gray-600">
+                                        <td class="px-4 py-2">RSA-4096</td>
+                                        <td class="px-4 py-2">4096 bits</td>
+                                        <td class="px-4 py-2">★★★★☆</td>
+                                        <td class="px-4 py-2">★☆☆☆☆</td>
+                                    </tr>
+                                    <tr class="border-b border-gray-200 dark:border-gray-600">
+                                        <td class="px-4 py-2">ECC-384</td>
+                                        <td class="px-4 py-2">384 bits</td>
+                                        <td class="px-4 py-2">★★★★★</td>
+                                        <td class="px-4 py-2">★★★★☆</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-2">Post-Quantum</td>
+                                        <td class="px-4 py-2">~10,000 bits</td>
+                                        <td class="px-4 py-2">★★★★★</td>
+                                        <td class="px-4 py-2">★★☆☆☆</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mermaid mt-6">
+                    sequenceDiagram
+                        participant Alice
+                        participant Bob
+                        Bob->>Alice: Sends public key Kpub
+                        Alice->>Bob: C = E(Kpub, P)
+                        Bob->>Bob: P = D(Kpriv, C)
+                </div>
+            </div>
+            
+            <!-- Hash Functions Tab -->
+            <div id="hash" class="crypto-tab">
+                <h3 class="text-xl font-bold mb-3">Cryptographic Hash Functions</h3>
+                <p class="mb-4">One-way transformation of data to fixed-size output:</p>
+                <p class="text-center mb-4">\[ h = H(M) \]</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div>
+                        <h4 class="font-bold mb-2">Hash Calculator</h4>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Input:</label>
+                            <textarea id="hash-input" class="w-full border p-2 rounded dark:bg-gray-700" rows="3">The quick brown fox jumps over the lazy dog</textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Algorithm:</label>
+                            <select id="hash-algorithm" class="w-full border p-2 rounded dark:bg-gray-700">
+                                <option value="SHA256">SHA-256</option>
+                                <option value="SHA512">SHA-512</option>
+                                <option value="SHA3">SHA-3</option>
+                                <option value="MD5">MD5 (insecure)</option>
+                            </select>
+                        </div>
+                        <button onclick="calculateHash()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Calculate Hash</button>
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium mb-1">Hash Output:</label>
+                            <div id="hash-output" class="terminal p-3 rounded"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-bold mb-2">Hash Properties</h4>
+                        <div class="bg-white p-4 rounded-lg shadow mb-4 dark:bg-gray-700">
+                            <ul class="list-disc pl-5">
+                                <li class="mb-2"><strong>Deterministic:</strong> Same input → same output</li>
+                                <li class="mb-2"><strong>Fast computation:</strong> Easy to calculate</li>
+                                <li class="mb-2"><strong>Pre-image resistant:</strong> Can't find input from output</li>
+                                <li class="mb-2"><strong>Small change → big difference:</strong> Avalanche effect</li>
+                                <li><strong>Collision resistant:</strong> Hard to find two inputs with same output</li>
+                            </ul>
+                        </div>
+                        
+                        <h4 class="font-bold mb-2">Collision Demo</h4>
+                        <div class="mb-4">
+                            <p class="text-sm mb-2">Try to find two different inputs with the same MD5 hash:</p>
+                            <div class="grid grid-cols-2 gap-2 mb-2">
+                                <input id="collision-input1" type="text" class="border p-2 rounded dark:bg-gray-700" placeholder="Input 1">
+                                <input id="collision-input2" type="text" class="border p-2 rounded dark:bg-gray-700" placeholder="Input 2">
+                            </div>
+                            <button onclick="checkCollision()" class="bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-600">Check Collision</button>
+                            <div id="collision-result" class="mt-2"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mermaid mt-6">
+                    graph LR
+                        A[Input Data] --> B[Hash Function]
+                        B --> C[Fixed-size Output]
+                        D[Small Change] --> B
+                        B --> E[Completely Different Output]
+                </div>
+            </div>
+        </section>
+
+        <!-- PRINCIPLES INTERACTIVE GUIDE -->
+        <section id="principles" class="mb-12 p-6 bg-amber-50 rounded-xl dark:bg-gray-800">
+            <h2 class="text-2xl font-semibold mb-4">Cryptographic Principles</h2>
+            
+            <div class="principle-cards grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Confusion Card -->
+                <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105 dark:bg-gray-700">
+                    <div class="text-purple-600 mb-2 text-center dark:text-purple-400">
+                        <i class="fas fa-random text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-center mb-2">Confusion</h3>
+                    <p class="text-sm mb-4">Relationship between key and ciphertext should be complex</p>
+                    <div class="confusion-demo h-32 mb-4 flex items-center justify-center">
+                        <div class="text-center">
+                            <p class="text-xs mb-1">Key: 0101</p>
+                            <p class="text-xs">Ciphertext: 1A9F4E</p>
+                        </div>
+                    </div>
+                    <button onclick="showConfusion()" class="w-full bg-purple-100 text-purple-800 p-2 rounded hover:bg-purple-200 dark:bg-purple-900 dark:text-purple-200">Demonstrate</button>
+                </div>
+                
+                <!-- Diffusion Card -->
+                <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105 dark:bg-gray-700">
+                    <div class="text-blue-600 mb-2 text-center dark:text-blue-400">
+                        <i class="fas fa-expand text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-center mb-2">Diffusion</h3>
+                    <p class="text-sm mb-4">Changes in plaintext affect many parts of ciphertext</p>
+                    <div class="diffusion-demo h-32 mb-4 rounded-lg overflow-hidden">
+                        <div class="diffusion-animation h-full w-full flex items-center justify-center text-white">
+                            <p class="text-center">"A" → 3F7A<br>"AA" → D92B4E</p>
+                        </div>
+                    </div>
+                    <button onclick="showDiffusion()" class="w-full bg-blue-100 text-blue-800 p-2 rounded hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-200">Demonstrate</button>
+                </div>
+                
+                <!-- Kerckhoffs's Principle Card -->
+                <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-transform transform hover:scale-105 dark:bg-gray-700">
+                    <div class="text-green-600 mb-2 text-center dark:text-green-400">
+                        <i class="fas fa-user-secret text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-center mb-2">Kerckhoffs's Principle</h3>
+                    <p class="text-sm mb-4">Security should depend only on the key, not the algorithm's secrecy</p>
+                    <div class="kerckhoffs-demo h-32 mb-4 flex items-center justify-center bg-gray-100 rounded dark:bg-gray-600">
+                        <p class="text-center text-sm">Algorithm public<br>Key secret</p>
+                    </div>
+                    <button onclick="testKerckhoffs()" class="w-full bg-green-100 text-green-800 p-2 rounded hover:bg-green-200 dark:bg-green-900 dark:text-green-200">Test Scenario</button>
+                </div>
+            </div>
+            
+            <div class="mt-6 p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                <h3 class="font-bold mb-2">Avalanche Effect Demonstration</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <p>Original Message:</p>
+                        <div class="terminal p-2 rounded mb-2">The quick brown fox jumps over the lazy dog</div>
+                        <p>SHA-256 Hash:</p>
+                        <div class="terminal p-2 rounded">d7a8fbb3...</div>
+                    </div>
+                    <div>
+                        <p>Changed Message:</p>
+                        <div class="terminal p-2 rounded mb-2">The quick brown fox jumps over the lazy cog</div>
+                        <p>SHA-256 Hash:</p>
+                        <div class="terminal p-2 rounded">e4c4d8f3...</div>
+                    </div>
+                </div>
+                <p class="text-sm mt-2">Single character change → completely different hash</p>
+            </div>
+        </section>
+
+        <!-- DIGITAL SIGNATURES WORKSHOP -->
+        <section id="signatures" class="mb-12">
+            <h2 class="text-2xl font-semibold mb-4">Digital Signatures</h2>
+            
+            <div class="signature-lab border-2 border-dashed border-gray-300 p-6 rounded-lg dark:border-gray-600">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="sign-process">
+                        <h3 class="font-bold mb-3">Signature Process</h3>
+                        <div class="mermaid">
+                            sequenceDiagram
+                                participant Sender
+                                participant Recipient
+                                Sender->>Sender: Generate hash h = H(M)
+                                Sender->>Sender: Encrypt hash with private key S = E(Kpriv, h)
+                                Sender->>Recipient: Send (M, S)
+                                Recipient->>Recipient: Decrypt S with public key h' = D(Kpub, S)
+                                Recipient->>Recipient: Compute hash h = H(M)
+                                Recipient->>Recipient: Verify h == h'
+                        </div>
+                        
+                        <div class="mt-4 p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                            <h4 class="font-bold mb-2">RSA Signature Formulas</h4>
+                            <p class="text-center">\[ S = M^d \mod n \]</p>
+                            <p class="text-center">\[ M' = S^e \mod n \]</p>
+                            <p class="text-center">Verify that \( M \equiv M' \)</p>
+                        </div>
+                    </div>
+                    <div class="verify-process">
+                        <h3 class="font-bold mb-3">Interactive Demo</h3>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Message:</label>
+                            <textarea id="sign-message" class="w-full border p-2 rounded dark:bg-gray-700" rows="3">Important contract details</textarea>
+                        </div>
+                        <div class="flex space-x-2 mb-4">
+                            <button onclick="generateSignature()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Sign Message</button>
+                            <button onclick="tamperMessage()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Tamper</button>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium mb-1">Signature:</label>
+                            <div id="signature-output" class="terminal p-2 rounded text-xs">Not yet signed</div>
+                        </div>
+                        <button onclick="verifySignature()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Verify Signature</button>
+                        <div id="signature-result" class="mt-4 p-3 rounded hidden"></div>
+                    </div>
+                </div>
+                
+                <div class="applications mt-6">
+                    <h3 class="font-bold mb-3">Real-world Applications</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-lg shadow dark:bg-gray-700">
+                            <h4 class="font-bold mb-2 flex items-center">
+                                <i class="fas fa-lock mr-2"></i> SSL/TLS
+                            </h4>
+                            <p class="text-sm">Website authentication and secure connections</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow dark:bg-gray-700">
+                            <h4 class="font-bold mb-2 flex items-center">
+                                <i class="fas fa-coins mr-2"></i> Blockchain
+                            </h4>
+                            <p class="text-sm">Transaction verification in cryptocurrencies</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow dark:bg-gray-700">
+                            <h4 class="font-bold mb-2 flex items-center">
+                                <i class="fas fa-envelope mr-2"></i> PGP Email
+                            </h4>
+                            <p class="text-sm">Signed and encrypted email communication</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ALGORITHM TIMELINE -->
+        <section id="timeline" class="mb-12">
+            <h2 class="text-2xl font-semibold mb-4">Cryptographic Algorithm Evolution</h2>
+            
+            <div class="timeline relative border-l-2 border-purple-500 pl-8">
+                <!-- DES -->
+                <div class="mb-8 relative">
+                    <div class="absolute w-4 h-4 bg-purple-500 rounded-full -left-2.5 top-2"></div>
+                    <h3 class="font-bold">1977: DES (Data Encryption Standard)</h3>
+                    <p class="text-sm mb-2">56-bit key, broken by brute force in 1999</p>
+                    <div class="bg-white p-3 rounded-lg shadow dark:bg-gray-700">
+                        <p class="text-sm">First FIPS-approved symmetric algorithm</p>
+                    </div>
+                </div>
+                
+                <!-- RSA -->
+                <div class="mb-8 relative">
+                    <div class="absolute w-4 h-4 bg-purple-500 rounded-full -left-2.5 top-2"></div>
+                    <h3 class="font-bold">1978: RSA Public-Key Cryptosystem</h3>
+                    <p class="text-sm mb-2">First practical asymmetric cryptosystem</p>
+                    <div class="bg-white p-3 rounded-lg shadow dark:bg-gray-700">
+                        <p class="text-sm">Based on integer factorization problem</p>
+                    </div>
+                </div>
+                
+                <!-- AES -->
+                <div class="mb-8 relative">
+                    <div class="absolute w-4 h-4 bg-purple-500 rounded-full -left-2.5 top-2"></div>
+                    <h3 class="font-bold">2001: AES (Advanced Encryption Standard)</h3>
+                    <p class="text-sm mb-2">128/192/256-bit keys, still secure today</p>
+                    <div class="bg-white p-3 rounded-lg shadow dark:bg-gray-700">
+                        <p class="text-sm">Replaced DES, based on Rijndael cipher</p>
+                    </div>
+                </div>
+                
+                <!-- ECC -->
+                <div class="mb-8 relative">
+                    <div class="absolute w-4 h-4 bg-purple-500 rounded-full -left-2.5 top-2"></div>
+                    <h3 class="font-bold">2005: ECC Adoption</h3>
+                    <p class="text-sm mb-2">Elliptic Curve Cryptography gains traction</p>
+                    <div class="bg-white p-3 rounded-lg shadow dark:bg-gray-700">
+                        <p class="text-sm">Equivalent security with smaller keys than RSA</p>
+                    </div>
+                </div>
+                
+                <!-- Post-Quantum -->
+                <div class="relative">
+                    <div class="absolute w-4 h-4 bg-purple-500 rounded-full -left-2.5 top-2"></div>
+                    <h3 class="font-bold">2022: Post-Quantum Standardization</h3>
+                    <p class="text-sm mb-2">NIST selects CRYSTALS-Kyber and others</p>
+                    <div class="bg-white p-3 rounded-lg shadow dark:bg-gray-700">
+                        <p class="text-sm">Preparing for quantum computing threats</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- CRYPTO CHALLENGE QUIZ -->
+    <div class="crypto-quiz  bottom-4 right-4 bg-white p-4 shadow-xl rounded-lg border-2 border-purple-500 no-print dark:bg-gray-800" >
+        <h3 class="font-bold text-lg mb-2">Crypto Challenge</h3>
+        
+        <div id="quiz-questions">
+            <!-- Question 1 -->
+            <div class="quiz-question mb-4">
+                <p class="font-medium mb-2">1. What's the output of SHA-256("abc") first 4 chars?</p>
+                <div class="space-y-2">
+                    <label class="flex items-center">
+                        <input type="radio" name="cq1" value="a" class="mr-2">
+                        <span>a999</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="cq1" value="b" class="mr-2">
+                        <span>ba78</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="cq1" value="c" class="mr-2">
+                        <span>3a7d</span>
+                    </label>
+                </div>
+                <p class="quiz-feedback text-sm mt-2 hidden"></p>
+            </div>
+            
+            <!-- Question 2 -->
+            <div class="quiz-question mb-4">
+                <p class="font-medium mb-2">2. Encrypt "HELLO" with Caesar cipher (shift 3):</p>
+                <div class="space-y-2">
+                    <label class="flex items-center">
+                        <input type="radio" name="cq2" value="a" class="mr-2">
+                        <span>KHOOR</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="cq2" value="b" class="mr-2">
+                        <span>EBIIL</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="cq2" value="c" class="mr-2">
+                        <span>GDKKN</span>
+                    </label>
+                </div>
+                <p class="quiz-feedback text-sm mt-2 hidden"></p>
+            </div>
+            
+            <!-- Question 3 -->
+            <div class="quiz-question mb-4">
+                <p class="font-medium mb-2">3. Which is NOT a property of cryptographic hash?</p>
+                <div class="space-y-2">
+                    <label class="flex items-center">
+                        <input type="radio" name="cq3" value="a" class="mr-2">
+                        <span>Reversible</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="cq3" value="b" class="mr-2">
+                        <span>Avalanche effect</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="cq3" value="c" class="mr-2">
+                        <span>Deterministic</span>
+                    </label>
+                </div>
+                <p class="quiz-feedback text-sm mt-2 hidden"></p>
+            </div>
+            
+            <!-- Question 4 -->
+            <div class="quiz-question mb-4">
+                <p class="font-medium mb-2">4. What's the main advantage of ECC over RSA?</p>
+                <div class="space-y-2">
+                    <label class="flex items-center">
+                        <input type="radio" name="cq4" value="a" class="mr-2">
+                        <span>Smaller key sizes</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="cq4" value="b" class="mr-2">
+                        <span>Faster encryption</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="cq4" value="c" class="mr-2">
+                        <span>Easier implementation</span>
+                    </label>
+                </div>
+                <p class="quiz-feedback text-sm mt-2 hidden"></p>
+            </div>
+            
+            <!-- Question 5 -->
+            <div class="quiz-question mb-4">
+                <p class="font-medium mb-2">5. Decrypt this AES-256 output (key="crypto"): U2FsdGVkX18=</p>
+                <div class="mb-2">
+                    <input type="text" id="decrypt-challenge" class="w-full border p-2 rounded dark:bg-gray-700" placeholder="Enter decrypted text">
+                </div>
+                <button onclick="checkDecryption()" class="bg-purple-600 text-white px-4 py-1 rounded hover:bg-purple-700 text-sm">Check Answer</button>
+                <p class="quiz-feedback text-sm mt-2 hidden"></p>
+            </div>
+        </div>
+        
+        <button id="submit-crypto-quiz" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 w-full">Submit Answers</button>
+        
+        <div id="crypto-quiz-results" class="mt-4 hidden">
+            <h4 class="font-bold">Your Score: <span id="crypto-quiz-score">0</span>/5</h4>
+            <p id="crypto-quiz-message" class="text-sm mt-1"></p>
+            <button id="retry-crypto-quiz" class="mt-2 bg-gray-600 text-white px-4 py-1 rounded hover:bg-gray-700 text-sm">Try Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            }
+        });
+        
+        // Dark mode toggle
+        document.getElementById('darkModeToggle').addEventListener('click', function() {
+            document.documentElement.classList.toggle('dark');
+            const icon = this.querySelector('i');
+            if (document.documentElement.classList.contains('dark')) {
+                icon.classList.replace('fa-moon', 'fa-sun');
+                this.textContent = ' Light Mode';
+            } else {
+                icon.classList.replace('fa-sun', 'fa-moon');
+                this.textContent = ' Dark Mode';
+            }
+            this.prepend(icon);
+        });
+        
+        // Crypto tabs functionality
+        const cryptoTabBtns = document.querySelectorAll('.crypto-tab-btn');
+        cryptoTabBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons and tabs
+                cryptoTabBtns.forEach(b => b.classList.remove('active', 'text-purple-600', 'border-purple-600'));
+                cryptoTabBtns.forEach(b => b.classList.add('text-gray-500'));
+                
+                // Add active class to clicked button
+                this.classList.add('active', 'text-purple-600', 'border-purple-600');
+                this.classList.remove('text-gray-500');
+                
+                // Show corresponding tab
+                const tabId = this.getAttribute('data-tab');
+                document.querySelectorAll('.crypto-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // AES Encryption/Decryption
+        function encryptAES() {
+            const message = document.getElementById('sym-message').value;
+            const key = document.getElementById('sym-key').value;
+            
+            // Encrypt with CryptoJS
+            const encrypted = CryptoJS.AES.encrypt(message, key).toString();
+            
+            document.getElementById('sym-result').innerHTML = 
+                `<span class="text-green-400">Encrypted:</span>\n${encrypted}`;
+        }
+        
+        function decryptAES() {
+            const ciphertext = document.getElementById('sym-message').value;
+            const key = document.getElementById('sym-key').value;
+            
+            try {
+                // Decrypt with CryptoJS
+                const decrypted = CryptoJS.AES.decrypt(ciphertext, key).toString(CryptoJS.enc.Utf8);
+                
+                if (decrypted) {
+                    document.getElementById('sym-result').innerHTML = 
+                        `<span class="text-green-400">Decrypted:</span>\n${decrypted}`;
+                } else {
+                    document.getElementById('sym-result').innerHTML = 
+                        `<span class="text-red-400">Error:</span> Invalid key or ciphertext`;
+                }
+            } catch (e) {
+                document.getElementById('sym-result').innerHTML = 
+                    `<span class="text-red-400">Error:</span> ${e.message}`;
+            }
+        }
+        
+        // RSA Simulation (not real RSA, just for demo)
+        function simulateRSAEncrypt() {
+            const message = document.getElementById('asym-message').value;
+            // Simulate RSA encryption by reversing and adding prefix
+            const simulatedCipher = `RSA-SIM:${message.split('').reverse().join('')}`;
+            document.getElementById('asym-result').innerHTML = 
+                `<span class="text-green-400">Encrypted:</span>\n${simulatedCipher}`;
+        }
+        
+        function simulateRSADecrypt() {
+            const ciphertext = document.getElementById('asym-message').value;
+            if (ciphertext.startsWith('RSA-SIM:')) {
+                const simulatedPlain = ciphertext.replace('RSA-SIM:', '').split('').reverse().join('');
+                document.getElementById('asym-result').innerHTML = 
+                    `<span class="text-green-400">Decrypted:</span>\n${simulatedPlain}`;
+            } else {
+                document.getElementById('asym-result').innerHTML = 
+                    `<span class="text-red-400">Error:</span> Invalid RSA simulation ciphertext`;
+            }
+        }
+        
+        // Hash Calculator
+        function calculateHash() {
+            const input = document.getElementById('hash-input').value;
+            const algorithm = document.getElementById('hash-algorithm').value;
+            
+            let hash;
+            switch(algorithm) {
+                case 'SHA256':
+                    hash = CryptoJS.SHA256(input).toString();
+                    break;
+                case 'SHA512':
+                    hash = CryptoJS.SHA512(input).toString();
+                    break;
+                case 'SHA3':
+                    hash = CryptoJS.SHA3(input).toString();
+                    break;
+                case 'MD5':
+                    hash = CryptoJS.MD5(input).toString();
+                    break;
+                default:
+                    hash = 'Unsupported algorithm';
+            }
+            
+            document.getElementById('hash-output').textContent = hash;
+        }
+        
+        // Collision Demo
+        function checkCollision() {
+            const input1 = document.getElementById('collision-input1').value;
+            const input2 = document.getElementById('collision-input2').value;
+            
+            if (!input1 || !input2) {
+                document.getElementById('collision-result').innerHTML = 
+                    '<span class="text-red-600">Please enter both inputs</span>';
+                return;
+            }
+            
+            if (input1 === input2) {
+                document.getElementById('collision-result').innerHTML = 
+                    '<span class="text-red-600">Inputs must be different</span>';
+                return;
+            }
+            
+            const hash1 = CryptoJS.MD5(input1).toString();
+            const hash2 = CryptoJS.MD5(input2).toString();
+            
+            if (hash1 === hash2) {
+                document.getElementById('collision-result').innerHTML = 
+                    `<span class="text-green-600">Collision found! (extremely rare)</span>
+                    <div class="mt-2 terminal">MD5("${input1}") = ${hash1}</div>
+                    <div class="mt-1 terminal">MD5("${input2}") = ${hash2}</div>`;
+            } else {
+                document.getElementById('collision-result').innerHTML = 
+                    `<span class="text-amber-600">No collision (expected)</span>
+                    <div class="mt-2 terminal">MD5("${input1}") = ${hash1}</div>
+                    <div class="mt-1 terminal">MD5("${input2}") = ${hash2}</div>`;
+            }
+        }
+        
+        // Digital Signature Demo
+        let signedMessage = '';
+        let messageSignature = '';
+        
+        function generateSignature() {
+            const message = document.getElementById('sign-message').value;
+            signedMessage = message;
+            
+            // Simulate signing by hashing and reversing (not real crypto)
+            const hash = CryptoJS.SHA256(message).toString();
+            messageSignature = `SIGN-SIM:${hash.split('').reverse().join('')}`;
+            
+            document.getElementById('signature-output').textContent = messageSignature;
+            document.getElementById('signature-result').classList.add('hidden');
+        }
+        
+        function tamperMessage() {
+            const message = document.getElementById('sign-message').value;
+            // Add a small change to simulate tampering
+            document.getElementById('sign-message').value = message + ' ';
+            document.getElementById('signature-result').classList.add('hidden');
+        }
+        
+        function verifySignature() {
+            const message = document.getElementById('sign-message').value;
+            const currentSig = messageSignature;
+            
+            if (!currentSig) {
+                document.getElementById('signature-result').innerHTML = 
+                    '<span class="text-red-600">Error:</span> No signature generated yet';
+                document.getElementById('signature-result').classList.remove('hidden');
+                return;
+            }
+            
+            // Simulate verification
+            const expectedHash = CryptoJS.SHA256(signedMessage).toString();
+            const receivedHash = currentSig.replace('SIGN-SIM:', '').split('').reverse().join('');
+            
+            const currentHash = CryptoJS.SHA256(message).toString();
+            
+            if (expectedHash === receivedHash && currentHash === expectedHash) {
+                document.getElementById('signature-result').innerHTML = 
+                    '<span class="text-green-600">✓ Signature valid - message intact</span>';
+            } else {
+                document.getElementById('signature-result').innerHTML = 
+                    '<span class="text-red-600">✗ Signature invalid - message tampered!</span>';
+            }
+            document.getElementById('signature-result').classList.remove('hidden');
+        }
+        
+        // Cryptographic Principles Demos
+        function showConfusion() {
+            alert('Confusion demonstrated: The relationship between the key and ciphertext is complex and non-linear.\n\nIn AES, each key bit affects multiple ciphertext bits through multiple rounds of substitution and permutation.');
+        }
+        
+        function showDiffusion() {
+            alert('Diffusion demonstrated: Changing one bit in the plaintext affects many bits in the ciphertext.\n\nIn AES, about 50% of ciphertext bits change when flipping one plaintext bit.');
+        }
+        
+        function testKerckhoffs() {
+            alert('Kerckhoffs\'s Principle test:\n\nScenario: An attacker knows the encryption algorithm but not the key.\n\nResult: The system remains secure because security depends solely on the key secrecy, not algorithm secrecy.');
+        }
+        
+        // Crypto Quiz
+        document.getElementById('submit-crypto-quiz').addEventListener('click', function() {
+            const answers = {
+                cq1: 'b', // ba78
+                cq2: 'a', // KHOOR
+                cq3: 'a', // Reversible
+                cq4: 'a'  // Smaller key sizes
+            };
+            
+            let score = 0;
+            
+            // Check each question
+            for (let i = 1; i <= 4; i++) {
+                const questionName = `cq${i}`;
+                const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
+                const feedbackElement = document.querySelector(`.quiz-question:nth-child(${i}) .quiz-feedback`);
+                
+                if (selectedOption) {
+                    if (selectedOption.value === answers[questionName]) {
+                        score++;
+                        feedbackElement.textContent = 'Correct!';
+                        feedbackElement.className = 'quiz-feedback text-sm mt-2 text-green-600';
+                    } else {
+                        feedbackElement.textContent = 'Incorrect. Please review the material.';
+                        feedbackElement.className = 'quiz-feedback text-sm mt-2 text-red-600';
+                    }
+                    feedbackElement.classList.remove('hidden');
+                }
+            }
+            
+            // Show results
+            document.getElementById('crypto-quiz-score').textContent = score;
+            const quizMessage = document.getElementById('crypto-quiz-message');
+            
+            if (score === 4) {
+                quizMessage.textContent = 'Excellent! You understand cryptographic concepts well.';
+            } else if (score >= 2) {
+                quizMessage.textContent = 'Good effort! Review the incorrect answers.';
+            } else {
+                quizMessage.textContent = 'Keep studying! Cryptography takes practice.';
+            }
+            
+            document.getElementById('crypto-quiz-results').classList.remove('hidden');
+        });
+        
+        function checkDecryption() {
+            const attempt = document.getElementById('decrypt-challenge').value;
+            const feedback = document.querySelector('.quiz-question:nth-child(5) .quiz-feedback');
+            
+            // The encrypted text is "secret" with key "crypto"
+            if (attempt.toLowerCase() === 'secret') {
+                feedback.textContent = 'Correct! You decrypted the message.';
+                feedback.className = 'quiz-feedback text-sm mt-2 text-green-600';
+                
+                // Update score if this is the first correct answer
+                const currentScore = parseInt(document.getElementById('crypto-quiz-score').textContent);
+                if (currentScore < 5) {
+                    document.getElementById('crypto-quiz-score').textContent = currentScore + 1;
+                }
+            } else {
+                feedback.textContent = 'Incorrect. Hint: Try decrypting with AES.';
+                feedback.className = 'quiz-feedback text-sm mt-2 text-red-600';
+            }
+            feedback.classList.remove('hidden');
+        }
+        
+        document.getElementById('retry-crypto-quiz').addEventListener('click', function() {
+            // Reset all radio buttons
+            document.querySelectorAll('#crypto-quiz input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            
+            // Reset text input
+            document.getElementById('decrypt-challenge').value = '';
+            
+            // Hide all feedback
+            document.querySelectorAll('#crypto-quiz .quiz-feedback').forEach(feedback => {
+                feedback.classList.add('hidden');
+            });
+            
+            // Hide results
+            document.getElementById('crypto-quiz-results').classList.add('hidden');
+        });
+        
+        // Initialize some examples
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up ciphertext example
+            const encrypted = CryptoJS.AES.encrypt("Hello World", "secret").toString();
+            document.getElementById('ciphertext-example').textContent = encrypted;
+            
+            // Calculate initial hash example
+            calculateHash();
+        });
+    </script>
+</body>
+</html>

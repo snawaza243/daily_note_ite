@@ -1,0 +1,341 @@
+**Role:** Authentication Systems Architect and Security Educator  
+**Task:** Create an interactive HTML tutorial for Chapter 5 with password security labs and protocol visualizations  
+**Output Requirements:**  
+
+1. **Technical Specifications:**  
+   - Single HTML5 file with embedded Tailwind CSS  
+   - JavaScript-powered password security analyzer  
+   - Mermaid.js for Kerberos protocol flows  
+   - Cryptographic hash calculators (MD5, SHA-1, etc.)  
+   - Vulnerability demonstration tools  
+   - Canvas-based hash structure visualizers  
+
+2. **Content Structure:**  
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Head with Tailwind, Mermaid, CryptoJS -->
+</head>
+<body class="bg-gray-50">
+    <header class="bg-indigo-900 text-white p-6">
+        <h1 class="text-3xl font-bold">Chapter 5: Authentication & Hashing Protocols</h1>
+    </header>
+
+    <main class="container mx-auto p-4">
+        <!-- PASSWORD SECURITY LAB -->
+        <section id="password-security" class="mb-12 p-6 bg-blue-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Password-based Authentication</h2>
+            
+            <div class="password-lab grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="hashing-demo">
+                    <h3 class="text-xl font-medium">Hashing & Salting</h3>
+                    <div class="demo-area p-4 border rounded-lg">
+                        <div class="input-group mb-4">
+                            <label class="block mb-2">Password:</label>
+                            <input type="text" id="passwordInput" value="P@ssw0rd!" class="w-full border p-2">
+                        </div>
+                        <div class="input-group mb-4">
+                            <label class="block mb-2">Salt:</label>
+                            <div class="flex">
+                                <input type="text" id="saltInput" value="" class="w-full border p-2" placeholder="Auto-generated">
+                                <button onclick="generateSalt()" class="bg-gray-200 p-2 ml-2">Generate</button>
+                            </div>
+                        </div>
+                        <button onclick="hashPassword()" class="bg-indigo-600 text-white p-2 w-full">Compute Hash</button>
+                        <div id="hashResults" class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-2"></div>
+                    </div>
+                </div>
+                
+                <div class="storage-methods">
+                    <h3 class="text-xl font-medium">Storage Methods</h3>
+                    <div class="storage-comparison grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                        <!-- Cards for Plaintext/Hashed/Salted & Hashed -->
+                        <div class="storage-card bg-red-100 p-4 rounded-lg">
+                            <h4 class="font-bold">Plaintext (Dangerous)</h4>
+                            <div class="risk-meter h-2 bg-gradient-to-r from-green-400 via-yellow-400 to-red-500 mt-2"></div>
+                        </div>
+                        <div class="storage-card bg-yellow-100 p-4 rounded-lg">
+                            <h4 class="font-bold">Hashed Only</h4>
+                            <div class="risk-meter h-2 bg-gradient-to-r from-green-400 via-yellow-400 to-red-500 mt-2"></div>
+                        </div>
+                        <div class="storage-card bg-green-100 p-4 rounded-lg">
+                            <h4 class="font-bold">Salted & Hashed</h4>
+                            <div class="risk-meter h-2 bg-gradient-to-r from-green-400 via-yellow-400 to-red-500 mt-2"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="breach-simulator mt-6 p-4 bg-gray-100 rounded-lg">
+                        <h4 class="font-bold mb-2">Rainbow Table Attack Simulator</h4>
+                        <button onclick="simulateRainbowAttack()" class="bg-red-500 text-white p-2">Run Simulation</button>
+                        <div id="attackResults" class="mt-4"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KERBEROS PROTOCOL VISUALIZER -->
+        <section id="kerberos" class="mb-12 p-6 bg-purple-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Kerberos Authentication Protocol</h2>
+            
+            <div class="kerberos-flow">
+                <div class="mermaid mb-6">
+                    sequenceDiagram
+                        participant Client
+                        participant AS
+                        participant TGS
+                        participant Service
+                        Client->>AS: Authenticate (Username)
+                        AS->>Client: TGT (Encrypted with client key)
+                        Client->>TGS: Request service ticket (TGT + Service ID)
+                        TGS->>Client: Service Ticket (Encrypted with service key)
+                        Client->>Service: Access request (Service Ticket)
+                        Service->>Client: Grant access
+                </div>
+                
+                <div class="protocol-simulator">
+                    <div class="step-buttons grid grid-cols-6 gap-2 mb-4">
+                        <!-- Authentication Steps: 1. Request TGT 2. Receive TGT 3. Request ST 4. Receive ST 5. Access Service 6. Grant -->
+                    </div>
+                    <div class="message-flow bg-white p-4 rounded-lg min-h-[200px]">
+                        <!-- Animated Kerberos message flow -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="ticket-granting mt-6">
+                <h3 class="text-xl font-medium">Ticket Granting Process</h3>
+                <div class="ticket-structure grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div class="tgt bg-blue-100 p-4 rounded-lg">
+                        <h4 class="font-bold">Ticket Granting Ticket (TGT)</h4>
+                        <!-- Structure: Session Key, Client ID, Timestamp, Lifetime -->
+                    </div>
+                    <div class="st bg-green-100 p-4 rounded-lg">
+                        <h4 class="font-bold">Service Ticket (ST)</h4>
+                        <!-- Structure: Service Session Key, Client ID, Timestamp -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KERBEROS REALMS EXPLAINER -->
+        <section id="realms" class="mb-12 p-6 bg-amber-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Kerberos Realms</h2>
+            
+            <div class="realm-visualization grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="realm-concept">
+                    <h3 class="text-xl font-medium">Realm Architecture</h3>
+                    <div class="mermaid">
+                        graph LR
+                            RealmA[Realm A] -->|Trust| RealmB[Realm B]
+                            RealmA -->|Trust| RealmC[Realm C]
+                            RealmB -->|Trust| RealmD[Realm D]
+                    </div>
+                </div>
+                
+                <div class="realm-demo">
+                    <h3 class="text-xl font-medium">Cross-Realm Authentication</h3>
+                    <div class="cross-realm-simulator border p-4 rounded-lg mt-4">
+                        <div class="flex mb-4">
+                            <div class="w-1/2 pr-2">
+                                <label class="block">Source Realm</label>
+                                <select id="sourceRealm" class="w-full border p-2">
+                                    <option>DOMAIN.LOCAL</option>
+                                    <option>CORP.ORG</option>
+                                </select>
+                            </div>
+                            <div class="w-1/2 pl-2">
+                                <label class="block">Target Realm</label>
+                                <select id="targetRealm" class="w-full border p-2">
+                                    <option>CORP.ORG</option>
+                                    <option>DOMAIN.LOCAL</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button onclick="simulateCrossRealm()" class="bg-indigo-600 text-white p-2 w-full">Authenticate</button>
+                        <div id="realmResult" class="mt-4"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HASHING ALGORITHMS VULNERABILITY LAB -->
+        <section id="hashing" class="mb-12 p-6 bg-red-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Hashing Algorithms & Vulnerabilities</h2>
+            
+            <div class="algorithm-comparison grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <!-- Cards for MD5/SHA-1/SHA-256 -->
+                <div class="hash-card md5 bg-yellow-100 p-4 rounded-lg">
+                    <h3 class="font-bold text-lg">MD5</h3>
+                    <div class="structure-diagram mt-2 h-24">
+                        <!-- Canvas-based MD5 structure -->
+                    </div>
+                    <div class="vulns mt-2">
+                        <span class="inline-block bg-red-500 text-white px-2 py-1 rounded text-xs">Collision Vulnerable</span>
+                    </div>
+                </div>
+                <div class="hash-card sha1 bg-orange-100 p-4 rounded-lg">
+                    <h3 class="font-bold text-lg">SHA-1</h3>
+                    <div class="structure-diagram mt-2 h-24">
+                        <!-- Canvas-based SHA-1 structure -->
+                    </div>
+                    <div class="vulns mt-2">
+                        <span class="inline-block bg-red-500 text-white px-2 py-1 rounded text-xs">Theoretical Collisions</span>
+                    </div>
+                </div>
+                <div class="hash-card sha256 bg-green-100 p-4 rounded-lg">
+                    <h3 class="font-bold text-lg">SHA-256</h3>
+                    <div class="structure-diagram mt-2 h-24">
+                        <!-- Canvas-based SHA-256 structure -->
+                    </div>
+                    <div class="vulns mt-2">
+                        <span class="inline-block bg-green-500 text-white px-2 py-1 rounded text-xs">Secure</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="vulnerability-demos">
+                <div class="collision-demo mb-6">
+                    <h3 class="text-xl font-medium">Collision Attack Demo</h3>
+                    <div class="demo-box border p-4 rounded-lg mt-2">
+                        <p>Input 1: <span id="collision1" class="font-mono">d131dd02c5e6eec4</span></p>
+                        <p>Input 2: <span id="collision2" class="font-mono">d131dd02c5e6eec4</span></p>
+                        <button onclick="showMD5Collision()" class="bg-red-500 text-white p-2 mt-2">Generate Collision</button>
+                        <div id="collisionResult" class="mt-4"></div>
+                    </div>
+                </div>
+                
+                <div class="comparison-tool">
+                    <h3 class="text-xl font-medium">Algorithm Comparison</h3>
+                    <table class="min-w-full mt-2">
+                        <thead>
+                            <tr>
+                                <th class="border p-2">Algorithm</th>
+                                <th class="border p-2">Output Size</th>
+                                <th class="border p-2">Rounds</th>
+                                <th class="border p-2">Collision Resistance</th>
+                                <th class="border p-2">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- MD5/SHA-1/SHA-256/SHA-3 rows -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- AUTHENTICATION CHALLENGES -->
+    <div class="challenges fixed bottom-4 right-4 bg-white p-4 shadow-xl rounded-lg border-2 border-indigo-600">
+        <h3 class="font-bold text-lg mb-2">Security Challenges</h3>
+        <!-- Interactive exercises:
+             - Crack weak password hashes
+             - Detect Kerberos replay attacks
+             - Identify vulnerable hash usage -->
+    </div>
+
+    <script>
+        // JavaScript implementations for:
+        // - Password hashing with salt (using CryptoJS)
+        // - Kerberos protocol simulator
+        // - Cross-realm authentication flow
+        // - Hash collision generator (MD5)
+        // - Algorithm comparison metrics
+    </script>
+</body>
+</html>
+Content Generation Rules:
+
+Password Security Lab:
+• Real-time hashing with salt generation
+• Storage method risk assessment visualizer
+• Rainbow table attack simulation
+
+Kerberos Protocol:
+• Interactive 6-step authentication simulator
+• TGT and ST structure visualizations
+• Real-world implementation examples (Active Directory)
+
+Kerberos Realms:
+• Trust relationship visualizer
+• Cross-realm authentication simulator
+• Realm configuration best practices
+
+Hashing Algorithms:
+• Canvas-based structure diagrams for MD5/SHA-1/SHA-256
+• Collision vulnerability demonstrations
+• Algorithm comparison table with security ratings
+
+Interactivity Requirements:
+
+Password strength analyzer with live feedback
+
+Kerberos protocol step controller
+
+Cross-realm authentication simulator
+
+Hash collision generator (demonstrating MD5 weakness)
+
+Algorithm performance benchmark tool
+
+Security challenge exercises
+
+Design Specifications:
+
+Color scheme: Authentication indigo (#4f46e5) + security amber (#d97706)
+
+Clean card-based layout for method comparisons
+
+Animated Kerberos ticket flows
+
+Responsive hash algorithm cards
+
+Vulnerability indicators with color coding
+
+Dark mode support
+
+Special Features:
+
+Password Hashing Lab:
+• Real-time hash computation (MD5, SHA-1, SHA-256, bcrypt)
+• Salt impact visualization
+
+Kerberos Simulator:
+• Interactive message flow animation
+• Ticket expiration timers
+
+Hash Vulnerability Demonstrations:
+• MD5 collision generator (using known vulnerable inputs)
+• SHA-1 prefix attack simulation
+
+Security Metrics:
+• Password cracking time estimates
+• Hash collision resistance ratings
+• Algorithm deprecation timelines
+
+Deliverable: Self-contained HTML file with functional authentication demonstrations
+
+Example Visualizations:
+
+Diagram
+Code
+    participant User
+    participant AS as Authentication Server
+    participant TGS as Ticket Granting Server
+    participant App as Application Server
+    User->>AS: Login Request (Username)
+    AS->>User: TGT (Encrypted with User Key)
+    User->>TGS: Service Request (TGT + App ID)
+    TGS->>User: Service Ticket (Encrypted with App Key)
+    User->>App: Access Request (Service Ticket)
+    App->>User: Granted Access
+Historical Context:
+
+2004: MD5 collision vulnerability proven
+
+2005: SHA-1 theoretical weaknesses discovered
+
+2017: Google's SHA-1 collision demonstration
+
+2020: Kerberos vulnerabilities (CVE-2020-17049)

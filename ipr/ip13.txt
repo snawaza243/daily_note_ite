@@ -1,0 +1,308 @@
+**Role:** Copyright Law Specialist and Digital Media Architect  
+**Task:** Create an interactive HTML tutorial for Chapter 13 with copyright analysis tools and DRM technology labs  
+**Output Requirements:**  
+
+1. **Technical Specifications:**  
+   - Single HTML5 file with embedded Tailwind CSS  
+   - JavaScript-powered copyright duration calculator  
+   - Mermaid.js for rights flow diagrams  
+   - Interactive infringement case mapper  
+   - DRM system simulator with encryption/decryption  
+   - Fair use evaluator  
+
+2. **Content Structure:**  
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Head with Tailwind, Mermaid, CryptoJS, PDF.js -->
+</head>
+<body class="bg-gray-50">
+    <header class="bg-blue-900 text-white p-6">
+        <h1 class="text-3xl font-bold">Chapter 13: Copyright Law & DRM</h1>
+    </header>
+
+    <main class="container mx-auto p-4">
+        <!-- COPYRIGHT FUNDAMENTALS -->
+        <section id="copyright-basics" class="mb-12 p-6 bg-blue-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Copyright Essentials</h2>
+            
+            <div class="copyright-cube grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="principle-card bg-white p-4 rounded-lg shadow">
+                    <div class="icon bg-blue-100 text-blue-600 w-12 h-12 rounded-full flex items-center justify-center mb-2 mx-auto">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="font-bold text-center">Protected Works</h3>
+                    <ul class="list-disc pl-5 mt-2 text-sm space-y-1">
+                        <li>Literary works</li>
+                        <li>Musical compositions</li>
+                        <li>Software code</li>
+                    </ul>
+                </div>
+                <!-- Other principle cards -->
+            </div>
+            
+            <div class="duration-calculator border-2 border-blue-300 p-4 rounded-lg bg-white">
+                <h3 class="font-bold mb-2">Copyright Term Calculator</h3>
+                <div class="calculator-grid grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block mb-1">Work Type:</label>
+                        <select id="workType" class="w-full border p-2">
+                            <option value="literary">Literary Work</option>
+                            <option value="film">Cinematograph Film</option>
+                            <option value="sound">Sound Recording</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block mb-1">Creation Year:</label>
+                        <input type="number" id="creationYear" class="w-full border p-2" value="2020">
+                    </div>
+                </div>
+                <button onclick="calculateTerm()" class="bg-blue-600 text-white p-2 w-full">Calculate Protection</button>
+                <div id="termResult" class="mt-4 hidden p-4 bg-gray-50 rounded-lg">
+                    <!-- Dynamic results with:
+                         - Protection end year
+                         - Post-copyright status
+                         - Special conditions -->
+                </div>
+            </div>
+        </section>
+
+        <!-- INFRINGEMENT CASES -->
+        <section id="infringement" class="mb-12 p-6 bg-red-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Landmark Cases</h2>
+            
+            <div class="case-map mb-6">
+                <div class="mermaid">
+                    timeline
+                        title Indian Copyright Cases
+                        1994 : R.G. Anand v. Deluxe Films
+                        2016 : Delhi University Photocopy Case
+                        2021 : Spotify v. Warner Music
+                        2023 : AI-Generated Art Controversy
+                </div>
+            </div>
+            
+            <div class="case-analyzer grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="case-finder bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold mb-2">Case Law Finder</h3>
+                    <div class="input-group mb-4">
+                        <label class="block mb-1">Describe Scenario:</label>
+                        <textarea id="caseScenario" class="w-full border p-2 h-32" placeholder="e.g., Using copyrighted music in YouTube videos..."></textarea>
+                    </div>
+                    <button onclick="findSimilarCases()" class="bg-red-500 text-white p-2 w-full">Find Relevant Cases</button>
+                </div>
+                
+                <div class="case-details bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold mb-2">Case Analysis: <span id="caseTitle">Delhi University Photocopy Case</span></h3>
+                    <div class="case-factors mt-2">
+                        <div class="factor flex justify-between text-sm mb-1">
+                            <span>Court:</span>
+                            <span class="font-bold">Delhi High Court</span>
+                        </div>
+                        <!-- More case metadata -->
+                    </div>
+                    <div class="case-summary mt-4 text-sm h-32 overflow-auto p-2 bg-gray-50 rounded">
+                        <!-- Case summary text -->
+                    </div>
+                    <button onclick="viewFullJudgement()" class="mt-4 bg-blue-500 text-white p-2 w-full text-sm">View Judgement Excerpts</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- INDIAN COPYRIGHT LAW -->
+        <section id="indian-law" class="mb-12 p-6 bg-yellow-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Indian Copyright Act 1957</h2>
+            
+            <div class="act-navigator mb-6">
+                <div class="mermaid">
+                    graph LR
+                        A[Section 14] --> B[Exclusive Rights]
+                        A --> C[Owner Privileges]
+                        D[Section 52] --> E[Fair Dealing]
+                        D --> F[Exceptions]
+                        G[Section 57] --> H[Moral Rights]
+                </div>
+            </div>
+            
+            <div class="law-simulator border-2 border-yellow-300 p-4 rounded-lg bg-white">
+                <h3 class="font-bold mb-2">Copyright Exception Evaluator</h3>
+                <div class="scenario-selector mb-4">
+                    <label class="block mb-1">Use Case:</label>
+                    <select id="useCase" class="w-full border p-2">
+                        <option value="education">Educational Use</option>
+                        <option value="research">Scientific Research</option>
+                        <option value="criticism">Criticism/Review</option>
+                    </select>
+                </div>
+                <button onclick="evaluateException()" class="bg-yellow-500 text-white p-2 w-full mb-4">Check Legality</button>
+                <div id="exceptionResult" class="hidden p-4 bg-gray-50 rounded-lg">
+                    <!-- Analysis with:
+                         - Relevant sections
+                         - Conditions
+                         - Limitations -->
+                </div>
+            </div>
+        </section>
+
+        <!-- DIGITAL RIGHTS MANAGEMENT -->
+        <section id="drm" class="mb-12 p-6 bg-purple-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">DRM Technologies</h2>
+            
+            <div class="drm-types grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="drm-card bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold">Encryption</h3>
+                    <div class="mermaid mt-2 text-xs">
+                        graph LR
+                            C[Content] -->|AES-256| E[Encrypted]
+                            E -->|License Key| D[Decrypted]
+                    </div>
+                </div>
+                <!-- Other DRM type cards -->
+            </div>
+            
+            <div class="drm-simulator border-2 border-purple-300 p-4 rounded-lg bg-white">
+                <h3 class="font-bold mb-2">DRM Protection Lab</h3>
+                <div class="simulator-area grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="original">
+                        <label class="block mb-1">Original Content:</label>
+                        <textarea id="originalContent" class="w-full border p-2 h-32">Sample protected content</textarea>
+                    </div>
+                    <div class="protected">
+                        <label class="block mb-1">DRM-Protected:</label>
+                        <div id="drmOutput" class="w-full border p-2 h-32 bg-gray-100 font-mono overflow-auto"></div>
+                    </div>
+                </div>
+                <div class="controls flex space-x-2">
+                    <button onclick="applyDRM()" class="bg-purple-600 text-white p-2 flex-1">Apply Protection</button>
+                    <button onclick="crackDRM()" class="bg-red-600 text-white p-2 flex-1">Simulate Circumvention</button>
+                    <button onclick="resetDRM()" class="bg-gray-600 text-white p-2 flex-1">Reset</button>
+                </div>
+            </div>
+            
+            <div class="drm-controversy mt-6 p-4 bg-gray-100 rounded-lg">
+                <h3 class="font-bold mb-2">DRM Ethical Debate</h3>
+                <div class="arguments grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="pro bg-green-50 p-3 rounded-lg">
+                        <h4 class="font-bold text-green-800">Pros</h4>
+                        <ul class="list-disc pl-5 mt-1 text-sm">
+                            <li>Protects creator revenue</li>
+                            <li>Controls distribution</li>
+                        </ul>
+                    </div>
+                    <div class="con bg-red-50 p-3 rounded-lg">
+                        <h4 class="font-bold text-red-800">Cons</h4>
+                        <ul class="list-disc pl-5 mt-1 text-sm">
+                            <li>Restricts fair use</li>
+                            <li>Creates vendor lock-in</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- COPYRIGHT CHALLENGES -->
+    <div class="challenges fixed bottom-4 right-4 bg-white p-4 shadow-xl rounded-lg border-2 border-blue-600">
+        <h3 class="font-bold text-lg mb-2">Legal Challenges</h3>
+        <!-- Interactive exercises:
+             - Determine copyright status
+             - Evaluate fair use cases
+             - Design DRM systems -->
+    </div>
+
+    <script>
+        // JavaScript implementations for:
+        // - Copyright term calculator
+        // - Case law matching engine
+        // - DRM encryption/decryption
+        // - Fair use evaluator
+        // - Indian law section finder
+    </script>
+</body>
+</html>
+Content Generation Rules:
+
+Copyright Basics:
+• Interactive protection term calculator
+• Automatic vs fixed media comparison
+• Rights bundle visualizer
+
+Infringement Cases:
+• Timeline of landmark judgments
+• Case similarity analyzer
+• Damage calculation estimator
+
+Indian Law:
+• Section-by-section explanation
+• Fair dealing exception tester
+• Moral rights explorer
+
+DRM Systems:
+• Encryption process simulator
+• Circumvention techniques
+• Platform lock-in analysis
+
+Interactivity Requirements:
+
+Copyright duration calculator
+
+Case law pattern matcher
+
+Legal exception evaluator
+
+DRM application/removal
+
+Ethical debate analyzer
+
+Design Specifications:
+
+Color scheme: Legal blue (#1e40af) + digital purple (#7e22ce)
+
+Responsive case law database
+
+Interactive encryption visualizer
+
+Dark mode with reading optimization
+
+Printable legal reference guides
+
+Special Features:
+
+Term Calculator:
+• Country-specific variations
+• Post-protection public domain status
+
+Case Finder:
+• Natural language scenario matching
+• Precedent impact ratings
+
+DRM Lab:
+• AES-256 simulation
+• Watermarking techniques
+• HDCP analog protection
+
+Fair Use Evaluator:
+• Four-factor analysis
+• Transformative use calculator
+
+Deliverable: Self-contained HTML file with functional copyright analysis tools
+
+Example Visualizations:
+
+Diagram
+Code
+pie
+    title Copyright Infringement Damages (India 2023)
+    "Under ₹10L" : 45
+    "₹10L-₹50L" : 30
+    "Over ₹50L" : 25
+
+    
+Key References:
+
+Copyright Act §57: Moral rights
+
+IT Act §65A: DRM protection
+
+Delhi U Photocopy Case: Education exception

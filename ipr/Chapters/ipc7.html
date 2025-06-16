@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 7: Mobile Phone Security</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        .signal-visualization {
+            background: repeating-linear-gradient(90deg, #e5e7eb, #e5e7eb 2px, #f3f4f6 2px, #f3f4f6 4px);
+        }
+        .bio-sample {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M30,40 Q50,20 70,40 Q80,60 60,70 Q40,80 30,60 Z" fill="%23d1d5db"/><circle cx="40" cy="45" r="3" fill="%236b7280"/><circle cx="60" cy="45" r="3" fill="%236b7280"/></svg>') center no-repeat;
+        }
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <header class="bg-blue-800 text-white p-6">
+        <h1 class="text-3xl font-bold">Chapter 7: Mobile Phone Security</h1>
+        <p class="mt-2 opacity-90">Cellular Protocols, Device Security, and Biometric Authentication</p>
+    </header>
+
+    <main class="container mx-auto p-4">
+        <!-- GSM AAA SECURITY -->
+        <section id="gsm-aaa" class="mb-12 p-6 bg-blue-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">GSM Authentication & Authorization</h2>
+            
+            <div class="gsm-simulator grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="protocol-flow">
+                    <div class="mermaid">
+                        sequenceDiagram
+                            participant MS as Mobile Station
+                            participant VLR as Visitor Location Register
+                            participant HLR as Home Location Register
+                            MS->>VLR: Authentication Request (IMSI)
+                            VLR->>HLR: Send Authentication Info
+                            HLR-->>VLR: Authentication Triplet (RAND, SRES, Kc)
+                            VLR->>MS: RAND Challenge
+                            MS->>VLR: SRES Response
+                            VLR->>VLR: Verify SRES
+                            alt Success
+                                VLR-->>MS: Grant Access
+                            else Failure
+                                VLR-->>MS: Deny Access
+                            end
+                    </div>
+                </div>
+                
+                <div class="simulator-ui border-2 border-blue-300 p-4 rounded-lg bg-white">
+                    <h3 class="font-bold mb-2">GSM Authentication Simulator</h3>
+                    <div class="input-group mb-4">
+                        <label class="block">IMSI:</label>
+                        <input type="text" id="imsiInput" value="310150123456789" class="w-full border p-2 font-mono">
+                    </div>
+                    <div class="input-group mb-4">
+                        <label class="block">Ki (Secret Key):</label>
+                        <input type="text" id="kiInput" value="A1B2C3D4E5F6" class="w-full border p-2 font-mono">
+                    </div>
+                    <button onclick="runGsmAuth()" class="bg-blue-600 text-white p-2 w-full mb-4 hover:bg-blue-700 transition">Authenticate</button>
+                    <div id="gsmAuthResult" class="p-4 rounded-lg hidden bg-blue-50">
+                        <div class="flex justify-between mb-2">
+                            <span>RAND:</span>
+                            <span id="randValue" class="font-mono"></span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span>Computed SRES:</span>
+                            <span id="sresValue" class="font-mono"></span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Session Key (Kc):</span>
+                            <span id="kcValue" class="font-mono"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gsm-vulnerabilities mt-6 p-4 bg-red-100 rounded-lg">
+                <h3 class="font-bold text-red-800">GSM Security Weaknesses</h3>
+                <ul class="list-disc pl-5 mt-2 space-y-1">
+                    <li>One-way authentication (base station to phone not verified)</li>
+                    <li>Weak A5/1 and A5/2 encryption algorithms</li>
+                    <li>IMSI catcher attacks</li>
+                    <li>No mutual authentication between MS and network</li>
+                    <li>Fixed key length (64-bit)</li>
+                </ul>
+            </div>
+
+            <div class="imsi-catcher mt-6 p-4 bg-yellow-100 rounded-lg">
+                <h3 class="font-bold text-yellow-800">IMSI Catcher Detection</h3>
+                <div class="mt-2">
+                    <button onclick="detectImsiCatcher()" class="bg-yellow-600 text-white p-2 w-full mb-2 hover:bg-yellow-700 transition">Run IMSI Catcher Scan</button>
+                    <div id="imsiResult" class="hidden p-3 rounded bg-white">
+                        <div class="flex items-center">
+                            <span id="imsiIcon" class="mr-2"></span>
+                            <span id="imsiText"></span>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-sm mt-2">Detection methods: Analyze cell tower parameters, encryption support, and authentication patterns</p>
+            </div>
+        </section>
+
+        <!-- CDMA SECURITY MECHANISMS -->
+        <section id="cdma-security" class="mb-12 p-6 bg-purple-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">CDMA Security Architecture</h2>
+            
+            <div class="cdma-comparison grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="cdma-card bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold">Authentication</h3>
+                    <p class="text-sm mt-2">CAVE algorithm with SSD updates</p>
+                    <div class="mermaid mt-2">
+                        graph LR
+                            MS[Mobile Station] -->|RAND| AC[Authentication Center]
+                            AC -->|AUTHU| MS
+                            AC -->|SSD Update| MS
+                    </div>
+                </div>
+                <div class="cdma-card bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold">Encryption</h3>
+                    <p class="text-sm mt-2">ORYX-based voice privacy</p>
+                    <div class="mermaid mt-2">
+                        graph LR
+                            VC[Voice Channel] -->|Encrypted| BS[Base Station]
+                            BS -->|Decrypted| MSC[Mobile Switching Center]
+                    </div>
+                </div>
+                <div class="cdma-card bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold">Spread Spectrum</h3>
+                    <p class="text-sm mt-2">PN codes provide inherent security</p>
+                    <div class="signal-visualization mt-2 h-16 relative">
+                        <canvas id="pnCodeCanvas"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cdma-simulator border-2 border-purple-300 p-4 rounded-lg bg-white">
+                <h3 class="font-bold mb-2">CDMA vs GSM Security Comparison</h3>
+                <table class="min-w-full mt-2">
+                    <thead>
+                        <tr class="border-b">
+                            <th class="p-2 text-left">Feature</th>
+                            <th class="p-2 text-center">CDMA</th>
+                            <th class="p-2 text-center">GSM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b">
+                            <td class="p-2">Authentication</td>
+                            <td class="p-2 text-center bg-green-100">Two-way</td>
+                            <td class="p-2 text-center bg-yellow-100">One-way</td>
+                        </tr>
+                        <tr class="border-b">
+                            <td class="p-2">Encryption</td>
+                            <td class="p-2 text-center bg-green-100">64-bit</td>
+                            <td class="p-2 text-center bg-yellow-100">54-bit (A5/1)</td>
+                        </tr>
+                        <tr class="border-b">
+                            <td class="p-2">Cloning Resistance</td>
+                            <td class="p-2 text-center bg-green-100">High</td>
+                            <td class="p-2 text-center bg-red-100">Low</td>
+                        </tr>
+                        <tr class="border-b">
+                            <td class="p-2">Spread Spectrum</td>
+                            <td class="p-2 text-center bg-green-100">Yes</td>
+                            <td class="p-2 text-center bg-red-100">No</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2">SSD Updates</td>
+                            <td class="p-2 text-center bg-green-100">Yes</td>
+                            <td class="p-2 text-center bg-red-100">No</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="cave-algo mt-6 p-4 bg-white rounded-lg shadow">
+                <h3 class="font-bold mb-2">CAVE Algorithm Demonstration</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block">ESN (Electronic Serial Number):</label>
+                        <input type="text" id="esnInput" value="0x12A4B678" class="w-full border p-2 font-mono mb-2">
+                        
+                        <label class="block">Shared Secret Data (SSD):</label>
+                        <input type="text" id="ssdInput" value="0x1F3A5C7E2D4B6980" class="w-full border p-2 font-mono mb-2">
+                    </div>
+                    <div>
+                        <label class="block">Random Challenge (RAND):</label>
+                        <input type="text" id="randCdmaInput" value="0x3B7D5F291A4C6E80" class="w-full border p-2 font-mono mb-2">
+                        
+                        <button onclick="runCaveAlgorithm()" class="bg-purple-600 text-white p-2 w-full hover:bg-purple-700 transition">Compute AUTHU</button>
+                    </div>
+                </div>
+                <div id="caveResult" class="mt-4 p-3 bg-purple-50 rounded hidden">
+                    <div class="font-mono break-all">AUTHU: <span id="authuValue"></span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MOBILE DEVICE THREATS -->
+        <section id="mobile-threats" class="mb-12 p-6 bg-red-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Mobile Security Challenges</h2>
+            
+            <div class="threat-matrix grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="attack-vectors">
+                    <h3 class="text-xl font-medium">Attack Vectors</h3>
+                    <div class="vector-list mt-4 space-y-3">
+                        <div class="vector-item p-3 bg-white rounded-lg shadow-sm flex items-start">
+                            <div class="icon bg-red-500 text-white p-2 rounded-full mr-3">
+                                <i class="fas fa-broadcast-tower"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Rogue Base Stations</h4>
+                                <p class="text-sm mt-1">Fake cell towers intercepting communications</p>
+                                <div class="mt-1">
+                                    <span class="inline-block bg-red-100 text-red-800 px-2 py-1 rounded text-xs">Risk: High</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="vector-item p-3 bg-white rounded-lg shadow-sm flex items-start">
+                            <div class="icon bg-red-500 text-white p-2 rounded-full mr-3">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Malicious Apps</h4>
+                                <p class="text-sm mt-1">Trojanized applications stealing data</p>
+                                <div class="mt-1">
+                                    <span class="inline-block bg-red-100 text-red-800 px-2 py-1 rounded text-xs">Risk: Medium</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="vector-item p-3 bg-white rounded-lg shadow-sm flex items-start">
+                            <div class="icon bg-red-500 text-white p-2 rounded-full mr-3">
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Network Spoofing</h4>
+                                <p class="text-sm mt-1">Fake WiFi access points</p>
+                                <div class="mt-1">
+                                    <span class="inline-block bg-red-100 text-red-800 px-2 py-1 rounded text-xs">Risk: High</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="protection-methods">
+                    <h3 class="text-xl font-medium">Protection Methods</h3>
+                    <div class="protection-cards mt-4 space-y-3">
+                        <div class="protection-card p-3 bg-white rounded-lg shadow-sm flex items-start">
+                            <div class="icon bg-green-500 text-white p-2 rounded-full mr-3">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Mobile Device Management (MDM)</h4>
+                                <p class="text-sm mt-1">Centralized policy enforcement</p>
+                                <div class="mt-1">
+                                    <span class="inline-block bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Effectiveness: High</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="protection-card p-3 bg-white rounded-lg shadow-sm flex items-start">
+                            <div class="icon bg-green-500 text-white p-2 rounded-full mr-3">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Containerization</h4>
+                                <p class="text-sm mt-1">Isolate corporate data</p>
+                                <div class="mt-1">
+                                    <span class="inline-block bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Effectiveness: Medium</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="protection-card p-3 bg-white rounded-lg shadow-sm flex items-start">
+                            <div class="icon bg-green-500 text-white p-2 rounded-full mr-3">
+                                <i class="fas fa-network-wired"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">VPN</h4>
+                                <p class="text-sm mt-1">Encrypt all communications</p>
+                                <div class="mt-1">
+                                    <span class="inline-block bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Effectiveness: High</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="threat-timeline mt-6 p-4 bg-white rounded-lg shadow">
+                <h3 class="font-bold mb-2">Recent Mobile Threats (2020-2023)</h3>
+                <div class="timeline-chart h-48">
+                    <canvas id="threatTimeline"></canvas>
+                </div>
+            </div>
+
+            <div class="mdm-lab mt-6 p-4 bg-white rounded-lg shadow">
+                <h3 class="font-bold mb-2">MDM Policy Configuration Lab</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h4 class="font-medium mb-2">Security Policies</h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2" checked> Require device encryption
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2"> Jailbreak/root detection
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2" checked> Force VPN for corporate data
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="mr-2"> Disable camera
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-medium mb-2">Compliance Status</h4>
+                        <div id="complianceStatus" class="p-3 bg-gray-100 rounded">
+                            <div class="flex items-center mb-1">
+                                <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                                <span>Encryption: Enabled</span>
+                            </div>
+                            <div class="flex items-center mb-1">
+                                <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
+                                <span>Jailbreak Detection: Not configured</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
+                                <span>VPN Enforcement: Partial</span>
+                            </div>
+                        </div>
+                        <button onclick="evaluateMdmPolicies()" class="mt-2 bg-blue-600 text-white p-2 w-full hover:bg-blue-700 transition">Evaluate Policies</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BIOMETRIC AUTHENTICATION -->
+        <section id="biometrics" class="mb-12 p-6 bg-green-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Smartphone Biometrics</h2>
+            
+            <div class="bio-methods grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="bio-card fingerprint bg-white p-4 rounded-lg shadow text-center">
+                    <div class="icon mx-auto bg-blue-100 text-blue-600 w-16 h-16 rounded-full flex items-center justify-center mb-2">
+                        <i class="fas fa-fingerprint text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold">Fingerprint</h3>
+                    <div class="stats mt-2">
+                        <span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">FAR: 1 in 50,000</span>
+                        <span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs ml-1">FRR: 1%</span>
+                    </div>
+                </div>
+                <div class="bio-card face bg-white p-4 rounded-lg shadow text-center">
+                    <div class="icon mx-auto bg-purple-100 text-purple-600 w-16 h-16 rounded-full flex items-center justify-center mb-2">
+                        <i class="fas fa-user-circle text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold">Face Recognition</h3>
+                    <div class="stats mt-2">
+                        <span class="inline-block bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs">FAR: 1 in 1,000,000</span>
+                        <span class="inline-block bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs ml-1">FRR: 3%</span>
+                    </div>
+                </div>
+                <div class="bio-card iris bg-white p-4 rounded-lg shadow text-center">
+                    <div class="icon mx-auto bg-green-100 text-green-600 w-16 h-16 rounded-full flex items-center justify-center mb-2">
+                        <i class="fas fa-eye text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold">Iris Scan</h3>
+                    <div class="stats mt-2">
+                        <span class="inline-block bg-green-100 text-green-800 px-2 py-1 rounded text-xs">FAR: 1 in 1,500,000</span>
+                        <span class="inline-block bg-green-100 text-green-800 px-2 py-1 rounded text-xs ml-1">FRR: 2%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bio-simulator border-2 border-green-300 p-4 rounded-lg bg-white">
+                <h3 class="font-bold mb-2">Biometric Security Simulator</h3>
+                <div class="flex items-center space-x-4 mb-4">
+                    <div class="bio-sample w-24 h-24 bg-gray-200 rounded-lg overflow-hidden">
+                        <!-- Sample biometric image -->
+                    </div>
+                    <div class="flex-1">
+                        <div class="mb-2">
+                            <label class="block text-sm">Spoof Attempt:</label>
+                            <select id="spoofType" class="w-full border p-2">
+                                <option value="none">None (Genuine Attempt)</option>
+                                <option value="photo">Photo Attack</option>
+                                <option value="mask">3D Mask</option>
+                                <option value="replica">Fingerprint Replica</option>
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <label class="block text-sm">Biometric Method:</label>
+                            <select id="bioMethod" class="w-full border p-2">
+                                <option value="fingerprint">Fingerprint</option>
+                                <option value="face">Face Recognition</option>
+                                <option value="iris">Iris Scan</option>
+                            </select>
+                        </div>
+                        <button onclick="testBiometric()" class="bg-green-600 text-white p-2 w-full hover:bg-green-700 transition">Authenticate</button>
+                    </div>
+                </div>
+                <div id="bioResult" class="p-3 rounded-lg hidden">
+                    <div class="flex items-center">
+                        <span id="bioResultIcon" class="mr-2 text-xl"></span>
+                        <span id="bioResultText"></span>
+                    </div>
+                    <div id="bioResultDetails" class="text-sm mt-1"></div>
+                </div>
+            </div>
+            
+            <div class="bio-vulnerabilities mt-6 p-4 bg-yellow-100 rounded-lg">
+                <h3 class="font-bold">Biometric Security Considerations</h3>
+                <ul class="list-disc pl-5 mt-2 space-y-1">
+                    <li>Liveness detection requirements</li>
+                    <li>Irrevocability of compromised biometrics</li>
+                    <li>Multi-modal biometrics for higher security</li>
+                    <li>FAR/FRR tradeoffs in different environments</li>
+                    <li>Template protection requirements</li>
+                </ul>
+            </div>
+
+            <div class="far-frr-chart mt-6 p-4 bg-white rounded-lg shadow">
+                <h3 class="font-bold mb-2">FAR vs FRR Tradeoffs</h3>
+                <div class="chart-container h-64">
+                    <canvas id="farFrrChart"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MOBILE SECURITY CHALLENGES -->
+    <div class="challenges  bottom-4 right-4 bg-white p-4 shadow-xl rounded-lg border-2 border-blue-600" >
+        <h3 class="font-bold text-lg mb-2">Security Challenges</h3>
+        <div class="space-y-3">
+            <div class="challenge-item p-2 bg-gray-100 rounded">
+                <h4 class="font-medium">1. Configure Optimal MDM</h4>
+                <p class="text-sm mt-1">Select policies for a healthcare organization</p>
+            </div>
+            <div class="challenge-item p-2 bg-gray-100 rounded">
+                <h4 class="font-medium">2. Detect Rogue Towers</h4>
+                <p class="text-sm mt-1">Analyze these cell parameters for anomalies</p>
+            </div>
+            <div class="challenge-item p-2 bg-gray-100 rounded">
+                <h4 class="font-medium">3. Biometric Selection</h4>
+                <p class="text-sm mt-1">Choose methods for a high-security facility</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: { useMaxWidth: false }
+        });
+
+        // GSM Authentication Simulator
+        function runGsmAuth() {
+            const imsi = document.getElementById('imsiInput').value;
+            const ki = document.getElementById('kiInput').value;
+            
+            // Simple simulation - real A3/A8 would use COMP128
+            const rand = generateRandomHex(16);
+            const sres = ki.substring(0, 4) + rand.substring(0, 4);
+            const kc = ki.substring(2, 10) + rand.substring(4, 8);
+            
+            document.getElementById('randValue').textContent = rand;
+            document.getElementById('sresValue').textContent = sres;
+            document.getElementById('kcValue').textContent = kc;
+            
+            const resultDiv = document.getElementById('gsmAuthResult');
+            resultDiv.classList.remove('hidden');
+        }
+
+        function detectImsiCatcher() {
+            const isImsiCatcher = Math.random() > 0.7; // 30% chance of detection
+            const resultDiv = document.getElementById('imsiResult');
+            const iconSpan = document.getElementById('imsiIcon');
+            const textSpan = document.getElementById('imsiText');
+            
+            resultDiv.classList.remove('hidden');
+            
+            if (isImsiCatcher) {
+                resultDiv.className = 'p-3 rounded bg-red-100';
+                iconSpan.innerHTML = '<i class="fas fa-exclamation-triangle text-red-600"></i>';
+                textSpan.textContent = 'Warning: Potential IMSI Catcher Detected!';
+            } else {
+                resultDiv.className = 'p-3 rounded bg-green-100';
+                iconSpan.innerHTML = '<i class="fas fa-check-circle text-green-600"></i>';
+                textSpan.textContent = 'No IMSI Catchers Detected';
+            }
+        }
+
+        // CDMA Visualization
+        function drawPnCode() {
+            const canvas = document.getElementById('pnCodeCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+            
+            ctx.fillStyle = '#e5e7eb';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.strokeStyle = '#4f46e5';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            
+            const steps = 50;
+            const stepWidth = canvas.width / steps;
+            
+            for (let i = 0; i < steps; i++) {
+                const x = i * stepWidth;
+                const y = Math.random() > 0.5 ? 10 : canvas.height - 10;
+                
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            
+            ctx.stroke();
+        }
+
+        // CAVE Algorithm Simulation
+        function runCaveAlgorithm() {
+            const esn = document.getElementById('esnInput').value;
+            const ssd = document.getElementById('ssdInput').value;
+            const rand = document.getElementById('randCdmaInput').value;
+            
+            // Simple simulation - real CAVE would be more complex
+            const authu = ssd.substring(0, 8) + rand.substring(0, 8);
+            
+            document.getElementById('authuValue').textContent = '0x' + authu;
+            document.getElementById('caveResult').classList.remove('hidden');
+        }
+
+        // Biometric Simulator
+        function testBiometric() {
+            const spoofType = document.getElementById('spoofType').value;
+            const bioMethod = document.getElementById('bioMethod').value;
+            const resultDiv = document.getElementById('bioResult');
+            const iconSpan = document.getElementById('bioResultIcon');
+            const textSpan = document.getElementById('bioResultText');
+            const detailsSpan = document.getElementById('bioResultDetails');
+            
+            resultDiv.classList.remove('hidden');
+            
+            let successRate;
+            let isSuccess;
+            
+            // Determine success based on method and spoof type
+            if (spoofType === 'none') {
+                // Genuine attempt
+                successRate = 0.97; // 97% success for genuine attempts
+                isSuccess = Math.random() < successRate;
+            } else {
+                // Spoof attempt
+                if (bioMethod === 'fingerprint') {
+                    successRate = spoofType === 'replica' ? 0.2 : 0.05;
+                } else if (bioMethod === 'face') {
+                    successRate = spoofType === 'mask' ? 0.15 : 0.3;
+                } else { // iris
+                    successRate = 0.05; // Hard to spoof
+                }
+                isSuccess = Math.random() < successRate;
+            }
+            
+            if (isSuccess) {
+                resultDiv.className = 'p-3 rounded-lg bg-green-100';
+                iconSpan.innerHTML = '<i class="fas fa-check-circle text-green-600"></i>';
+                textSpan.textContent = 'Authentication Successful';
+                detailsSpan.textContent = spoofType === 'none' ? 
+                    'Genuine user authenticated' : 
+                    `Spoof attack (${spoofType}) succeeded`;
+            } else {
+                resultDiv.className = 'p-3 rounded-lg bg-red-100';
+                iconSpan.innerHTML = '<i class="fas fa-times-circle text-red-600"></i>';
+                textSpan.textContent = 'Authentication Failed';
+                detailsSpan.textContent = spoofType === 'none' ? 
+                    'False rejection (FRR)' : 
+                    `Spoof attack (${spoofType}) detected`;
+            }
+        }
+
+        // Threat Timeline
+        function initThreatTimeline() {
+            const ctx = document.getElementById('threatTimeline').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['2020', '2021', '2022', '2023'],
+                    datasets: [
+                        {
+                            label: 'iOS Threats',
+                            data: [12, 18, 25, 30],
+                            borderColor: '#3b82f6',
+                            backgroundColor: '#3b82f6',
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Android Threats',
+                            data: [45, 55, 60, 65],
+                            borderColor: '#10b981',
+                            backgroundColor: '#10b981',
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                afterLabel: function(context) {
+                                    const year = context.label;
+                                    let threat = '';
+                                    
+                                    if (context.datasetIndex === 0) { // iOS
+                                        if (year === '2020') threat = 'Pegasus';
+                                        if (year === '2021') threat = 'XcodeSpy';
+                                        if (year === '2022') threat = 'AdLoad';
+                                        if (year === '2023') threat = 'GoldDigger';
+                                    } else { // Android
+                                        if (year === '2020') threat = 'Cerberus';
+                                        if (year === '2021') threat = 'FluBot';
+                                        if (year === '2022') threat = 'BRATA';
+                                        if (year === '2023') threat = 'SpinOk';
+                                    }
+                                    
+                                    return 'Major Threat: ' + threat;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Threat Incidents (thousands)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // FAR/FRR Chart
+        function initFarFrrChart() {
+            const ctx = document.getElementById('farFrrChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Fingerprint', 'Face Recognition', 'Iris Scan'],
+                    datasets: [
+                        {
+                            label: 'False Acceptance Rate (FAR)',
+                            data: [0.002, 0.0001, 0.000067],
+                            backgroundColor: '#f59e0b'
+                        },
+                        {
+                            label: 'False Rejection Rate (FRR)',
+                            data: [0.01, 0.03, 0.02],
+                            backgroundColor: '#3b82f6'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Error Rate'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return (value * 100) + '%';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    label += (context.raw * 100).toFixed(4) + '%';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // MDM Policy Evaluation
+        function evaluateMdmPolicies() {
+            const complianceDiv = document.getElementById('complianceStatus');
+            complianceDiv.innerHTML = `
+                <div class="flex items-center mb-1">
+                    <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                    <span>Encryption: Enabled</span>
+                </div>
+                <div class="flex items-center mb-1">
+                    <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                    <span>Jailbreak Detection: Active</span>
+                </div>
+                <div class="flex items-center mb-1">
+                    <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                    <span>VPN Enforcement: Full</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
+                    <span>Camera: Not restricted</span>
+                </div>
+            `;
+        }
+
+        // Helper functions
+        function generateRandomHex(length) {
+            let result = '';
+            const chars = '0123456789ABCDEF';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        // Initialize visualizations when page loads
+        window.onload = function() {
+            drawPnCode();
+            initThreatTimeline();
+            initFarFrrChart();
+        };
+    </script>
+</body>
+</html>

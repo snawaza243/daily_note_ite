@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 3: Encryption Algorithms</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        .mermaid { margin: 20px 0; }
+        .bit-cell { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; }
+        .des-round { transition: all 0.3s ease; }
+        .des-round.active { background-color: #fecaca; }
+        .progress-bar { transition: width 0.1s linear; }
+        .dark .dark\:bg-gray-900 { background-color: #111827; }
+        .dark .dark\:text-white { color: #fff; }
+        .key-bit { transition: all 0.2s ease; }
+        .key-bit.active { transform: scale(1.1); background-color: #f59e0b; }
+        @keyframes highlight {
+            0% { background-color: inherit; }
+            50% { background-color: #f59e0b; }
+            100% { background-color: inherit; }
+        }
+        .highlight-step { animation: highlight 1.5s ease; }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans dark:bg-gray-900 dark:text-white transition-colors duration-300">
+    <header class="bg-rose-900 text-white p-6 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-bold">Chapter 3: Encryption Algorithms</h1>
+            <button id="darkModeToggle" class="bg-rose-700 hover:bg-rose-800 px-4 py-2 rounded-lg">
+                <i class="fas fa-moon"></i> Dark Mode
+            </button>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4">
+        <!-- DES VISUAL WORKSHOP -->
+        <section id="des" class="mb-12 p-6 bg-blue-50 rounded-xl dark:bg-gray-800">
+            <h2 class="text-2xl font-semibold mb-4">Data Encryption Standard (DES)</h2>
+            
+            <div class="des-visualizer grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="des-structure">
+                    <h3 class="text-xl font-medium mb-2">64-bit Block Structure</h3>
+                    <p class="text-sm mb-4">DES operates on 64-bit blocks. Click bits to toggle:</p>
+                    <div class="bit-grid grid grid-cols-8 gap-1 mt-4 mb-6" id="desBlock"></div>
+                    
+                    <h4 class="font-medium mb-2">Initial Permutation (IP)</h4>
+                    <p class="text-sm mb-4">The first step rearranges bits according to a fixed table:</p>
+                    <div class="permutation-grid grid grid-cols-8 gap-1 mb-6" id="initialPermutation"></div>
+                    
+                    <h4 class="font-medium mb-2">Key Schedule</h4>
+                    <p class="text-sm mb-2">56-bit key (with parity bits removed):</p>
+                    <div class="key-grid grid grid-cols-7 gap-1 mb-2" id="desKey"></div>
+                    <p class="text-sm">Generates 16 48-bit subkeys, one for each round:</p>
+                    <div class="subkey-display mt-2 p-2 bg-gray-100 rounded dark:bg-gray-700" id="currentSubkey"></div>
+                </div>
+                
+                <div class="des-rounds">
+                    <h3 class="text-xl font-medium mb-2">16-Round Feistel Network</h3>
+                    <p class="text-sm mb-4">DES uses 16 rounds of Feistel function:</p>
+                    <div class="mermaid mb-6">
+                        graph TD
+                            A[Plaintext] --> B(DES Initial Permutation)
+                            B --> C(Left Block)
+                            B --> D(Right Block)
+                            D --> E(F Function)
+                            E --> F(Round Key)
+                            F --> G(XOR with Left Block)
+                            G --> H(New Right Block)
+                            C --> I(New Left Block)
+                            H & I --> J(Next Round)
+                    </div>
+                    
+                    <div class="round-slider-container mt-4">
+                        <label class="block mb-2">Current Round: <span id="roundCounter">1</span>/16</label>
+                        <input type="range" min="1" max="16" value="1" class="w-full" id="roundSlider">
+                    </div>
+                    
+                    <div id="roundVisualization" class="mt-6 p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                        <h4 class="font-medium mb-2">Round <span id="roundNumber">1</span> Details</h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm font-medium">Left Input (L<sub>0</sub>):</p>
+                                <div class="bit-grid grid grid-cols-4 gap-1 mt-1 mb-3" id="leftInput"></div>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium">Right Input (R<sub>0</sub>):</p>
+                                <div class="bit-grid grid grid-cols-4 gap-1 mt-1 mb-3" id="rightInput"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="feistel-function mt-4 p-3 bg-gray-100 rounded dark:bg-gray-600">
+                            <h5 class="font-medium text-sm mb-2">Feistel Function (F):</h5>
+                            <p class="text-xs">\[ f(R,K) = P(S(E(R) \oplus K)) \]</p>
+                            <div class="steps mt-2">
+                                <div class="step mb-2">
+                                    <span class="text-xs font-medium">1. Expansion (E):</span>
+                                    <div class="bit-grid grid grid-cols-6 gap-1 mt-1" id="expansionBits"></div>
+                                </div>
+                                <div class="step mb-2">
+                                    <span class="text-xs font-medium">2. Key XOR:</span>
+                                    <div class="bit-grid grid grid-cols-6 gap-1 mt-1" id="keyXorBits"></div>
+                                </div>
+                                <div class="step mb-2">
+                                    <span class="text-xs font-medium">3. Substitution (S-boxes):</span>
+                                    <div class="bit-grid grid grid-cols-4 gap-1 mt-1" id="sboxOutput"></div>
+                                </div>
+                                <div class="step">
+                                    <span class="text-xs font-medium">4. Permutation (P):</span>
+                                    <div class="bit-grid grid grid-cols-4 gap-1 mt-1" id="permutationOutput"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Strength/Weakness Comparison -->
+            <div class="des-assessment grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+                <div class="strengths bg-green-100 p-4 rounded-lg dark:bg-green-900 dark:bg-opacity-20">
+                    <h4 class="font-bold mb-2 flex items-center">
+                        <i class="fas fa-shield-alt mr-2"></i> Strengths
+                    </h4>
+                    <ul class="list-disc pl-5 text-sm">
+                        <li class="mb-1">Proven design stood for 20+ years</li>
+                        <li class="mb-1">Strong against linear cryptanalysis</li>
+                        <li class="mb-1">Efficient hardware implementation</li>
+                        <li>Influenced modern block cipher design</li>
+                    </ul>
+                </div>
+                <div class="weaknesses bg-red-100 p-4 rounded-lg dark:bg-red-900 dark:bg-opacity-20">
+                    <h4 class="font-bold mb-2 flex items-center">
+                        <i class="fas fa-exclamation-triangle mr-2"></i> Weaknesses
+                    </h4>
+                    <ul class="list-disc pl-5 text-sm">
+                        <li class="mb-1">56-bit key is too small (brute-forced in 1998)</li>
+                        <li class="mb-1">Vulnerable to differential cryptanalysis</li>
+                        <li class="mb-1">Fixed S-boxes (no key involvement)</li>
+                        <li>Block size of 64 bits is now considered small</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="des-history mt-6 p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                <h4 class="font-bold mb-2">Historical Context</h4>
+                <div class="timeline relative border-l-2 border-blue-500 pl-4">
+                    <div class="mb-4 relative">
+                        <div class="absolute w-3 h-3 bg-blue-500 rounded-full -left-1.5"></div>
+                        <h5 class="font-medium">1977</h5>
+                        <p class="text-sm">DES adopted as FIPS standard</p>
+                    </div>
+                    <div class="mb-4 relative">
+                        <div class="absolute w-3 h-3 bg-blue-500 rounded-full -left-1.5"></div>
+                        <h5 class="font-medium">1998</h5>
+                        <p class="text-sm">EFF's Deep Crack breaks DES in 56 hours</p>
+                    </div>
+                    <div class="mb-4 relative">
+                        <div class="absolute w-3 h-3 bg-blue-500 rounded-full -left-1.5"></div>
+                        <h5 class="font-medium">2001</h5>
+                        <p class="text-sm">AES replaces DES as standard</p>
+                    </div>
+                    <div class="relative">
+                        <div class="absolute w-3 h-3 bg-blue-500 rounded-full -left-1.5"></div>
+                        <h5 class="font-medium">2024</h5>
+                        <p class="text-sm">DES considered obsolete for most uses</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DES BREAKING LAB -->
+        <section id="breaking-des" class="mb-12 p-6 bg-yellow-50 rounded-xl dark:bg-gray-800">
+            <h2 class="text-2xl font-semibold mb-4">Breaking DES</h2>
+            
+            <div class="attack-methods grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="brute-force">
+                    <h3 class="text-xl font-medium mb-2">Brute Force Attack</h3>
+                    <p class="text-sm mb-4">Testing all 2<sup>56</sup> possible keys (72 quadrillion):</p>
+                    
+                    <div class="attack-simulator">
+                        <div class="progress-container mb-2">
+                            <div class="flex justify-between text-sm">
+                                <span>0%</span>
+                                <span id="progressPercent">0%</span>
+                                <span>100%</span>
+                            </div>
+                            <div class="progress-bar h-4 bg-gray-200 rounded-full">
+                                <div id="bruteProgress" class="h-full bg-red-600 rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="stats grid grid-cols-2 gap-2 mb-4">
+                            <div class="p-2 bg-gray-100 rounded dark:bg-gray-700">
+                                <p class="text-xs">Keys Tested:</p>
+                                <p id="keysTested" class="font-mono">0</p>
+                            </div>
+                            <div class="p-2 bg-gray-100 rounded dark:bg-gray-700">
+                                <p class="text-xs">Time Elapsed:</p>
+                                <p id="timeElapsed">0s</p>
+                            </div>
+                        </div>
+                        
+                        <div class="controls flex space-x-2">
+                            <button id="startBrute" class="flex-1 bg-red-500 hover:bg-red-600 text-white p-2 rounded">
+                                <i class="fas fa-play mr-1"></i> Start Attack
+                            </button>
+                            <button id="pauseBrute" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white p-2 rounded" disabled>
+                                <i class="fas fa-pause mr-1"></i> Pause
+                            </button>
+                            <button id="resetBrute" class="flex-1 bg-gray-700 hover:bg-gray-800 text-white p-2 rounded">
+                                <i class="fas fa-redo mr-1"></i> Reset
+                            </button>
+                        </div>
+                        
+                        <div id="bruteResult" class="mt-4 p-3 bg-white rounded-lg shadow hidden dark:bg-gray-700"></div>
+                    </div>
+                </div>
+                
+                <div class="cryptanalysis">
+                    <h3 class="text-xl font-medium mb-2">Differential Cryptanalysis</h3>
+                    <p class="text-sm mb-4">Analyzing ciphertext differences from carefully chosen plaintext pairs:</p>
+                    
+                    <div class="mermaid mb-4">
+                        sequenceDiagram
+                            Attacker->>Plaintexts: Select pairs with fixed difference
+                            Plaintexts->>Ciphertexts: Encrypt
+                            Attacker->>Ciphertexts: Analyze difference patterns
+                            Attacker->>Key: Recover subkeys
+                    </div>
+                    
+                    <button id="demoCryptanalysis" class="w-full bg-purple-500 hover:bg-purple-600 text-white p-2 rounded">
+                        <i class="fas fa-flask mr-1"></i> Simulate Attack
+                    </button>
+                    
+                    <div id="cryptanalysisResult" class="mt-4 p-3 bg-white rounded-lg shadow hidden dark:bg-gray-700">
+                        <p class="text-sm">This advanced attack requires ~2<sup>47</sup> chosen plaintexts but can recover the key faster than brute force.</p>
+                    </div>
+                    
+                    <div class="mt-4 p-3 bg-blue-50 rounded-lg dark:bg-gray-700">
+                        <h4 class="font-medium text-sm mb-1">Historical Note:</h4>
+                        <p class="text-xs">DES's S-boxes were designed to resist this attack, though this wasn't publicly known until the 1990s.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="des-variants mt-8">
+                <h3 class="text-xl font-medium mb-2">DES Variants</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="p-3 bg-white rounded-lg shadow dark:bg-gray-700">
+                        <h4 class="font-medium">Triple DES (3DES)</h4>
+                        <p class="text-xs mt-1">Applies DES three times with 2-3 keys (112-168 bit security)</p>
+                    </div>
+                    <div class="p-3 bg-white rounded-lg shadow dark:bg-gray-700">
+                        <h4 class="font-medium">DESX</h4>
+                        <p class="text-xs mt-1">Whitens input/output with additional keys</p>
+                    </div>
+                    <div class="p-3 bg-white rounded-lg shadow dark:bg-gray-700">
+                        <h4 class="font-medium">AES</h4>
+                        <p class="text-xs mt-1">Modern replacement with larger blocks and keys</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RSA INTERACTIVE LABORATORY -->
+        <section id="rsa" class="mb-12 p-6 bg-emerald-50 rounded-xl dark:bg-gray-800">
+            <h2 class="text-2xl font-semibold mb-4">RSA Algorithm</h2>
+            
+            <div class="rsa-lab grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="key-generation p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                    <h3 class="text-lg font-medium mb-3">Key Generation</h3>
+                    <div class="math-steps text-sm">
+                        <div class="step mb-3 p-2 bg-gray-100 rounded dark:bg-gray-600">
+                            <p class="font-medium">1. Select primes \(p\) and \(q\)</p>
+                            <div class="flex space-x-2 mt-2">
+                                <input id="rsaP" type="number" class="w-1/2 border p-1 rounded dark:bg-gray-700" placeholder="p" min="11" max="997">
+                                <input id="rsaQ" type="number" class="w-1/2 border p-1 rounded dark:bg-gray-700" placeholder="q" min="11" max="997">
+                            </div>
+                        </div>
+                        
+                        <div class="step mb-3 p-2 bg-gray-100 rounded dark:bg-gray-600">
+                            <p class="font-medium">2. Compute \(n = p \times q\)</p>
+                            <p id="rsaN" class="mt-1 font-mono">n = ?</p>
+                        </div>
+                        
+                        <div class="step mb-3 p-2 bg-gray-100 rounded dark:bg-gray-600">
+                            <p class="font-medium">3. Compute \(\phi(n) = (p-1)(q-1)\)</p>
+                            <p id="rsaPhi" class="mt-1 font-mono">ϕ(n) = ?</p>
+                        </div>
+                        
+                        <div class="step mb-3 p-2 bg-gray-100 rounded dark:bg-gray-600">
+                            <p class="font-medium">4. Choose \(e\) where \(1 < e < \phi(n)\)</p>
+                            <input id="rsaE" type="number" class="w-full mt-1 border p-1 rounded dark:bg-gray-700" placeholder="e (usually 65537)">
+                        </div>
+                        
+                        <div class="step mb-3 p-2 bg-gray-100 rounded dark:bg-gray-600">
+                            <p class="font-medium">5. Determine \(d = e^{-1} \mod \phi(n)\)</p>
+                            <p id="rsaD" class="mt-1 font-mono">d = ?</p>
+                        </div>
+                        
+                        <button id="generateKeys" class="w-full bg-green-600 hover:bg-green-700 text-white p-2 rounded">
+                            <i class="fas fa-key mr-1"></i> Generate Keys
+                        </button>
+                    </div>
+                    
+                    <div id="keyOutput" class="mt-4 p-3 bg-gray-100 rounded font-mono text-xs dark:bg-gray-600">
+                        <p>Public Key: (e, n) = (?, ?)</p>
+                        <p>Private Key: (d, n) = (?, ?)</p>
+                    </div>
+                </div>
+                
+                <div class="encryption p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                    <h3 class="text-lg font-medium mb-2">Encryption</h3>
+                    <p class="text-sm mb-2">\[ c = m^e \mod n \]</p>
+                    <textarea id="rsaPlaintext" class="w-full border p-2 mt-2 rounded dark:bg-gray-700" rows="3" placeholder="Enter message (as number)"></textarea>
+                    <button id="encryptBtn" class="w-full mt-2 bg-blue-500 hover:bg-blue-600 text-white p-2 rounded" disabled>
+                        <i class="fas fa-lock mr-1"></i> Encrypt
+                    </button>
+                    <div id="ciphertextOutput" class="mt-4 p-3 bg-gray-100 rounded font-mono text-sm dark:bg-gray-600">
+                        Ciphertext will appear here
+                    </div>
+                </div>
+                
+                <div class="decryption p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                    <h3 class="text-lg font-medium mb-2">Decryption</h3>
+                    <p class="text-sm mb-2">\[ m = c^d \mod n \]</p>
+                    <button id="decryptBtn" class="w-full mt-2 bg-indigo-500 hover:bg-indigo-600 text-white p-2 rounded" disabled>
+                        <i class="fas fa-unlock mr-1"></i> Decrypt
+                    </button>
+                    <div id="plaintextOutput" class="mt-4 p-3 bg-gray-100 rounded font-mono text-sm dark:bg-gray-600">
+                        Plaintext will appear here
+                    </div>
+                    
+                    <div class="mt-4 p-3 bg-yellow-50 rounded text-xs dark:bg-gray-600">
+                        <p><strong>Note:</strong> This is a simplified simulation. Real RSA uses much larger primes (2048+ bits).</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="rsa-security mt-6 p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                <h3 class="text-xl font-medium mb-3">Security Considerations</h3>
+                
+                <div class="factorability-meter mb-4">
+                    <h4 class="font-medium text-sm mb-2">Factorability of n = <span id="factorN">?</span></h4>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-600">
+                        <div id="factorabilityBar" class="bg-red-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                    <p class="text-xs mt-1" id="factorabilityText">Enter primes to assess factorability</p>
+                </div>
+                
+                <div class="key-recommendations">
+                    <h4 class="font-medium text-sm mb-2">Key Length Recommendations</h4>
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-100 dark:bg-gray-600">
+                            <tr>
+                                <th class="p-2 text-left">Year</th>
+                                <th class="p-2 text-left">Minimum RSA Key Size</th>
+                                <th class="p-2 text-left">Security Level</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-200 dark:border-gray-600">
+                                <td class="p-2">2000</td>
+                                <td class="p-2">1024 bits</td>
+                                <td class="p-2">80 bits</td>
+                            </tr>
+                            <tr class="border-b border-gray-200 dark:border-gray-600">
+                                <td class="p-2">2010</td>
+                                <td class="p-2">2048 bits</td>
+                                <td class="p-2">112 bits</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2">2020+</td>
+                                <td class="p-2">3072 bits</td>
+                                <td class="p-2">128 bits</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="mt-4 p-3 bg-red-50 rounded text-xs dark:bg-gray-600">
+                    <h4 class="font-medium mb-1">Warning:</h4>
+                    <p>Small keys (like in this demo) can be factored instantly. Always use cryptographically secure primes in production.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PGP ARCHITECTURE DEMO -->
+        <section id="pgp" class="mb-12 p-6 bg-cyan-50 rounded-xl dark:bg-gray-800">
+            <h2 class="text-2xl font-semibold mb-4">PGP Architecture</h2>
+            
+            <div class="pgp-flow mb-6">
+                <div class="mermaid">
+                    graph LR
+                        A[User] -->|Plaintext| B[Compression]
+                        B --> C[Symmetric Encryption]
+                        C --> D[Session Key]
+                        D --> E[Asymmetric Encryption]
+                        E --> F[Recipient's Public Key]
+                        F --> G[Transmission]
+                        G --> H[Recipient]
+                        H --> I[Asymmetric Decryption]
+                        I --> J[Session Key]
+                        J --> K[Symmetric Decryption]
+                        K --> L[Decompression]
+                        L --> M[Plaintext]
+                </div>
+            </div>
+            
+            <div class="pgp-applications grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                    <h4 class="font-bold mb-2 flex items-center">
+                        <i class="fas fa-envelope mr-2"></i> Email Security
+                    </h4>
+                    <p class="text-sm">End-to-end encrypted email with PGP/GPG</p>
+                </div>
+                <div class="p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                    <h4 class="font-bold mb-2 flex items-center">
+                        <i class="fas fa-file-archive mr-2"></i> File Encryption
+                    </h4>
+                    <p class="text-sm">Encrypt files for specific recipients</p>
+                </div>
+                <div class="p-4 bg-white rounded-lg shadow dark:bg-gray-700">
+                    <h4 class="font-bold mb-2 flex items-center">
+                        <i class="fas fa-signature mr-2"></i> Digital Signatures
+                    </h4>
+                    <p class="text-sm">Verify authenticity and integrity</p>
+                </div>
+            </div>
+            
+            <div class="email-demo border-2 border-gray-300 p-4 rounded-lg dark:border-gray-600">
+                <h3 class="text-lg font-medium mb-3">PGP Email Simulation</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="sender">
+                        <h4 class="font-medium text-sm mb-2">Sender</h4>
+                        <textarea id="pgpMessage" class="w-full border p-2 rounded dark:bg-gray-700" rows="4" placeholder="Type your secret message"></textarea>
+                        <button id="pgpEncrypt" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white p-2 rounded w-full">
+                            <i class="fas fa-lock mr-1"></i> Encrypt Message
+                        </button>
+                    </div>
+                    <div class="recipient">
+                        <h4 class="font-medium text-sm mb-2">Encrypted Message</h4>
+                        <div id="pgpOutput" class="w-full border p-2 rounded bg-gray-100 min-h-[116px] dark:bg-gray-700 dark:border-gray-600">
+                            PGP message will appear here
+                        </div>
+                        <button id="pgpDecrypt" class="mt-2 bg-green-500 hover:bg-green-600 text-white p-2 rounded w-full" disabled>
+                            <i class="fas fa-unlock mr-1"></i> Decrypt Message
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mt-4 p-3 bg-white rounded-lg shadow dark:bg-gray-700">
+                    <h4 class="font-medium text-sm mb-2">What's happening:</h4>
+                    <ol class="list-decimal pl-5 text-xs">
+                        <li class="mb-1">System generates random session key</li>
+                        <li class="mb-1">Message encrypted with session key (AES)</li>
+                        <li class="mb-1">Session key encrypted with recipient's public key (RSA)</li>
+                        <li class="mb-1">Both sent together as PGP message</li>
+                        <li>Recipient decrypts session key with private key, then decrypts message</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ALGORITHM CHALLENGE ZONE -->
+    <div class="algorithm-challenge  bottom-4 right-4 bg-white p-4 shadow-xl rounded-lg border-2 border-rose-600 no-print dark:bg-gray-800" >
+        <h3 class="font-bold text-lg mb-2">Crypto Challenges</h3>
+        
+        <div class="challenge-tabs flex border-b border-gray-200 mb-3">
+            <button class="challenge-tab active px-3 py-1 text-sm font-medium" data-tab="des-challenge">DES</button>
+            <button class="challenge-tab px-3 py-1 text-sm font-medium" data-tab="rsa-challenge">RSA</button>
+            <button class="challenge-tab px-3 py-1 text-sm font-medium" data-tab="pgp-challenge">PGP</button>
+        </div>
+        
+        <!-- DES Challenge -->
+        <div class="challenge-content" id="des-challenge">
+            <p class="text-sm mb-3">Given this DES ciphertext and plaintext, find the key:</p>
+            <div class="mb-2 p-2 bg-gray-100 rounded text-xs dark:bg-gray-700">
+                <p>Plaintext: 0123456789ABCDEF</p>
+                <p>Ciphertext: <span class="font-mono">85E813540F0AB405</span></p>
+            </div>
+            <input type="text" id="desKeyGuess" class="w-full border p-2 rounded mb-2 dark:bg-gray-700" placeholder="Enter 16-character hex key">
+            <button id="checkDesKey" class="bg-rose-600 hover:bg-rose-700 text-white p-2 rounded w-full">
+                Check Key
+            </button>
+            <p id="desChallengeResult" class="mt-2 text-sm hidden"></p>
+        </div>
+        
+        <!-- RSA Challenge -->
+        <div class="challenge-content hidden" id="rsa-challenge">
+            <p class="text-sm mb-3">Factor this RSA modulus to break the key:</p>
+            <div class="mb-2 p-2 bg-gray-100 rounded text-xs dark:bg-gray-700">
+                <p>n = 3233</p>
+                <p>e = 17</p>
+            </div>
+            <div class="grid grid-cols-2 gap-2 mb-2">
+                <input type="number" id="rsaPGuess" class="border p-2 rounded dark:bg-gray-700" placeholder="p">
+                <input type="number" id="rsaQGuess" class="border p-2 rounded dark:bg-gray-700" placeholder="q">
+            </div>
+            <button id="checkRsaFactors" class="bg-rose-600 hover:bg-rose-700 text-white p-2 rounded w-full">
+                Factorize
+            </button>
+            <p id="rsaChallengeResult" class="mt-2 text-sm hidden"></p>
+        </div>
+        
+        <!-- PGP Challenge -->
+        <div class="challenge-content hidden" id="pgp-challenge">
+            <p class="text-sm mb-3">Identify the vulnerability in this PGP message:</p>
+            <div class="mb-2 p-2 bg-gray-100 rounded text-xs font-mono dark:bg-gray-700">
+                <p>-----BEGIN PGP MESSAGE-----</p>
+                <p>Version: OpenPGP.js v4.10.10</p>
+                <p>No session key</p>
+                <p>-----END PGP MESSAGE-----</p>
+            </div>
+            <select id="pgpVulnSelect" class="w-full border p-2 rounded mb-2 dark:bg-gray-700">
+                <option value="">Select vulnerability</option>
+                <option value="noenc">No encryption</option>
+                <option value="weakkey">Weak session key</option>
+                <option value="missingkey">Missing session key</option>
+                <option value="fake">Fake signature</option>
+            </select>
+            <button id="checkPgpVuln" class="bg-rose-600 hover:bg-rose-700 text-white p-2 rounded w-full">
+                Submit Answer
+            </button>
+            <p id="pgpChallengeResult" class="mt-2 text-sm hidden"></p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            }
+        });
+        
+        // Dark mode toggle
+        document.getElementById('darkModeToggle').addEventListener('click', function() {
+            document.documentElement.classList.toggle('dark');
+            const icon = this.querySelector('i');
+            if (document.documentElement.classList.contains('dark')) {
+                icon.classList.replace('fa-moon', 'fa-sun');
+                this.textContent = ' Light Mode';
+            } else {
+                icon.classList.replace('fa-sun', 'fa-moon');
+                this.textContent = ' Dark Mode';
+            }
+            this.prepend(icon);
+        });
+        
+        // Initialize DES block visualization
+        function initDESBlock() {
+            const blockContainer = document.getElementById('desBlock');
+            blockContainer.innerHTML = '';
+            
+            // Create 64-bit block
+            for (let i = 0; i < 64; i++) {
+                const bit = document.createElement('div');
+                bit.className = 'bit-cell border bg-white text-xs cursor-pointer dark:bg-gray-700';
+                bit.textContent = Math.round(Math.random());
+                bit.addEventListener('click', function() {
+                    this.textContent = this.textContent === '1' ? '0' : '1';
+                });
+                blockContainer.appendChild(bit);
+            }
+            
+            // Initialize permutation grid (simplified)
+            const ipContainer = document.getElementById('initialPermutation');
+            ipContainer.innerHTML = '';
+            for (let i = 0; i < 64; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'bit-cell border bg-gray-100 text-xs text-center dark:bg-gray-600';
+                cell.textContent = (i % 8) + 1;
+                ipContainer.appendChild(cell);
+            }
+            
+            // Initialize DES key
+            const keyContainer = document.getElementById('desKey');
+            keyContainer.innerHTML = '';
+            for (let i = 0; i < 56; i++) {
+                const bit = document.createElement('div');
+                bit.className = 'bit-cell border bg-white text-xs dark:bg-gray-700';
+                bit.textContent = Math.round(Math.random());
+                keyContainer.appendChild(bit);
+            }
+            
+            // Initialize round visualization
+            updateRoundVisualization(1);
+        }
+        
+        // Update DES round visualization
+        function updateRoundVisualization(round) {
+            document.getElementById('roundNumber').textContent = round;
+            document.getElementById('roundCounter').textContent = round;
+            
+            // Generate random bits for visualization
+            const leftBits = document.getElementById('leftInput');
+            const rightBits = document.getElementById('rightInput');
+            const expansionBits = document.getElementById('expansionBits');
+            const keyXorBits = document.getElementById('keyXorBits');
+            const sboxOutput = document.getElementById('sboxOutput');
+            const permutationOutput = document.getElementById('permutationOutput');
+            
+            leftBits.innerHTML = rightBits.innerHTML = '';
+            expansionBits.innerHTML = keyXorBits.innerHTML = '';
+            sboxOutput.innerHTML = permutationOutput.innerHTML = '';
+            
+            // Left and right inputs (32 bits each, simplified to 16 for display)
+            for (let i = 0; i < 16; i++) {
+                const leftBit = document.createElement('div');
+                leftBit.className = 'bit-cell border bg-white text-xs dark:bg-gray-700';
+                leftBit.textContent = Math.round(Math.random());
+                leftBits.appendChild(leftBit);
+                
+                const rightBit = document.createElement('div');
+                rightBit.className = 'bit-cell border bg-white text-xs dark:bg-gray-700';
+                rightBit.textContent = Math.round(Math.random());
+                rightBits.appendChild(rightBit);
+            }
+            
+            // Expansion (32 to 48 bits, simplified to 24 for display)
+            for (let i = 0; i < 24; i++) {
+                const bit = document.createElement('div');
+                bit.className = 'bit-cell border bg-blue-100 text-xs dark:bg-blue-900';
+                bit.textContent = Math.round(Math.random());
+                expansionBits.appendChild(bit);
+            }
+            
+            // Key XOR (48 bits, simplified to 24)
+            for (let i = 0; i < 24; i++) {
+                const bit = document.createElement('div');
+                bit.className = 'bit-cell border bg-purple-100 text-xs dark:bg-purple-900';
+                bit.textContent = Math.round(Math.random());
+                keyXorBits.appendChild(bit);
+            }
+            
+            // S-box output (32 bits, simplified to 16)
+            for (let i = 0; i < 16; i++) {
+                const bit = document.createElement('div');
+                bit.className = 'bit-cell border bg-green-100 text-xs dark:bg-green-900';
+                bit.textContent = Math.round(Math.random());
+                sboxOutput.appendChild(bit);
+            }
+            
+            // Permutation output (32 bits, simplified to 16)
+            for (let i = 0; i < 16; i++) {
+                const bit = document.createElement('div');
+                bit.className = 'bit-cell border bg-yellow-100 text-xs dark:bg-yellow-900';
+                bit.textContent = Math.round(Math.random());
+                permutationOutput.appendChild(bit);
+            }
+            
+            // Update subkey display
+            document.getElementById('currentSubkey').textContent = 
+                `Round ${round} Subkey: ${Array(12).fill(0).map(() => Math.floor(Math.random()*16).toString(16)).join('')}...`;
+        }
+        
+        // DES Brute Force Simulator
+        let bruteForceInterval;
+        let bruteForceProgress = 0;
+        let bruteForceStartTime;
+        let keysTested = 0;
+        
+        document.getElementById('startBrute').addEventListener('click', function() {
+            this.disabled = true;
+            document.getElementById('pauseBrute').disabled = false;
+            bruteForceStartTime = new Date();
+            
+            bruteForceInterval = setInterval(function() {
+                bruteForceProgress += Math.random() * 0.5;
+                keysTested += 1000000 + Math.floor(Math.random() * 9000000);
+                
+                if (bruteForceProgress >= 100) {
+                    bruteForceProgress = 100;
+                    clearInterval(bruteForceInterval);
+                    document.getElementById('bruteResult').innerHTML = 
+                        '<div class="p-2 bg-green-100 rounded text-sm dark:bg-green-900 dark:bg-opacity-20">' +
+                        'Key found after testing ' + keysTested.toLocaleString() + ' possibilities!' +
+                        '</div>';
+                    document.getElementById('startBrute').disabled = false;
+                    document.getElementById('pauseBrute').disabled = true;
+                }
+                
+                document.getElementById('bruteProgress').style.width = bruteForceProgress + '%';
+                document.getElementById('progressPercent').textContent = Math.min(100, Math.round(bruteForceProgress)) + '%';
+                document.getElementById('keysTested').textContent = keysTested.toLocaleString();
+                
+                const secondsElapsed = Math.floor((new Date() - bruteForceStartTime) / 1000);
+                document.getElementById('timeElapsed').textContent = secondsElapsed + 's';
+            }, 100);
+        });
+        
+        document.getElementById('pauseBrute').addEventListener('click', function() {
+            clearInterval(bruteForceInterval);
+            this.disabled = true;
+            document.getElementById('startBrute').disabled = false;
+        });
+        
+        document.getElementById('resetBrute').addEventListener('click', function() {
+            clearInterval(bruteForceInterval);
+            bruteForceProgress = 0;
+            keysTested = 0;
+            document.getElementById('bruteProgress').style.width = '0%';
+            document.getElementById('progressPercent').textContent = '0%';
+            document.getElementById('keysTested').textContent = '0';
+            document.getElementById('timeElapsed').textContent = '0s';
+            document.getElementById('bruteResult').classList.add('hidden');
+            document.getElementById('startBrute').disabled = false;
+            document.getElementById('pauseBrute').disabled = true;
+        });
+        
+        // Differential Cryptanalysis Demo
+        document.getElementById('demoCryptanalysis').addEventListener('click', function() {
+            const resultDiv = document.getElementById('cryptanalysisResult');
+            resultDiv.classList.remove('hidden');
+            
+            // Simulate analysis steps
+            resultDiv.innerHTML = '<p class="text-sm">Starting differential cryptanalysis...</p>';
+            
+            setTimeout(() => {
+                resultDiv.innerHTML += '<p class="text-sm mt-2">Analyzing ciphertext differences...</p>';
+            }, 1000);
+            
+            setTimeout(() => {
+                resultDiv.innerHTML += '<p class="text-sm mt-2">Identifying probable S-box inputs...</p>';
+            }, 2000);
+            
+            setTimeout(() => {
+                resultDiv.innerHTML += '<p class="text-sm mt-2">Recovering 12 bits of round key...</p>';
+            }, 3000);
+            
+            setTimeout(() => {
+                resultDiv.innerHTML += 
+                    '<p class="text-sm mt-2 font-medium">Partial key recovered: 3A??F2??9E?? (where ? is unknown)</p>' +
+                    '<p class="text-xs mt-1">Complete attack would require more chosen plaintext pairs</p>';
+            }, 4000);
+        });
+        
+        // RSA Key Generation
+        document.getElementById('generateKeys').addEventListener('click', function() {
+            const p = parseInt(document.getElementById('rsaP').value) || 61;
+            const q = parseInt(document.getElementById('rsaQ').value) || 53;
+            let e = parseInt(document.getElementById('rsaE').value) || 17;
+            
+            if (!isPrime(p) || !isPrime(q)) {
+                alert('Please enter prime numbers for p and q');
+                return;
+            }
+            
+            const n = p * q;
+            const phi = (p - 1) * (q - 1);
+            
+            // Find suitable e if not provided
+            if (!e || e >= phi || gcd(e, phi) !== 1) {
+                e = findCoprime(phi);
+                document.getElementById('rsaE').value = e;
+            }
+            
+            // Calculate modular inverse (d)
+            const d = modInverse(e, phi);
+            
+            // Update displays
+            document.getElementById('rsaN').innerHTML = `n = ${n}`;
+            document.getElementById('rsaPhi').innerHTML = `ϕ(n) = ${phi}`;
+            document.getElementById('rsaD').innerHTML = `d = ${d}`;
+            
+            document.getElementById('keyOutput').innerHTML = 
+                `<p>Public Key: (e, n) = (${e}, ${n})</p>` +
+                `<p>Private Key: (d, n) = (${d}, ${n})</p>`;
+            
+            // Enable encryption/decryption buttons
+            document.getElementById('encryptBtn').disabled = false;
+            document.getElementById('decryptBtn').disabled = false;
+            
+            // Update factorability meter
+            updateFactorability(n);
+        });
+        
+        // RSA Encryption
+        document.getElementById('encryptBtn').addEventListener('click', function() {
+            const e = parseInt(document.getElementById('rsaE').value);
+            const n = parseInt(document.getElementById('rsaN').textContent.split('=')[1].trim());
+            const m = parseInt(document.getElementById('rsaPlaintext').value) || 123;
+            
+            if (m >= n) {
+                alert('Message must be smaller than n');
+                return;
+            }
+            
+            // Simulate modular exponentiation
+            const c = modExp(m, e, n);
+            
+            document.getElementById('ciphertextOutput').innerHTML = 
+                `<div class="p-2 bg-blue-100 rounded text-sm dark:bg-blue-900 dark:bg-opacity-20">
+                    Ciphertext: ${c}
+                </div>`;
+        });
+        
+        // RSA Decryption
+        document.getElementById('decryptBtn').addEventListener('click', function() {
+            const d = parseInt(document.getElementById('rsaD').textContent.split('=')[1].trim());
+            const n = parseInt(document.getElementById('rsaN').textContent.split('=')[1].trim());
+            const c = parseInt(document.getElementById('ciphertextOutput').textContent.split(':')[1]) || 855;
+            
+            // Simulate modular exponentiation
+            const m = modExp(c, d, n);
+            
+            document.getElementById('plaintextOutput').innerHTML = 
+                `<div class="p-2 bg-green-100 rounded text-sm dark:bg-green-900 dark:bg-opacity-20">
+                    Plaintext: ${m}
+                </div>`;
+        });
+        
+        // PGP Encryption Simulation
+        document.getElementById('pgpEncrypt').addEventListener('click', function() {
+            const message = document.getElementById('pgpMessage').value;
+            if (!message.trim()) {
+                alert('Please enter a message');
+                return;
+            }
+            
+            // Simulate PGP encryption
+            const sessionKey = generateRandomHex(32);
+            const encryptedMessage = `-----BEGIN PGP MESSAGE-----\n` +
+                                    `Version: Crypto Demo\n\n` +
+                                    `Session Key: ${sessionKey}\n` +
+                                    `Encrypted: ${CryptoJS.AES.encrypt(message, sessionKey).toString()}\n` +
+                                    `-----END PGP MESSAGE-----`;
+            
+            document.getElementById('pgpOutput').textContent = encryptedMessage;
+            document.getElementById('pgpDecrypt').disabled = false;
+        });
+        
+        // PGP Decryption Simulation
+        document.getElementById('pgpDecrypt').addEventListener('click', function() {
+            const pgpMessage = document.getElementById('pgpOutput').textContent;
+            
+            // Extract session key (simulated)
+            const sessionKeyMatch = pgpMessage.match(/Session Key: ([0-9A-F]+)/);
+            if (!sessionKeyMatch) {
+                alert('Invalid PGP message format');
+                return;
+            }
+            
+            const sessionKey = sessionKeyMatch[1];
+            const encryptedMatch = pgpMessage.match(/Encrypted: (.+)/);
+            
+            try {
+                const decrypted = CryptoJS.AES.decrypt(encryptedMatch[1], sessionKey).toString(CryptoJS.enc.Utf8);
+                document.getElementById('pgpOutput').textContent = decrypted || "Decryption failed (wrong key?)";
+            } catch (e) {
+                alert('Decryption failed: ' + e.message);
+            }
+        });
+        
+        // Challenge tabs
+        document.querySelectorAll('.challenge-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.challenge-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                const tabId = this.getAttribute('data-tab');
+                document.querySelectorAll('.challenge-content').forEach(content => {
+                    content.classList.add('hidden');
+                });
+                document.getElementById(tabId).classList.remove('hidden');
+            });
+        });
+        
+        // DES Challenge
+        document.getElementById('checkDesKey').addEventListener('click', function() {
+            const guess = document.getElementById('desKeyGuess').value.toUpperCase();
+            const resultDiv = document.getElementById('desChallengeResult');
+            
+            if (guess === '133457799BBCDFF1') {  // Known test key for this plaintext/ciphertext pair
+                resultDiv.textContent = 'Correct! This is the known test key for DES.';
+                resultDiv.className = 'mt-2 text-sm text-green-600';
+            } else {
+                resultDiv.textContent = 'Incorrect. Try researching DES test vectors.';
+                resultDiv.className = 'mt-2 text-sm text-red-600';
+            }
+            resultDiv.classList.remove('hidden');
+        });
+        
+        // RSA Challenge
+        document.getElementById('checkRsaFactors').addEventListener('click', function() {
+            const p = parseInt(document.getElementById('rsaPGuess').value);
+            const q = parseInt(document.getElementById('rsaQGuess').value);
+            const resultDiv = document.getElementById('rsaChallengeResult');
+            
+            if (p === 53 && q === 61 || p === 61 && q === 53) {
+                resultDiv.textContent = 'Correct! 3233 = 53 × 61. Now you can compute ϕ(n) and d.';
+                resultDiv.className = 'mt-2 text-sm text-green-600';
+            } else if (p * q === 3233) {
+                resultDiv.textContent = 'Correct factors! Though in real RSA, p and q should be primes.';
+                resultDiv.className = 'mt-2 text-sm text-green-600';
+            } else {
+                resultDiv.textContent = 'Incorrect. Try smaller primes that multiply to 3233.';
+                resultDiv.className = 'mt-2 text-sm text-red-600';
+            }
+            resultDiv.classList.remove('hidden');
+        });
+        
+        // PGP Challenge
+        document.getElementById('checkPgpVuln').addEventListener('click', function() {
+            const selection = document.getElementById('pgpVulnSelect').value;
+            const resultDiv = document.getElementById('pgpChallengeResult');
+            
+            if (selection === 'missingkey') {
+                resultDiv.textContent = 'Correct! The message is missing its encrypted session key, making it unreadable.';
+                resultDiv.className = 'mt-2 text-sm text-green-600';
+            } else if (selection) {
+                resultDiv.textContent = 'Not quite. Look at what critical component is missing from the message.';
+                resultDiv.className = 'mt-2 text-sm text-red-600';
+            } else {
+                resultDiv.textContent = 'Please select an option';
+                resultDiv.className = 'mt-2 text-sm text-yellow-600';
+            }
+            resultDiv.classList.remove('hidden');
+        });
+        
+        // Helper functions
+        function isPrime(num) {
+            if (num <= 1) return false;
+            if (num <= 3) return true;
+            if (num % 2 === 0 || num % 3 === 0) return false;
+            
+            for (let i = 5; i * i <= num; i += 6) {
+                if (num % i === 0 || num % (i + 2) === 0) return false;
+            }
+            return true;
+        }
+        
+        function gcd(a, b) {
+            return b === 0 ? a : gcd(b, a % b);
+        }
+        
+        function findCoprime(phi) {
+            // Try common RSA e values first
+            const commonEs = [65537, 17, 3];
+            for (let e of commonEs) {
+                if (e < phi && gcd(e, phi) === 1) return e;
+            }
+            
+            // Find a suitable e if common ones don't work
+            for (let e = 2; e < phi; e++) {
+                if (gcd(e, phi) === 1) return e;
+            }
+            return 1;
+        }
+        
+        function modInverse(a, m) {
+            // Extended Euclidean Algorithm
+            let [oldR, r] = [a, m];
+            let [oldS, s] = [1, 0];
+            let [oldT, t] = [0, 1];
+            
+            while (r !== 0) {
+                const quotient = Math.floor(oldR / r);
+                [oldR, r] = [r, oldR - quotient * r];
+                [oldS, s] = [s, oldS - quotient * s];
+                [oldT, t] = [t, oldT - quotient * t];
+            }
+            
+            return oldS < 0 ? oldS + m : oldS;
+        }
+        
+        function modExp(base, exp, mod) {
+            // Simulate modular exponentiation
+            if (mod === 1) return 0;
+            let result = 1;
+            base = base % mod;
+            
+            while (exp > 0) {
+                if (exp % 2 === 1) result = (result * base) % mod;
+                exp = Math.floor(exp / 2);
+                base = (base * base) % mod;
+            }
+            
+            return result;
+        }
+        
+        function updateFactorability(n) {
+            const factorability = Math.min(100, Math.floor(100 - Math.log2(n) * 1.5));
+            document.getElementById('factorN').textContent = n;
+            document.getElementById('factorabilityBar').style.width = factorability + '%';
+            
+            let factorText;
+            if (n < 1000) {
+                factorText = 'Trivial to factor (n too small)';
+            } else if (n < 10000) {
+                factorText = 'Easy to factor with basic methods';
+            } else if (n < 100000) {
+                factorText = 'Factorable with some effort';
+            } else {
+                factorText = 'Challenging but possible for small n';
+            }
+            
+            document.getElementById('factorabilityText').textContent = factorText;
+        }
+        
+        function generateRandomHex(length) {
+            return Array.from({length}, () => Math.floor(Math.random() * 16).toString(16)).join('').toUpperCase();
+        }
+        
+        // Initialize DES visualization when slider changes
+        document.getElementById('roundSlider').addEventListener('input', function() {
+            updateRoundVisualization(parseInt(this.value));
+        });
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            initDESBlock();
+            
+            // Set up RSA example with small primes
+            document.getElementById('rsaP').value = 61;
+            document.getElementById('rsaQ').value = 53;
+            document.getElementById('rsaE').value = 17;
+        });
+    </script>
+</body>
+</html>

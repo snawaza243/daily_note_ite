@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 6: Malicious Code & Countermeasures</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        red: {
+                            900: '#7f1d1d',
+                        }
+                    }
+                }
+            }
+        }
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        .infection-node {
+            transition: all 0.5s ease;
+        }
+        .infected {
+            background-color: #ef4444 !important;
+        }
+        .protected {
+            background-color: #10b981 !important;
+        }
+        .quarantined {
+            background-color: #f59e0b !important;
+        }
+        .dark-mode {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        .dark-mode .section-dark {
+            background-color: #2d3748;
+            color: #e2e8f0;
+        }
+        .hex-highlight {
+            background-color: #fef08a;
+            color: #000;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <header class="bg-red-900 text-white p-6">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-bold">Chapter 6: Malicious Code & Countermeasures</h1>
+            <button onclick="toggleDarkMode()" class="bg-gray-800 text-white px-4 py-2 rounded-lg">Toggle Dark Mode</button>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4">
+        <!-- MALWARE ZOO -->
+        <section id="malware-types" class="mb-12 p-6 bg-red-50 rounded-xl section-dark">
+            <h2 class="text-2xl font-semibold mb-4">Types of Malicious Software</h2>
+            
+            <div class="malware-grid grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <!-- Virus Card -->
+                <div class="malware-card virus bg-blue-100 p-4 rounded-lg hover:shadow-lg transition">
+                    <div class="icon bg-blue-500 text-white w-12 h-12 rounded-full flex items-center justify-center mb-2">
+                        <i class="fas fa-virus"></i>
+                    </div>
+                    <h3 class="font-bold">Viruses</h3>
+                    <p class="text-sm mt-2">Self-replicating code that attaches to clean files and spreads.</p>
+                    <div class="mt-3">
+                        <span class="inline-block bg-blue-200 text-blue-800 px-2 py-1 rounded text-xs">Requires host</span>
+                        <span class="inline-block bg-blue-200 text-blue-800 px-2 py-1 rounded text-xs ml-1">File infector</span>
+                    </div>
+                    <button onclick="simulateVirus()" class="mt-4 bg-blue-500 text-white p-1 text-xs w-full rounded hover:bg-blue-600">Simulate</button>
+                </div>
+                
+                <!-- Worm Card -->
+                <div class="malware-card worm bg-green-100 p-4 rounded-lg hover:shadow-lg transition">
+                    <div class="icon bg-green-500 text-white w-12 h-12 rounded-full flex items-center justify-center mb-2">
+                        <i class="fas fa-worm"></i>
+                    </div>
+                    <h3 class="font-bold">Worms</h3>
+                    <p class="text-sm mt-2">Standalone malware that replicates to spread to other computers.</p>
+                    <div class="mt-3">
+                        <span class="inline-block bg-green-200 text-green-800 px-2 py-1 rounded text-xs">Network-based</span>
+                        <span class="inline-block bg-green-200 text-green-800 px-2 py-1 rounded text-xs ml-1">Self-replicating</span>
+                    </div>
+                    <button onclick="simulateWorm()" class="mt-4 bg-green-500 text-white p-1 text-xs w-full rounded hover:bg-green-600">Simulate</button>
+                </div>
+                
+                <!-- Trojan Card -->
+                <div class="malware-card trojan bg-yellow-100 p-4 rounded-lg hover:shadow-lg transition">
+                    <div class="icon bg-yellow-500 text-white w-12 h-12 rounded-full flex items-center justify-center mb-2">
+                        <i class="fas fa-horse-head"></i>
+                    </div>
+                    <h3 class="font-bold">Trojans</h3>
+                    <p class="text-sm mt-2">Disguised as legitimate software to trick users into execution.</p>
+                    <div class="mt-3">
+                        <span class="inline-block bg-yellow-200 text-yellow-800 px-2 py-1 rounded text-xs">Non-replicating</span>
+                        <span class="inline-block bg-yellow-200 text-yellow-800 px-2 py-1 rounded text-xs ml-1">Backdoor</span>
+                    </div>
+                    <button onclick="simulateTrojan()" class="mt-4 bg-yellow-500 text-white p-1 text-xs w-full rounded hover:bg-yellow-600">Simulate</button>
+                </div>
+                
+                <!-- Ransomware Card -->
+                <div class="malware-card ransomware bg-purple-100 p-4 rounded-lg hover:shadow-lg transition">
+                    <div class="icon bg-purple-500 text-white w-12 h-12 rounded-full flex items-center justify-center mb-2">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3 class="font-bold">Ransomware</h3>
+                    <p class="text-sm mt-2">Encrypts files and demands payment for decryption.</p>
+                    <div class="mt-3">
+                        <span class="inline-block bg-purple-200 text-purple-800 px-2 py-1 rounded text-xs">Cryptographic</span>
+                        <span class="inline-block bg-purple-200 text-purple-800 px-2 py-1 rounded text-xs ml-1">Extortion</span>
+                    </div>
+                    <button onclick="simulateRansomware()" class="mt-4 bg-purple-500 text-white p-1 text-xs w-full rounded hover:bg-purple-600">Simulate</button>
+                </div>
+            </div>
+            
+            <div class="malware-simulator border-2 border-red-300 p-4 rounded-lg bg-white">
+                <h3 class="font-bold mb-2" id="simulationTitle">Malware Simulation Sandbox</h3>
+                <p class="text-sm mb-4" id="simulationDescription">Select a malware type to begin simulation</p>
+                
+                <div class="simulator-display h-64 mb-4 relative">
+                    <canvas id="infectionCanvas" class="border rounded-md w-full h-full"></canvas>
+                    <div id="simulationStats" class="absolute bottom-2 left-2 bg-black bg-opacity-70 text-white p-2 rounded text-xs">
+                        Nodes: 0 | Infected: 0 | Protected: 0
+                    </div>
+                </div>
+                <div class="controls flex space-x-2">
+                    <button onclick="startSimulation()" class="bg-red-500 text-white p-2 flex-1 rounded hover:bg-red-600">Start Infection</button>
+                    <button onclick="deployCountermeasure()" class="bg-blue-500 text-white p-2 flex-1 rounded hover:bg-blue-600">Deploy AV</button>
+                    <button onclick="resetSimulation()" class="bg-gray-500 text-white p-2 flex-1 rounded hover:bg-gray-600">Reset</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIRUS LIFE CYCLE -->
+        <section id="virus-lifecycle" class="mb-12 p-6 bg-blue-50 rounded-xl section-dark">
+            <h2 class="text-2xl font-semibold mb-4">Virus Life Cycle</h2>
+            
+            <div class="lifecycle-visualization">
+                <div class="mermaid">
+                    stateDiagram-v2
+                        [*] --> Dormant: Infection
+                        Dormant --> Propagation: Activation
+                        Propagation --> Triggering: Condition Met
+                        Triggering --> Execution: Payload
+                        Execution --> [*] OR Propagation
+                </div>
+                
+                <div class="stage-details grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+                    <div class="stage dormant bg-gray-100 p-4 rounded-lg">
+                        <h3 class="font-bold">1. Dormant Phase</h3>
+                        <p class="text-sm mt-2">Virus remains inactive until trigger conditions are met (specific date, program launch, etc.)</p>
+                        <div class="mt-3 p-2 bg-gray-200 rounded">
+                            <p class="text-xs font-semibold">Example:</p>
+                            <p class="text-xs">Michelangelo virus activated on March 6 (artist's birthday)</p>
+                        </div>
+                    </div>
+                    <div class="stage propagation bg-green-100 p-4 rounded-lg">
+                        <h3 class="font-bold">2. Propagation</h3>
+                        <p class="text-sm mt-2">Replicates itself to other files/systems while trying to avoid detection</p>
+                        <div class="mt-3 p-2 bg-green-200 rounded">
+                            <p class="text-xs font-semibold">Example:</p>
+                            <p class="text-xs">ILOVEYOU worm copied itself to all Outlook contacts</p>
+                        </div>
+                    </div>
+                    <div class="stage triggering bg-yellow-100 p-4 rounded-lg">
+                        <h3 class="font-bold">3. Triggering</h3>
+                        <p class="text-sm mt-2">Activated by predefined conditions (date, time, user action, system event)</p>
+                        <div class="mt-3 p-2 bg-yellow-200 rounded">
+                            <p class="text-xs font-semibold">Example:</p>
+                            <p class="text-xs">Stuxnet triggered when specific industrial control systems detected</p>
+                        </div>
+                    </div>
+                    <div class="stage execution bg-red-100 p-4 rounded-lg">
+                        <h3 class="font-bold">4. Execution</h3>
+                        <p class="text-sm mt-2">Delivers payload (destructive actions, data theft, backdoor installation)</p>
+                        <div class="mt-3 p-2 bg-red-200 rounded">
+                            <p class="text-xs font-semibold">Example:</p>
+                            <p class="text-xs">WannaCry encrypted files and displayed ransom note</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="case-study mt-6 p-4 bg-white rounded-lg border">
+                    <h3 class="font-bold">Real-World Example: ILOVEYOU Virus (2000)</h3>
+                    <div class="timeline mt-4 relative pl-8 border-l-2 border-gray-200">
+                        <div class="timeline-event mb-6 relative">
+                            <div class="timeline-dot absolute w-4 h-4 bg-red-500 rounded-full -left-2.5 top-1"></div>
+                            <h4 class="font-semibold">May 4, 2000</h4>
+                            <p class="text-sm">Initial infection in Philippines</p>
+                        </div>
+                        <div class="timeline-event mb-6 relative">
+                            <div class="timeline-dot absolute w-4 h-4 bg-red-500 rounded-full -left-2.5 top-1"></div>
+                            <h4 class="font-semibold">May 5, 2000</h4>
+                            <p class="text-sm">Spread globally via email attachments</p>
+                        </div>
+                        <div class="timeline-event mb-6 relative">
+                            <div class="timeline-dot absolute w-4 h-4 bg-red-500 rounded-full -left-2.5 top-1"></div>
+                            <h4 class="font-semibold">May 5-9, 2000</h4>
+                            <p class="text-sm">Over 50 million infections worldwide</p>
+                        </div>
+                        <div class="timeline-event relative">
+                            <div class="timeline-dot absolute w-4 h-4 bg-red-500 rounded-full -left-2.5 top-1"></div>
+                            <h4 class="font-semibold">Aftermath</h4>
+                            <p class="text-sm">Estimated $15 billion in damages</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COUNTERMEASURES LAB -->
+        <section id="countermeasures" class="mb-12 p-6 bg-green-50 rounded-xl section-dark">
+            <h2 class="text-2xl font-semibold mb-4">Defense Systems</h2>
+            
+            <div class="defense-systems grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="defense-card antivirus bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold">Antivirus Systems</h3>
+                    <div class="tech-tags mt-2">
+                        <span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs mr-1">Signature-based</span>
+                        <span class="inline-block bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs">Heuristics</span>
+                        <span class="inline-block bg-green-100 text-green-800 px-2 py-1 rounded text-xs mt-1">Behavioral</span>
+                    </div>
+                    <div class="effectiveness-meter mt-4">
+                        <div class="text-xs mb-1">Detection Rate: 92% known malware</div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 92%"></div>
+                        </div>
+                    </div>
+                    <div class="mt-3 p-2 bg-blue-50 rounded">
+                        <p class="text-xs"><span class="font-semibold">Best for:</span> Known malware detection, endpoint protection</p>
+                    </div>
+                </div>
+                
+                <div class="defense-card firewall bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold">Firewalls</h3>
+                    <div class="tech-tags mt-2">
+                        <span class="inline-block bg-green-100 text-green-800 px-2 py-1 rounded text-xs mr-1">Packet Filtering</span>
+                        <span class="inline-block bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Stateful</span>
+                        <span class="inline-block bg-red-100 text-red-800 px-2 py-1 rounded text-xs mt-1">Application</span>
+                    </div>
+                    <div class="effectiveness-meter mt-4">
+                        <div class="text-xs mb-1">Network Protection: 85%</div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-green-600 h-2.5 rounded-full" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    <div class="mt-3 p-2 bg-green-50 rounded">
+                        <p class="text-xs"><span class="font-semibold">Best for:</span> Network perimeter defense, traffic filtering</p>
+                    </div>
+                </div>
+                
+                <div class="defense-card ids bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold">IDS/IPS</h3>
+                    <div class="tech-tags mt-2">
+                        <span class="inline-block bg-red-100 text-red-800 px-2 py-1 rounded text-xs mr-1">Anomaly-based</span>
+                        <span class="inline-block bg-indigo-100 text-indigo-800 px-2 py-1 rounded text-xs">Signature</span>
+                        <span class="inline-block bg-pink-100 text-pink-800 px-2 py-1 rounded text-xs mt-1">Hybrid</span>
+                    </div>
+                    <div class="effectiveness-meter mt-4">
+                        <div class="text-xs mb-1">Threat Detection: 78%</div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-red-600 h-2.5 rounded-full" style="width: 78%"></div>
+                        </div>
+                    </div>
+                    <div class="mt-3 p-2 bg-red-50 rounded">
+                        <p class="text-xs"><span class="font-semibold">Best for:</span> Network monitoring, attack detection/prevention</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="defense-simulator border-2 border-green-300 p-4 rounded-lg bg-white">
+                <h3 class="font-bold mb-2">Network Defense Simulator</h3>
+                <p class="text-sm mb-4">Test different defense configurations against malware attacks</p>
+                
+                <div class="network-visualization h-64 mb-4 relative">
+                    <canvas id="networkCanvas" class="border rounded-md w-full h-full"></canvas>
+                    <div id="defenseStats" class="absolute bottom-2 left-2 bg-black bg-opacity-70 text-white p-2 rounded text-xs">
+                        Attacks: 0 | Blocked: 0 | Bypassed: 0
+                    </div>
+                </div>
+                <div class="controls grid grid-cols-2 md:grid-cols-4 gap-2">
+                    <button onclick="launchAttack('worm')" class="bg-red-500 text-white p-2 rounded hover:bg-red-600">Deploy Worm</button>
+                    <button onclick="launchAttack('trojan')" class="bg-orange-500 text-white p-2 rounded hover:bg-orange-600">Deploy Trojan</button>
+                    <button onclick="activateFirewall()" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Enable Firewall</button>
+                    <button onclick="activateIDS()" class="bg-purple-500 text-white p-2 rounded hover:bg-purple-600">Enable IDS</button>
+                    <button onclick="activateAV()" class="bg-green-500 text-white p-2 rounded hover:bg-green-600">Enable AV</button>
+                    <button onclick="enableAllDefenses()" class="bg-indigo-500 text-white p-2 rounded hover:bg-indigo-600">Enable All</button>
+                    <button onclick="resetDefense()" class="bg-gray-500 text-white p-2 rounded hover:bg-gray-600">Reset</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- DETECTION TECHNIQUES -->
+        <section id="detection" class="mb-12 p-6 bg-yellow-50 rounded-xl section-dark">
+            <h2 class="text-2xl font-semibold mb-4">Detection & Prevention</h2>
+            
+            <div class="techniques grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="signature-based">
+                    <h3 class="text-xl font-medium">Signature-Based Detection</h3>
+                    <p class="text-sm mt-2">Identifies known malware by unique patterns (hashes, strings, byte sequences)</p>
+                    
+                    <div class="hex-viewer mt-4 p-4 bg-black text-green-400 font-mono text-xs rounded-lg overflow-auto h-48">
+                        00000000: 4D 5A 90 00 03 00 00 00 04 00 00 00 FF FF 00 00  MZ..............
+                        00000010: B8 00 00 00 00 00 00 00 40 00 00 00 00 00 00 00  ........@.......
+                        00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+                        00000030: 00 00 00 00 00 00 00 00 00 00 00 00 <span class="hex-highlight">E8 00 00 00</span>  ................
+                        00000040: 0E 1F BA 0E 00 B4 09 CD 21 B8 01 4C CD 21 54 68  ........!..L.!Th
+                        00000050: 69 73 20 70 72 6F 67 72 61 6D 20 63 61 6E 6E 6F  is program canno
+                        00000060: 74 20 62 65 20 72 75 6E 20 69 6E 20 44 4F 53 20  t be run in DOS 
+                        00000070: 6D 6F 64 65 2E 0D 0D 0A 24 00 00 00 00 00 00 00  mode....$.......
+                    </div>
+                    <p class="mt-2 text-sm">Example: PE file header signature detection (highlighted entry point)</p>
+                    
+                    <div class="mt-4 p-3 bg-blue-50 rounded">
+                        <h4 class="font-semibold">Pros & Cons</h4>
+                        <div class="grid grid-cols-2 gap-2 mt-2">
+                            <div class="p-2 bg-green-50 rounded">
+                                <p class="text-xs font-semibold">Advantages:</p>
+                                <ul class="list-disc pl-5 text-xs">
+                                    <li>Low false positives</li>
+                                    <li>Fast scanning</li>
+                                    <li>Proven effectiveness</li>
+                                </ul>
+                            </div>
+                            <div class="p-2 bg-red-50 rounded">
+                                <p class="text-xs font-semibold">Limitations:</p>
+                                <ul class="list-disc pl-5 text-xs">
+                                    <li>Cannot detect new malware</li>
+                                    <li>Easily bypassed by obfuscation</li>
+                                    <li>Signature database maintenance</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="behavioral">
+                    <h3 class="text-xl font-medium">Behavioral Analysis</h3>
+                    <p class="text-sm mt-2">Identifies malware by monitoring runtime behavior (API calls, file operations, network activity)</p>
+                    
+                    <div class="behavior-chart mt-4">
+                        <div id="behaviorRadar" class="h-48"></div>
+                    </div>
+                    <p class="mt-2 text-sm">Example behavioral profile showing suspicious activity patterns</p>
+                    
+                    <div class="mt-4 p-3 bg-blue-50 rounded">
+                        <h4 class="font-semibold">Detection Indicators</h4>
+                        <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
+                            <div class="p-1 bg-yellow-100 rounded">Process injection</div>
+                            <div class="p-1 bg-yellow-100 rounded">Registry persistence</div>
+                            <div class="p-1 bg-yellow-100 rounded">Code obfuscation</div>
+                            <div class="p-1 bg-yellow-100 rounded">Network beaconing</div>
+                            <div class="p-1 bg-yellow-100 rounded">Fileless execution</div>
+                            <div class="p-1 bg-yellow-100 rounded">Privilege escalation</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="prevention-checklist mt-6 p-4 bg-white rounded-lg shadow">
+                <h3 class="font-bold mb-2">Enterprise Prevention Checklist</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h4 class="font-semibold text-sm">Technical Controls</h4>
+                        <ul class="list-disc pl-5 space-y-1 text-sm">
+                            <li>Regular patch management cycle</li>
+                            <li>Application whitelisting</li>
+                            <li>Network segmentation</li>
+                            <li>Email attachment sandboxing</li>
+                            <li>Endpoint detection and response (EDR)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-sm">Policy Controls</h4>
+                        <ul class="list-disc pl-5 space-y-1 text-sm">
+                            <li>Principle of least privilege</li>
+                            <li>User security training</li>
+                            <li>Incident response plan</li>
+                            <li>Backup and recovery testing</li>
+                            <li>Vendor risk management</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MALWARE ANALYSIS CHALLENGES -->
+    <div class="challenges  bottom-4 right-4 bg-white p-4 shadow-xl rounded-lg border-2 border-red-600 ">
+        <h3 class="font-bold text-lg mb-2">Analysis Challenges</h3>
+        <div class="space-y-3">
+            <div class="challenge p-2 border rounded hover:bg-gray-50 cursor-pointer" onclick="showChallenge(1)">
+                <h4 class="font-semibold">1. Identify Malware Type</h4>
+                <p class="text-xs">Analyze behavior to classify malware</p>
+            </div>
+            <div class="challenge p-2 border rounded hover:bg-gray-50 cursor-pointer" onclick="showChallenge(2)">
+                <h4 class="font-semibold">2. Configure Defenses</h4>
+                <p class="text-xs">Optimize firewall rules against attack</p>
+            </div>
+            <div class="challenge p-2 border rounded hover:bg-gray-50 cursor-pointer" onclick="showChallenge(3)">
+                <h4 class="font-semibold">3. Analyze Hex Dump</h4>
+                <p class="text-xs">Find malware signature in binary</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode toggle
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            document.querySelectorAll('.section-dark').forEach(el => {
+                el.classList.toggle('bg-gray-800');
+                el.classList.toggle('text-white');
+            });
+        }
+
+        // Malware simulation variables
+        let currentMalwareType = null;
+        let infectionInterval = null;
+        let infectionNodes = [];
+        let protectedNodes = 0;
+        let infectionCount = 0;
+        let totalNodes = 50;
+        let infectionRate = 1;
+        let canvas, networkCanvas, ctx, networkCtx;
+
+        // Initialize canvases
+        function initCanvases() {
+            canvas = document.getElementById('infectionCanvas');
+            networkCanvas = document.getElementById('networkCanvas');
+            ctx = canvas.getContext('2d');
+            networkCtx = networkCanvas.getContext('2d');
+            
+            // Set canvas dimensions
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            networkCanvas.width = networkCanvas.offsetWidth;
+            networkCanvas.height = networkCanvas.offsetHeight;
+            
+            // Initialize infection nodes
+            resetSimulation();
+        }
+
+        // Reset simulation
+        function resetSimulation() {
+            clearInterval(infectionInterval);
+            infectionNodes = [];
+            protectedNodes = 0;
+            infectionCount = 0;
+            
+            // Create nodes
+            for (let i = 0; i < totalNodes; i++) {
+                infectionNodes.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    infected: false,
+                    protected: false,
+                    quarantined: false
+                });
+            }
+            
+            updateStats();
+            drawNodes();
+        }
+
+        // Draw nodes on canvas
+        function drawNodes() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            infectionNodes.forEach(node => {
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, 6, 0, Math.PI * 2);
+                
+                if (node.quarantined) {
+                    ctx.fillStyle = '#f59e0b'; // Quarantined (orange)
+                } else if (node.infected) {
+                    ctx.fillStyle = '#ef4444'; // Infected (red)
+                } else if (node.protected) {
+                    ctx.fillStyle = '#10b981'; // Protected (green)
+                } else {
+                    ctx.fillStyle = '#d1d5db'; // Healthy (gray)
+                }
+                
+                ctx.fill();
+                ctx.strokeStyle = '#6b7280';
+                ctx.stroke();
+            });
+        }
+
+        // Update stats display
+        function updateStats() {
+            const infected = infectionNodes.filter(n => n.infected).length;
+            const protectedCount = infectionNodes.filter(n => n.protected).length;
+            document.getElementById('simulationStats').textContent = 
+                `Nodes: ${totalNodes} | Infected: ${infected} | Protected: ${protectedCount}`;
+        }
+
+        // Malware simulation functions
+        function simulateVirus() {
+            currentMalwareType = 'virus';
+            document.getElementById('simulationTitle').textContent = 'Virus Simulation';
+            document.getElementById('simulationDescription').textContent = 
+                'Simulating file-infecting virus that spreads through document macros and executable files.';
+            infectionRate = 1;
+            resetSimulation();
+        }
+
+        function simulateWorm() {
+            currentMalwareType = 'worm';
+            document.getElementById('simulationTitle').textContent = 'Worm Simulation';
+            document.getElementById('simulationDescription').textContent = 
+                'Simulating network worm that spreads automatically through vulnerabilities and shares.';
+            infectionRate = 3;
+            resetSimulation();
+        }
+
+        function simulateTrojan() {
+            currentMalwareType = 'trojan';
+            document.getElementById('simulationTitle').textContent = 'Trojan Simulation';
+            document.getElementById('simulationDescription').textContent = 
+                'Simulating trojan horse that disguises as legitimate software but contains malicious payload.';
+            infectionRate = 0.5;
+            resetSimulation();
+        }
+
+        function simulateRansomware() {
+            currentMalwareType = 'ransomware';
+            document.getElementById('simulationTitle').textContent = 'Ransomware Simulation';
+            document.getElementById('simulationDescription').textContent = 
+                'Simulating ransomware that encrypts files and demands payment for decryption.';
+            infectionRate = 2;
+            resetSimulation();
+        }
+
+        // Start infection
+        function startSimulation() {
+            if (!currentMalwareType) {
+                alert('Please select a malware type first');
+                return;
+            }
+            
+            // Infect first node
+            if (infectionNodes.filter(n => n.infected).length === 0) {
+                infectionNodes[0].infected = true;
+                infectionCount++;
+                drawNodes();
+                updateStats();
+            }
+            
+            // Start spreading
+            infectionInterval = setInterval(() => {
+                const infectedNodes = infectionNodes.filter(n => n.infected && !n.protected && !n.quarantined);
+                
+                infectedNodes.forEach(infectedNode => {
+                    // Find nearby nodes to infect
+                    infectionNodes.forEach(node => {
+                        if (!node.infected && !node.protected && !node.quarantined) {
+                            const distance = Math.sqrt(
+                                Math.pow(infectedNode.x - node.x, 2) + 
+                                Math.pow(infectedNode.y - node.y, 2)
+                            );
+                            
+                            if (distance < 50 && Math.random() < 0.3 * infectionRate) {
+                                node.infected = true;
+                                infectionCount++;
+                            }
+                        }
+                    });
+                });
+                
+                drawNodes();
+                updateStats();
+                
+                // Check if all nodes are infected
+                if (infectionCount >= totalNodes - protectedNodes) {
+                    clearInterval(infectionInterval);
+                    
+                    if (currentMalwareType === 'ransomware') {
+                        alert('All your files have been encrypted! Pay 5 BTC to decrypt them.');
+                    }
+                }
+            }, 500);
+        }
+
+        // Deploy countermeasure
+        function deployCountermeasure() {
+            if (infectionInterval) {
+                // Quarantine some infected nodes
+                infectionNodes.forEach(node => {
+                    if (node.infected && !node.protected && Math.random() < 0.4) {
+                        node.quarantined = true;
+                    }
+                });
+                
+                // Protect some uninfected nodes
+                infectionNodes.forEach(node => {
+                    if (!node.infected && !node.protected && Math.random() < 0.7) {
+                        node.protected = true;
+                        protectedNodes++;
+                    }
+                });
+                
+                drawNodes();
+                updateStats();
+            }
+        }
+
+        // Network defense simulation
+        let attackInterval = null;
+        let attacksLaunched = 0;
+        let attacksBlocked = 0;
+        let firewallActive = false;
+        let idsActive = false;
+        let avActive = false;
+
+        function initNetworkSimulation() {
+            // Draw network diagram
+            drawNetwork();
+        }
+
+        function drawNetwork() {
+            networkCtx.clearRect(0, 0, networkCanvas.width, networkCanvas.height);
+            
+            // Draw network elements
+            // Internet cloud
+            drawCloud(networkCanvas.width * 0.2, networkCanvas.height * 0.2, 80, 60);
+            
+            // Firewall
+            drawFirewall(networkCanvas.width * 0.4, networkCanvas.height * 0.5);
+            
+            // Internal network
+            drawNetworkSegment(networkCanvas.width * 0.7, networkCanvas.height * 0.3, 3, 'Workstations');
+            drawNetworkSegment(networkCanvas.width * 0.7, networkCanvas.height * 0.5, 2, 'Servers');
+            drawNetworkSegment(networkCanvas.width * 0.7, networkCanvas.height * 0.7, 1, 'Database');
+            
+            // Update stats
+            document.getElementById('defenseStats').textContent = 
+                `Attacks: ${attacksLaunched} | Blocked: ${attacksBlocked} | Bypassed: ${attacksLaunched - attacksBlocked}`;
+        }
+
+        function drawCloud(x, y, width, height) {
+            networkCtx.beginPath();
+            networkCtx.moveTo(x, y + height/3);
+            networkCtx.bezierCurveTo(x, y, x + width/3, y, x + width/3, y + height/3);
+            networkCtx.bezierCurveTo(x + width, y, x + width, y + height/2, x + width*2/3, y + height*2/3);
+            networkCtx.bezierCurveTo(x + width, y + height, x + width/3, y + height, x + width/3, y + height*2/3);
+            networkCtx.bezierCurveTo(x, y + height, x, y + height*2/3, x, y + height/3);
+            networkCtx.fillStyle = '#e5e7eb';
+            networkCtx.fill();
+            networkCtx.strokeStyle = '#9ca3af';
+            networkCtx.stroke();
+            
+            networkCtx.fillStyle = '#000';
+            networkCtx.textAlign = 'center';
+            networkCtx.fillText('Internet', x + width/2, y + height/2);
+        }
+
+        function drawFirewall(x, y) {
+            networkCtx.fillStyle = firewallActive ? '#10b981' : '#d1d5db';
+            networkCtx.fillRect(x - 30, y - 20, 60, 40);
+            networkCtx.strokeStyle = '#6b7280';
+            networkCtx.strokeRect(x - 30, y - 20, 60, 40);
+            
+            networkCtx.fillStyle = '#000';
+            networkCtx.textAlign = 'center';
+            networkCtx.fillText('Firewall', x, y + 5);
+        }
+
+        function drawNetworkSegment(x, y, numDevices, label) {
+            // Draw switch
+            networkCtx.fillStyle = '#d1d5db';
+            networkCtx.fillRect(x - 25, y - 15, 50, 30);
+            networkCtx.strokeStyle = '#6b7280';
+            networkCtx.strokeRect(x - 25, y - 15, 50, 30);
+            
+            // Draw devices
+            for (let i = 0; i < numDevices; i++) {
+                const deviceX = x + 60 + i * 40;
+                networkCtx.beginPath();
+                networkCtx.arc(deviceX, y, 15, 0, Math.PI * 2);
+                networkCtx.fillStyle = avActive ? '#10b981' : '#d1d5db';
+                networkCtx.fill();
+                networkCtx.strokeStyle = '#6b7280';
+                networkCtx.stroke();
+            }
+            
+            // Draw label
+            networkCtx.fillStyle = '#000';
+            networkCtx.textAlign = 'center';
+            networkCtx.fillText(label, x, y + 30);
+        }
+
+        function launchAttack(type) {
+            if (attackInterval) clearInterval(attackInterval);
+            
+            attacksLaunched = 0;
+            attacksBlocked = 0;
+            
+            attackInterval = setInterval(() => {
+                attacksLaunched++;
+                
+                // Determine if attack is blocked
+                let blocked = false;
+                
+                if (firewallActive && Math.random() < 0.7) blocked = true;
+                if (idsActive && !blocked && Math.random() < 0.5) blocked = true;
+                if (avActive && !blocked && Math.random() < 0.3) blocked = true;
+                
+                if (blocked) attacksBlocked++;
+                
+                drawNetwork();
+                
+                // Flash the network to show attack
+                networkCtx.fillStyle = 'rgba(239, 68, 68, 0.3)';
+                networkCtx.fillRect(0, 0, networkCanvas.width, networkCanvas.height);
+                
+                setTimeout(() => {
+                    drawNetwork();
+                }, 100);
+                
+                // Stop after 10 attacks
+                if (attacksLaunched >= 10) {
+                    clearInterval(attackInterval);
+                    
+                    let message = `Attack completed: ${attacksBlocked} blocked, ${attacksLaunched - attacksBlocked} succeeded\n\n`;
+                    
+                    if (firewallActive || idsActive || avActive) {
+                        message += "Defense effectiveness: ";
+                        const effectiveness = Math.round((attacksBlocked / attacksLaunched) * 100);
+                        message += `${effectiveness}%`;
+                        
+                        if (effectiveness < 50) {
+                            message += " - Needs improvement";
+                        } else if (effectiveness < 80) {
+                            message += " - Moderate protection";
+                        } else {
+                            message += " - Strong protection";
+                        }
+                    } else {
+                        message += "No defenses active - all attacks succeeded!";
+                    }
+                    
+                    alert(message);
+                }
+            }, 500);
+        }
+
+        function activateFirewall() {
+            firewallActive = !firewallActive;
+            drawNetwork();
+        }
+
+        function activateIDS() {
+            idsActive = !idsActive;
+            drawNetwork();
+        }
+
+        function activateAV() {
+            avActive = !avActive;
+            drawNetwork();
+        }
+
+        function enableAllDefenses() {
+            firewallActive = true;
+            idsActive = true;
+            avActive = true;
+            drawNetwork();
+        }
+
+        function resetDefense() {
+            clearInterval(attackInterval);
+            firewallActive = false;
+            idsActive = false;
+            avActive = false;
+            attacksLaunched = 0;
+            attacksBlocked = 0;
+            drawNetwork();
+        }
+
+        // Behavioral analysis radar chart
+        function initBehaviorRadar() {
+            const options = {
+                series: [{
+                    name: 'Malicious Activity',
+                    data: [80, 50, 30, 60, 70, 40]
+                }, {
+                    name: 'Normal Activity',
+                    data: [30, 60, 80, 30, 20, 60]
+                }],
+                chart: {
+                    height: '100%',
+                    type: 'radar',
+                    toolbar: {
+                        show: false
+                    }
+                },
+                colors: ['#ef4444', '#10b981'],
+                xaxis: {
+                    categories: ['File Changes', 'Registry Mods', 'Network Calls', 'Process Creation', 'Memory Access', 'Privilege Escalation']
+                },
+                yaxis: {
+                    show: false
+                },
+                markers: {
+                    size: 4
+                }
+            };
+
+            const chart = new ApexCharts(document.querySelector("#behaviorRadar"), options);
+            chart.render();
+        }
+
+        // Analysis challenges
+        function showChallenge(num) {
+            const challenges = [
+                {
+                    title: "Identify Malware Type",
+                    content: `
+                        <p>Given this behavior profile:</p>
+                        <ul class="list-disc pl-5 mt-2 text-sm">
+                            <li>Copies itself to all removable drives</li>
+                            <li>Modifies registry for persistence</li>
+                            <li>No network activity</li>
+                            <li>Triggers on specific date</li>
+                        </ul>
+                        <p class="mt-3 text-sm">This is most likely a <span class="font-semibold">virus</span> (file infector with trigger mechanism).</p>
+                    `
+                },
+                {
+                    title: "Configure Firewall Rules",
+                    content: `
+                        <p>To block a worm spreading via SMB vulnerability (port 445):</p>
+                        <div class="mt-2 p-2 bg-gray-100 rounded text-sm">
+                            <p>1. Block inbound TCP port 445 from external networks</p>
+                            <p>2. Segment internal networks to limit lateral movement</p>
+                            <p>3. Enable deep packet inspection for SMB traffic</p>
+                        </div>
+                    `
+                },
+                {
+                    title: "Analyze Hex Dump",
+                    content: `
+                        <p>Malware signatures to look for:</p>
+                        <div class="mt-2 p-2 bg-gray-100 rounded text-sm font-mono">
+                            <p>PE header: <span class="hex-highlight">4D 5A</span> (MZ)</p>
+                            <p>Code caves: Long sequences of 00 or FF</p>
+                            <p>Obfuscation: XOR patterns, encoded strings</p>
+                        </div>
+                    `
+                }
+            ];
+            
+            alert(challenges[num-1].title + "\n\n" + challenges[num-1].content.replace(/<[^>]*>/g, ''));
+        }
+
+        // Initialize
+        window.onload = function() {
+            initCanvases();
+            initNetworkSimulation();
+            initBehaviorRadar();
+        };
+    </script>
+</body>
+</html>

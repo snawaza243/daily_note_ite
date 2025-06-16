@@ -1,0 +1,302 @@
+**Role:** Intellectual Property Strategist and Industrial Design Expert  
+**Task:** Create an interactive HTML tutorial for Chapter 15 with trade secret analyzers and design protection simulators  
+**Output Requirements:**  
+
+1. **Technical Specifications:**  
+   - Single HTML5 file with embedded Tailwind CSS  
+   - JavaScript-powered trade secret classifier  
+   - Mermaid.js for litigation process flows  
+   - Design novelty checker with image upload  
+   - Interactive infringement comparator  
+   - Protection strategy builder  
+
+2. **Content Structure:**  
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Head with Tailwind, Mermaid, Fabric.js, PDF.js -->
+</head>
+<body class="bg-gray-50">
+    <header class="bg-indigo-900 text-white p-6">
+        <h1 class="text-3xl font-bold">Chapter 15: Trade Secrets & Designs</h1>
+    </header>
+
+    <main class="container mx-auto p-4">
+        <!-- TRADE SECRETS -->
+        <section id="trade-secrets" class="mb-12 p-6 bg-blue-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Trade Secret Protection</h2>
+            
+            <div class="secret-qualifier grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <div class="criteria-checker bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold mb-2">Trade Secret Evaluator</h3>
+                    <div class="evaluation-form space-y-4">
+                        <div class="criterion">
+                            <label class="flex items-center">
+                                <input type="checkbox" id="notGenerallyKnown" class="mr-2">
+                                <span>Not generally known in the industry</span>
+                            </label>
+                        </div>
+                        <!-- More criteria -->
+                    </div>
+                    <button onclick="evaluateSecret()" class="mt-4 bg-blue-600 text-white p-2 w-full">Evaluate Protection</button>
+                </div>
+                
+                <div class="protection-methods bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold mb-2">Protection Measures</h3>
+                    <div class="security-level mb-4">
+                        <label class="block mb-1">Current Protection Score:</label>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div id="protectionMeter" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="measure-grid grid grid-cols-2 gap-2">
+                        <button onclick="addMeasure('nda')" class="measure-btn bg-blue-100 p-2 rounded text-sm">NDAs</button>
+                        <!-- More protection buttons -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="litigation-guide border-2 border-blue-300 p-4 rounded-lg bg-white">
+                <h3 class="font-bold mb-2">Trade Secret Litigation Process</h3>
+                <div class="mermaid">
+                    journey
+                        title Trade Secret Case Timeline
+                        section Filing
+                          Complaint: 5: Plaintiff
+                          TRO Motion: 4: Court
+                        section Discovery
+                          Evidence Gathering: 3: Both Parties
+                          Expert Reports: 2: Special Master
+                        section Trial
+                          Injunction Hearing: 4: Judge
+                          Damages Calculation: 3: Jury
+                </div>
+            </div>
+        </section>
+
+        <!-- DESIGN PROTECTION -->
+        <section id="design-rights" class="mb-12 p-6 bg-purple-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Design Registration</h2>
+            
+            <div class="design-lab grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <div class="design-upload bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold mb-2">Design Novelty Check</h3>
+                    <div class="upload-area border-2 border-dashed border-gray-300 p-6 rounded-lg mb-4 text-center">
+                        <div id="designCanvas" class="mx-auto mb-2"></div>
+                        <button onclick="uploadDesign()" class="bg-purple-100 text-purple-600 p-2 text-sm">Upload Design</button>
+                    </div>
+                    <button onclick="checkNovelty()" class="bg-purple-600 text-white p-2 w-full">Check for Prior Designs</button>
+                </div>
+                
+                <div class="design-criteria bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold mb-2">Registrability Requirements</h3>
+                    <ul class="list-disc pl-5 mt-2 text-sm space-y-2">
+                        <li>New and original design</li>
+                        <li>Not disclosed previously</li>
+                        <li>Applied to an article</li>
+                        <li>Non-functional features</li>
+                    </ul>
+                    <div class="jurisdiction-tabs mt-4">
+                        <div class="flex border-b">
+                            <button class="tab-btn active px-4 py-2 border-b-2 border-purple-500">India</button>
+                            <button class="tab-btn px-4 py-2">EU</button>
+                            <button class="tab-btn px-4 py-2">US</button>
+                        </div>
+                        <div class="tab-content p-2">
+                            <!-- Jurisdiction-specific requirements -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="design-act border-2 border-purple-300 p-4 rounded-lg bg-white">
+                <h3 class="font-bold mb-2">Indian Designs Act 2000</h3>
+                <div class="act-navigator">
+                    <div class="mermaid">
+                        graph TD
+                            A[Section 4] --> B[Registration Process]
+                            C[Section 22] --> D[Infringement]
+                            E[Section 19] --> F[Cancellation]
+                            G[Section 11] --> H[Priority Date]
+                    </div>
+                </div>
+                <button onclick="showDesignCase()" class="mt-4 bg-purple-600 text-white p-2 w-full">View Landmark Case</button>
+            </div>
+        </section>
+
+        <!-- INFRINGEMENT ANALYSIS -->
+        <section id="infringement" class="mb-12 p-6 bg-red-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Design Infringement Detection</h2>
+            
+            <div class="comparison-tool grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <div class="original-design bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold mb-2">Registered Design</h3>
+                    <div id="registeredDesign" class="h-48 bg-gray-100 rounded-lg mb-2"></div>
+                    <div class="design-details text-sm">
+                        <div class="flex justify-between">
+                            <span>Registration No.:</span>
+                            <span class="font-mono">123456</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alleged-infringer bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold mb-2">Alleged Infringement</h3>
+                    <div id="comparisonDesign" class="h-48 bg-gray-100 rounded-lg mb-2"></div>
+                    <button onclick="uploadComparison()" class="bg-gray-200 p-2 w-full text-sm mb-2">Upload Comparison</button>
+                    <button onclick="analyzeInfringement()" class="bg-red-600 text-white p-2 w-full">Analyze Similarity</button>
+                </div>
+            </div>
+            
+            <div class="test-results border-2 border-red-300 p-4 rounded-lg bg-white hidden" id="infringementResult">
+                <h3 class="font-bold mb-2">Infringement Analysis</h3>
+                <div class="similarity-meter mb-4">
+                    <label class="block mb-1">Visual Similarity Score:</label>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div id="similarityBar" class="bg-red-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="factors">
+                    <h4 class="font-bold">Key Factors:</h4>
+                    <!-- Dynamic factors list -->
+                </div>
+            </div>
+        </section>
+
+        <!-- PROTECTION STRATEGIES -->
+        <section id="protection-strategy" class="mb-12 p-6 bg-green-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Integrated Protection Plan</h2>
+            
+            <div class="strategy-builder border-2 border-green-300 p-4 rounded-lg bg-white">
+                <h3 class="font-bold mb-2">Asset Protection Matrix</h3>
+                <table class="min-w-full mt-2">
+                    <thead>
+                        <tr class="border-b">
+                            <th class="p-2 text-left">Asset Type</th>
+                            <th class="p-2 text-left">Trade Secret</th>
+                            <th class="p-2 text-left">Design Rights</th>
+                            <th class="p-2 text-left">Patent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b">
+                            <td class="p-2">Product Design</td>
+                            <td class="p-2"><input type="checkbox" checked></td>
+                            <td class="p-2"><input type="checkbox" checked></td>
+                            <td class="p-2"><input type="checkbox"></td>
+                        </tr>
+                        <!-- More asset rows -->
+                    </tbody>
+                </table>
+                <button onclick="generateStrategy()" class="mt-4 bg-green-600 text-white p-2 w-full">Generate Protection Plan</button>
+            </div>
+            
+            <div class="case-study mt-6 p-4 bg-white rounded-lg shadow">
+                <h3 class="font-bold mb-2">Coca-Cola Bottle Case</h3>
+                <div class="protection-timeline">
+                    <!-- Visual timeline showing:
+                         - Original design registration
+                         - Trade secret protections
+                         - Litigation history -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- PROTECTION CHALLENGES -->
+    <div class="challenges fixed bottom-4 right-4 bg-white p-4 shadow-xl rounded-lg border-2 border-indigo-600">
+        <h3 class="font-bold text-lg mb-2">Protection Challenges</h3>
+        <!-- Interactive exercises:
+             - Identify trade secrets
+             - Evaluate design novelty
+             - Respond to infringement -->
+    </div>
+
+    <script>
+        // JavaScript implementations for:
+        // - Trade secret evaluation engine
+        // - Design similarity analyzer
+        // - Protection strategy optimizer
+        // - Litigation cost calculator
+        // - Document generator
+    </script>
+</body>
+</html>
+Content Generation Rules:
+
+Trade Secrets:
+• Six-factor secret qualification test
+• Protection measure effectiveness scoring
+• Litigation cost estimator
+
+Design Rights:
+• Visual novelty checker with image processing
+• Jurisdiction comparison tool
+• Infringement similarity analyzer
+
+Integrated Protection:
+• Asset protection matrix builder
+• Cost-benefit analysis
+• Case study library
+
+Interactivity Requirements:
+
+Trade secret classification wizard
+
+Design upload and comparison tool
+
+Visual similarity percentage calculator
+
+Protection strategy configurator
+
+Litigation scenario simulator
+
+Design Specifications:
+
+Color scheme: Corporate indigo (#4f46e5) + legal gold (#d97706)
+
+Drag-and-drop design comparison
+
+Responsive protection matrix
+
+Dark mode with image optimization
+
+Printable strategy documents
+
+Special Features:
+
+Trade Secret Auditor:
+• Confidentiality measure checklist
+• Employee access tracking
+• Digital security scoring
+
+Design Comparator:
+• Shape/surface pattern analysis
+• Visual similarity heatmap
+• Industry-specific thresholds
+
+Strategy Generator:
+• Trade secret vs patent vs design right
+• Cost-duration-impact analysis
+• Enforcement roadmap
+
+Deliverable: Self-contained HTML file with functional IP protection tools
+
+Example Visualizations:
+
+Diagram
+Code
+pie
+    title Design Infringement Outcomes (India)
+    "Injunction Granted" : 65
+    "Damages Awarded" : 25
+    "Case Dismissed" : 10
+    
+Key References:
+
+Indian Designs Act §22: Infringement
+
+Uniform Trade Secrets Act: Reasonable efforts
+
+Coca-Cola Contour Bottle: Dual protection

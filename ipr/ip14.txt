@@ -1,0 +1,352 @@
+**Role:** Patent Attorney and Technology Transfer Specialist  
+**Task:** Create an interactive HTML tutorial for Chapter 14 with patent lifecycle simulators and legal analysis tools  
+**Output Requirements:**  
+
+1. **Technical Specifications:**  
+   - Single HTML5 file with embedded Tailwind CSS  
+   - JavaScript-powered patent timeline generator  
+   - Mermaid.js for ownership transfer flows  
+   - Interactive prior art search simulator  
+   - Patent claim builder with validity testing  
+   - Software patent eligibility analyzer  
+
+2. **Content Structure:**  
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Head with Tailwind, Mermaid, PatentJS, PDF.js -->
+</head>
+<body class="bg-gray-50">
+    <header class="bg-green-900 text-white p-6">
+        <h1 class="text-3xl font-bold">Chapter 14: Patent Systems</h1>
+    </header>
+
+    <main class="container mx-auto p-4">
+        <!-- PATENT PROCESS -->
+        <section id="patent-process" class="mb-12 p-6 bg-blue-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Patent Lifecycle</h2>
+            
+            <div class="process-visual mb-6">
+                <div class="mermaid">
+                    journey
+                        title From Invention to Patent
+                        section Conception
+                          Idea: 5: Inventor
+                          Documentation: 3: Lab Notebook
+                        section Filing
+                          Provisional: 4: Attorney
+                          Non-Provisional: 5: Patent Office
+                        section Examination
+                          Office Actions: 4: Examiner
+                          Amendments: 3: Attorney
+                        section Grant
+                          Maintenance: 2: Patentee
+                        section Expiration
+                          Public Domain: 1: Society
+                </div>
+            </div>
+            
+            <div class="timeline-simulator border-2 border-blue-300 p-4 rounded-lg bg-white">
+                <h3 class="font-bold mb-2">Patent Timeline Generator</h3>
+                <div class="controls grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block mb-1">Jurisdiction:</label>
+                        <select id="jurisdiction" class="w-full border p-2">
+                            <option value="india">India</option>
+                            <option value="us">United States</option>
+                            <option value="epo">Europe</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block mb-1">Filing Date:</label>
+                        <input type="date" id="filingDate" class="w-full border p-2">
+                    </div>
+                </div>
+                <button onclick="generateTimeline()" class="bg-blue-600 text-white p-2 w-full">Generate Patent Timeline</button>
+                <div id="timelineOutput" class="mt-4 hidden p-4 bg-gray-50 rounded-lg">
+                    <!-- Dynamic timeline with:
+                         - Critical dates
+                         - Fee deadlines
+                         - Examination stages -->
+                </div>
+            </div>
+        </section>
+
+        <!-- PATENT SEARCH -->
+        <section id="patent-search" class="mb-12 p-6 bg-purple-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Prior Art Search</h2>
+            
+            <div class="search-lab grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <div class="search-tools bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold mb-2">Patent Databases</h3>
+                    <div class="database-grid grid grid-cols-2 gap-2 mt-4">
+                        <button onclick="openDatabase('inpass')" class="database-btn bg-purple-100 p-3 rounded-lg flex items-center">
+                            <img src="india-flag.png" class="w-6 h-6 mr-2">
+                            <span class="text-sm">INPASS</span>
+                        </button>
+                        <!-- Other database buttons -->
+                    </div>
+                </div>
+                
+                <div class="search-strategy bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold mb-2">Search Strategy Builder</h3>
+                    <div class="input-group mb-4">
+                        <label class="block mb-1">Invention Keywords:</label>
+                        <input type="text" id="keywords" class="w-full border p-2" placeholder="e.g., 'AI image recognition'">
+                    </div>
+                    <div class="input-group mb-4">
+                        <label class="block mb-1">IPC Classification:</label>
+                        <select id="ipcClass" class="w-full border p-2">
+                            <option>G06N - Neural Networks</option>
+                            <!-- More IPC classes -->
+                        </select>
+                    </div>
+                    <button onclick="buildSearchQuery()" class="bg-purple-600 text-white p-2 w-full">Generate Search Query</button>
+                </div>
+            </div>
+            
+            <div class="search-results border-2 border-purple-300 p-4 rounded-lg bg-white">
+                <h3 class="font-bold mb-2">Prior Art Analysis</h3>
+                <div class="result-filters flex space-x-2 mb-4">
+                    <button class="filter-btn active bg-purple-600 text-white px-3 py-1 rounded-full text-xs">Relevance</button>
+                    <!-- Other filters -->
+                </div>
+                <div class="results-list h-64 overflow-auto p-2 bg-gray-50 rounded-lg">
+                    <!-- Patent result cards with:
+                         - Citation
+                         - Claims comparison
+                         - Novelty indicators -->
+                </div>
+            </div>
+        </section>
+
+        <!-- OWNERSHIP & TRANSFER -->
+        <section id="patent-rights" class="mb-12 p-6 bg-yellow-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Patent Rights Management</h2>
+            
+            <div class="rights-visual mb-6">
+                <div class="mermaid">
+                    graph LR
+                        O[Owner] -->|License| L[Licensee]
+                        O -->|Assign| A[Assignee]
+                        O -->|Mortgage| B[Bank]
+                        O -->|Will| H[Heir]
+                </div>
+            </div>
+            
+            <div class="transfer-simulator grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="assignment-lab bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold mb-2">Assignment Generator</h3>
+                    <div class="input-group mb-4">
+                        <label class="block mb-1">Assignor:</label>
+                        <input type="text" id="assignor" class="w-full border p-2" placeholder="Current owner">
+                    </div>
+                    <div class="input-group mb-4">
+                        <label class="block mb-1">Assignee:</label>
+                        <input type="text" id="assignee" class="w-full border p-2" placeholder="New owner">
+                    </div>
+                    <button onclick="generateAssignment()" class="bg-yellow-500 text-white p-2 w-full">Create Draft Agreement</button>
+                </div>
+                
+                <div class="licensing-lab bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold mb-2">Royalty Calculator</h3>
+                    <div class="input-group mb-4">
+                        <label class="block mb-1">License Type:</label>
+                        <select id="licenseType" class="w-full border p-2">
+                            <option>Exclusive</option>
+                            <option>Non-exclusive</option>
+                            <option>Field-limited</option>
+                        </select>
+                    </div>
+                    <div class="input-group mb-4">
+                        <label class="block mb-1">Projected Sales ($):</label>
+                        <input type="number" id="projectedSales" class="w-full border p-2" value="1000000">
+                    </div>
+                    <button onclick="calculateRoyalties()" class="bg-yellow-500 text-white p-2 w-full">Calculate Royalties</button>
+                    <div id="royaltyResult" class="mt-4 hidden p-3 bg-gray-50 rounded-lg"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INDIAN PATENT ACT -->
+        <section id="indian-act" class="mb-12 p-6 bg-red-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Indian Patents Act 1970</h2>
+            
+            <div class="act-navigator mb-6">
+                <div class="mermaid">
+                    graph TD
+                        A[Section 3] --> B[Non-Patentable Inventions]
+                        C[Section 10] --> D[Specification Requirements]
+                        E[Section 25] --> F[Opposition Procedures]
+                        G[Section 84] --> H[Compulsory Licensing]
+                </div>
+            </div>
+            
+            <div class="section-analyzer border-2 border-red-300 p-4 rounded-lg bg-white">
+                <h3 class="font-bold mb-2">Section Interpreter</h3>
+                <div class="input-group mb-4">
+                    <label class="block mb-1">Search Sections:</label>
+                    <input type="text" id="sectionSearch" class="w-full border p-2" placeholder="e.g., 'software patents'">
+                </div>
+                <div id="sectionResults" class="h-64 overflow-auto p-3 bg-gray-50 rounded-lg">
+                    <!-- Dynamic section results with:
+                         - Text excerpts
+                         - Case law references
+                         - Amendment history -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SOFTWARE PATENTS -->
+        <section id="software-patents" class="mb-12 p-6 bg-green-50 rounded-xl">
+            <h2 class="text-2xl font-semibold mb-4">Software Patent Controversy</h2>
+            
+            <div class="jurisdiction-comparison grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="jurisdiction-card bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold">United States</h3>
+                    <div class="status-badge bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs inline-block mt-2">Allowed</div>
+                    <p class="text-sm mt-2">Alice test for abstract ideas</p>
+                </div>
+                <div class="jurisdiction-card bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold">India</h3>
+                    <div class="status-badge bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs inline-block mt-2">Restricted</div>
+                    <p class="text-sm mt-2">Section 3(k) exclusion</p>
+                </div>
+                <div class="jurisdiction-card bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold">Europe</h3>
+                    <div class="status-badge bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs inline-block mt-2">Conditional</div>
+                    <p class="text-sm mt-2">Technical contribution required</p>
+                </div>
+            </div>
+            
+            <div class="patent-eligibility border-2 border-green-300 p-4 rounded-lg bg-white">
+                <h3 class="font-bold mb-2">Software Patent Evaluator</h3>
+                <div class="input-group mb-4">
+                    <label class="block mb-1">Describe Software Innovation:</label>
+                    <textarea id="softwareDescription" class="w-full border p-2 h-32" placeholder="e.g., A novel machine learning algorithm that improves image processing efficiency by..."></textarea>
+                </div>
+                <div class="flex space-x-2 mb-4">
+                    <button onclick="evaluatePatent('india')" class="bg-green-600 text-white p-2 flex-1">Test in India</button>
+                    <button onclick="evaluatePatent('us')" class="bg-blue-600 text-white p-2 flex-1">Test in US</button>
+                    <button onclick="evaluatePatent('epo')" class="bg-yellow-600 text-white p-2 flex-1">Test in Europe</button>
+                </div>
+                <div id="eligibilityResult" class="hidden p-4 bg-gray-50 rounded-lg">
+                    <!-- Analysis with:
+                         - Eligibility determination
+                         - Suggested claim drafting
+                         - Alternative strategies -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- PATENT CHALLENGES -->
+    <div class="challenges fixed bottom-4 right-4 bg-white p-4 shadow-xl rounded-lg border-2 border-green-600">
+        <h3 class="font-bold text-lg mb-2">Patent Exercises</h3>
+        <!-- Interactive exercises:
+             - Draft patent claims
+             - Respond to office actions
+             - Negotiate licenses -->
+    </div>
+
+    <script>
+        // JavaScript implementations for:
+        // - Patent timeline generator
+        // - Prior art search builder
+        // - Royalty calculation engine
+        // - Software patent analyzer
+        // - Document generator
+    </script>
+</body>
+</html>
+Content Generation Rules:
+
+Patent Process:
+• Interactive lifecycle simulator with jurisdiction variations
+• Cost estimator for filing/maintenance
+• Examination response generator
+
+Prior Art Search:
+• IPC classification browser
+• Boolean search query builder
+• Novelty mapper with citation analysis
+
+Ownership Rights:
+• Assignment agreement generator
+• Royalty calculation engine
+• License type comparison
+
+Indian Law:
+• Section 3(k) analyzer for software
+• Compulsory licensing simulator
+• Opposition procedure flowchart
+
+Software Patents:
+• Jurisdictional comparison matrix
+• Claim drafting advisor
+• Technical effect evaluator
+
+Interactivity Requirements:
+
+Patent timeline generator with critical dates
+
+Prior art search interface with real examples
+
+Ownership transfer document builder
+
+Software patent eligibility tester
+
+Claim drafting workshop
+
+Design Specifications:
+
+Color scheme: Patent green (#065f46) + legal gold (#d97706)
+
+Responsive timeline visualizations
+
+Interactive claim drafting interface
+
+Dark mode with document optimization
+
+Printable agreement templates
+
+Special Features:
+
+Timeline Generator:
+• Country-specific procedural maps
+• Cost calculators for each phase
+
+Prior Art Toolkit:
+• IPC/CPC classification explorer
+• Citation network visualizer
+
+Royalty Calculator:
+• Lump-sum vs running royalty
+• Industry-standard rates database
+
+Software Patent Advisor:
+• Jurisdictional strategy planner
+• Technical contribution analyzer
+
+Deliverable: Self-contained HTML file with functional patent analysis tools
+
+Example Visualizations:
+
+Diagram
+Code
+pie
+    title Indian Patent Grants by Sector (2023)
+    "Pharma" : 38
+    "Engineering" : 27
+    "ICT" : 15
+    "Biotech" : 20
+
+    
+Key References:
+
+India Patents Act §3(k): Software exclusion
+
+USPTO Alice Test: Abstract idea analysis
+
+EPO Guidelines: Technical character requirement
