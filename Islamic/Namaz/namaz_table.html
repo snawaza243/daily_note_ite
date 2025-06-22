@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Namaz Rakat Table</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fffbea;
+      margin: 20px;
+    }
+
+    .namaz-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      overflow-x: auto;
+    }
+
+    .namaz-table th,
+    .namaz-table td {
+      border: 1px solid #444;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .namaz-table th {
+      background-color: #bfff00;
+      color: #000;
+    }
+
+    .namaz-table td {
+      background-color: #fff;
+    }
+
+    .namaz-table .namaz-name {
+      background-color: #ff3333;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .sunnah-muakkadah {
+      border: 3px solid blue;
+      border-radius: 50%;
+      display: inline-block;
+      padding: 2px 8px;
+      font-weight: bold;
+    }
+
+    .note {
+      font-size: 0.95rem;
+      color: #222;
+      background-color: #e6e6e6;
+      padding: 10px;
+      border-left: 4px solid #007700;
+    }
+
+    @media (max-width: 600px) {
+      .namaz-table th, .namaz-table td {
+        font-size: 12px;
+        padding: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Rakats to be Prayed in Five Times Namaz of the Day</h2>
+
+  <table class="namaz-table">
+    <thead>
+      <tr>
+        <th>Namaz</th>
+        <th>Sunnath</th>
+        <th>Farz</th>
+        <th>Sunnath</th>
+        <th>Nafil</th>
+        <th>Sunnath</th>
+        <th>Vitar</th>
+        <th>Nafil</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="namaz-name">Fajar</td>
+        <td><span class="sunnah-muakkadah">2</span></td>
+        <td>2</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+      </tr>
+      <tr>
+        <td class="namaz-name">Zohar</td>
+        <td><span class="sunnah-muakkadah">4</span></td>
+        <td>4</td>
+        <td><span class="sunnah-muakkadah">2</span></td>
+        <td>2</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+      </tr>
+      <tr>
+        <td class="namaz-name">Asar</td>
+        <td>4</td>
+        <td>4</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+      </tr>
+      <tr>
+        <td class="namaz-name">Moghrib</td>
+        <td>-</td>
+        <td>3</td>
+        <td><span class="sunnah-muakkadah">2</span></td>
+        <td>2</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+      </tr>
+      <tr>
+        <td class="namaz-name">Isha</td>
+        <td>4</td>
+        <td>4</td>
+        <td><span class="sunnah-muakkadah">2</span></td>
+        <td>2</td>
+        <td>-</td>
+        <td><span class="sunnah-muakkadah">3</span></td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td class="namaz-name">Juma</td>
+        <td><span class="sunnah-muakkadah">4</span></td>
+        <td>2</td>
+        <td><span class="sunnah-muakkadah">4</span></td>
+        <td>-</td>
+        <td>2</td>
+        <td>-</td>
+        <td>2</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <strong>Note:</strong> The Sunnat salats encircled are <strong>Sunnate-Muakkadah</strong> and must be prayed. Namaz is the secret of a healthy Muslim.
+  </div>
+
+</body>
+</html>
