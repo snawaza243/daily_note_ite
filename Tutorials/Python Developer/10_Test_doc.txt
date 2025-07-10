@@ -1,0 +1,126 @@
+1. doctest: Inline Testing
+Basic Syntax & Execution
+Test case format: >>> for input, expected output on next line
+
+Running tests: python -m doctest module.py
+
+Verbose mode: -v flag for detailed output
+
+Advanced Formatting
+Handling whitespace sensitivity (<BLANKLINE> marker)
+
+Ellipsis for partial matches (... wildcard)
+
+Multiline test cases (indentation rules)
+
+Edge Cases
+Testing floating-point approximations
+
+Handling unpredictable outputs (timestamps, random values)
+
+Testing exceptions (traceback formatting)
+
+2. doctest: Documentation Tests
+Best Practices
+Balancing readability with test coverage
+
+Organizing tests within docstrings
+
+When to use doctest vs unittest/pytest
+
+Integration Methods
+Module-level doctests
+
+Class and method doctests
+
+Standalone text file doctests
+
+Execution Control
+Test directives:
+
+# doctest: +SKIP (skip test)
+
+# doctest: +ELLIPSIS
+
+# doctest: +NORMALIZE_WHITESPACE
+
+Conditional test execution
+
+3. Advanced doctest Features
+Test Fixtures
+Setting up pre-test state
+
+Mocking dependencies
+
+Context managers in doctests
+
+Customization
+Creating custom doctest runners
+
+Output checkers for specialized comparison
+
+Integration with other test frameworks
+
+Performance Considerations
+Impact on documentation rendering
+
+Large-scale doctest maintenance
+
+Optimizing test execution time
+
+4. Real-World Patterns
+Documentation-Driven Development
+Writing specifications as doctests
+
+Living documentation examples
+
+API documentation testing
+
+Debugging Techniques
+Diagnosing failing doctests
+
+Interactive debugging (doctest.testmod())
+
+Handling platform-specific differences
+
+5. Limitations & Alternatives
+When Not to Use Doctest
+Complex test setups
+
+Data-driven tests
+
+Performance testing
+
+Complementary Tools
+doctest + unittest hybrid approach
+
+doctest + pytest integration
+
+Documentation generators (Sphinx)
+
+Complete Example
+python
+def factorial(n):
+    """
+    Compute the factorial of n.
+    
+    Examples:
+    >>> factorial(3)
+    6
+    >>> factorial(5)
+    120
+    
+    Edge cases:
+    >>> factorial(0)
+    1
+    >>> factorial(-1)
+    Traceback (most recent call last):
+    ValueError: n must be >= 0
+    """
+    if n < 0:
+        raise ValueError("n must be >= 0")
+    return 1 if n == 0 else n * factorial(n-1)
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(verbose=True)

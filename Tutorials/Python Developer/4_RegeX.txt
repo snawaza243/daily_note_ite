@@ -1,0 +1,86 @@
+Regular Expressions in Python (Master Guide)
+1. Pattern Matching Fundamentals
+Regex Syntax Basics
+Meta Characters
+
+. (any char), ^ (start), $ (end)
+
+* (0+), + (1+), ? (0 or 1), {m,n} (range)
+
+Character Classes
+
+\d (digit), \w (word), \s (whitespace)
+
+Custom: [A-Z], [^0-9] (negation)
+
+Grouping & Capturing
+
+( ) (capture group), (?: ) (non-capturing)
+
+Named groups: (?P<name>pattern)
+
+Python's re Module
+re.match() (start-only) vs re.search() (anywhere)
+
+re.findall() (all matches) vs re.finditer() (iterator)
+
+Flags: re.IGNORECASE, re.MULTILINE, re.DOTALL
+
+2. Search and Replace Operations
+Basic Search/Replace
+re.sub() (replace all occurrences)
+
+Using backreferences: \1, \g<name> in replacements
+
+Count parameter: Limit replacements
+
+Advanced Replacement Techniques
+Replacement with functions (callable as replacement)
+
+Conditional replacements using lookarounds
+
+Dynamic string building with replacements
+
+3. Common Regex Patterns
+Validation Patterns
+Email: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+
+Phone (US): ^\+1\d{10}$
+
+URL: https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+
+
+Extraction Patterns
+Dates: \d{2}-\d{2}-\d{4}
+
+HTML tags: <([a-z]+)([^<]+)*(?:>(.*)<\/\1>| *\/>)
+
+Log parsing: (\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2}) (ERROR|WARN)
+
+Text Processing Patterns
+Splitting strings: re.split() with complex delimiters
+
+Whitespace normalization
+
+Removing comments from code
+
+4. Advanced Regex Techniques
+Lookaheads/Lookbehinds
+Positive lookahead: (?=pattern)
+
+Negative lookbehind: (?<!pattern)
+
+Practical uses: Password validation
+
+Optimization & Performance
+Compiling patterns: re.compile()
+
+Avoiding catastrophic backtracking
+
+When NOT to use regex (simpler alternatives)
+
+5. Debugging & Tools
+Online testers: regex101, pythex
+
+re.DEBUG flag
+
+Common pitfalls (greedy vs lazy matching)

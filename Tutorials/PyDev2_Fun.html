@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Functions - Comprehensive Guide</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        header {
+            background-color: #3776ab;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+        }
+        
+        h1 {
+            margin-top: 0;
+        }
+        
+        h2 {
+            border-bottom: 2px solid #3776ab;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        
+        h3 {
+            color: #3776ab;
+            margin-top: 25px;
+        }
+        
+        h4 {
+            color: #5d8fc2;
+            margin-top: 20px;
+        }
+        
+        code {
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Consolas', monospace;
+        }
+        
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 4px solid #3776ab;
+        }
+        
+        .note {
+            background-color: #e7f4ff;
+            border-left: 4px solid #3776ab;
+            padding: 10px 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .warning {
+            background-color: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 10px 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #3776ab;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .toc {
+            background-color: #f0f7ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .toc li {
+            margin-bottom: 5px;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: #2c3e50;
+        }
+        
+        .toc a:hover {
+            color: #3776ab;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Python Functions: A Deep Dive</h1>
+        <p>Mastering one of Python's most fundamental building blocks</p>
+    </header>
+    
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#definition">1. Function Definition</a></li>
+            <li><a href="#parameters">2. Parameters and Arguments</a></li>
+            <li><a href="#builtins">3. Built-in Functions</a></li>
+            <li><a href="#lambda">4. Lambda Functions</a></li>
+            <li><a href="#decorators">5. Decorators</a></li>
+            <li><a href="#execution">6. Function Execution & Memory</a></li>
+            <li><a href="#error">7. Error Handling in Functions</a></li>
+            <li><a href="#functional">8. Functional Programming</a></li>
+        </ul>
+    </div>
+    
+    <section id="definition">
+        <h2>1. Function Definition</h2>
+        
+        <h3>Basics</h3>
+        <p>Functions in Python are defined using the <code>def</code> keyword followed by the function name and parentheses.</p>
+        
+        <pre><code>def greet(name):
+    """Return a greeting message."""
+    return f"Hello, {name}!"</code></pre>
+        
+        <h4>Function naming conventions</h4>
+        <ul>
+            <li>Use snake_case (all lowercase with underscores)</li>
+            <li>Should be descriptive but concise</li>
+            <li>Verbs for actions (e.g., <code>calculate_total</code>)</li>
+            <li>Follow PEP 8 guidelines</li>
+        </ul>
+        
+        <h4>The pass keyword</h4>
+        <p>Use <code>pass</code> as a placeholder for empty functions:</p>
+        <pre><code>def todo_function():
+    pass  # Implement later</code></pre>
+        
+        <h4>Defining vs calling</h4>
+        <pre><code># Defining a function
+def say_hello():
+    print("Hello!")
+
+# Calling the function
+say_hello()  # Output: Hello!</code></pre>
+        
+        <h3>Advanced Concepts</h3>
+        
+        <h4>First-class functions</h4>
+        <p>Functions are objects that can be assigned to variables, passed as arguments, and returned from other functions.</p>
+        <pre><code>def square(x):
+    return x * x
+
+# Assign function to variable
+func = square
+print(func(5))  # 25
+
+# Pass function as argument
+def apply_func(f, x):
+    return f(x)
+
+print(apply_func(square, 4))  # 16</code></pre>
+        
+        <h4>Docstrings and __doc__</h4>
+        <p>Document functions with docstrings (following PEP 257):</p>
+        <pre><code>def calculate_area(width, height):
+    """Calculate the area of a rectangle.
+    
+    Args:
+        width (float): The width of the rectangle
+        height (float): The height of the rectangle
+        
+    Returns:
+        float: The area (width * height)
+    """
+    return width * height
+
+# Access documentation
+print(calculate_area.__doc__)
+help(calculate_area)</code></pre>
+        
+        <h4>Function annotations</h4>
+        <p>Type hints for parameters and return values (PEP 484):</p>
+        <pre><code>def repeat(text: str, count: int) -> str:
+    """Return text repeated count times."""
+    return text * count</code></pre>
+        
+        <h4>Namespace and scope</h4>
+        <p>Functions have access to their local scope and enclosing scopes:</p>
+        <pre><code>x = "global"
+
+def outer():
+    x = "outer"
+    
+    def inner():
+        nonlocal x  # Refers to x in outer()
+        x = "inner"
+    inner()
+    print(x)  # "inner"
+
+outer()
+print(x)  # "global"</code></pre>
+    </section>
+    
+    <section id="parameters">
+        <h2>2. Parameters and Arguments</h2>
+        
+        <h3>Parameter Types</h3>
+        
+        <h4>Positional arguments</h4>
+        <p>Matched by position in the function call:</p>
+        <pre><code>def power(base, exponent):
+    return base ** exponent
+
+print(power(2, 3))  # 8 (2 is base, 3 is exponent)</code></pre>
+        
+        <h4>Keyword arguments</h4>
+        <p>Matched by parameter name:</p>
+        <pre><code>print(power(exponent=3, base=2))  # 8</code></pre>
+        
+        <h4>Default parameters</h4>
+        <p>Parameters with default values become optional:</p>
+        <pre><code>def greet(name="World"):
+    print(f"Hello, {name}!")
+
+greet()          # Hello, World!
+greet("Alice")   # Hello, Alice!</code></pre>
+        
+        <div class="warning">
+            <p><strong>Warning:</strong> Mutable default arguments are a common pitfall (see Advanced Concepts below).</p>
+        </div>
+        
+        <h4>Variable-length arguments</h4>
+        <p>Collect arbitrary numbers of arguments:</p>
+        <pre><code>def sum_all(*args):
+    """Sum all positional arguments."""
+    return sum(args)
+
+print(sum_all(1, 2, 3))  # 6
+
+def print_details(**kwargs):
+    """Print all keyword arguments."""
+    for key, value in kwargs.items():
+        print(f"{key}: {value}")
+
+print_details(name="Alice", age=25)</code></pre>
+        
+        <h3>Advanced Concepts</h3>
+        
+        <h4>Argument unpacking</h4>
+        <p>Use <code>*</code> and <code>**</code> to unpack sequences and dictionaries:</p>
+        <pre><code>def point(x, y):
+    print(f"Point at ({x}, {y})")
+
+coordinates = (3, 4)
+point(*coordinates)  # Point at (3, 4)
+
+params = {'x': 1, 'y': 2}
+point(**params)      # Point at (1, 2)</code></pre>
+        
+        <h4>Mutable default arguments</h4>
+        <p>Default arguments are evaluated once when the function is defined:</p>
+        <pre><code># Anti-pattern
+def add_item(item, items=[]):
+    items.append(item)
+    return items
+
+print(add_item(1))  # [1]
+print(add_item(2))  # [1, 2] - Surprise!
+
+# Correct approach
+def add_item(item, items=None):
+    if items is None:
+        items = []
+    items.append(item)
+    return items</code></pre>
+        
+        <h4>Keyword-only arguments</h4>
+        <p>Force arguments to be passed by keyword (PEP 3102):</p>
+        <pre><code>def create_user(name, *, email, phone):
+    """Parameters after * must be keyword arguments"""
+    print(f"Creating {name} with {email} and {phone}")
+
+create_user("Alice", email="a@example.com", phone="1234")  # OK
+# create_user("Bob", "b@example.com", "5678")  # Error</code></pre>
+        
+        <h4>Positional-only arguments</h4>
+        <p>Force arguments to be positional (PEP 570, Python 3.8+):</p>
+        <pre><code>def power(base, exponent, /):
+    """Parameters before / must be positional"""
+    return base ** exponent
+
+power(2, 3)  # OK
+# power(base=2, exponent=3)  # Error</code></pre>
+    </section>
+    
+    <section id="builtins">
+        <h2>3. Built-in Functions</h2>
+        
+        <h3>Commonly Used Built-ins</h3>
+        
+        <table>
+            <tr>
+                <th>Category</th>
+                <th>Functions</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>I/O</td>
+                <td><code>print(), input(), open()</code></td>
+                <td>Basic input/output operations</td>
+            </tr>
+            <tr>
+                <td>Type Conversion</td>
+                <td><code>int(), str(), list(), dict()</code></td>
+                <td>Convert between types</td>
+            </tr>
+            <tr>
+                <td>Math</td>
+                <td><code>abs(), round(), min(), max(), sum()</code></td>
+                <td>Mathematical operations</td>
+            </tr>
+            <tr>
+                <td>Iteration</td>
+                <td><code>len(), range(), enumerate(), zip()</code></td>
+                <td>Working with sequences</td>
+            </tr>
+        </table>
+        
+        <h3>Advanced Built-ins</h3>
+        
+        <h4>Functional Programming</h4>
+        <pre><code># map() - Apply function to each item
+numbers = [1, 2, 3]
+squared = list(map(lambda x: x**2, numbers))  # [1, 4, 9]
+
+# filter() - Select items where function returns True
+evens = list(filter(lambda x: x % 2 == 0, numbers))  # [2]
+
+# reduce() - Cumulatively apply function (from functools)
+from functools import reduce
+product = reduce(lambda x, y: x * y, numbers)  # 6</code></pre>
+        
+        <h4>Dynamic Code Execution</h4>
+        <div class="warning">
+            <p><strong>Security Warning:</strong> <code>eval()</code> and <code>exec()</code> can execute arbitrary code and should be used with extreme caution.</p>
+        </div>
+        <pre><code># eval() - Evaluate expression
+result = eval("2 + 3 * 4")  # 14
+
+# exec() - Execute statements
+exec("""
+def hello():
+    print("Hello from exec!")
+""")
+hello()  # Hello from exec!</code></pre>
+        
+        <h4>Type Checking</h4>
+        <pre><code>print(isinstance(42, int))      # True
+print(issubclass(bool, int))  # True (bool is a subclass of int)</code></pre>
+        
+        <h4>Namespace Inspection</h4>
+        <pre><code>def show_locals():
+    x = 10
+    print(locals())  # {'x': 10}
+
+show_locals()
+print(globals().keys())  # Shows global names</code></pre>
+    </section>
+    
+    <section id="lambda">
+        <h2>4. Lambda Functions</h2>
+        
+        <h3>Basics</h3>
+        <p>Lambda functions are small anonymous functions defined with the <code>lambda</code> keyword.</p>
+        
+        <pre><code># Regular function
+def square(x):
+    return x * x
+
+# Equivalent lambda
+square = lambda x: x * x</code></pre>
+        
+        <h4>Use cases</h4>
+        <p>Best for short, one-time operations where a full function definition would be verbose:</p>
+        <pre><code># Sorting with a key
+names = ["Alice", "Bob", "Charlie"]
+names.sort(key=lambda name: len(name))  # Sort by length</code></pre>
+        
+        <h4>Limitations</h4>
+        <ul>
+            <li>Single expression only (no statements)</li>
+            <li>No annotations or documentation string</li>
+            <li>Often less readable than named functions for complex logic</li>
+        </ul>
+        
+        <h3>Advanced Usage</h3>
+        
+        <h4>With built-in functions</h4>
+        <pre><code># map() example
+numbers = [1, 2, 3]
+squared = list(map(lambda x: x**2, numbers))  # [1, 4, 9]
+
+# filter() example
+evens = list(filter(lambda x: x % 2 == 0, numbers))  # [2]
+
+# sorted() with custom key
+people = [{"name": "Alice", "age": 25}, {"name": "Bob", "age": 30}]
+sorted_people = sorted(people, key=lambda p: p["age"])</code></pre>
+        
+        <h4>Closures and late binding</h4>
+        <p>A common gotcha with lambdas in loops:</p>
+        <pre><code># Problematic - all lambdas use last i value
+functions = []
+for i in range(3):
+    functions.append(lambda: i)
+
+print([f() for f in functions])  # [2, 2, 2]
+
+# Solution - capture current i value
+functions = []
+for i in range(3):
+    functions.append(lambda i=i: i)  # Default arg captures current i
+
+print([f() for f in functions])  # [0, 1, 2]</code></pre>
+        
+        <h4>When not to use lambdas</h4>
+        <p>Avoid lambdas when:</p>
+        <ul>
+            <li>The logic is complex enough to need a docstring</li>
+            <li>The function is used in multiple places</li>
+            <li>You need type hints or other function metadata</li>
+            <li>The expression becomes hard to read</li>
+        </ul>
+    </section>
+    
+    <section id="decorators">
+        <h2>5. Decorators</h2>
+        
+        <h3>Basic Decorators</h3>
+        <p>Decorators modify or enhance functions without changing their source code.</p>
+        
+        <h4>What is a decorator?</h4>
+        <p>A function that takes another function and extends its behavior.</p>
+        <pre><code>def my_decorator(func):
+    def wrapper():
+        print("Something is happening before the function is called.")
+        func()
+        print("Something is happening after the function is called.")
+    return wrapper
+
+@my_decorator
+def say_hello():
+    print("Hello!")
+
+say_hello()
+# Output:
+# Something is happening before the function is called.
+# Hello!
+# Something is happening after the function is called.</code></pre>
+        
+        <h4>Creating a simple decorator</h4>
+        <pre><code>def timer(func):
+    """Measure and print execution time of a function."""
+    import time
+    
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        print(f"{func.__name__} executed in {end-start:.4f}s")
+        return result
+    return wrapper
+
+@timer
+def slow_function():
+    time.sleep(1)
+
+slow_function()  # slow_function executed in 1.0001s</code></pre>
+        
+        <h4>Common use cases</h4>
+        <ul>
+            <li>Logging</li>
+            <li>Timing</li>
+            <li>Authentication/authorization</li>
+            <li>Caching/memoization</li>
+            <li>Validation</li>
+        </ul>
+        
+        <h3>Advanced Decorator Concepts</h3>
+        
+        <h4>Decorators with arguments</h4>
+        <p>Requires an extra level of nesting:</p>
+        <pre><code>def repeat(num_times):
+    """Decorator that repeats function call num_times."""
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            for _ in range(num_times):
+                result = func(*args, **kwargs)
+            return result
+        return wrapper
+    return decorator
+
+@repeat(num_times=3)
+def greet(name):
+    print(f"Hello {name}")
+
+greet("Alice")
+# Output:
+# Hello Alice
+# Hello Alice
+# Hello Alice</code></pre>
+        
+        <h4>Class-based decorators</h4>
+        <p>Implement <code>__call__</code> to make instances callable:</p>
+        <pre><code>class CountCalls:
+    def __init__(self, func):
+        self.func = func
+        self.num_calls = 0
+    
+    def __call__(self, *args, **kwargs):
+        self.num_calls += 1
+        print(f"Call {self.num_calls} of {self.func.__name__}")
+        return self.func(*args, **kwargs)
+
+@CountCalls
+def say_hello():
+    print("Hello")
+
+say_hello()  # Call 1 of say_hello
+say_hello()  # Call 2 of say_hello</code></pre>
+        
+        <h4>Preserving metadata with functools.wraps</h4>
+        <p>Decorators obscure the original function's metadata. <code>functools.wraps</code> fixes this:</p>
+        <pre><code>from functools import wraps
+
+def decorator(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        """Wrapper docstring"""
+        return func(*args, **kwargs)
+    return wrapper
+
+@decorator
+def example():
+    """Example docstring"""
+    pass
+
+print(example.__name__)  # "example" (without wraps: "wrapper")
+print(example.__doc__)   # "Example docstring"</code></pre>
+        
+        <h4>Stacking decorators</h4>
+        <p>Decorators are applied from bottom to top:</p>
+        <pre><code>@decorator1
+@decorator2
+@decorator3
+def my_function():
+    pass
+
+# Equivalent to:
+my_function = decorator1(decorator2(decorator3(my_function)))</code></pre>
+        
+        <h4>Built-in decorators</h4>
+        <table>
+            <tr>
+                <th>Decorator</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>@staticmethod</code></td>
+                <td>Method that doesn't receive self/cls</td>
+            </tr>
+            <tr>
+                <td><code>@classmethod</code></td>
+                <td>Method that receives class as first arg</td>
+            </tr>
+            <tr>
+                <td><code>@property</code></td>
+                <td>Define getter for an attribute</td>
+            </tr>
+            <tr>
+                <td><code>@functools.lru_cache</code></td>
+                <td>Memoization decorator</td>
+            </tr>
+            <tr>
+                <td><code>@dataclasses.dataclass</code></td>
+                <td>Auto-generate special methods for classes</td>
+            </tr>
+        </table>
+    </section>
+    
+    <section id="execution">
+        <h2>6. Function Execution & Memory</h2>
+        
+        <h3>Stack Frames</h3>
+        <p>Python maintains a call stack with frame objects for each function call:</p>
+        <pre><code>import inspect
+
+def show_stack():
+    for frame in inspect.stack():
+        print(frame.function, frame.lineno)
+
+def outer():
+    show_stack()
+
+outer()</code></pre>
+        
+        <h3>Recursion</h3>
+        <p>Python has a recursion limit (usually 1000) to prevent stack overflows:</p>
+        <pre><code>import sys
+
+def factorial(n):
+    return 1 if n <= 1 else n * factorial(n - 1)
+
+print(factorial(5))  # 120
+
+# Change recursion limit (use with caution!)
+sys.setrecursionlimit(2000)</code></pre>
+        
+        <h3>Generator Functions</h3>
+        <p>Functions that use <code>yield</code> return a generator iterator:</p>
+        <pre><code>def count_up_to(max):
+    count = 1
+    while count <= max:
+        yield count
+        count += 1
+
+counter = count_up_to(5)
+print(next(counter))  # 1
+print(next(counter))  # 2
+
+# Iterate through remaining
+for num in counter:
+    print(num)  # 3, 4, 5</code></pre>
+    </section>
+    
+    <section id="error">
+        <h2>7. Error Handling in Functions</h2>
+        
+        <h3>Raising Exceptions</h3>
+        <pre><code>def validate_age(age):
+    if age < 0:
+        raise ValueError("Age cannot be negative")
+    return age
+
+try:
+    validate_age(-5)
+except ValueError as e:
+    print(f"Error: {e}")</code></pre>
+        
+        <h3>Custom Exceptions</h3>
+        <pre><code>class InvalidEmailError(Exception):
+    """Raised when an invalid email is provided"""
+    pass
+
+def validate_email(email):
+    if "@" not in email:
+        raise InvalidEmailError(f"Invalid email: {email}")
+
+try:
+    validate_email("user.example.com")
+except InvalidEmailError as e:
+    print(e)</code></pre>
+    </section>
+    
+    <section id="functional">
+        <h2>8. Functional Programming in Python</h2>
+        
+        <h3>Pure Functions</h3>
+        <p>Functions with no side effects that always return the same output for the same input:</p>
+        <pre><code># Pure function
+def square(x):
+    return x * x
+
+# Not pure (has side effect)
+def square_impure(x):
+    print("Squaring", x)
+    return x * x</code></pre>
+        
+        <h3>Higher-Order Functions</h3>
+        <p>Functions that take or return other functions:</p>
+        <pre><code>def make_adder(n):
+    """Return a function that adds n to its argument."""
+    def adder(x):
+        return x + n
+    return adder
+
+add5 = make_adder(5)
+print(add5(3))  # 8</code></pre>
+        
+        <h3>Partial Function Application</h3>
+        <p>Fix some arguments of a function to create a new function:</p>
+        <pre><code>from functools import partial
+
+def power(base, exponent):
+    return base ** exponent
+
+square = partial(power, exponent=2)
+cube = partial(power, exponent=3)
+
+print(square(5))  # 25
+print(cube(3))    # 27</code></pre>
+    </section>
+    
+    <footer>
+        <p>© 2023 Python Developer Guide. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Core Concepts - Developer Guide</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        header {
+            background-color: #3776ab;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+        }
+        
+        h1 {
+            margin-top: 0;
+        }
+        
+        h2 {
+            border-bottom: 2px solid #3776ab;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        
+        h3 {
+            color: #3776ab;
+            margin-top: 25px;
+        }
+        
+        h4 {
+            color: #5d8fc2;
+            margin-top: 20px;
+        }
+        
+        code {
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Consolas', monospace;
+        }
+        
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 4px solid #3776ab;
+        }
+        
+        .note {
+            background-color: #e7f4ff;
+            border-left: 4px solid #3776ab;
+            padding: 10px 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .warning {
+            background-color: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 10px 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #3776ab;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .toc {
+            background-color: #f0f7ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .toc li {
+            margin-bottom: 5px;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: #2c3e50;
+        }
+        
+        .toc a:hover {
+            color: #3776ab;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Python Core Concepts</h1>
+        <p>A comprehensive guide to Python's fundamental building blocks</p>
+    </header>
+    
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#variables">1. Variables and Data Types</a></li>
+            <li><a href="#operators">2. Operators and Expressions</a></li>
+            <li><a href="#conditions">3. Conditions and Loops</a></li>
+            <li><a href="#typecasting">4. Type Casting</a></li>
+            <li><a href="#exceptions">5. Exception Handling</a></li>
+            <li><a href="#io">6. Input/Output Basics</a></li>
+            <li><a href="#formatting">7. String Formatting</a></li>
+            <li><a href="#docs">8. Docstrings & Comments</a></li>
+            <li><a href="#execution">9. Python's Execution Model</a></li>
+        </ul>
+    </div>
+    
+    <section id="variables">
+        <h2>1. Variables and Data Types</h2>
+        
+        <h3>Variable Basics</h3>
+        <p>Variables in Python are names that refer to objects in memory. Python uses dynamic typing, meaning variable types are determined at runtime.</p>
+        
+        <h4>Variable naming rules and conventions</h4>
+        <ul>
+            <li>Must start with a letter or underscore</li>
+            <li>Can contain letters, numbers, and underscores</li>
+            <li>Case-sensitive</li>
+            <li>Use snake_case by convention (e.g., <code>my_variable</code>)</li>
+            <li>Avoid Python keywords (like <code>if</code>, <code>for</code>, etc.)</li>
+        </ul>
+        
+        <pre><code># Valid variable names
+age = 25
+user_name = "Alice"
+_is_admin = False
+MAX_RETRIES = 3</code></pre>
+        
+        <h4>Dynamic typing vs static typing</h4>
+        <p>Python uses duck typing ("if it walks like a duck and quacks like a duck, it must be a duck") where type checking happens at runtime.</p>
+        
+        <pre><code>x = 10      # x is an integer
+x = "hello" # now x is a string
+x = [1, 2]  # now x is a list</code></pre>
+        
+        <h4>type() and isinstance()</h4>
+        <p>Use these functions to check types:</p>
+        <pre><code>print(type(42))         # &lt;class 'int'>
+print(isinstance(3.14, float))  # True</code></pre>
+        
+        <h4>Variable scope</h4>
+        <p>Python has three scopes:</p>
+        <ul>
+            <li><strong>Local</strong>: Inside the current function</li>
+            <li><strong>Nonlocal</strong>: In enclosing functions (but not global)</li>
+            <li><strong>Global</strong>: At the module level</li>
+        </ul>
+        
+        <pre><code>x = "global"  # Global scope
+
+def outer():
+    x = "nonlocal"
+    
+    def inner():
+        nonlocal x  # Refers to x in outer()
+        x = "changed"
+    inner()
+    print(x)  # "changed"
+
+outer()
+print(x)  # "global"</code></pre>
+        
+        <h3>Primitive Data Types</h3>
+        <p>Python's built-in primitive types:</p>
+        
+        <table>
+            <tr>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td><code>int</code></td>
+                <td>Integer of unlimited size</td>
+                <td><code>42</code>, <code>-7</code>, <code>0</code></td>
+            </tr>
+            <tr>
+                <td><code>float</code></td>
+                <td>Floating-point number</td>
+                <td><code>3.14</code>, <code>-0.001</code></td>
+            </tr>
+            <tr>
+                <td><code>bool</code></td>
+                <td>Boolean value</td>
+                <td><code>True</code>, <code>False</code></td>
+            </tr>
+            <tr>
+                <td><code>str</code></td>
+                <td>Unicode string</td>
+                <td><code>"hello"</code>, <code>'world'</code></td>
+            </tr>
+            <tr>
+                <td><code>complex</code></td>
+                <td>Complex number</td>
+                <td><code>3+4j</code></td>
+            </tr>
+            <tr>
+                <td><code>NoneType</code></td>
+                <td>Represents absence of value</td>
+                <td><code>None</code></td>
+            </tr>
+        </table>
+        
+        <h3>Composite Data Types</h3>
+        <p>Python's built-in container types:</p>
+        
+        <table>
+            <tr>
+                <th>Type</th>
+                <th>Mutable</th>
+                <th>Ordered</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td><code>list</code></td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Ordered sequence of items</td>
+                <td><code>[1, 2, 3]</code></td>
+            </tr>
+            <tr>
+                <td><code>tuple</code></td>
+                <td>No</td>
+                <td>Yes</td>
+                <td>Immutable sequence</td>
+                <td><code>(1, 2, 3)</code></td>
+            </tr>
+            <tr>
+                <td><code>dict</code></td>
+                <td>Yes</td>
+                <td>No (Python 3.7+: insertion order)</td>
+                <td>Key-value mapping</td>
+                <td><code>{"a": 1, "b": 2}</code></td>
+            </tr>
+            <tr>
+                <td><code>set</code></td>
+                <td>Yes</td>
+                <td>No</td>
+                <td>Unordered collection of unique items</td>
+                <td><code>{1, 2, 3}</code></td>
+            </tr>
+            <tr>
+                <td><code>frozenset</code></td>
+                <td>No</td>
+                <td>No</td>
+                <td>Immutable set</td>
+                <td><code>frozenset({1, 2, 3})</code></td>
+            </tr>
+        </table>
+        
+        <h3>Advanced Topics</h3>
+        
+        <h4>Immutable vs Mutable Objects</h4>
+        <p>Immutable objects (int, float, str, tuple, frozenset) cannot be changed after creation. Mutable objects (list, dict, set) can be modified.</p>
+        
+        <pre><code># Immutable example
+x = "hello"
+y = x  # Both point to same string
+x += " world"  # Creates new string, x now points to it
+print(y)  # "hello" (unchanged)
+
+# Mutable example
+a = [1, 2]
+b = a  # Both reference same list
+a.append(3)  # Modifies the list in place
+print(b)  # [1, 2, 3] (changed)</code></pre>
+        
+        <h4>Memory Management</h4>
+        <p>Use <code>id()</code> to get memory address and <code>sys.getsizeof()</code> to check object size:</p>
+        
+        <pre><code>import sys
+
+x = 42
+print(id(x))  # Memory address
+print(sys.getsizeof(x))  # Size in bytes</code></pre>
+        
+        <h4>Type Hints (PEP 484)</h4>
+        <p>Python supports optional type annotations:</p>
+        
+        <pre><code>def greet(name: str) -> str:
+    return f"Hello, {name}"
+
+# Variable annotations
+count: int = 0</code></pre>
+        
+        <div class="note">
+            <p><strong>Note:</strong> Type hints don't enforce types at runtime but are useful for documentation and static type checkers like mypy.</p>
+        </div>
+    </section>
+    
+    <section id="operators">
+        <h2>2. Operators and Expressions</h2>
+        
+        <h3>Arithmetic Operators</h3>
+        <table>
+            <tr>
+                <th>Operator</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td><code>+</code></td>
+                <td>Addition</td>
+                <td><code>3 + 2 → 5</code></td>
+            </tr>
+            <tr>
+                <td><code>-</code></td>
+                <td>Subtraction</td>
+                <td><code>5 - 2 → 3</code></td>
+            </tr>
+            <tr>
+                <td><code>*</code></td>
+                <td>Multiplication</td>
+                <td><code>3 * 4 → 12</code></td>
+            </tr>
+            <tr>
+                <td><code>/</code></td>
+                <td>Division (float)</td>
+                <td><code>10 / 3 → 3.333...</code></td>
+            </tr>
+            <tr>
+                <td><code>//</code></td>
+                <td>Floor division</td>
+                <td><code>10 // 3 → 3</code></td>
+            </tr>
+            <tr>
+                <td><code>%</code></td>
+                <td>Modulus (remainder)</td>
+                <td><code>10 % 3 → 1</code></td>
+            </tr>
+            <tr>
+                <td><code>**</code></td>
+                <td>Exponentiation</td>
+                <td><code>2 ** 3 → 8</code></td>
+            </tr>
+        </table>
+        
+        <h4>Augmented Assignment</h4>
+        <p>Combine operation and assignment:</p>
+        <pre><code>x = 5
+x += 3  # Equivalent to x = x + 3
+x *= 2  # Equivalent to x = x * 2</code></pre>
+        
+        <h3>Comparison Operators</h3>
+        <table>
+            <tr>
+                <th>Operator</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td><code>==</code></td>
+                <td>Equal to</td>
+                <td><code>5 == 5 → True</code></td>
+            </tr>
+            <tr>
+                <td><code>!=</code></td>
+                <td>Not equal to</td>
+                <td><code>5 != 3 → True</code></td>
+            </tr>
+            <tr>
+                <td><code>&gt;</code></td>
+                <td>Greater than</td>
+                <td><code>5 > 3 → True</code></td>
+            </tr>
+            <tr>
+                <td><code>&lt;</code></td>
+                <td>Less than</td>
+                <td><code>5 < 3 → False</code></td>
+            </tr>
+            <tr>
+                <td><code>&gt;=</code></td>
+                <td>Greater than or equal to</td>
+                <td><code>5 >= 5 → True</code></td>
+            </tr>
+            <tr>
+                <td><code>&lt;=</code></td>
+                <td>Less than or equal to</td>
+                <td><code>5 <= 3 → False</code></td>
+            </tr>
+        </table>
+        
+        <h4>Chained Comparisons</h4>
+        <p>Python allows chaining comparison operators:</p>
+        <pre><code># Traditional way
+if x > 1 and x < 10:
+    print("Between 1 and 10")
+
+# Chained comparison
+if 1 < x < 10:
+    print("Between 1 and 10")</code></pre>
+        
+        <h3>Logical Operators</h3>
+        <table>
+            <tr>
+                <th>Operator</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td><code>and</code></td>
+                <td>Both conditions must be true</td>
+                <td><code>True and False → False</code></td>
+            </tr>
+            <tr>
+                <td><code>or</code></td>
+                <td>At least one condition must be true</td>
+                <td><code>True or False → True</code></td>
+            </tr>
+            <tr>
+                <td><code>not</code></td>
+                <td>Negates the condition</td>
+                <td><code>not True → False</code></td>
+            </tr>
+        </table>
+        
+        <h4>Truthy vs Falsy Values</h4>
+        <p>In Python, the following evaluate to <code>False</code>:</p>
+        <ul>
+            <li><code>None</code></li>
+            <li><code>False</code></li>
+            <li>Zero of any numeric type: <code>0</code>, <code>0.0</code>, <code>0j</code></li>
+            <li>Empty sequences: <code>""</code>, <code>()</code>, <code>[]</code></li>
+            <li>Empty mappings: <code>{}</code></li>
+            <li>Objects with <code>__bool__()</code> returning <code>False</code> or <code>__len__()</code> returning <code>0</code></li>
+        </ul>
+        
+        <pre><code>if not []:
+    print("Empty list is falsy")</code></pre>
+        
+        <h3>Bitwise Operators</h3>
+        <table>
+            <tr>
+                <th>Operator</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td><code>&</code></td>
+                <td>Bitwise AND</td>
+                <td><code>5 & 3 → 1</code></td>
+            </tr>
+            <tr>
+                <td><code>|</code></td>
+                <td>Bitwise OR</td>
+                <td><code>5 | 3 → 7</code></td>
+            </tr>
+            <tr>
+                <td><code>^</code></td>
+                <td>Bitwise XOR</td>
+                <td><code>5 ^ 3 → 6</code></td>
+            </tr>
+            <tr>
+                <td><code>~</code></td>
+                <td>Bitwise NOT</td>
+                <td><code>~5 → -6</code></td>
+            </tr>
+            <tr>
+                <td><code>&lt;&lt;</code></td>
+                <td>Left shift</td>
+                <td><code>5 << 1 → 10</code></td>
+            </tr>
+            <tr>
+                <td><code>&gt;&gt;</code></td>
+                <td>Right shift</td>
+                <td><code>5 >> 1 → 2</code></td>
+            </tr>
+        </table>
+        
+        <h3>Membership & Identity Operators</h3>
+        <table>
+            <tr>
+                <th>Operator</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td><code>in</code></td>
+                <td>Membership test</td>
+                <td><code>"a" in ["a", "b"] → True</code></td>
+            </tr>
+            <tr>
+                <td><code>not in</code></td>
+                <td>Negative membership test</td>
+                <td><code>"c" not in ["a", "b"] → True</code></td>
+            </tr>
+            <tr>
+                <td><code>is</code></td>
+                <td>Identity test (same object)</td>
+                <td><code>x is y</code></td>
+            </tr>
+            <tr>
+                <td><code>is not</code></td>
+                <td>Negative identity test</td>
+                <td><code>x is not y</code></td>
+            </tr>
+        </table>
+        
+        <div class="warning">
+            <p><strong>Important:</strong> <code>is</code> checks for object identity (same memory address), while <code>==</code> checks for equality (same value).</p>
+        </div>
+        
+        <h3>Operator Overloading</h3>
+        <p>Python allows operators to have different meanings for user-defined classes using special methods:</p>
+        
+        <table>
+            <tr>
+                <th>Operator</th>
+                <th>Method</th>
+            </tr>
+            <tr>
+                <td><code>+</code></td>
+                <td><code>__add__</code></td>
+            </tr>
+            <tr>
+                <td><code>-</code></td>
+                <td><code>__sub__</code></td>
+            </tr>
+            <tr>
+                <td><code>*</code></td>
+                <td><code>__mul__</code></td>
+            </tr>
+            <tr>
+                <td><code>==</code></td>
+                <td><code>__eq__</code></td>
+            </tr>
+            <tr>
+                <td><code>&lt;</code></td>
+                <td><code>__lt__</code></td>
+            </tr>
+        </table>
+        
+        <pre><code>class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        
+    def __add__(self, other):
+        return Vector(self.x + other.x, self.y + other.y)
+    
+    def __repr__(self):
+        return f"Vector({self.x}, {self.y})"
+
+v1 = Vector(1, 2)
+v2 = Vector(3, 4)
+print(v1 + v2)  # Vector(4, 6)</code></pre>
+    </section>
+    
+    <section id="conditions">
+        <h2>3. Conditions and Loops</h2>
+        
+        <h3>Conditional Statements</h3>
+        
+        <h4>if, elif, else</h4>
+        <pre><code>age = 18
+
+if age < 13:
+    print("Child")
+elif age < 18:
+    print("Teenager")
+else:
+    print("Adult")</code></pre>
+        
+        <h4>Ternary Operator</h4>
+        <p>Compact conditional expression:</p>
+        <pre><code># Traditional if-else
+if x > 0:
+    result = "positive"
+else:
+    result = "non-positive"
+
+# Ternary equivalent
+result = "positive" if x > 0 else "non-positive"</code></pre>
+        
+        <h4>match-case (Python 3.10+)</h4>
+        <p>Structural pattern matching:</p>
+        <pre><code>def handle_command(command):
+    match command.split():
+        case ["quit"]:
+            print("Quitting...")
+        case ["go", direction]:
+            print(f"Going {direction}")
+        case ["drop", *items]:
+            print(f"Dropping {', '.join(items)}")
+        case _:
+            print("Unknown command")</code></pre>
+        
+        <h3>Loops</h3>
+        
+        <h4>for loops</h4>
+        <p>Iterate over sequences or any iterable:</p>
+        <pre><code># Iterating through a list
+fruits = ["apple", "banana", "cherry"]
+for fruit in fruits:
+    print(fruit)
+
+# Using range()
+for i in range(5):  # 0 to 4
+    print(i)
+
+# With dictionary
+person = {"name": "Alice", "age": 25}
+for key, value in person.items():
+    print(f"{key}: {value}")</code></pre>
+        
+        <h4>while loops</h4>
+        <p>Execute while condition is true:</p>
+        <pre><code>count = 0
+while count < 5:
+    print(count)
+    count += 1</code></pre>
+        
+        <h3>Loop Control</h3>
+        
+        <table>
+            <tr>
+                <th>Statement</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>break</code></td>
+                <td>Exit the loop immediately</td>
+            </tr>
+            <tr>
+                <td><code>continue</code></td>
+                <td>Skip to next iteration</td>
+            </tr>
+            <tr>
+                <td><code>pass</code></td>
+                <td>Do nothing (placeholder)</td>
+            </tr>
+        </table>
+        
+        <pre><code>for num in range(10):
+    if num % 2 == 0:
+        continue  # Skip even numbers
+    if num > 7:
+        break    # Stop after 7
+    print(num)</code></pre>
+        
+        <h4>else clause in loops</h4>
+        <p>The <code>else</code> block executes if the loop completes normally (no <code>break</code>):</p>
+        <pre><code>for n in range(2, 10):
+    for x in range(2, n):
+        if n % x == 0:
+            print(f"{n} equals {x} * {n//x}")
+            break
+    else:
+        print(f"{n} is a prime number")</code></pre>
+        
+        <h3>Iteration Tools</h3>
+        
+        <table>
+            <tr>
+                <th>Function</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td><code>enumerate()</code></td>
+                <td>Get index and value</td>
+                <td><code>for i, val in enumerate(lst):</code></td>
+            </tr>
+            <tr>
+                <td><code>zip()</code></td>
+                <td>Iterate multiple sequences</td>
+                <td><code>for a, b in zip(lst1, lst2):</code></td>
+            </tr>
+            <tr>
+                <td><code>reversed()</code></td>
+                <td>Reverse iteration</td>
+                <td><code>for x in reversed(lst):</code></td>
+            </tr>
+            <tr>
+                <td><code>sorted()</code></td>
+                <td>Iterate in sorted order</td>
+                <td><code>for x in sorted(lst):</code></td>
+            </tr>
+        </table>
+        
+        <h3>Comprehensions</h3>
+        
+        <h4>List comprehensions</h4>
+        <pre><code># Traditional approach
+squares = []
+for x in range(10):
+    squares.append(x**2)
+
+# List comprehension
+squares = [x**2 for x in range(10)]
+
+# With condition
+even_squares = [x**2 for x in range(10) if x % 2 == 0]</code></pre>
+        
+        <h4>Dict comprehensions</h4>
+        <pre><code># Create dictionary of squares
+squares = {x: x**2 for x in range(5)}
+# {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}</code></pre>
+        
+        <h4>Set comprehensions</h4>
+        <pre><code>unique_lengths = {len(x) for x in ["apple", "banana", "cherry"]}
+# {5, 6}</code></pre>
+        
+        <h4>Generator expressions</h4>
+        <p>Memory-efficient alternative to list comprehensions:</p>
+        <pre><code># List comprehension (creates list)
+sum_of_squares = sum([x**2 for x in range(1000000)])
+
+# Generator expression (no list created)
+sum_of_squares = sum(x**2 for x in range(1000000))</code></pre>
+    </section>
+    
+    <section id="typecasting">
+        <h2>4. Type Casting</h2>
+        
+        <h3>Implicit vs Explicit Casting</h3>
+        <p>Python performs implicit type conversion in some cases:</p>
+        <pre><code># Integer + float → float
+result = 3 + 4.5  # 7.5 (float)
+
+# Boolean + integer → integer
+result = True + 5  # 6 (True becomes 1)</code></pre>
+        
+        <p>Explicit casting uses constructor functions:</p>
+        <pre><code>int("42")       # 42 (string to integer)
+float("3.14")   # 3.14 (string to float)
+str(100)        # "100" (integer to string)
+bool(0)         # False (integer to boolean)</code></pre>
+        
+        <h3>Common Conversions</h3>
+        <table>
+            <tr>
+                <th>Conversion</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td>String to number</td>
+                <td><code>int("42")</code>, <code>float("3.14")</code></td>
+            </tr>
+            <tr>
+                <td>Number to string</td>
+                <td><code>str(100)</code></td>
+            </tr>
+            <tr>
+                <td>Sequence conversions</td>
+                <td><code>tuple([1, 2, 3])</code>, <code>list("hello")</code></td>
+            </tr>
+            <tr>
+                <td>Dict to list</td>
+                <td><code>list({"a": 1, "b": 2}.items())</code></td>
+            </tr>
+        </table>
+        
+        <h3>Edge Cases & Pitfalls</h3>
+        
+        <h4>Handling ValueError</h4>
+        <pre><code>try:
+    num = int("abc")
+except ValueError:
+    print("Invalid integer")</code></pre>
+        
+        <h4>Lossy conversions</h4>
+        <pre><code>pi = 3.14159
+int(pi)  # 3 (decimal part truncated)</code></pre>
+        
+        <h4>Boolean casting rules</h4>
+        <p>All values are truthy except:</p>
+        <ul>
+            <li><code>None</code></li>
+            <li><code>False</code></li>
+            <li>Zero numeric values: <code>0</code>, <code>0.0</code>, <code>0j</code></li>
+            <li>Empty sequences/collections: <code>""</code>, <code>()</code>, <code>[]</code>, <code>{}</code>, <code>set()</code></li>
+        </ul>
+    </section>
+    
+    <section id="exceptions">
+        <h2>5. Exception Handling</h2>
+        
+        <h3>Basic Try-Except</h3>
+        <pre><code>try:
+    result = 10 / 0
+except ZeroDivisionError:
+    print("Cannot divide by zero")
+else:
+    print("Division successful")
+finally:
+    print("This always executes")</code></pre>
+        
+        <h3>Common Built-in Exceptions</h3>
+        <table>
+            <tr>
+                <th>Exception</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>ValueError</code></td>
+                <td>Invalid value (e.g., <code>int("abc")</code>)</td>
+            </tr>
+            <tr>
+                <td><code>TypeError</code></td>
+                <td>Invalid operation for type (e.g., <code>"a" + 1</code>)</td>
+            </tr>
+            <tr>
+                <td><code>IndexError</code></td>
+                <td>Sequence index out of range</td>
+            </tr>
+            <tr>
+                <td><code>KeyError</code></td>
+                <td>Dictionary key not found</td>
+            </tr>
+            <tr>
+                <td><code>ZeroDivisionError</code></td>
+                <td>Division by zero</td>
+            </tr>
+            <tr>
+                <td><code>FileNotFoundError</code></td>
+                <td>File doesn't exist</td>
+            </tr>
+        </table>
+        
+        <h3>Advanced Topics</h3>
+        
+        <h4>Custom Exceptions</h4>
+        <pre><code>class InvalidEmailError(Exception):
+    """Raised when email format is invalid"""
+    pass
+
+def validate_email(email):
+    if "@" not in email:
+        raise InvalidEmailError("Email must contain @")
+
+try:
+    validate_email("user.example.com")
+except InvalidEmailError as e:
+    print(f"Error: {e}")</code></pre>
+        
+        <h4>Exception Chaining</h4>
+        <pre><code>try:
+    open("nonexistent.txt")
+except FileNotFoundError as e:
+    raise RuntimeError("Failed to open file") from e</code></pre>
+        
+        <h4>assert Statements</h4>
+        <p>For debugging and internal consistency checks:</p>
+        <pre><code>def calculate_average(numbers):
+    assert len(numbers) > 0, "List cannot be empty"
+    return sum(numbers) / len(numbers)</code></pre>
+        
+        <h4>Context Managers (with blocks)</h4>
+        <pre><code># Automatically closes file after block
+with open("file.txt") as f:
+    content = f.read()</code></pre>
+        
+        <h3>Logging & Debugging</h3>
+        
+        <h4>logging module</h4>
+        <pre><code>import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+try:
+    1 / 0
+except ZeroDivisionError:
+    logger.exception("Division by zero error")</code></pre>
+        
+        <h4>traceback module</h4>
+        <pre><code>import traceback
+
+try:
+    1 / 0
+except:
+    traceback.print_exc()  # Prints full traceback</code></pre>
+    </section>
+    
+    <section id="io">
+        <h2>6. Input/Output Basics</h2>
+        
+        <h3>Console I/O</h3>
+        
+        <h4>print() function</h4>
+        <pre><code>print("Hello", "World", sep=", ")  # Hello, World
+print("No newline", end="")  # Prints without newline</code></pre>
+        
+        <h4>input() function</h4>
+        <pre><code>name = input("Enter your name: ")
+print(f"Hello, {name}")</code></pre>
+        
+        <h3>File I/O</h3>
+        
+        <h4>Opening files</h4>
+        <table>
+            <tr>
+                <th>Mode</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>'r'</code></td>
+                <td>Read (default)</td>
+            </tr>
+            <tr>
+                <td><code>'w'</code></td>
+                <td>Write (truncates existing)</td>
+            </tr>
+            <tr>
+                <td><code>'a'</code></td>
+                <td>Append</td>
+            </tr>
+            <tr>
+                <td><code>'x'</code></td>
+                <td>Exclusive creation (fails if exists)</td>
+            </tr>
+            <tr>
+                <td><code>'b'</code></td>
+                <td>Binary mode</td>
+            </tr>
+            <tr>
+                <td><code>'t'</code></td>
+                <td>Text mode (default)</td>
+            </tr>
+            <tr>
+                <td><code>'+'</code></td>
+                <td>Updating (read/write)</td>
+            </tr>
+        </table>
+        
+        <h4>Reading files</h4>
+        <pre><code># Using context manager (recommended)
+with open("file.txt", "r") as f:
+    content = f.read()  # Read entire file
+    lines = f.readlines()  # Read as list of lines
+    line = f.readline()  # Read single line
+    
+    # Iterate line by line (memory efficient)
+    for line in f:
+        print(line.strip())</code></pre>
+        
+        <h4>Writing files</h4>
+        <pre><code>with open("output.txt", "w") as f:
+    f.write("Line 1\n")
+    f.write("Line 2\n")
+    f.writelines(["Line 3\n", "Line 4\n"])</code></pre>
+    </section>
+    
+    <section id="formatting">
+        <h2>7. String Formatting</h2>
+        
+        <h3>Methods</h3>
+        
+        <h4>f-strings (Python 3.6+)</h4>
+        <pre><code>name = "Alice"
+age = 25
+print(f"My name is {name} and I'm {age} years old")
+
+# Expressions inside f-strings
+print(f"Next year I'll be {age + 1}")</code></pre>
+        
+        <h4>.format() method</h4>
+        <pre><code>"Hello, {}. You are {} years old".format("Alice", 25)
+"Coordinates: {latitude}, {longitude}".format(latitude="37.24N", longitude="115.81W")</code></pre>
+        
+        <h4>% formatting (legacy)</h4>
+        <pre><code>"Hello, %s. You are %d years old" % ("Alice", 25)</code></pre>
+        
+        <h3>Advanced Formatting</h3>
+        
+        <h4>Format specifiers</h4>
+        <pre><code># Number formatting
+print(f"Pi: {3.1415926535:.2f}")  # Pi: 3.14
+
+# Alignment
+print(f"{"left":<10}")   # left      
+print(f"{"right":>10}")  #      right
+print(f"{"center":^10}") #  center  
+
+# Number bases
+print(f"255 in hex: {255:#x}")  # 0xff
+print(f"255 in binary: {255:b}")  # 11111111</code></pre>
+        
+        <h4>Multiline strings</h4>
+        <pre><code>long_text = """This is a
+multi-line string
+that spans several lines"""
+
+# With f-strings
+name = "Alice"
+message = f"""Dear {name},
+Thank you for your order.
+We'll ship it soon."""</code></pre>
+    </section>
+    
+    <section id="docs">
+        <h2>8. Docstrings & Comments</h2>
+        
+        <h3>Docstrings</h3>
+        <p>Multi-line documentation strings (following PEP 257):</p>
+        <pre><code>def calculate_area(width, height):
+    """Calculate the area of a rectangle.
+    
+    Args:
+        width (float): The width of the rectangle
+        height (float): The height of the rectangle
+        
+    Returns:
+        float: The area of the rectangle
+    """
+    return width * height</code></pre>
+        
+        <h4>Accessing docstrings</h4>
+        <pre><code>print(calculate_area.__doc__)
+help(calculate_area)</code></pre>
+        
+        <h3>Comments</h3>
+        <p>Single-line comments start with <code>#</code>:</p>
+        <pre><code># This is a single-line comment
+x = 5  # Inline comment</code></pre>
+        
+        <div class="note">
+            <p><strong>PEP 8 Guidelines:</strong></p>
+            <ul>
+                <li>Use docstrings for public modules, functions, classes, and methods</li>
+                <li>Keep comments up-to-date when code changes</li>
+                <li>Comments should explain why, not what (code should be self-documenting)</li>
+                <li>Use complete sentences in docstrings</li>
+            </ul>
+        </div>
+    </section>
+    
+    <section id="execution">
+        <h2>9. Python's Execution Model</h2>
+        
+        <h3>Script vs. Module</h3>
+        <p>The special <code>__name__</code> variable determines how a file is being used:</p>
+        <pre><code># my_module.py
+def main():
+    print("This is the main function")
+
+if __name__ == "__main__":
+    # Executed when run directly
+    main()
+else:
+    # Executed when imported
+    print("Module imported")</code></pre>
+        
+        <h3>Bytecode Compilation</h3>
+        <p>Python compiles source code (<code>.py</code>) to bytecode (<code>.pyc</code>) for faster execution.</p>
+        
+        <h3>Namespaces and Scope</h3>
+        <p>Python uses namespaces to organize variables:</p>
+        <ul>
+            <li><strong>Local</strong>: Inside the current function</li>
+            <li><strong>Enclosing</strong>: For nested functions</li>
+            <li><strong>Global</strong>: At the module level</li>
+            <li><strong>Built-in</strong>: Python's built-in names</li>
+        </ul>
+        
+        <pre><code>x = "global"
+
+def outer():
+    x = "outer"
+    
+    def inner():
+        nonlocal x  # Refers to x in outer()
+        x = "inner"
+    inner()
+    print(x)  # "inner"
+
+outer()
+print(x)  # "global"</code></pre>
+    </section>
+    
+    <footer>
+        <p>© 2023 Python Developer Guide. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,91 @@
+1. Recursion (Industrial-Strength Patterns)
+Core Mechanics
+Call Stack Analysis:
+
+Frame allocation (Python sys.getrecursionlimit() ≈ 1000)
+
+Tail recursion optimization (TCO) workarounds
+
+Time/Space Tradeoffs:
+
+markdown
+| Approach       | Time           | Space (Stack)  |
+|----------------|----------------|----------------|
+| Head Recursion | O(n)           | O(n)           |
+| Tail Recursion | O(n)           | O(1) if TCO    |
+Advanced Patterns
+Memoization:
+
+python
+from functools import lru_cache
+@lru_cache(maxsize=None)
+def fib(n):
+    return n if n < 2 else fib(n-1) + fib(n-2)
+Trampolining:
+
+python
+def trampoline(fn):
+    while callable(fn): fn = fn()
+    return fn
+Production Considerations
+Stack overflow mitigation (iteration conversion)
+
+Debugging techniques (stack frame inspection)
+
+2. Sorting Algorithms (Hardware-Aware Analysis)
+Comparative Performance
+Algorithm	Time (Best/Worst)	Space	Cache-Friendly	Stable
+QuickSort	O(n log n)/O(n²)	O(log n)	✅	❌
+MergeSort	O(n log n)	O(n)	❌	✅
+TimSort	O(n)/O(n log n)	O(n)	✅	✅
+Python-Specific Optimizations
+Timsort Hybrid:
+
+Mergesort + insertion sort (Python’s list.sort())
+
+Galloping mode for unbalanced data
+
+Key Functions:
+
+python
+data.sort(key=lambda x: (x[1], -x[0]))  # Tuple sorting
+Specialized Sorts
+Radix Sort: O(n) for fixed-width keys
+
+Bucket Sort: O(n+k) for uniform distributions
+
+3. Searching Algorithms (Systems Perspective)
+Binary Search Variants
+Standard:
+
+python
+def bisect(arr, x):
+    lo, hi = 0, len(arr)
+    while lo < hi:
+        mid = (lo + hi) // 2
+        lo, hi = (mid + 1, hi) if arr[mid] < x else (lo, mid)
+    return lo
+Industrial Adaptations:
+
+Exponential Search (unbounded datasets)
+
+Interpolation Search (O(log log n) for uniform dist.)
+
+Hash-Based Search
+Bloom Filters:
+
+O(1) membership test (false positives possible)
+
+Redis-backed implementations
+
+Tree Search Optimizations
+B-Trees: Disk-optimized (database indices)
+
+Trie: O(L) prefix search (autocomplete)
+
+Real-World Implementations
+Python bisect Module: Binary search utilities
+
+NumPy searchsorted: Vectorized binary search
+
+Elasticsearch: Hybrid inverted indices

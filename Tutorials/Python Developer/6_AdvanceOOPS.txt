@@ -1,0 +1,187 @@
+Advanced Object-Oriented Programming (OOP) in Python
+1. Inheritance
+Basic Inheritance
+Syntax: class Child(Parent)
+
+Method overriding
+
+The super() function (accessing parent class methods)
+
+isinstance() and issubclass() checks
+
+Types of Inheritance
+Single Inheritance (One parent → One child)
+
+Multiple Inheritance (Multiple parents → One child)
+
+Method Resolution Order (MRO) with __mro__
+
+Diamond problem and Python’s solution
+
+Multilevel Inheritance (Grandparent → Parent → Child)
+
+Hierarchical Inheritance (One parent → Multiple children)
+
+Abstract Base Classes (ABC)
+from abc import ABC, abstractmethod
+
+Defining abstract methods
+
+Preventing instantiation of incomplete classes
+
+2. Polymorphism
+Method Overriding
+Same method name, different implementations in child classes
+
+Runtime polymorphism (dynamic dispatch)
+
+Duck Typing
+"If it walks like a duck and quacks like a duck, it's a duck"
+
+No explicit interface requirements
+
+Operator Overloading
++ → __add__, == → __eq__, etc.
+
+Making objects work with Python operators
+
+Function Polymorphism
+Built-in functions (len(), str()) work differently per object type
+
+3. Encapsulation
+Access Modifiers (Convention-Based)
+Public: No prefix (self.value)
+
+Protected: Single underscore (self._value)
+
+Private: Double underscore (self.__value)
+
+Name mangling (_ClassName__value)
+
+Property Decorators (Getters & Setters)
+@property (getter)
+
+@property_name.setter (setter)
+
+@property_name.deleter (deleter)
+
+Why Encapsulation?
+Data validation
+
+Computed attributes
+
+Preventing direct access to sensitive data
+
+4. Dunder (Magic) Methods
+Object Representation
+__str__ → str(obj) (human-readable)
+
+__repr__ → repr(obj) (unambiguous, debug-friendly)
+
+Comparison Methods
+__eq__ (==), __lt__ (<), __gt__ (>)
+
+__hash__ for hashable objects
+
+Arithmetic Operations
+__add__ (+), __sub__ (-), __mul__ (*)
+
+In-place operations (__iadd__, +=)
+
+Container Methods
+__len__ (len(obj))
+
+__getitem__ (obj[key])
+
+__setitem__ (obj[key] = value)
+
+Callable Objects
+__call__ → Makes an instance callable like a function
+
+Context Managers
+__enter__ & __exit__ → Used in with blocks
+
+5. Advanced Patterns & Best Practices
+Mixins
+Reusable components in multiple inheritance
+
+Example: LoggingMixin, SerializationMixin
+
+Descriptors
+__get__, __set__, __delete__
+
+Used in @property, @classmethod, @staticmethod
+
+Metaclasses
+type as the default metaclass
+
+Custom metaclass (class Meta(type))
+
+Use cases: ORMs, API enforcement
+
+Singleton Pattern
+Ensuring only one instance exists
+
+Implementation via __new__
+
+Dependency Injection
+Loose coupling between classes
+
+Constructor injection vs setter injection
+
+6. Performance & Optimization
+__slots__
+Reduces memory usage by preventing __dict__
+
+Trade-offs (no dynamic attributes)
+
+Method Lookup Optimization
+Caching method lookups
+
+Impact of multiple inheritance on performance
+
+Weak References
+weakref module for circular references
+
+Complete Example: Advanced OOP Implementation
+python
+from abc import ABC, abstractmethod
+
+class Animal(ABC):
+    @abstractmethod
+    def speak(self):
+        pass
+
+class Dog(Animal):
+    def speak(self):
+        return "Woof!"
+    
+    def __str__(self):
+        return "I am a Dog"
+
+class Cat(Animal):
+    def speak(self):
+        return "Meow!"
+    
+    def __repr__(self):
+        return "Cat()"
+
+class PetShop:
+    def __init__(self):
+        self.__pets = []  # Private list
+    
+    @property
+    def pets(self):
+        return self.__pets
+    
+    def add_pet(self, pet: Animal):
+        if isinstance(pet, Animal):
+            self.__pets.append(pet)
+        else:
+            raise TypeError("Only Animal instances allowed")
+
+# Usage
+shop = PetShop()
+shop.add_pet(Dog())
+shop.add_pet(Cat())
+print([pet.speak() for pet in shop.pets])  # Polymorphism in action

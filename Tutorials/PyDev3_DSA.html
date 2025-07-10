@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Data Structures - Comprehensive Guide</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        header {
+            background-color: #3776ab;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+        }
+        
+        h1 {
+            margin-top: 0;
+        }
+        
+        h2 {
+            border-bottom: 2px solid #3776ab;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        
+        h3 {
+            color: #3776ab;
+            margin-top: 25px;
+        }
+        
+        h4 {
+            color: #5d8fc2;
+            margin-top: 20px;
+        }
+        
+        code {
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Consolas', monospace;
+        }
+        
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 4px solid #3776ab;
+        }
+        
+        .note {
+            background-color: #e7f4ff;
+            border-left: 4px solid #3776ab;
+            padding: 10px 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .warning {
+            background-color: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 10px 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #3776ab;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .toc {
+            background-color: #f0f7ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .toc li {
+            margin-bottom: 5px;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: #2c3e50;
+        }
+        
+        .toc a:hover {
+            color: #3776ab;
+            text-decoration: underline;
+        }
+        
+        .complexity-table {
+            width: 80%;
+            margin: 20px auto;
+        }
+        
+        .complexity-table td:nth-child(2) {
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Python Data Structures: Core Concepts</h1>
+        <p>Mastering Python's built-in data structures for efficient programming</p>
+    </header>
+    
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#lists-tuples">1. Lists and Tuples</a></li>
+            <li><a href="#sets-dicts">2. Sets and Dictionaries</a></li>
+            <li><a href="#comprehensions">3. List Comprehensions</a></li>
+            <li><a href="#generators">4. Generator Expressions</a></li>
+            <li><a href="#performance">5. Performance & Optimization</a></li>
+            <li><a href="#specialized">6. Specialized Collections</a></li>
+            <li><a href="#memory">7. Memory Management</a></li>
+        </ul>
+    </div>
+    
+    <section id="lists-tuples">
+        <h2>1. Lists and Tuples</h2>
+        
+        <h3>Lists (Mutable Sequences)</h3>
+        
+        <h4>Basics</h4>
+        <p>Lists are ordered, mutable collections that can hold heterogeneous data types.</p>
+        
+        <pre><code># List creation
+numbers = [1, 2, 3, 4]
+mixed = [1, "two", 3.0, [4, 5]]
+
+# Indexing and slicing
+print(numbers[0])     # 1 (first element)
+print(numbers[-1])    # 4 (last element)
+print(numbers[1:3])   # [2, 3] (slice from index 1 to 2)</code></pre>
+        
+        <h4>Common Methods</h4>
+        <table>
+            <tr>
+                <th>Method</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td><code>append(x)</code></td>
+                <td>Add item to end</td>
+                <td><code>numbers.append(5)</code></td>
+            </tr>
+            <tr>
+                <td><code>extend(iterable)</code></td>
+                <td>Add all items from iterable</td>
+                <td><code>numbers.extend([6,7])</code></td>
+            </tr>
+            <tr>
+                <td><code>insert(i, x)</code></td>
+                <td>Insert item at position</td>
+                <td><code>numbers.insert(0, 0)</code></td>
+            </tr>
+            <tr>
+                <td><code>remove(x)</code></td>
+                <td>Remove first occurrence</td>
+                <td><code>numbers.remove(3)</code></td>
+            </tr>
+            <tr>
+                <td><code>pop([i])</code></td>
+                <td>Remove and return item</td>
+                <td><code>last = numbers.pop()</code></td>
+            </tr>
+        </table>
+        
+        <h4>List Operations</h4>
+        <pre><code># Concatenation
+combined = [1, 2] + [3, 4]  # [1, 2, 3, 4]
+
+# Repetition
+repeated = [0] * 5  # [0, 0, 0, 0, 0]
+
+# Membership testing
+print(2 in numbers)  # True</code></pre>
+        
+        <h4>Advanced Operations</h4>
+        
+        <h5>Shallow vs Deep Copying</h5>
+        <pre><code>import copy
+
+original = [[1, 2], [3, 4]]
+
+# Shallow copy (only copies references)
+shallow = original.copy()
+shallow[0][0] = 99  # Affects original!
+
+# Deep copy (copies all nested objects)
+deep = copy.deepcopy(original)
+deep[0][0] = 100  # Doesn't affect original</code></pre>
+        
+        <h5>Memory Allocation</h5>
+        <p>Python lists are dynamic arrays that overallocate memory for growth:</p>
+        <pre><code>import sys
+
+lst = []
+for i in range(10):
+    print(f"Length: {len(lst)}, Size: {sys.getsizeof(lst)} bytes")
+    lst.append(i)</code></pre>
+        
+        <h3>Tuples (Immutable Sequences)</h3>
+        
+        <h4>Basics</h4>
+        <p>Tuples are immutable, ordered sequences typically used for heterogeneous data.</p>
+        
+        <pre><code># Tuple creation
+point = (10, 20)
+colors = ("red", "green", "blue")
+
+# Single-element tuple (note trailing comma)
+single = (42,)
+
+# Common gotcha - not a tuple
+not_a_tuple = (42)  # Just an integer</code></pre>
+        
+        <h4>Immutability and Use Cases</h4>
+        <ul>
+            <li>Dictionary keys (must be hashable/immutable)</li>
+            <li>Function arguments and return values</li>
+            <li>Data integrity (can't be modified accidentally)</li>
+            <li>Generally more memory efficient than lists</li>
+        </ul>
+        
+        <h4>Advanced Concepts</h4>
+        
+        <h5>Named Tuples</h5>
+        <pre><code>from collections import namedtuple
+
+# Create a class-like structure
+Point = namedtuple("Point", ["x", "y"])
+p = Point(10, y=20)
+print(p.x, p.y)  # 10 20</code></pre>
+        
+        <h5>Tuple Unpacking</h5>
+        <pre><code># Basic unpacking
+x, y = (10, 20)
+
+# Extended unpacking (Python 3+)
+first, *rest = (1, 2, 3, 4)  # first=1, rest=[2, 3, 4]
+
+# Swapping variables
+a, b = b, a</code></pre>
+        
+        <div class="note">
+            <p><strong>Performance Note:</strong> Tuples can be more memory efficient than lists for small collections, but the difference is negligible for most use cases.</p>
+        </div>
+    </section>
+    
+    <section id="sets-dicts">
+        <h2>2. Sets and Dictionaries</h2>
+        
+        <h3>Sets (Unique, Unordered Collections)</h3>
+        
+        <h4>Basics</h4>
+        <p>Sets are mutable collections of unique, hashable elements with fast membership testing.</p>
+        
+        <pre><code># Set creation
+primes = {2, 3, 5, 7}
+empty_set = set()  # {} creates empty dict!
+
+# Basic operations
+primes.add(11)      # Add element
+primes.remove(3)    # Remove element (raises KeyError if missing)
+primes.discard(99)  # Remove if present (no error)
+
+# Set operations
+odds = {1, 3, 5, 7, 9}
+print(primes | odds)   # Union
+print(primes & odds)   # Intersection
+print(primes - odds)   # Difference
+print(primes ^ odds)   # Symmetric difference</code></pre>
+        
+        <h4>Frozensets</h4>
+        <p>Immutable version of sets (can be used as dictionary keys):</p>
+        <pre><code>immutable = frozenset([1, 2, 3])</code></pre>
+        
+        <h4>Advanced Usage</h4>
+        
+        <h5>Set Comprehensions</h5>
+        <pre><code>squares = {x**2 for x in range(10)}</code></pre>
+        
+        <h5>Performance</h5>
+        <p>Sets provide O(1) average case membership testing:</p>
+        <pre><code># Much faster than checking lists for membership
+if 999999 in huge_set:  # Fast
+    print("Found")
+
+if 999999 in huge_list:  # Slow (O(n))
+    print("Found")</code></pre>
+        
+        <h5>Use Cases</h5>
+        <ul>
+            <li>Removing duplicates from a sequence: <code>list(set(duplicates))</code></li>
+            <li>Membership testing (faster than lists)</li>
+            <li>Mathematical set operations</li>
+            <li>Finding unique elements</li>
+        </ul>
+        
+        <h3>Dictionaries (Key-Value Stores)</h3>
+        
+        <h4>Basics</h4>
+        <p>Dictionaries are mutable mappings from unique keys to values.</p>
+        
+        <pre><code># Dictionary creation
+person = {"name": "Alice", "age": 25}
+empty_dict = {}
+
+# Accessing values
+print(person["name"])      # Alice
+print(person.get("age"))   # 25
+print(person.get("job", "unemployed"))  # Default if missing
+
+# Adding/modifying
+person["job"] = "Engineer"
+person["age"] = 26
+
+# Membership testing
+print("name" in person)  # True</code></pre>
+        
+        <h4>Dictionary Methods</h4>
+        <table>
+            <tr>
+                <th>Method</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td><code>keys()</code></td>
+                <td>View of dictionary keys</td>
+                <td><code>person.keys()</code></td>
+            </tr>
+            <tr>
+                <td><code>values()</code></td>
+                <td>View of dictionary values</td>
+                <td><code>person.values()</code></td>
+            </tr>
+            <tr>
+                <td><code>items()</code></td>
+                <td>View of (key, value) pairs</td>
+                <td><code>person.items()</code></td>
+            </tr>
+            <tr>
+                <td><code>update()</code></td>
+                <td>Merge with another dict</td>
+                <td><code>person.update({"city": "NY"})</code></td>
+            </tr>
+            <tr>
+                <td><code>setdefault()</code></td>
+                <td>Get value or set default</td>
+                <td><code>person.setdefault("age", 30)</code></td>
+            </tr>
+        </table>
+        
+        <h4>Advanced Topics</h4>
+        
+        <h5>Dictionary Comprehensions</h5>
+        <pre><code>squares = {x: x**2 for x in range(5)}
+# {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}</code></pre>
+        
+        <h5>Default Dictionaries</h5>
+        <pre><code>from collections import defaultdict
+
+# Automatically initialize missing keys
+word_counts = defaultdict(int)
+for word in text.split():
+    word_counts[word] += 1</code></pre>
+        
+        <h5>Ordered Dictionaries</h5>
+        <p>As of Python 3.7+, regular dictionaries preserve insertion order. For additional features:</p>
+        <pre><code>from collections import OrderedDict
+
+# Remember insertion order (useful before Python 3.7)
+od = OrderedDict()
+od["a"] = 1
+od["b"] = 2
+od.move_to_end("a")  # Move to end</code></pre>
+        
+        <h5>Memory Optimization</h5>
+        <p>Dictionaries consume more memory than lists. For memory-critical applications:</p>
+        <ul>
+            <li>Use <code>__slots__</code> in classes to prevent dynamic dictionary creation</li>
+            <li>Consider <code>array.array</code> or NumPy arrays for homogeneous numeric data</li>
+            <li>Use <code>sys.getsizeof()</code> to measure memory usage</li>
+        </ul>
+    </section>
+    
+    <section id="comprehensions">
+        <h2>3. List Comprehensions</h2>
+        
+        <h3>Basic Syntax</h3>
+        <p>Concise way to create lists by applying operations to iterables.</p>
+        
+        <pre><code># Basic comprehension
+squares = [x**2 for x in range(10)]
+
+# With condition
+even_squares = [x**2 for x in range(10) if x % 2 == 0]
+
+# Equivalent to:
+even_squares = []
+for x in range(10):
+    if x % 2 == 0:
+        even_squares.append(x**2)</code></pre>
+        
+        <h3>Advanced Patterns</h3>
+        
+        <h4>Nested Comprehensions</h4>
+        <pre><code># Flatten a 2D list
+matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+flat = [num for row in matrix for num in row]
+# [1, 2, 3, 4, 5, 6, 7, 8, 9]</code></pre>
+        
+        <h4>Multiple Loops</h4>
+        <pre><code># Cartesian product
+colors = ["red", "green"]
+sizes = ["S", "M", "L"]
+tshirts = [(color, size) for color in colors for size in sizes]
+# [('red', 'S'), ('red', 'M'), ('red', 'L'), 
+#  ('green', 'S'), ('green', 'M'), ('green', 'L')]</code></pre>
+        
+        <h4>Performance Considerations</h4>
+        <p>List comprehensions are generally faster than equivalent loops:</p>
+        <ul>
+            <li>Optimized at the C level in Python</li>
+            <li>More concise and often more readable</li>
+            <li>But can become unreadable if overly complex</li>
+        </ul>
+        
+        <div class="note">
+            <p><strong>Readability Tip:</strong> If a comprehension spans multiple lines or has complex logic, consider using a traditional loop for better readability.</p>
+        </div>
+    </section>
+    
+    <section id="generators">
+        <h2>4. Generator Expressions</h2>
+        
+        <h3>Basics</h3>
+        <p>Similar to list comprehensions but produce items lazily (one at a time).</p>
+        
+        <pre><code># Generator expression
+squares_gen = (x**2 for x in range(10))
+
+# Consume generator
+for num in squares_gen:
+    print(num)
+
+# Can only be consumed once
+print(list(squares_gen))  # [] (already exhausted)</code></pre>
+        
+        <h4>Memory Efficiency</h4>
+        <p>Generators don't store all values in memory at once:</p>
+        <pre><code># Compare memory usage
+import sys
+
+list_comp = [x**2 for x in range(10000)]
+gen_expr = (x**2 for x in range(10000))
+
+print(sys.getsizeof(list_comp))  # Large (stores all values)
+print(sys.getsizeof(gen_expr))   # Small (constant size)</code></pre>
+        
+        <h3>Advanced Usage</h3>
+        
+        <h4>Chaining Generators</h4>
+        <pre><code>def integers():
+    """Infinite generator of integers"""
+    i = 1
+    while True:
+        yield i
+        i += 1
+
+def squares():
+    for i in integers():
+        yield i * i
+
+# Take first 5 squares
+first_5 = (x for _, x in zip(range(5), squares()))</code></pre>
+        
+        <h4>yield vs Generator Expressions</h4>
+        <p>Generator functions (using <code>yield</code>) are more flexible but generator expressions are more concise:</p>
+        <pre><code># Generator function
+def squares(n):
+    for i in range(n):
+        yield i ** 2
+
+# Generator expression equivalent
+squares = (i**2 for i in range(n))</code></pre>
+        
+        <h4>Use Cases</h4>
+        <ul>
+            <li>Processing large files line by line</li>
+            <li>Memory-efficient pipelines</li>
+            <li>Infinite sequences</li>
+            <li>Anywhere you only need to process items once</li>
+        </ul>
+    </section>
+    
+    <section id="performance">
+        <h2>5. Performance & Optimization</h2>
+        
+        <h3>Time Complexity</h3>
+        <p>Understanding Big-O notation helps choose the right data structure:</p>
+        
+        <table class="complexity-table">
+            <tr>
+                <th>Operation</th>
+                <th>List</th>
+                <th>Set/Dict</th>
+                <th>Deque</th>
+            </tr>
+            <tr>
+                <td>Index Access</td>
+                <td>O(1)</td>
+                <td>N/A</td>
+                <td>O(1) (ends only)</td>
+            </tr>
+            <tr>
+                <td>Search</td>
+                <td>O(n)</td>
+                <td>O(1)</td>
+                <td>O(n)</td>
+            </tr>
+            <tr>
+                <td>Insert at End</td>
+                <td>O(1)*</td>
+                <td>N/A</td>
+                <td>O(1)</td>
+            </tr>
+            <tr>
+                <td>Insert at Start</td>
+                <td>O(n)</td>
+                <td>N/A</td>
+                <td>O(1)</td>
+            </tr>
+            <tr>
+                <td>Delete Item</td>
+                <td>O(n)</td>
+                <td>O(1)</td>
+                <td>O(n)</td>
+            </tr>
+        </table>
+        <p class="note">* Amortized O(1) due to occasional resizing</p>
+        
+        <h3>Choosing the Right Data Structure</h3>
+        <ul>
+            <li><strong>Lists</strong>: When you need ordered, indexable data that changes frequently</li>
+            <li><strong>Tuples</strong>: For immutable sequences, dictionary keys, or when memory matters</li>
+            <li><strong>Sets</strong>: For membership testing and uniqueness guarantees</li>
+            <li><strong>Dictionaries</strong>: For key-value associations and fast lookups</li>
+            <li><strong>Deques</strong>: When you need fast appends/pops from both ends</li>
+        </ul>
+    </section>
+    
+    <section id="specialized">
+        <h2>6. Specialized Collections</h2>
+        
+        <h3>collections.deque</h3>
+        <p>Double-ended queue with fast O(1) appends and pops from both ends:</p>
+        <pre><code>from collections import deque
+
+d = deque([1, 2, 3])
+d.appendleft(0)  # [0, 1, 2, 3]
+d.pop()          # Removes 3
+d.popleft()      # Removes 0</code></pre>
+        
+        <h3>collections.Counter</h3>
+        <p>Specialized dictionary for counting hashable objects:</p>
+        <pre><code>from collections import Counter
+
+words = ["apple", "banana", "apple", "orange", "banana", "apple"]
+word_counts = Counter(words)
+print(word_counts.most_common(2))  # [('apple', 3), ('banana', 2)]</code></pre>
+        
+        <h3>heapq</h3>
+        <p>Priority queue implementation using a binary heap:</p>
+        <pre><code>import heapq
+
+nums = [5, 7, 9, 1, 3]
+heapq.heapify(nums)  # Convert to heap
+
+print(heapq.heappop(nums))  # 1 (smallest element)
+heapq.heappush(nums, 2)     # Add new element</code></pre>
+    </section>
+    
+    <section id="memory">
+        <h2>7. Memory Management</h2>
+        
+        <h3>Internal Storage</h3>
+        <p>Python data structures have different memory layouts:</p>
+        <ul>
+            <li><strong>Lists</strong>: Dynamic array of pointers to objects</li>
+            <li><strong>Tuples</strong>: Fixed-size array of pointers</li>
+            <li><strong>Dictionaries</strong>: Hash tables with open addressing</li>
+            <li><strong>Sets</strong>: Similar to dictionaries but without values</li>
+        </ul>
+        
+        <h3>Memory Measurement</h3>
+        <pre><code>import sys
+
+lst = list(range(1000))
+tup = tuple(range(1000))
+
+print(sys.getsizeof(lst))  # ~9024 bytes
+print(sys.getsizeof(tup))  # ~8040 bytes</code></pre>
+        
+        <h3>Memory Profiling</h3>
+        <p>For detailed memory analysis:</p>
+        <pre><code># Install memory_profiler first: pip install memory-profiler
+from memory_profiler import profile
+
+@profile
+def process_data():
+    data = [i**2 for i in range(100000)]
+    return sum(data)
+
+process_data()</code></pre>
+    </section>
+    
+    <footer>
+        <p>© 2023 Python Developer Guide. All rights reserved.</p>
+    </footer>
+</body>
+</html>

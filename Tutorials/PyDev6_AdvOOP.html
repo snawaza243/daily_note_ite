@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Python OOP: Master Guide</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        header {
+            background-color: #3776ab;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+        }
+        
+        h1 {
+            margin-top: 0;
+        }
+        
+        h2 {
+            border-bottom: 2px solid #3776ab;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        
+        h3 {
+            color: #3776ab;
+            margin-top: 25px;
+        }
+        
+        h4 {
+            color: #5d8fc2;
+            margin-top: 20px;
+        }
+        
+        code {
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Consolas', monospace;
+        }
+        
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 4px solid #3776ab;
+        }
+        
+        .note {
+            background-color: #e7f4ff;
+            border-left: 4px solid #3776ab;
+            padding: 10px 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .warning {
+            background-color: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 10px 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #3776ab;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .toc {
+            background-color: #f0f7ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .toc li {
+            margin-bottom: 5px;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: #2c3e50;
+        }
+        
+        .toc a:hover {
+            color: #3776ab;
+            text-decoration: underline;
+        }
+        
+        .inheritance-diagram {
+            text-align: center;
+            margin: 20px 0;
+            font-family: monospace;
+        }
+        
+        .method-table {
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .method-table td:first-child {
+            font-family: monospace;
+            width: 25%;
+        }
+        
+        .dunder-table {
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .dunder-table td:first-child {
+            font-family: monospace;
+            width: 30%;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Advanced Object-Oriented Programming in Python</h1>
+        <p>Mastering inheritance, polymorphism, encapsulation, and Python's advanced OOP features</p>
+    </header>
+    
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#inheritance">1. Inheritance</a></li>
+            <li><a href="#polymorphism">2. Polymorphism</a></li>
+            <li><a href="#encapsulation">3. Encapsulation</a></li>
+            <li><a href="#dunder">4. Dunder (Magic) Methods</a></li>
+            <li><a href="#patterns">5. Advanced Patterns & Best Practices</a></li>
+            <li><a href="#performance">6. Performance & Optimization</a></li>
+            <li><a href="#example">Complete Example</a></li>
+        </ul>
+    </div>
+    
+    <section id="inheritance">
+        <h2>1. Inheritance</h2>
+        
+        <h3>Basic Inheritance</h3>
+        
+        <pre><code>class Animal:
+    def __init__(self, name):
+        self.name = name
+    
+    def speak(self):
+        raise NotImplementedError("Subclass must implement")
+
+class Dog(Animal):
+    def speak(self):
+        return f"{self.name} says Woof!"
+
+class Cat(Animal):
+    def speak(self):
+        return f"{self.name} says Meow!"
+
+# Usage
+animals = [Dog("Rex"), Cat("Whiskers")]
+for animal in animals:
+    print(animal.speak())</code></pre>
+        
+        <h4>The super() Function</h4>
+        <p>Access parent class methods and properties:</p>
+        <pre><code>class Parent:
+    def __init__(self, value):
+        self.value = value
+
+class Child(Parent):
+    def __init__(self, value, extra):
+        super().__init__(value)  # Call parent __init__
+        self.extra = extra</code></pre>
+        
+        <h4>Type Checking</h4>
+        <pre><code>dog = Dog("Buddy")
+print(isinstance(dog, Dog))    # True
+print(isinstance(dog, Animal)) # True
+print(issubclass(Dog, Animal)) # True</code></pre>
+        
+        <h3>Types of Inheritance</h3>
+        
+        <h4>Single Inheritance</h4>
+        <div class="inheritance-diagram">
+            Parent<br>
+            |<br>
+            Child
+        </div>
+        
+        <h4>Multiple Inheritance</h4>
+        <div class="inheritance-diagram">
+            Parent1   Parent2<br>
+              \       /<br>
+               Child
+        </div>
+        
+        <h5>Method Resolution Order (MRO)</h5>
+        <pre><code>class A: pass
+class B(A): pass
+class C(A): pass
+class D(B, C): pass
+
+print(D.__mro__)
+# (&lt;class '__main__.D'>, &lt;class '__main__.B'>, 
+#  &lt;class '__main__.C'>, &lt;class '__main__.A'>, 
+#  &lt;class 'object'>)</code></pre>
+        
+        <h5>Diamond Problem</h5>
+        <p>Python solves this with C3 linearization algorithm:</p>
+        <div class="inheritance-diagram">
+            A<br>
+           / \<br>
+          B   C<br>
+           \ /<br>
+            D
+        </div>
+        
+        <h4>Multilevel Inheritance</h4>
+        <div class="inheritance-diagram">
+            Grandparent<br>
+            |<br>
+            Parent<br>
+            |<br>
+            Child
+        </div>
+        
+        <h4>Hierarchical Inheritance</h4>
+        <div class="inheritance-diagram">
+            Parent<br>
+           /    \<br>
+        Child1  Child2
+        </div>
+        
+        <h3>Abstract Base Classes (ABC)</h3>
+        <pre><code>from abc import ABC, abstractmethod
+
+class Shape(ABC):
+    @abstractmethod
+    def area(self):
+        pass
+    
+    @abstractmethod
+    def perimeter(self):
+        pass
+
+class Circle(Shape):
+    def __init__(self, radius):
+        self.radius = radius
+    
+    def area(self):
+        return 3.14 * self.radius ** 2
+    
+    def perimeter(self):
+        return 2 * 3.14 * self.radius
+
+# shape = Shape()  # Error: Can't instantiate abstract class
+circle = Circle(5)  # OK</code></pre>
+    </section>
+    
+    <section id="polymorphism">
+        <h2>2. Polymorphism</h2>
+        
+        <h3>Method Overriding</h3>
+        <p>Child classes provide specific implementations of parent methods:</p>
+        <pre><code>class Bird:
+    def fly(self):
+        print("Flying high")
+
+class Penguin(Bird):
+    def fly(self):
+        print("Penguins can't fly!")
+
+birds = [Bird(), Penguin()]
+for bird in birds:
+    bird.fly()  # Different behavior per type</code></pre>
+        
+        <h3>Duck Typing</h3>
+        <p>Python's approach to polymorphism - objects are used based on behavior, not type:</p>
+        <pre><code>class Duck:
+    def quack(self):
+        print("Quack!")
+
+class Person:
+    def quack(self):
+        print("I'm quacking like a duck!")
+
+def make_it_quack(duck_like_object):
+    duck_like_object.quack()
+
+make_it_quack(Duck())   # Quack!
+make_it_quack(Person()) # I'm quacking like a duck!</code></pre>
+        
+        <h3>Operator Overloading</h3>
+        <p>Define how operators work with your objects:</p>
+        <table class="dunder-table">
+            <tr>
+                <th>Operator</th>
+                <th>Method</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>+</code></td>
+                <td><code>__add__</code></td>
+                <td>Addition</td>
+            </tr>
+            <tr>
+                <td><code>-</code></td>
+                <td><code>__sub__</code></td>
+                <td>Subtraction</td>
+            </tr>
+            <tr>
+                <td><code>*</code></td>
+                <td><code>__mul__</code></td>
+                <td>Multiplication</td>
+            </tr>
+            <tr>
+                <td><code>==</code></td>
+                <td><code>__eq__</code></td>
+                <td>Equality</td>
+            </tr>
+            <tr>
+                <td><code>&lt;</code></td>
+                <td><code>__lt__</code></td>
+                <td>Less than</td>
+            </tr>
+        </table>
+        
+        <pre><code>class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+    
+    def __add__(self, other):
+        return Vector(self.x + other.x, self.y + other.y)
+    
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+    
+    def __str__(self):
+        return f"Vector({self.x}, {self.y})"
+
+v1 = Vector(1, 2)
+v2 = Vector(3, 4)
+print(v1 + v2)  # Vector(4, 6)
+print(v1 == v2) # False</code></pre>
+        
+        <h3>Function Polymorphism</h3>
+        <p>Built-in functions work differently with different object types:</p>
+        <pre><code>print(len("hello"))    # 5 (string length)
+print(len([1,2,3]))   # 3 (list length)
+print(len({"a":1})))  # 1 (dict item count)</code></pre>
+    </section>
+    
+    <section id="encapsulation">
+        <h2>3. Encapsulation</h2>
+        
+        <h3>Access Modifiers (Convention-Based)</h3>
+        <table class="method-table">
+            <tr>
+                <th>Access Level</th>
+                <th>Syntax</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>Public</td>
+                <td><code>self.value</code></td>
+                <td>Accessible anywhere</td>
+            </tr>
+            <tr>
+                <td>Protected</td>
+                <td><code>self._value</code></td>
+                <td>Shouldn't be accessed outside class hierarchy</td>
+            </tr>
+            <tr>
+                <td>Private</td>
+                <td><code>self.__value</code></td>
+                <td>Name-mangled to prevent accidental access</td>
+            </tr>
+        </table>
+        
+        <pre><code>class BankAccount:
+    def __init__(self, balance):
+        self.__balance = balance  # Private
+        
+    def deposit(self, amount):
+        self.__balance += amount
+    
+    def get_balance(self):
+        return self.__balance
+
+account = BankAccount(100)
+# account.__balance  # Error (name mangled to _BankAccount__balance)
+print(account.get_balance())  # Proper access</code></pre>
+        
+        <h3>Property Decorators</h3>
+        <pre><code>class Temperature:
+    def __init__(self, celsius):
+        self._celsius = celsius
+    
+    @property
+    def celsius(self):
+        """Get the temperature in Celsius"""
+        return self._celsius
+    
+    @celsius.setter
+    def celsius(self, value):
+        if value < -273.15:
+            raise ValueError("Temperature below absolute zero")
+        self._celsius = value
+    
+    @property
+    def fahrenheit(self):
+        """Computed property - temperature in Fahrenheit"""
+        return (self._celsius * 9/5) + 32
+
+temp = Temperature(25)
+print(temp.fahrenheit)  # 77.0
+temp.celsius = 30       # Uses setter
+# temp.celsius = -300   # Raises ValueError</code></pre>
+        
+        <h3>Why Encapsulation?</h3>
+        <ul>
+            <li><strong>Data validation:</strong> Control how attributes are modified</li>
+            <li><strong>Computed attributes:</strong> Derive values from other attributes</li>
+            <li><strong>Implementation hiding:</strong> Change internals without breaking client code</li>
+            <li><strong>Access control:</strong> Prevent unauthorized access to sensitive data</li>
+        </ul>
+    </section>
+    
+    <section id="dunder">
+        <h2>4. Dunder (Magic) Methods</h2>
+        
+        <h3>Object Representation</h3>
+        <pre><code>class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+    
+    def __str__(self):
+        return f"Point at ({self.x}, {self.y})"
+    
+    def __repr__(self):
+        return f"Point(x={self.x}, y={self.y})"
+
+p = Point(3, 4)
+print(str(p))   # Point at (3, 4) - for users
+print(repr(p))  # Point(x=3, y=4) - for developers</code></pre>
+        
+        <h3>Comparison Methods</h3>
+        <pre><code>class Card:
+    def __init__(self, rank, suit):
+        self.rank = rank
+        self.suit = suit
+    
+    def __eq__(self, other):
+        return self.rank == other.rank and self.suit == other.suit
+    
+    def __lt__(self, other):
+        return self.rank < other.rank
+    
+    def __hash__(self):
+        return hash((self.rank, self.suit))
+
+queen_hearts = Card(12, 'hearts')
+king_spades = Card(13, 'spades')
+print(queen_hearts < king_spades)  # True</code></pre>
+        
+        <h3>Arithmetic Operations</h3>
+        <pre><code>class Fraction:
+    def __init__(self, numerator, denominator):
+        self.n = numerator
+        self.d = denominator
+    
+    def __add__(self, other):
+        new_n = self.n * other.d + other.n * self.d
+        new_d = self.d * other.d
+        return Fraction(new_n, new_d)
+    
+    def __iadd__(self, other):
+        self.n = self.n * other.d + other.n * self.d
+        self.d = self.d * other.d
+        return self
+    
+    def __str__(self):
+        return f"{self.n}/{self.d}"
+
+f1 = Fraction(1, 2)
+f2 = Fraction(1, 3)
+print(f1 + f2)  # 5/6
+f1 += f2
+print(f1)       # 5/6</code></pre>
+        
+        <h3>Container Methods</h3>
+        <pre><code>class ShoppingCart:
+    def __init__(self):
+        self.items = []
+    
+    def __len__(self):
+        return len(self.items)
+    
+    def __getitem__(self, index):
+        return self.items[index]
+    
+    def __setitem__(self, index, value):
+        self.items[index] = value
+    
+    def add_item(self, item):
+        self.items.append(item)
+
+cart = ShoppingCart()
+cart.add_item("Apple")
+cart.add_item("Banana")
+print(len(cart))    # 2
+print(cart[1])      # Banana
+cart[1] = "Orange"  # Uses __setitem__</code></pre>
+        
+        <h3>Callable Objects</h3>
+        <pre><code>class Multiplier:
+    def __init__(self, factor):
+        self.factor = factor
+    
+    def __call__(self, x):
+        return x * self.factor
+
+double = Multiplier(2)
+print(double(5))  # 10 - instance called like a function</code></pre>
+        
+        <h3>Context Managers</h3>
+        <pre><code>class Timer:
+    def __enter__(self):
+        import time
+        self.start = time.time()
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        import time
+        self.end = time.time()
+        print(f"Elapsed: {self.end - self.start:.2f}s")
+
+with Timer() as t:
+    # Code to time
+    sum(range(1000000))
+# Output: Elapsed: 0.05s</code></pre>
+    </section>
+    
+    <section id="patterns">
+        <h2>5. Advanced Patterns & Best Practices</h2>
+        
+        <h3>Mixins</h3>
+        <p>Reusable components in multiple inheritance:</p>
+        <pre><code>class JsonMixin:
+    def to_json(self):
+        import json
+        return json.dumps(self.__dict__)
+
+class XmlMixin:
+    def to_xml(self):
+        # Simple XML conversion
+        items = [f"&lt;{k}>{v}&lt;/{k}>" for k, v in self.__dict__.items()]
+        return f"&lt;object>{''.join(items)}&lt;/object>"
+
+class Person(JsonMixin, XmlMixin):
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+p = Person("Alice", 25)
+print(p.to_json())  # {"name": "Alice", "age": 25}
+print(p.to_xml())   # &lt;object>&lt;name>Alice&lt;/name>&lt;age>25&lt;/age>&lt;/object></code></pre>
+        
+        <h3>Descriptors</h3>
+        <p>Powerful attribute access control:</p>
+        <pre><code>class PositiveNumber:
+    def __set_name__(self, owner, name):
+        self.name = name
+    
+    def __get__(self, obj, objtype=None):
+        return obj.__dict__.get(self.name)
+    
+    def __set__(self, obj, value):
+        if value <= 0:
+            raise ValueError("Must be positive")
+        obj.__dict__[self.name] = value
+
+class Circle:
+    radius = PositiveNumber()  # Descriptor instance
+    
+    def __init__(self, radius):
+        self.radius = radius  # Uses __set__
+
+c = Circle(5)
+# c.radius = -1  # Raises ValueError</code></pre>
+        
+        <h3>Metaclasses</h3>
+        <p>Customize class creation:</p>
+        <pre><code>class SingletonMeta(type):
+    _instances = {}
+    
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super().__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+class Singleton(metaclass=SingletonMeta):
+    pass
+
+a = Singleton()
+b = Singleton()
+print(a is b)  # True</code></pre>
+        
+        <h3>Dependency Injection</h3>
+        <pre><code>class Engine:
+    def start(self):
+        print("Engine started")
+
+class Car:
+    def __init__(self, engine):  # Constructor injection
+        self.engine = engine
+    
+    def start(self):
+        self.engine.start()
+
+# Usage
+engine = Engine()
+car = Car(engine)  # Dependency injected
+car.start()</code></pre>
+    </section>
+    
+    <section id="performance">
+        <h2>6. Performance & Optimization</h2>
+        
+        <h3>__slots__</h3>
+        <p>Reduce memory usage by preventing dynamic attribute creation:</p>
+        <pre><code>class Point:
+    __slots__ = ['x', 'y']  # Only these attributes allowed
+    
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+p = Point(3, 4)
+# p.z = 5  # AttributeError (no __dict__ by default)</code></pre>
+        
+        <div class="note">
+            <p><strong>Note:</strong> <code>__slots__</code> trades flexibility for memory savings. Use when you have many instances and fixed attributes.</p>
+        </div>
+        
+        <h3>Method Lookup Optimization</h3>
+        <p>Python caches method lookups, but multiple inheritance can impact performance:</p>
+        <pre><code>class A: pass
+class B(A): pass
+class C(A): pass
+class D(B, C): pass  # More complex MRO
+
+# Method lookup is slower in D than in single inheritance</code></pre>
+        
+        <h3>Weak References</h3>
+        <p>Break circular references without preventing garbage collection:</p>
+        <pre><code>import weakref
+
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self._parent = None
+        self.children = []
+    
+    @property
+    def parent(self):
+        return self._parent() if self._parent else None
+    
+    @parent.setter
+    def parent(self, node):
+        self._parent = weakref.ref(node)  # Weak reference
+
+parent = Node("parent")
+child = Node("child")
+child.parent = parent
+parent.children.append(child)</code></pre>
+    </section>
+    
+    <section id="example">
+        <h2>Complete Example: Advanced OOP Implementation</h2>
+        
+        <pre><code>from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import List
+
+class Animal(ABC):
+    """Abstract base class for all animals"""
+    @abstractmethod
+    def speak(self) -> str:
+        """Return the sound the animal makes"""
+        pass
+    
+    @property
+    @abstractmethod
+    def scientific_name(self) -> str:
+        """Return the animal's scientific name"""
+        pass
+
+@dataclass
+class Dog(Animal):
+    """A dog that can bark"""
+    name: str
+    breed: str
+    
+    def speak(self) -> str:
+        return f"{self.name} says Woof!"
+    
+    @property
+    def scientific_name(self) -> str:
+        return "Canis lupus familiaris"
+    
+    def __str__(self) -> str:
+        return f"I am a {self.breed} named {self.name}"
+    
+    def __repr__(self) -> str:
+        return f"Dog(name='{self.name}', breed='{self.breed}')"
+
+class PetShop:
+    """A shop that sells pets with encapsulation"""
+    def __init__(self):
+        self.__pets: List[Animal] = []  # Private list
+    
+    @property
+    def pets(self) -> List[Animal]:
+        """Get a copy of the pets list"""
+        return self.__pets.copy()
+    
+    def add_pet(self, pet: Animal) -> None:
+        """Add a pet to the shop"""
+        if isinstance(pet, Animal):
+            self.__pets.append(pet)
+        else:
+            raise TypeError("Only Animal instances allowed")
+    
+    def __len__(self) -> int:
+        """Number of pets in the shop"""
+        return len(self.__pets)
+    
+    def __getitem__(self, index: int) -> Animal:
+        """Get pet by index"""
+        return self.__pets[index]
+
+# Usage
+shop = PetShop()
+shop.add_pet(Dog("Buddy", "Golden Retriever"))
+shop.add_pet(Dog("Max", "Beagle"))
+
+print([pet.speak() for pet in shop.pets])  # Polymorphism
+print(len(shop))  # Uses __len__
+print(shop[1])    # Uses __getitem__</code></pre>
+    </section>
+    
+    <footer>
+        <p>© 2023 Python Developer Guide. All rights reserved.</p>
+        <p>References: Python documentation, Fluent Python by Luciano Ramalho, Python Cookbook</p>
+    </footer>
+</body>
+</html>

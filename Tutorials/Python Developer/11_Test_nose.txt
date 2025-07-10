@@ -1,0 +1,137 @@
+1. Test Discovery
+Basic Discovery Rules
+File naming conventions (test_*.py, *_test.py)
+
+Directory scanning behavior
+
+Test case identification (classes/functions starting with test)
+
+Advanced Discovery
+Customizing discovery patterns
+
+Excluding specific tests/directories
+
+Recursive vs non-recursive discovery
+
+Using --where to specify search paths
+
+Performance Optimization
+Parallel test discovery
+
+Caching discovered tests
+
+Dealing with large test suites
+
+2. Plugins System
+Built-in Plugins
+xunit (JUnit-compatible output)
+
+cover (code coverage integration)
+
+prof (performance profiling)
+
+doctests (doctest integration)
+
+Custom Plugin Development
+Plugin architecture overview
+
+Key extension points:
+
+TestLoader modifications
+
+TestResult customization
+
+TestRunner extensions
+
+Example plugin skeleton
+
+Popular Third-party Plugins
+nose-parameterized (data-driven tests)
+
+nose-progressive (better output formatting)
+
+nose-timer (test timing)
+
+nose-exclude (test exclusion)
+
+3. Execution Control
+Test Selection
+Running specific test modules
+
+Running tests by name pattern
+
+Running tests by attributes/markers
+
+Execution Options
+Stop on first failure (--stop)
+
+Failed test reruns
+
+Test randomization (--randomize)
+
+4. Advanced Features
+Fixtures
+Module/class/function-level setup/teardown
+
+Package-level fixtures
+
+Contextual fixtures
+
+Test Generators
+Data-driven test patterns
+
+Dynamic test generation
+
+Parameterized testing approaches
+
+Multi-process Testing
+Parallel test execution
+
+Process isolation considerations
+
+Resource sharing patterns
+
+5. Integration & Extensibility
+CI/CD Integration
+Jenkins/Travis CI configuration
+
+Output formatting for CI systems
+
+Failure reporting
+
+Debugging Support
+PDB integration
+
+Post-mortem debugging
+
+Interactive debugging techniques
+
+6. Migration & Alternatives
+Transitioning to nose2/pytest
+Key differences from nose
+
+Migration strategies
+
+Compatibility layers
+
+When to Choose nose
+Legacy codebases
+
+Specific plugin requirements
+
+Team familiarity factors
+
+Complete Example
+python
+# test_example.py
+from nose.tools import assert_equal
+
+def test_addition():
+    assert_equal(1 + 1, 2)
+
+class TestMathOperations:
+    def test_subtraction(self):
+        assert_equal(5 - 3, 2)
+        
+    def test_multiplication(self):
+        assert_equal(2 * 3, 6)

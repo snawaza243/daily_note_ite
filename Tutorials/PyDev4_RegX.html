@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Regular Expressions - Master Guide</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        header {
+            background-color: #3776ab;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+        }
+        
+        h1 {
+            margin-top: 0;
+        }
+        
+        h2 {
+            border-bottom: 2px solid #3776ab;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        
+        h3 {
+            color: #3776ab;
+            margin-top: 25px;
+        }
+        
+        h4 {
+            color: #5d8fc2;
+            margin-top: 20px;
+        }
+        
+        code {
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Consolas', monospace;
+        }
+        
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 4px solid #3776ab;
+        }
+        
+        .note {
+            background-color: #e7f4ff;
+            border-left: 4px solid #3776ab;
+            padding: 10px 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .warning {
+            background-color: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 10px 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #3776ab;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .toc {
+            background-color: #f0f7ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .toc li {
+            margin-bottom: 5px;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: #2c3e50;
+        }
+        
+        .toc a:hover {
+            color: #3776ab;
+            text-decoration: underline;
+        }
+        
+        .regex-table {
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .regex-table td:first-child {
+            font-family: monospace;
+            width: 30%;
+        }
+        
+        .pattern-example {
+            background-color: #f8f9fa;
+            border: 1px solid #eaecf0;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        
+        .pattern-example .pattern {
+            font-weight: bold;
+            color: #202122;
+        }
+        
+        .pattern-example .description {
+            color: #54595d;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Python Regular Expressions: Master Guide</h1>
+        <p>Comprehensive guide to pattern matching and text processing in Python</p>
+    </header>
+    
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#fundamentals">1. Pattern Matching Fundamentals</a></li>
+            <li><a href="#search-replace">2. Search and Replace Operations</a></li>
+            <li><a href="#common-patterns">3. Common Regex Patterns</a></li>
+            <li><a href="#advanced">4. Advanced Regex Techniques</a></li>
+            <li><a href="#debugging">5. Debugging & Tools</a></li>
+        </ul>
+    </div>
+    
+    <section id="fundamentals">
+        <h2>1. Pattern Matching Fundamentals</h2>
+        
+        <h3>Regex Syntax Basics</h3>
+        
+        <h4>Meta Characters</h4>
+        <p>Special characters that define the matching rules:</p>
+        
+        <table class="regex-table">
+            <tr>
+                <th>Character</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td><code>.</code></td>
+                <td>Matches any character except newline</td>
+                <td><code>a.c</code> matches "abc", "a1c"</td>
+            </tr>
+            <tr>
+                <td><code>^</code></td>
+                <td>Matches start of string</td>
+                <td><code>^Hello</code> matches "Hello" at start</td>
+            </tr>
+            <tr>
+                <td><code>$</code></td>
+                <td>Matches end of string</td>
+                <td><code>end$</code> matches "end" at end</td>
+            </tr>
+            <tr>
+                <td><code>*</code></td>
+                <td>0 or more repetitions</td>
+                <td><code>ab*c</code> matches "ac", "abc", "abbc"</td>
+            </tr>
+            <tr>
+                <td><code>+</code></td>
+                <td>1 or more repetitions</td>
+                <td><code>ab+c</code> matches "abc", "abbc" (not "ac")</td>
+            </tr>
+            <tr>
+                <td><code>?</code></td>
+                <td>0 or 1 repetition (optional)</td>
+                <td><code>colou?r</code> matches "color" and "colour"</td>
+            </tr>
+            <tr>
+                <td><code>{m,n}</code></td>
+                <td>Between m and n repetitions</td>
+                <td><code>a{2,4}</code> matches "aa", "aaa", "aaaa"</td>
+            </tr>
+        </table>
+        
+        <h4>Character Classes</h4>
+        <p>Special sequences and custom character sets:</p>
+        
+        <pre><code># Predefined character classes
+\d  # Any digit [0-9]
+\w  # Word character [a-zA-Z0-9_]
+\s  # Whitespace [ \t\n\r\f\v]
+
+# Custom character classes
+[aeiou]    # Any vowel
+[A-Z]      # Any uppercase letter
+[^0-9]     # Negation - anything NOT a digit
+[0-9a-fA-F]  # Hexadecimal digits</code></pre>
+        
+        <h4>Grouping & Capturing</h4>
+        <p>Organize patterns and extract matched portions:</p>
+        
+        <pre><code>import re
+
+# Basic capturing group
+match = re.search(r'(\d{3})-(\d{3})', 'Phone: 123-456')
+print(match.group(1))  # '123'
+print(match.group(2))  # '456'
+
+# Non-capturing group
+re.findall(r'(?:Mr|Ms|Mrs) (\w+)', 'Mr Smith and Ms Doe')  # ['Smith', 'Doe']
+
+# Named group
+match = re.search(r'(?P&lt;area&gt;\d{3})-(?P&lt;number&gt;\d{3})', '123-456')
+print(match.group('area'))    # '123'
+print(match.group('number'))  # '456'</code></pre>
+        
+        <h3>Python's re Module</h3>
+        
+        <h4>Search Functions</h4>
+        <table>
+            <tr>
+                <th>Function</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td><code>re.match()</code></td>
+                <td>Match only at string start</td>
+                <td><code>re.match(r'\d+', '123abc')</code></td>
+            </tr>
+            <tr>
+                <td><code>re.search()</code></td>
+                <td>Search anywhere in string</td>
+                <td><code>re.search(r'\d+', 'abc123def')</code></td>
+            </tr>
+            <tr>
+                <td><code>re.findall()</code></td>
+                <td>Return all matches as list</td>
+                <td><code>re.findall(r'\d+', '1a22b333') # ['1', '22', '333']</code></td>
+            </tr>
+            <tr>
+                <td><code>re.finditer()</code></td>
+                <td>Return iterator of match objects</td>
+                <td><code>for match in re.finditer(r'\d+', text):</code></td>
+            </tr>
+        </table>
+        
+        <h4>Flags</h4>
+        <p>Modify regex behavior:</p>
+        
+        <pre><code># Case insensitive matching
+re.findall(r'hello', 'Hello WORLD', re.IGNORECASE)  # ['Hello']
+
+# Multiline mode (^/$ match start/end of line)
+text = "first\nsecond\nthird"
+re.findall(r'^\w+', text, re.MULTILINE)  # ['first', 'second', 'third']
+
+# DOTALL mode (make . match newlines)
+re.search(r'a.*b', 'a\nb', re.DOTALL).group()  # 'a\nb'</code></pre>
+    </section>
+    
+    <section id="search-replace">
+        <h2>2. Search and Replace Operations</h2>
+        
+        <h3>Basic Search/Replace</h3>
+        
+        <h4>re.sub()</h4>
+        <p>Replace all occurrences of a pattern:</p>
+        
+        <pre><code># Simple replacement
+text = "Today is 2023-01-15"
+new_text = re.sub(r'\d{4}-\d{2}-\d{2}', 'DATE', text)
+# "Today is DATE"
+
+# With backreferences
+text = "Smith, John"
+new_text = re.sub(r'(\w+), (\w+)', r'\2 \1', text)
+# "John Smith"
+
+# Named backreferences
+text = "Area code: 123-456"
+new_text = re.sub(r'(?P&lt;area&gt;\d{3})-(?P&lt;number&gt;\d{3})', 
+                 r'\g&lt;number&gt;-\g&lt;area&gt;', text)
+# "Area code: 456-123"
+
+# Limited replacements
+text = "a a a a a"
+new_text = re.sub(r'a', 'b', text, count=2)
+# "b b a a a"</code></pre>
+        
+        <h3>Advanced Replacement Techniques</h3>
+        
+        <h4>Replacement with Functions</h4>
+        <p>Use a callable to generate replacement strings:</p>
+        
+        <pre><code>def to_upper(match):
+    return match.group().upper()
+
+text = "hello world"
+new_text = re.sub(r'\w+', to_upper, text)
+# "HELLO WORLD"
+
+# With lambda
+new_text = re.sub(r'\d+', lambda m: str(int(m.group()) * 2), "2 apples")
+# "4 apples"</code></pre>
+        
+        <h4>Conditional Replacements</h4>
+        <p>Use lookarounds for context-sensitive replacements:</p>
+        
+        <pre><code># Replace comma only if followed by 3 digits
+text = "Amounts: 1,234 and 5,67"
+new_text = re.sub(r',(?=\d{3})', '.', text)
+# "Amounts: 1.234 and 5,67"
+
+# Add space after dot not followed by space or end
+text = "Hello.World.Python. "
+new_text = re.sub(r'\.(?! |$)', '. ', text)
+# "Hello. World. Python. "</code></pre>
+    </section>
+    
+    <section id="common-patterns">
+        <h2>3. Common Regex Patterns</h2>
+        
+        <h3>Validation Patterns</h3>
+        
+        <div class="pattern-example">
+            <div class="pattern">Email: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$</div>
+            <div class="description">Matches most common email formats</div>
+        </div>
+        
+        <div class="pattern-example">
+            <div class="pattern">Phone (US): ^\+1\d{10}$</div>
+            <div class="description">Matches US phone numbers with country code</div>
+        </div>
+        
+        <div class="pattern-example">
+            <div class="pattern">URL: https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+</div>
+            <div class="description">Matches HTTP/HTTPS URLs with encoded characters</div>
+        </div>
+        
+        <h3>Extraction Patterns</h3>
+        
+        <div class="pattern-example">
+            <div class="pattern">Dates: \d{2}-\d{2}-\d{4}</div>
+            <div class="description">Matches dates in DD-MM-YYYY format (adjust as needed)</div>
+        </div>
+        
+        <div class="pattern-example">
+            <div class="pattern">HTML tags: &lt;([a-z]+)([^&lt;]+)*(?:&gt;(.*)&lt;\/\1&gt;| *\/&gt;)</div>
+            <div class="description">Matches HTML tags and their content (simplified)</div>
+        </div>
+        
+        <div class="pattern-example">
+            <div class="pattern">Log parsing: (\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2}) (ERROR|WARN)</div>
+            <div class="description">Extracts timestamp and log level from log entries</div>
+        </div>
+        
+        <h3>Text Processing Patterns</h3>
+        
+        <h4>Splitting Strings</h4>
+        <pre><code># Split on multiple delimiters
+text = "apple,banana;cherry/orange"
+re.split(r'[,;/]', text)  # ['apple', 'banana', 'cherry', 'orange']
+
+# Split and keep delimiters
+re.split(r'([,;/])', text)  # ['apple', ',', 'banana', ';', 'cherry', '/', 'orange']</code></pre>
+        
+        <h4>Whitespace Normalization</h4>
+        <pre><code>text = "Hello     world\n\nPython"
+re.sub(r'\s+', ' ', text).strip()  # "Hello world Python"</code></pre>
+        
+        <h4>Removing Comments</h4>
+        <pre><code>code = """
+def func(): # This is a comment
+    return 42  # Another comment
+"""
+re.sub(r'#.*$', '', code, flags=re.MULTILINE)</code></pre>
+    </section>
+    
+    <section id="advanced">
+        <h2>4. Advanced Regex Techniques</h2>
+        
+        <h3>Lookaheads/Lookbehinds</h3>
+        <p>Assertions that don't consume characters:</p>
+        
+        <table>
+            <tr>
+                <th>Pattern</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>(?=...)</code></td>
+                <td>Positive lookahead</td>
+                <td>Matches if ... matches next</td>
+            </tr>
+            <tr>
+                <td><code>(?!...)</code></td>
+                <td>Negative lookahead</td>
+                <td>Matches if ... doesn't match next</td>
+            </tr>
+            <tr>
+                <td><code>(?&lt;=...)</code></td>
+                <td>Positive lookbehind</td>
+                <td>Matches if ... matches before</td>
+            </tr>
+            <tr>
+                <td><code>(?&lt;!...)</code></td>
+                <td>Negative lookbehind</td>
+                <td>Matches if ... doesn't match before</td>
+            </tr>
+        </table>
+        
+        <h4>Practical Example: Password Validation</h4>
+        <pre><code># At least 8 chars, contains uppercase, lowercase, digit and special char
+pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
+
+re.fullmatch(pattern, 'Password1!')  # Match
+re.fullmatch(pattern, 'weak')        # No match</code></pre>
+        
+        <h3>Optimization & Performance</h3>
+        
+        <h4>Compiling Patterns</h4>
+        <pre><code># Compile once, use many times
+pattern = re.compile(r'\d{3}-\d{3}-\d{4}')  # Phone number pattern
+pattern.search('Call 123-456-7890')</code></pre>
+        
+        <h4>Avoiding Catastrophic Backtracking</h4>
+        <div class="warning">
+            <p><strong>Warning:</strong> Nested quantifiers can cause exponential time complexity.</p>
+        </div>
+        <pre><code># Problematic pattern (exponential time)
+re.match(r'(a+)+$', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaa!')
+
+# Better approach (atomic grouping or possessive quantifiers)
+re.match(r'(?&gt;a+)+$', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaa!')</code></pre>
+        
+        <h4>When Not to Use Regex</h4>
+        <ul>
+            <li>Simple string operations (<code>str.startswith()</code>, <code>str.split()</code>)</li>
+            <li>Parsing nested structures (HTML/XML - use proper parsers)</li>
+            <li>When readability suffers (complex patterns can be unmaintainable)</li>
+        </ul>
+    </section>
+    
+    <section id="debugging">
+        <h2>5. Debugging & Tools</h2>
+        
+        <h3>Online Testers</h3>
+        <ul>
+            <li><a href="https://regex101.com/" target="_blank">Regex101</a> - Interactive tester with explanation</li>
+            <li><a href="https://pythex.org/" target="_blank">Pythex</a> - Python-specific regex tester</li>
+            <li><a href="https://www.debuggex.com/" target="_blank">Debuggex</a> - Visual regex debugger</li>
+        </ul>
+        
+        <h3>re.DEBUG Flag</h3>
+        <p>See how Python interprets your pattern:</p>
+        <pre><code>re.compile(r'\d{3}-\d{3}', re.DEBUG)
+
+# Output shows parsing steps:
+# MAX_REPEAT 3 3
+#   IN
+#     CATEGORY CATEGORY_DIGIT
+# LITERAL 45
+# MAX_REPEAT 3 3
+#   IN
+#     CATEGORY CATEGORY_DIGIT</code></pre>
+        
+        <h3>Common Pitfalls</h3>
+        
+        <h4>Greedy vs Lazy Matching</h4>
+        <pre><code>text = "&lt;div&gt;content&lt;/div&gt;&lt;div&gt;more&lt;/div&gt;"
+
+# Greedy match (default)
+re.findall(r'&lt;div&gt;.*&lt;/div&gt;', text)  # Matches entire string
+
+# Lazy match (add ? after quantifier)
+re.findall(r'&lt;div&gt;.*?&lt;/div&gt;', text)  # Matches each div separately</code></pre>
+        
+        <h4>Other Common Issues</h4>
+        <ul>
+            <li>Forgetting to use raw strings (<code>r'\d'</code> vs <code>'\d'</code>)</li>
+            <li>Overusing regex when simpler string methods would suffice</li>
+            <li>Not considering Unicode characters (<code>\w</code> matches word chars in any language)</li>
+            <li>Assuming . matches newlines (need <code>re.DOTALL</code> flag)</li>
+        </ul>
+    </section>
+    
+    <footer>
+        <p>© 2023 Python Developer Guide. All rights reserved.</p>
+        <p>References: Python <code>re</code> module documentation, Regular-Expressions.info, Mastering Python Regular Expressions</p>
+    </footer>
+</body>
+</html>

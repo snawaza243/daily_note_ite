@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Backend Developer Roadmap</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3776ab;
+            --secondary-color: #ffd43b;
+            --dark-color: #1e1e1e;
+            --light-color: #f8f9fa;
+        }
+        
+      
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #294872 100%);
+            color: white;
+            padding: 4rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 20px 20px;
+        }
+        
+        .roadmap-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .roadmap-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .roadmap-header:hover {
+            background-color: #2a5d84;
+        }
+        
+        .roadmap-header h3 {
+            margin: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .roadmap-content {
+            padding: 1.5rem;
+        }
+        
+        .topic-card {
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background-color: var(--light-color);
+            border-radius: 0 5px 5px 0;
+            transition: transform 0.2s;
+        }
+        
+        .topic-card:hover {
+            transform: translateX(5px);
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .topic-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .topic-card ul {
+            padding-left: 1.5rem;
+            margin-bottom: 0;
+        }
+        
+        .topic-card li {
+            margin-bottom: 0.3rem;
+        }
+        
+        .badge-python {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .progress {
+            height: 8px;
+            margin-top: 0.5rem;
+        }
+        
+        .progress-bar {
+            background-color: var(--primary-color);
+        }
+        
+        .related-roadmaps {
+            background-color: var(--light-color);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+        
+        .accordion-button:not(.collapsed) {
+            background-color: rgba(55, 118, 171, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .accordion-button:focus {
+            box-shadow: none;
+            border-color: rgba(55, 118, 171, 0.25);
+        }
+        
+        @media (max-width: 768px) {
+            .hero {
+                padding: 2rem 0;
+            }
+            
+            .roadmap-content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero text-center">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-3">Python Backend Developer Roadmap</h1>
+            <p class="lead mb-4">A comprehensive guide to becoming a professional Python backend developer in 2024</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="#roadmap" class="btn btn-light btn-lg px-4">Explore Roadmap</a>
+                <a href="#related" class="btn btn-outline-light btn-lg px-4">Related Roadmaps</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container" id="roadmap">
+        <!-- Python Basics Section -->
+        <div class="roadmap-container mb-4">
+            <div class="roadmap-header" data-bs-toggle="collapse" href="#pythonBasics">
+                <h3>
+                    <span><i class="fas fa-code me-2"></i> Python Basics</span>
+                    <i class="fas fa-chevron-down"></i>
+                </h3>
+            </div>
+            <div class="collapse show" id="pythonBasics">
+                <div class="roadmap-content">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="topic-card">
+                                <h4>Core Syntax</h4>
+                                <ul>
+                                    <li>Variables and Data Types</li>
+                                    <li>Operators and Expressions</li>
+                                    <li>Conditions and Loops</li>
+                                    <li>Type Casting</li>
+                                    <li>Exception Handling</li>
+                                </ul>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: 100%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="topic-card">
+                                <h4>Functions</h4>
+                                <ul>
+                                    <li>Function Definition</li>
+                                    <li>Parameters and Arguments</li>
+                                    <li>Built-in Functions</li>
+                                    <li>Lambda Functions</li>
+                                    <li>Decorators</li>
+                                </ul>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: 80%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="topic-card">
+                                <h4>Data Structures</h4>
+                                <ul>
+                                    <li>Lists and Tuples</li>
+                                    <li>Sets and Dictionaries</li>
+                                    <li>List Comprehensions</li>
+                                    <li>Generator Expressions</li>
+                                </ul>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: 75%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="topic-card">
+                                <h4>Regular Expressions</h4>
+                                <ul>
+                                    <li>Pattern Matching</li>
+                                    <li>Search and Replace</li>
+                                    <li>Common Regex Patterns</li>
+                                </ul>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: 60%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OOP Section -->
+        <div class="roadmap-container mb-4">
+            <div class="roadmap-header" data-bs-toggle="collapse" href="#oop">
+                <h3>
+                    <span><i class="fas fa-object-group me-2"></i> Object-Oriented Programming</span>
+                    <i class="fas fa-chevron-down"></i>
+                </h3>
+            </div>
+            <div class="collapse show" id="oop">
+                <div class="roadmap-content">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="topic-card">
+                                <h4>Classes and Objects</h4>
+                                <ul>
+                                    <li>Class Definition</li>
+                                    <li>Attributes and Methods</li>
+                                    <li>Constructors</li>
+                                    <li>Instance vs Class Variables</li>
+                                </ul>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: 85%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="topic-card">
+                                <h4>Advanced OOP</h4>
+                                <ul>
+                                    <li>Inheritance</li>
+                                    <li>Polymorphism</li>
+                                    <li>Encapsulation</li>
+                                    <li>Dunder Methods</li>
+                                </ul>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: 70%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Package Management Section -->
+        <div class="roadmap-container mb-4">
+            <div class="roadmap-header" data-bs-toggle="collapse" href="#packageManagement">
+                <h3>
+                    <span><i class="fas fa-box-open me-2"></i> Package Management</span>
+                    <i class="fas fa-chevron-down"></i>
+                </h3>
+            </div>
+            <div class="collapse show" id="packageManagement">
+                <div class="roadmap-content">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="topic-card">
+                                <h4>PyPI</h4>
+                                <ul>
+                                    <li>Package Index</li>
+                                    <li>Finding Packages</li>
+                                    <li>Publishing Packages</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="topic-card">
+                                <h4>Pip</h4>
+                                <ul>
+                                    <li>Installation</li>
+                                    <li>Requirements Files</li>
+                                    <li>Virtual Environments</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="topic-card">
+                                <h4>Conda</h4>
+                                <ul>
+                                    <li>Environment Management</li>
+                                    <li>Channel Management</li>
+                                    <li>Conda vs Pip</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testing Section -->
+        <div class="roadmap-container mb-4">
+            <div class="roadmap-header" data-bs-toggle="collapse" href="#testing">
+                <h3>
+                    <span><i class="fas fa-vial me-2"></i> Testing</span>
+                    <i class="fas fa-chevron-down"></i>
+                </h3>
+            </div>
+            <div class="collapse show" id="testing">
+                <div class="roadmap-content">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="topic-card">
+                                <h4>doctest</h4>
+                                <ul>
+                                    <li>Inline Testing</li>
+                                    <li>Documentation Tests</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="topic-card">
+                                <h4>nose</h4>
+                                <ul>
+                                    <li>Test Discovery</li>
+                                    <li>Plugins</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="topic-card">
+                                <h4>pytest</h4>
+                                <ul>
+                                    <li>Fixtures</li>
+                                    <li>Parameterized Tests</li>
+                                    <li>Plugins</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="topic-card">
+                                <h4>unittest</h4>
+                                <ul>
+                                    <li>Test Cases</li>
+                                    <li>Assertions</li>
+                                    <li>Test Suites</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Structures & Algorithms Section -->
+        <div class="roadmap-container mb-4">
+            <div class="roadmap-header" data-bs-toggle="collapse" href="#dsa">
+                <h3>
+                    <span><i class="fas fa-project-diagram me-2"></i> Data Structures & Algorithms</span>
+                    <i class="fas fa-chevron-down"></i>
+                </h3>
+            </div>
+            <div class="collapse show" id="dsa">
+                <div class="roadmap-content">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="topic-card">
+                                <h4>Basic Structures</h4>
+                                <ul>
+                                    <li>Arrays</li>
+                                    <li>Linked Lists</li>
+                                    <li>Hash Tables</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="topic-card">
+                                <h4>Advanced Structures</h4>
+                                <ul>
+                                    <li>Heaps</li>
+                                    <li>Stacks and Queues</li>
+                                    <li>Binary Search Trees</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="topic-card">
+                                <h4>Algorithms</h4>
+                                <ul>
+                                    <li>Recursion</li>
+                                    <li>Sorting Algorithms</li>
+                                    <li>Searching Algorithms</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Web Frameworks Section -->
+        <div class="roadmap-container mb-4">
+            <div class="roadmap-header" data-bs-toggle="collapse" href="#frameworks">
+                <h3>
+                    <span><i class="fas fa-globe me-2"></i> Web Frameworks</span>
+                    <i class="fas fa-chevron-down"></i>
+                </h3>
+            </div>
+            <div class="collapse show" id="frameworks">
+                <div class="roadmap-content">
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h4 class="mb-3 text-center">Synchronous Frameworks</h4>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="topic-card">
+                                <h4>Django</h4>
+                                <ul>
+                                    <li>ORM</li>
+                                    <li>Admin Panel</li>
+                                    <li>Authentication</li>
+                                    <li>REST Framework</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="topic-card">
+                                <h4>Flask</h4>
+                                <ul>
+                                    <li>Routing</li>
+                                    <li>Jinja2 Templates</li>
+                                    <li>Extensions</li>
+                                    <li>RESTful APIs</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="topic-card">
+                                <h4>Pyramid</h4>
+                                <ul>
+                                    <li>Flexible Auth</li>
+                                    <li>Traversal</li>
+                                    <li>Scalability</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <h4 class="mb-3 text-center">Asynchronous Frameworks</h4>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="topic-card">
+                                <h4>FastAPI</h4>
+                                <ul>
+                                    <li>Type Hints</li>
+                                    <li>Pydantic Models</li>
+                                    <li>Auto Docs</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="topic-card">
+                                <h4>gevent</h4>
+                                <ul>
+                                    <li>Greenlets</li>
+                                    <li>Monkey Patching</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="topic-card">
+                                <h4>Tornado</h4>
+                                <ul>
+                                    <li>Non-blocking I/O</li>
+                                    <li>WebSockets</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="topic-card">
+                                <h4>Sonic</h4>
+                                <ul>
+                                    <li>High Performance</li>
+                                    <li>Minimalist</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Roadmaps -->
+    <div class="container" id="related">
+        <div class="related-roadmaps">
+            <h2 class="text-center mb-4">Related Roadmaps</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <i class="fas fa-server fa-3x mb-3 text-primary"></i>
+                            <h4 class="card-title">Backend Roadmap</h4>
+                            <p class="card-text">Complete guide to backend development beyond Python</p>
+                            <a href="#" class="btn btn-outline-primary">Explore</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <i class="fas fa-cloud fa-3x mb-3 text-success"></i>
+                            <h4 class="card-title">DevOps Roadmap</h4>
+                            <p class="card-text">Learn deployment, CI/CD, and infrastructure as code</p>
+                            <a href="#" class="btn btn-outline-success">Explore</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <i class="fas fa-project-diagram fa-3x mb-3 text-info"></i>
+                            <h4 class="card-title">Software Design Roadmap</h4>
+                            <p class="card-text">Master system design and architecture patterns</p>
+                            <a href="#" class="btn btn-outline-info">Explore</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+                    <h3>Python Backend Developer Roadmap</h3>
+                    <p class="mb-4">A comprehensive guide to mastering Python for backend development</p>
+                    <div class="mb-4">
+                        <a href="#" class="text-white mx-2"><i class="fab fa-github fa-2x"></i></a>
+                        <a href="#" class="text-white mx-2"><i class="fab fa-twitter fa-2x"></i></a>
+                        <a href="#" class="text-white mx-2"><i class="fab fa-linkedin fa-2x"></i></a>
+                    </div>
+                    <p>&copy; 2024 Python Backend Roadmap. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Add smooth scrolling to all links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Add active class to current section in navigation
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('section, .related-roadmaps');
+            const navLinks = document.querySelectorAll('a[href^="#"]');
+            
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                
+                if (pageYOffset >= (sectionTop - 100)) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

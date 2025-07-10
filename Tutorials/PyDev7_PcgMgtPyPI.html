@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Package Management - Complete Guide</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        header {
+            background-color: #3776ab;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+        }
+        
+        h1 {
+            margin-top: 0;
+        }
+        
+        h2 {
+            border-bottom: 2px solid #3776ab;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        
+        h3 {
+            color: #3776ab;
+            margin-top: 25px;
+        }
+        
+        h4 {
+            color: #5d8fc2;
+            margin-top: 20px;
+        }
+        
+        code {
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Consolas', monospace;
+        }
+        
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 4px solid #3776ab;
+        }
+        
+        .note {
+            background-color: #e7f4ff;
+            border-left: 4px solid #3776ab;
+            padding: 10px 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .warning {
+            background-color: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 10px 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #3776ab;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .toc {
+            background-color: #f0f7ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .toc li {
+            margin-bottom: 5px;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: #2c3e50;
+        }
+        
+        .toc a:hover {
+            color: #3776ab;
+            text-decoration: underline;
+        }
+        
+        .file-structure {
+            font-family: monospace;
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .command-table {
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .command-table td:first-child {
+            font-family: monospace;
+            width: 40%;
+        }
+        
+        .toml-example {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 4px solid #3776ab;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Python Package Management & PyPI</h1>
+        <p>Complete guide to finding, installing, and publishing Python packages</p>
+    </header>
+    
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#pypi-overview">1. Python Package Index (PyPI) Overview</a></li>
+            <li><a href="#installing">2. Finding & Installing Packages</a></li>
+            <li><a href="#publishing">3. Publishing Packages to PyPI</a></li>
+            <li><a href="#maintenance">4. Package Maintenance Best Practices</a></li>
+            <li><a href="#troubleshooting">5. Troubleshooting Common Issues</a></li>
+            <li><a href="#advanced">6. Advanced Topics</a></li>
+        </ul>
+    </div>
+    
+    <section id="pypi-overview">
+        <h2>1. Python Package Index (PyPI) Overview</h2>
+        
+        <h3>What is PyPI?</h3>
+        <p>The Python Package Index (PyPI) is the official repository for Python packages, serving as:</p>
+        <ul>
+            <li>The primary source for pip-installable packages</li>
+            <li>A hosting platform for over 400,000 packages (as of 2024)</li>
+            <li>The central distribution point for the Python ecosystem</li>
+        </ul>
+        
+        <h4>PyPI Versions</h4>
+        <table>
+            <tr>
+                <th>Environment</th>
+                <th>URL</th>
+                <th>Purpose</th>
+            </tr>
+            <tr>
+                <td>Production</td>
+                <td><a href="https://pypi.org" target="_blank">pypi.org</a></td>
+                <td>Main package repository</td>
+            </tr>
+            <tr>
+                <td>Test</td>
+                <td><a href="https://test.pypi.org" target="_blank">test.pypi.org</a></td>
+                <td>Testing/staging environment</td>
+            </tr>
+        </table>
+        
+        <h3>Key Components</h3>
+        
+        <h4>Package Metadata</h4>
+        <p>Every Python package contains metadata files that describe the package:</p>
+        <ul>
+            <li><code>pyproject.toml</code> (modern standard)</li>
+            <li><code>setup.py</code> (legacy, still widely used)</li>
+            <li><code>setup.cfg</code> (legacy configuration)</li>
+        </ul>
+        
+        <h4>Distribution Formats</h4>
+        <table>
+            <tr>
+                <th>Format</th>
+                <th>Extension</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>Source Distribution</td>
+                <td><code>.tar.gz</code></td>
+                <td>Contains raw source code, requires build</td>
+            </tr>
+            <tr>
+                <td>Built Distribution (Wheel)</td>
+                <td><code>.whl</code></td>
+                <td>Pre-built package, faster installation</td>
+            </tr>
+        </table>
+        
+        <h4>Package Classifiers</h4>
+        <p>Standardized tags that describe package compatibility:</p>
+        <pre><code>classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries",
+]</code></pre>
+    </section>
+    
+    <section id="installing">
+        <h2>2. Finding & Installing Packages</h2>
+        
+        <h3>Searching PyPI</h3>
+        
+        <h4>Web Interface</h4>
+        <p>The primary way to search is via <a href="https://pypi.org/search" target="_blank">pypi.org/search</a> which offers:</p>
+        <ul>
+            <li>Advanced search filters</li>
+            <li>Package statistics and metadata</li>
+            <li>Download history and popularity metrics</li>
+        </ul>
+        
+        <h4>Command Line</h4>
+        <div class="warning">
+            <p><strong>Note:</strong> <code>pip search</code> was disabled due to performance issues. Use web search instead.</p>
+        </div>
+        <pre><code># Inspect a package before installing
+pip download --no-deps &lt;package>
+
+# View package metadata
+pip show &lt;package></code></pre>
+        
+        <h3>Installation Methods</h3>
+        
+        <table class="command-table">
+            <tr>
+                <th>Command</th>
+                <th>Purpose</th>
+            </tr>
+            <tr>
+                <td><code>pip install package</code></td>
+                <td>Latest stable version</td>
+            </tr>
+            <tr>
+                <td><code>pip install package==1.0.0</code></td>
+                <td>Specific version</td>
+            </tr>
+            <tr>
+                <td><code>pip install 'package>=1.0.0,&lt;2.0.0'</code></td>
+                <td>Version range</td>
+            </tr>
+            <tr>
+                <td><code>pip install -e ./path/to/pkg</code></td>
+                <td>Editable/development install</td>
+            </tr>
+            <tr>
+                <td><code>pip install -r requirements.txt</code></td>
+                <td>Install from requirements file</td>
+            </tr>
+        </table>
+        
+        <h3>Advanced Installation</h3>
+        
+        <h4>Index URLs</h4>
+        <pre><code># Use alternative index
+pip install --index-url https://pypi.example.com/simple/ package
+
+# Add extra index (fallback)
+pip install --extra-index-url https://pypi.example.com/simple/ package</code></pre>
+        
+        <h4>Constraints Files</h4>
+        <p>Lock versions without installing packages:</p>
+        <pre><code># constraints.txt
+requests==2.25.1
+numpy>=1.20.0
+
+# Usage
+pip install -c constraints.txt package</code></pre>
+        
+        <h4>Hash Verification</h4>
+        <p>Ensure package integrity:</p>
+        <pre><code># requirements.txt with hashes
+package==1.0.0 \
+    --hash=sha256:2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
+
+# Install with hash checking
+pip install --require-hashes -r requirements.txt</code></pre>
+    </section>
+    
+    <section id="publishing">
+        <h2>3. Publishing Packages to PyPI</h2>
+        
+        <h3>Package Structure Essentials</h3>
+        
+        <div class="file-structure">
+            mypackage/<br>
+            ├── mypackage/          # Actual package<br>
+            │   ├── __init__.py<br>
+            │   └── module.py<br>
+            ├── tests/              # Tests (optional)<br>
+            ├── pyproject.toml      # Build system config<br>
+            ├── README.md           # Project description<br>
+            └── LICENSE             # Legal info
+        </div>
+        
+        <h3>Key Configuration Files</h3>
+        
+        <h4>pyproject.toml (Modern Standard)</h4>
+        <div class="toml-example">
+<pre>[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mypackage"
+version = "1.0.0"
+authors = [{name = "Your Name", email = "you@example.com"}]
+description = "My awesome package"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "requests>=2.25.0",
+    "numpy>=1.20.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=6.0.0", "black"]
+gui = ["pyqt5>=5.15.0"]</pre>
+        </div>
+        
+        <h4>Legacy setup.py (Deprecated but still used)</h4>
+        <pre><code>from setuptools import setup, find_packages
+
+setup(
+    name="mypackage",
+    version="1.0.0",
+    author="Your Name",
+    author_email="you@example.com",
+    description="My awesome package",
+    long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
+    packages=find_packages(),
+    install_requires=[
+        "requests>=2.25.0",
+        "numpy>=1.20.0",
+    ],
+    extras_require={
+        "dev": ["pytest>=6.0.0", "black"],
+        "gui": ["pyqt5>=5.15.0"],
+    },
+    python_requires=">=3.8",
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "Operating System :: OS Independent",
+    ],
+)</code></pre>
+        
+        <h3>Publishing Steps</h3>
+        
+        <h4>1. Build Distributions</h4>
+        <pre><code># Install build tools
+pip install build
+
+# Create distribution packages
+python -m build
+
+# Output:
+# dist/
+#   mypackage-1.0.0.tar.gz
+#   mypackage-1.0.0-py3-none-any.whl</code></pre>
+        
+        <h4>2. Upload to PyPI</h4>
+        <pre><code># Install twine
+pip install twine
+
+# Upload to test PyPI first (recommended)
+twine upload --repository testpypi dist/*
+
+# Upload to production PyPI
+twine upload dist/*
+
+# First time setup:
+# 1. Create account at pypi.org
+# 2. Generate API token
+# 3. Configure ~/.pypirc or use environment variables</code></pre>
+        
+        <div class="note">
+            <p><strong>Security Note:</strong> Always use API tokens instead of passwords for PyPI uploads. Enable 2FA for your account.</p>
+        </div>
+    </section>
+    
+    <section id="maintenance">
+        <h2>4. Package Maintenance Best Practices</h2>
+        
+        <h3>Versioning Strategy</h3>
+        
+        <h4>Semantic Versioning (SemVer)</h4>
+        <p>Follow the <code>MAJOR.MINOR.PATCH</code> pattern:</p>
+        <ul>
+            <li><strong>MAJOR</strong>: Breaking changes</li>
+            <li><strong>MINOR</strong>: Backwards-compatible features</li>
+            <li><strong>PATCH</strong>: Backwards-compatible bug fixes</li>
+        </ul>
+        
+        <h4>Version in Code</h4>
+        <p>Define version in your package's <code>__init__.py</code>:</p>
+        <pre><code># mypackage/__init__.py
+__version__ = "1.0.0"</code></pre>
+        
+        <h3>Dependency Management</h3>
+        
+        <h4>Required Dependencies</h4>
+        <p>Specify in <code>pyproject.toml</code> or <code>setup.py</code>:</p>
+        <pre><code># pyproject.toml
+[project]
+dependencies = [
+    "requests>=2.25.0",
+    "numpy>=1.20.0",
+]</code></pre>
+        
+        <h4>Optional Dependencies</h4>
+        <pre><code># pyproject.toml
+[project.optional-dependencies]
+dev = ["pytest>=6.0.0", "black"]
+gui = ["pyqt5>=5.15.0"]
+
+# Installation
+pip install "mypackage[gui]"</code></pre>
+        
+        <h4>Development Setup</h4>
+        <pre><code># Install package in editable mode with dev dependencies
+pip install -e ".[dev]"</code></pre>
+        
+        <h3>Security Considerations</h3>
+        
+        <h4>Package Auditing</h4>
+        <pre><code># Install pip-audit
+pip install pip-audit
+
+# Check for vulnerabilities
+pip-audit</code></pre>
+        
+        <h4>PyPI Security</h4>
+        <ul>
+            <li>Enable 2FA for your PyPI account (mandatory for critical operations)</li>
+            <li>Use API tokens instead of passwords</li>
+            <li>Rotate tokens regularly</li>
+            <li>Review package maintainers and collaborators</li>
+        </ul>
+    </section>
+    
+    <section id="troubleshooting">
+        <h2>5. Troubleshooting Common Issues</h2>
+        
+        <table>
+            <tr>
+                <th>Issue</th>
+                <th>Solution</th>
+            </tr>
+            <tr>
+                <td>PackageNotFoundError</td>
+                <td>Check spelling, try <code>--index-url</code>, verify package exists</td>
+            </tr>
+            <tr>
+                <td>Version conflicts</td>
+                <td>Use virtual environments, <code>pip check</code>, review dependency tree</td>
+            </tr>
+            <tr>
+                <td>Upload fails (403)</td>
+                <td>Verify PyPI credentials/token, check package name availability</td>
+            </tr>
+            <tr>
+                <td>Legacy metadata</td>
+                <td>Migrate to <code>pyproject.toml</code>, update build tools</td>
+            </tr>
+            <tr>
+                <td>Build failures</td>
+                <td>Ensure build dependencies are installed, check Python version compatibility</td>
+            </tr>
+            <tr>
+                <td>Slow downloads</td>
+                <td>Use <code>--index-url</code> with mirror, upgrade pip</td>
+            </tr>
+        </table>
+    </section>
+    
+    <section id="advanced">
+        <h2>6. Advanced Topics</h2>
+        
+        <h3>Private Package Hosting</h3>
+        
+        <h4>Alternate Index Servers</h4>
+        <ul>
+            <li><strong>DevPI</strong>: Self-hosted PyPI-compatible server</li>
+            <li><strong>Artifactory/Nexus</strong>: Enterprise artifact management</li>
+            <li><strong>AWS CodeArtifact</strong>: Managed service from AWS</li>
+            <li><strong>Google Artifact Registry</strong>: Google Cloud's solution</li>
+        </ul>
+        
+        <h4>.pypirc Configuration</h4>
+        <pre><code># ~/.pypirc
+[distutils]
+index-servers =
+  pypi
+  private
+
+[pypi]
+username = __token__
+password = pypi-YourApiTokenHere
+
+[private]
+repository = https://your-private-repo.com
+username = your-username
+password = your-token</code></pre>
+        
+        <h3>Automated Publishing</h3>
+        
+        <h4>GitHub Actions Workflow</h4>
+        <pre><code># .github/workflows/publish.yml
+name: Publish to PyPI
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build twine
+    
+    - name: Build package
+      run: python -m build
+    
+    - name: Publish to PyPI
+      run: twine upload dist/*
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}</code></pre>
+        
+        <h3>Package Signing</h3>
+        <p>GPG signatures for additional security:</p>
+        <pre><code># Generate GPG key if you don't have one
+gpg --gen-key
+
+# Upload with signature
+twine upload --sign --identity you@example.com dist/*</code></pre>
+    </section>
+    
+    <footer>
+        <p>© 2023 Python Developer Guide. All rights reserved.</p>
+        <p>References: Python Packaging User Guide, PyPI documentation, PEP 517, PEP 621</p>
+    </footer>
+</body>
+</html>

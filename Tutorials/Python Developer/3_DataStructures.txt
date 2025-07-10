@@ -1,0 +1,118 @@
+Data Structures in Python (Comprehensive Guide)
+1. Lists and Tuples
+Lists (Mutable Sequences)
+Basics
+
+Creation: [] or list()
+
+Indexing & slicing ([0], [-1], [1:5])
+
+Common methods: .append(), .extend(), .insert(), .remove(), .pop()
+
+List concatenation (+) and repetition (*)
+
+Advanced Operations
+
+Shallow vs deep copying (copy(), deepcopy())
+
+List memory allocation & re
+
+Performance considerations (time complexity of operations)
+
+Tuples (Immutable Sequences)
+Basics
+
+Creation: () or tuple()
+
+Immutability & use cases (dictionary keys, function args)
+
+Single-element tuple gotcha ((1,) vs (1))
+
+Advanced Concepts
+
+Named tuples (collections.namedtuple)
+
+Tuple unpacking (a, b = (1, 2))
+
+Memory efficiency vs lists
+
+2. Sets and Dictionaries
+Sets (Unique, Unordered Collections)
+Basics
+
+Creation: {} or set() (empty set requires set())
+
+Operations: .add(), .remove(), .union(), .intersection()
+
+Frozensets (immutable sets)
+
+Advanced Usage
+
+Set comprehensions
+
+Performance (O(1) membership tests)
+
+Use cases (duplicate removal, mathematical operations)
+
+Dictionaries (Key-Value Stores)
+Basics
+
+Creation: {} or dict()
+
+Accessing: .get(), dict[key], in operator
+
+Methods: .keys(), .values(), .items(), .update()
+
+Advanced Topics
+
+Dictionary comprehensions
+
+collections.defaultdict
+
+collections.OrderedDict (insertion order preservation)
+
+Memory optimization (dictionary internals, __slots__)
+
+3. List Comprehensions
+Basic Syntax
+[x**2 for x in range(10)]
+
+Conditional filtering ([x for x in list if x > 0])
+
+Advanced Patterns
+Nested comprehensions
+
+Multiple loops ([(x,y) for x in a for y in b])
+
+Performance vs traditional loops
+
+4. Generator Expressions
+Basics
+Syntax: (x**2 for x in range(10))
+
+Memory efficiency (lazy evaluation)
+
+Advanced Usage
+Chaining generators
+
+yield vs generator expressions
+
+Use cases (large datasets, pipelines)
+
+Additional Key Topics
+Performance & Optimization
+Time complexity of operations (Big-O)
+
+Choosing the right data structure
+
+Specialized Collections
+collections.deque (double-ended queue)
+
+collections.Counter (frequency counting)
+
+heapq (priority queues)
+
+Memory Management
+How Python stores these structures internally
+
+sys.getsizeof() and memory profiling

@@ -1,0 +1,104 @@
+1. Heaps (Priority Queues in Production)
+Core Mechanics
+Binary Heap Structure:
+
+Array representation: children of i → 2i+1, 2i+2
+
+Heap invariants (min-heap vs max-heap)
+
+Time Complexities:
+
+markdown
+| Operation      | Big-O     | 
+|----------------|-----------|
+| Insert         | O(log n)  |
+| Extract Min/Max| O(log n)  |
+| Heapify        | O(n)      |
+Advanced Variations
+Type	Key Feature	Use Case
+Fibonacci Heap	O(1) amortized insert	Dijkstra’s algorithm
+B-Heap	Cache-oblivious layout	Database systems
+Pairing Heap	Meld operation efficiency	Graph algorithms
+Python Implementation
+python
+import heapq  # Min-heap by default
+
+heap = []
+heapq.heappush(heap, 3)          # Insert
+val = heapq.heappop(heap)        # Extract min
+heapq.heapify([4, 2, 1])         # Heapify list
+2. Stacks and Queues (System-Level Patterns)
+Memory-Level Implementations
+Structure	Core Principle	Production Example
+Stack	LIFO (Last-In-First-Out)	Function call stack
+Queue	FIFO (First-In-First-Out)	Message brokers (Kafka)
+Advanced Engineering Patterns
+Circular Queues:
+
+Fixed-size buffer with modulo indexing
+
+(head + 1) % capacity pointer arithmetic
+
+Monotonic Stacks:
+
+python
+# Next Greater Element pattern
+stack = []
+for num in nums:
+    while stack and num > stack[-1]:
+        print(f"{stack.pop()} → {num}")
+    stack.append(num)
+Double-Ended Queues (Deque):
+
+python
+from collections import deque
+dq = deque(maxlen=100)  # Thread-safe ring buffer
+Concurrency Considerations
+Lock-free stacks (atomic CAS operations)
+
+Blocking queues (thread pool task management)
+
+3. Binary Search Trees (BSTs) – Beyond Basics
+Performance Spectrum
+Tree Type	Insert/Search	Worst Case	Best For
+Naive BST	O(h)	O(n)	Educational purposes
+AVL	O(log n)	Strict balance	Read-heavy workloads
+Red-Black	O(log n)	Loose balance	Java TreeMap, C++ map
+Pythonic Implementations
+python
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left = self.right = None
+
+# Recursive search
+def search(root, val):
+    if not root or root.val == val:
+        return root
+    return search(root.left, val) if val < root.val else search(root.right, val)
+Real-World Optimizations
+Memory pooling for high-frequency trading systems
+
+Bulk-loading sorted data (optimal tree construction)
+
+Cache-aware layouts (B-trees for SSDs)
+
+Comparative Analysis
+When to Use Which
+Structure	Strengths	Weaknesses
+Heap	O(1) find min/max	No O(1) search
+Stack	Constant-time ops	Limited access patterns
+BST	Ordered traversal	Degenerates to O(n)
+Memory Overhead
+markdown
+| Structure   | 1M Nodes | Overhead Factor |
+|-------------|----------|-----------------|
+| Heap        | ~8MB     | 1x              |
+| BST         | ~32MB    | 4x (pointers)   |
+| RB-Tree     | ~40MB    | 5x (color bits) |
+System Design Applications
+Linux O(1) Scheduler: Uses multiple priority heaps
+
+Redis Sorted Sets: Hybrid of skiplist + hash table
+
+Python’s asyncio: Event loop queue management

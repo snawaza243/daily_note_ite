@@ -1,0 +1,109 @@
+Topic: Conda (Expanded Master Outline)
+1. Environment Management
+Core Operations
+
+Creating environments (`conda create -n env_nconda create -n env_name)
+
+Specifying Python versions (python=3.9)
+
+Cloning environments (--clone)
+
+Exporting/recreating envs (environment.yml)
+
+Advanced Control
+
+Environment isolation with --prefix
+
+--prune flag (removing unused packages)
+
+Managing environment locations (conda info --envs)
+
+Environment variables in Conda (conda env config vars)
+
+Best Practices
+
+Naming conventions for environments
+
+Directory structure for project-specific envs
+
+Environment size optimization
+
+2. Channel Management
+Fundamentals
+
+Default channels (conda-forge, defaults)
+
+Adding/removing channels (conda config --add channels)
+
+Channel priority (channel_priority in .condarc)
+
+Advanced Topics
+
+Private channels (self-hosted/Artifactory)
+
+Channel mirrors for offline use
+
+Pinning packages from specific channels
+
+Security & Performance
+
+Channel trust verification
+
+Avoiding channel conflicts
+
+Local channel caching
+
+3. Conda vs Pip
+Feature Comparison
+
+Aspect	Conda	Pip
+Non-Python Dependencies	✅ Handles binaries (C libs)	❌ Python-only
+Environment Isolation	✅ Built-in	❌ Needs venv/virtualenv
+Dependency Resolution	✅ More robust	❌ Can conflict
+Interoperability
+
+Using pip inside Conda envs (risks and guidelines)
+
+conda-lock vs pip-tools for deterministic builds
+
+Converting requirements.txt to Conda format
+
+When to Use Which
+
+Data science stacks → Conda
+
+Pure Python packages → Pip
+
+Hybrid approaches (conda env export --from-history)
+
+4. Dependency Management
+Advanced Resolution
+
+Dependency conflicts troubleshooting
+
+--freeze-installed flag
+
+Forcing reinstalls (--force-reinstall)
+
+Reproducibility
+
+conda list --explicit (exact build specs)
+
+conda-pack for relocatable environments
+
+Docker integration strategies
+
+5. Performance Optimization
+Conda parallel download (-q/--quiet flags)
+
+Mamba as a drop-in faster alternative
+
+Cleaning caches (conda clean --all)
+
+6. Edge Cases & Troubleshooting
+SSL errors in corporate environments
+
+Solving inconsistent environment states
+
+Handling CondaHTTPError
+

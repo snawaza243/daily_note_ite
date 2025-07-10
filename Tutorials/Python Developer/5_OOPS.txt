@@ -1,0 +1,157 @@
+Object-Oriented Programming (OOP) in Python – Deep Dive
+1. Classes and Objects Fundamentals
+Core Concepts
+What is a class? (Blueprint for objects)
+
+What is an object? (Instance of a class)
+
+class keyword syntax
+
+The self parameter (instance reference)
+
+Object Identity and Comparison
+id() function (memory address)
+
+is vs == (identity vs equality)
+
+Object lifecycle and garbage collection
+
+2. Class Definition and Structure
+Basic Class Definition
+python
+class MyClass:
+    """Class documentation"""
+    class_attribute = value
+Naming conventions (PascalCase)
+
+Docstrings and class documentation
+
+Empty classes (pass keyword)
+
+Advanced Class Features
+Type hints in classes
+
+Abstract Base Classes (ABC)
+
+Class decorators (@dataclass, @final)
+
+3. Attributes and Methods
+Instance Attributes
+Adding attributes dynamically
+
+__dict__ attribute (namespace dictionary)
+
+Attribute access order (instance → class → inheritance)
+
+Method Types
+Instance methods (self parameter)
+
+Class methods (@classmethod, cls parameter)
+
+Static methods (@staticmethod)
+
+Property methods (@property)
+
+4. Constructors and Initialization
+__init__ Method
+Purpose of constructor
+
+Default arguments in __init__
+
+Calling parent class constructors (super())
+
+Other Special Methods
+__new__ (instance creation)
+
+__del__ (destructor)
+
+Object representation methods:
+
+__str__ (human-readable)
+
+__repr__ (unambiguous)
+
+5. Instance vs Class Variables
+Instance Variables
+Unique to each instance
+
+Defined in __init__
+
+Modification affects only one instance
+
+Class Variables
+Shared across all instances
+
+Defined directly in class
+
+Modification affects all instances
+
+Common use cases (constants, counters)
+
+6. Advanced OOP Concepts
+Name Mangling (__var)
+Name decoration for "private" attributes
+
+Access restrictions (convention vs enforcement)
+
+Property Decorators
+Getters, setters, deleters
+
+Computed properties
+
+Read-only properties
+
+Class Composition
+"Has-a" relationships
+
+When to use composition vs inheritance
+
+7. Practical Patterns and Best Practices
+Common Patterns
+Singleton pattern implementation
+
+Factory methods
+
+Strategy pattern
+
+Performance Considerations
+Memory usage of instances
+
+__slots__ optimization
+
+Method resolution order (MRO)
+
+8. Debugging and Introspection
+Inspection Tools
+type() and isinstance()
+
+dir() function
+
+inspect module
+
+Common Pitfalls
+Mutable default arguments
+
+Accidental class variable sharing
+
+Circular references
+
+Complete Code Example
+python
+class Person:
+    """A class representing a person"""
+    species = "Homo sapiens"  # Class variable
+    
+    def __init__(self, name, age):
+        self.name = name  # Instance variable
+        self.age = age    # Instance variable
+    
+    @classmethod
+    def from_birth_year(cls, name, birth_year):
+        """Alternative constructor"""
+        return cls(name, 2023 - birth_year)
+    
+    @property
+    def is_adult(self):
+        """Computed property"""
+        return self.age >= 18

@@ -1,0 +1,229 @@
+1. Variables and Data Types
+Your Subtopics: (Implicitly covered under "Variables and Data Types")
+Expanded List:
+
+Variable Basics
+
+Variable naming rules and conventions (snake_case)
+
+Dynamic typing vs static typing (duck typing)
+
+type() function and isinstance()
+
+Variable scope (global, nonlocal, local)
+
+Primitive Data Types
+
+int, float, bool, str
+
+Complex numbers (complex)
+
+None type and its use cases
+
+Composite Data Types
+
+list (mutable, ordered)
+
+tuple (immutable, ordered)
+
+dict (key-value pairs, mutable)
+
+set and frozenset (unique elements, unordered)
+
+Advanced Topics
+
+Immutable vs mutable objects (hashability)
+
+Memory management (id(), sys.getsizeof())
+
+Type hints (PEP 484) and annotations
+
+Constants (conventionally UPPER_CASE)
+
+2. Operators and Expressions
+Your Subtopics: (Implicitly covered under "Operators and Expressions")
+Expanded List:
+
+Arithmetic Operators
+
++, -, *, /, // (floor division), % (modulus), ** (exponentiation)
+
+Augmented assignment (+=, -=, etc.)
+
+Comparison Operators
+
+==, !=, >, <, >=, <=
+
+Chained comparisons (1 < x < 10)
+
+Logical Operators
+
+and, or, not (short-circuiting behavior)
+
+Truthy vs falsy values
+
+Bitwise Operators
+
+&, |, ^, ~, <<, >>
+
+Membership & Identity Operators
+
+in, not in (for sequences/mappings)
+
+is vs == (object identity vs equality)
+
+Operator Overloading
+
+Special methods (__add__, __eq__, etc.)
+
+Customizing behavior for user-defined classes
+
+3. Conditions and Loops
+Your Subtopics: (Implicitly covered under "Conditions and Loops")
+Expanded List:
+
+Conditional Statements
+
+if, elif, else
+
+Ternary operator (x if condition else y)
+
+match-case (structural pattern matching, Python 3.10+)
+
+Loops
+
+for loops (iterables, range())
+
+while loops (break/continue/else clauses)
+
+Iterating over dictionaries, lists, strings
+
+Loop Control
+
+break, continue, pass
+
+else clause in loops (executes if no break)
+
+Iteration Tools
+
+enumerate() (index + value)
+
+zip() (parallel iteration)
+
+reversed(), sorted()
+
+Comprehensions
+
+List, dict, set comprehensions
+
+Nested comprehensions
+
+Generator expressions (memory efficiency)
+
+4. Type Casting
+Your Subtopics: (Implicitly covered under "Type Casting")
+Expanded List:
+
+Implicit vs Explicit Casting
+
+Python’s automatic type coercion (e.g., int + float → float)
+
+Manual casting with constructors (int(), str(), float(), etc.)
+
+Common Conversions
+
+String to number (int("42"), float("3.14"))
+
+Number to string (str(100))
+
+List ↔ Tuple ↔ Set (tuple([1, 2, 3]))
+
+Dict to list of tuples (list(dict.items()))
+
+Edge Cases & Pitfalls
+
+Handling ValueError (e.g., int("abc"))
+
+Lossy conversions (float → int truncation)
+
+Boolean casting rules (bool(0) == False, bool([]) == False)
+
+5. Exception Handling
+Your Subtopics: (Implicitly covered under "Exception Handling")
+Expanded List:
+
+Basic Try-Except
+
+try, except, else, finally
+
+Catching specific exceptions (except ValueError)
+
+Multiple exceptions in one block (except (TypeError, IndexError))
+
+Common Built-in Exceptions
+
+ValueError, TypeError, IndexError, KeyError
+
+ZeroDivisionError, FileNotFoundError
+
+ImportError, AttributeError
+
+Advanced Topics
+
+Custom exceptions (inheriting from Exception)
+
+Exception chaining (raise ... from)
+
+assert statements (debugging vs validation)
+
+Context managers (with blocks for resource handling)
+
+Logging & Debugging
+
+logging module (vs print)
+
+traceback module (detailed error info)
+
+
+
+6. Input/Output Basics
+Console I/O
+print() (sep, end, file params)
+
+input() (string handling)
+
+File I/O
+open() (read, write, append modes)
+
+Context managers (with statement)
+
+Handling FileNotFoundError
+
+7. String Formatting
+Methods
+f-strings (Python 3.6+)
+
+.format() (positional, named args)
+
+%-formatting (legacy)
+
+Advanced
+Format specifiers (:.2f, :>10)
+
+Multiline strings ("""), escaping
+
+8. Docstrings & Comments
+PEP 8 conventions
+
+Single-line (#) vs. multi-line (""")
+
+__doc__ attribute
+
+Type hints in docstrings
+
+9. Python’s Execution Model
+Script vs. module (__name__ == "__main__")
+
+Bytecode compilation (.pyc files)
+
+Namespaces and scope resolution

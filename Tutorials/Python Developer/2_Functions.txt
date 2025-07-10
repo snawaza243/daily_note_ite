@@ -1,0 +1,112 @@
+Functions in Python (Deep Dive)
+1. Function Definition
+Basics
+Syntax: def function_name():
+
+Function naming conventions (snake_case)
+
+The pass keyword (placeholder functions)
+
+Difference between defining and calling a function
+
+Advanced
+First-class functions (functions as objects)
+
+__doc__ attribute and docstrings (help())
+
+Function annotations (-> return type hints)
+
+Namespace and scope inside functions (globals(), locals())
+
+2. Parameters and Arguments
+Parameter Types
+Positional arguments (order matters)
+
+Keyword arguments (param=value)
+
+Default parameters (def func(a=1))
+
+Variable-length args (*args, **kwargs)
+
+Advanced Concepts
+Argument unpacking (* and ** operators)
+
+Mutable default arguments (common pitfall)
+
+Forced keyword-only args (* separator, PEP 3102)
+
+Positional-only args (/ separator, PEP 570)
+
+3. Built-in Functions
+Commonly Used Built-ins
+I/O: print(), input(), open()
+
+Type conversion: int(), str(), list(), dict()
+
+Math: abs(), round(), min(), max(), sum()
+
+Iteration: len(), range(), enumerate(), zip()
+
+Advanced Built-ins
+map(), filter(), reduce() (functional programming)
+
+eval(), exec() (dynamic code execution)
+
+isinstance(), issubclass() (type checking)
+
+globals(), locals(), vars() (namespace inspection)
+
+4. Lambda Functions
+Basics
+Syntax: lambda x: x + 1
+
+Use cases (short, one-time functions)
+
+Limitations (single expression, no statements)
+
+Advanced Usage
+Using with map(), filter(), sorted()
+
+Closures and late binding (common gotcha)
+
+When not to use lambdas (readability trade-offs)
+
+5. Decorators
+Basic Decorators
+What is a decorator? (@decorator syntax)
+
+Creating a simple decorator
+
+Decorator use cases (logging, timing, auth)
+
+Advanced Decorator Concepts
+Decorators with arguments (nested functions)
+
+Class-based decorators (__call__ method)
+
+functools.wraps (preserving metadata)
+
+Stacking multiple decorators (order matters)
+
+Built-in decorators (@staticmethod, @classmethod, @property)
+
+Additional Key Topics (For Completeness)
+Function Execution & Memory
+How Python executes functions (stack frames)
+
+Recursion (limits, sys.setrecursionlimit())
+
+Generator functions (yield vs return)
+
+Error Handling in Functions
+Raising exceptions (raise)
+
+Custom exceptions inside functions
+
+Functional Programming in Python
+Pure functions (side effects, idempotence)
+
+Higher-order functions (functions returning functions)
+
+functools.partial (partial function application)
+

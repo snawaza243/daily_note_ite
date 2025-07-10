@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python OOP: Object-Oriented Programming Master Guide</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        header {
+            background-color: #3776ab;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+        }
+        
+        h1 {
+            margin-top: 0;
+        }
+        
+        h2 {
+            border-bottom: 2px solid #3776ab;
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+        
+        h3 {
+            color: #3776ab;
+            margin-top: 25px;
+        }
+        
+        h4 {
+            color: #5d8fc2;
+            margin-top: 20px;
+        }
+        
+        code {
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Consolas', monospace;
+        }
+        
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 4px solid #3776ab;
+        }
+        
+        .note {
+            background-color: #e7f4ff;
+            border-left: 4px solid #3776ab;
+            padding: 10px 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .warning {
+            background-color: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 10px 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #3776ab;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .toc {
+            background-color: #f0f7ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .toc li {
+            margin-bottom: 5px;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: #2c3e50;
+        }
+        
+        .toc a:hover {
+            color: #3776ab;
+            text-decoration: underline;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .comparison-table td {
+            vertical-align: top;
+        }
+        
+        .method-table {
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .method-table td:first-child {
+            font-family: monospace;
+            width: 25%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Object-Oriented Programming in Python</h1>
+        <p>Mastering classes, objects, and Python's OOP features</p>
+    </header>
+    
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#fundamentals">1. Classes and Objects Fundamentals</a></li>
+            <li><a href="#class-definition">2. Class Definition and Structure</a></li>
+            <li><a href="#attributes-methods">3. Attributes and Methods</a></li>
+            <li><a href="#constructors">4. Constructors and Initialization</a></li>
+            <li><a href="#variables">5. Instance vs Class Variables</a></li>
+            <li><a href="#advanced">6. Advanced OOP Concepts</a></li>
+            <li><a href="#patterns">7. Practical Patterns and Best Practices</a></li>
+            <li><a href="#debugging">8. Debugging and Introspection</a></li>
+            <li><a href="#example">Complete Code Example</a></li>
+        </ul>
+    </div>
+    
+    <section id="fundamentals">
+        <h2>1. Classes and Objects Fundamentals</h2>
+        
+        <h3>Core Concepts</h3>
+        
+        <h4>What is a Class?</h4>
+        <p>A class is a blueprint for creating objects. It defines attributes (data) and methods (functions) that the created objects will have.</p>
+        
+        <h4>What is an Object?</h4>
+        <p>An object is an instance of a class. It's a concrete "thing" created from the class blueprint, with its own set of attributes.</p>
+        
+        <pre><code># Class definition
+class Dog:
+    """A simple Dog class"""
+    
+    def bark(self):
+        print("Woof!")
+
+# Object creation
+my_dog = Dog()
+my_dog.bark()  # Output: Woof!</code></pre>
+        
+        <h4>The self Parameter</h4>
+        <p><code>self</code> refers to the instance calling the method. Python automatically passes it when calling instance methods.</p>
+        
+        <div class="note">
+            <p><strong>Note:</strong> While <code>self</code> is the convention, you can technically use any name, but don't!</p>
+        </div>
+        
+        <h3>Object Identity and Comparison</h3>
+        
+        <h4>id() Function</h4>
+        <p>Returns the memory address of an object:</p>
+        <pre><code>a = [1, 2, 3]
+print(id(a))  # Memory address like 140245123456</code></pre>
+        
+        <h4>is vs ==</h4>
+        <table class="comparison-table">
+            <tr>
+                <th>Operator</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td><code>is</code></td>
+                <td>Identity comparison (same object in memory)</td>
+                <td><code>a is b</code></td>
+            </tr>
+            <tr>
+                <td><code>==</code></td>
+                <td>Equality comparison (same value)</td>
+                <td><code>a == b</code></td>
+            </tr>
+        </table>
+        
+        <pre><code>list1 = [1, 2, 3]
+list2 = [1, 2, 3]
+list3 = list1
+
+print(list1 == list2)  # True (same content)
+print(list1 is list2)  # False (different objects)
+print(list1 is list3)  # True (same object)</code></pre>
+        
+        <h4>Object Lifecycle</h4>
+        <p>Python uses reference counting and garbage collection to manage memory:</p>
+        <ul>
+            <li>Objects are created when instantiated</li>
+            <li>Memory is reclaimed when no references remain</li>
+            <li>The <code>__del__</code> method is called before destruction</li>
+        </ul>
+    </section>
+    
+    <section id="class-definition">
+        <h2>2. Class Definition and Structure</h2>
+        
+        <h3>Basic Class Definition</h3>
+        
+        <pre><code>class Person:
+    """A class representing a person.
+    
+    Attributes:
+        name (str): The person's name
+        age (int): The person's age
+    """
+    
+    species = "Homo sapiens"  # Class attribute
+    
+    def __init__(self, name, age):
+        self.name = name  # Instance attribute
+        self.age = age    # Instance attribute</code></pre>
+        
+        <h4>Naming Conventions</h4>
+        <ul>
+            <li>Class names: <code>PascalCase</code></li>
+            <li>Method names: <code>snake_case</code></li>
+            <li>Private conventions: <code>_single_leading_underscore</code> (protected), <code>__double_leading_underscore</code> (name mangled)</li>
+        </ul>
+        
+        <h4>Empty Classes</h4>
+        <p>Use <code>pass</code> as a placeholder:</p>
+        <pre><code>class MyEmptyClass:
+    pass</code></pre>
+        
+        <h3>Advanced Class Features</h3>
+        
+        <h4>Type Hints in Classes</h4>
+        <pre><code>class Point:
+    def __init__(self, x: float, y: float) -> None:
+        self.x = x
+        self.y = y
+    
+    def move(self, dx: float, dy: float) -> 'Point':
+        self.x += dx
+        self.y += dy
+        return self</code></pre>
+        
+        <h4>Abstract Base Classes (ABC)</h4>
+        <pre><code>from abc import ABC, abstractmethod
+
+class Shape(ABC):
+    @abstractmethod
+    def area(self) -> float:
+        pass
+
+class Circle(Shape):
+    def __init__(self, radius):
+        self.radius = radius
+    
+    def area(self) -> float:
+        return 3.14 * self.radius ** 2</code></pre>
+        
+        <h4>Class Decorators</h4>
+        <pre><code>from dataclasses import dataclass
+from typing import final
+
+@dataclass
+class Point:
+    x: float
+    y: float
+
+@final
+class CannotBeInherited:
+    pass</code></pre>
+    </section>
+    
+    <section id="attributes-methods">
+        <h2>3. Attributes and Methods</h2>
+        
+        <h3>Instance Attributes</h3>
+        
+        <h4>Adding Attributes Dynamically</h4>
+        <pre><code>class Dog:
+    pass
+
+d = Dog()
+d.name = "Fido"  # Added dynamically
+d.age = 3</code></pre>
+        
+        <h4>__dict__ Attribute</h4>
+        <p>Contains the instance's namespace dictionary:</p>
+        <pre><code>print(d.__dict__)  # {'name': 'Fido', 'age': 3}</code></pre>
+        
+        <h4>Attribute Access Order</h4>
+        <p>Python searches for attributes in this order:</p>
+        <ol>
+            <li>Instance attributes</li>
+            <li>Class attributes</li>
+            <li>Parent class attributes (inheritance)</li>
+        </ol>
+        
+        <h3>Method Types</h3>
+        
+        <table class="method-table">
+            <tr>
+                <th>Method Type</th>
+                <th>Description</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td>Instance Method</td>
+                <td>Receives instance as first arg (<code>self</code>)</td>
+                <td><code>def method(self, args):</code></td>
+            </tr>
+            <tr>
+                <td>Class Method (<code>@classmethod</code>)</td>
+                <td>Receives class as first arg (<code>cls</code>)</td>
+                <td><code>@classmethod<br>def method(cls, args):</code></td>
+            </tr>
+            <tr>
+                <td>Static Method (<code>@staticmethod</code>)</td>
+                <td>Receives no special first arg</td>
+                <td><code>@staticmethod<br>def method(args):</code></td>
+            </tr>
+            <tr>
+                <td>Property Method (<code>@property</code>)</td>
+                <td>Defines getter for computed attribute</td>
+                <td><code>@property<br>def value(self):</code></td>
+            </tr>
+        </table>
+        
+        <pre><code>class MyClass:
+    @classmethod
+    def class_method(cls):
+        print(f"Called class_method of {cls}")
+    
+    @staticmethod
+    def static_method():
+        print("Called static_method")
+    
+    @property
+    def computed_prop(self):
+        return "Computed value"</code></pre>
+    </section>
+    
+    <section id="constructors">
+        <h2>4. Constructors and Initialization</h2>
+        
+        <h3>__init__ Method</h3>
+        <p>The constructor method called when an instance is created:</p>
+        
+        <pre><code>class Person:
+    def __init__(self, name, age=18):  # Default age
+        self.name = name
+        self.age = age
+
+p = Person("Alice", 25)</code></pre>
+        
+        <h4>Calling Parent Constructors</h4>
+        <pre><code>class Employee(Person):
+    def __init__(self, name, age, employee_id):
+        super().__init__(name, age)  # Call parent __init__
+        self.employee_id = employee_id</code></pre>
+        
+        <h3>Other Special Methods</h3>
+        
+        <h4>__new__ Method</h4>
+        <p>Controls instance creation (rarely used directly):</p>
+        <pre><code>class Singleton:
+    _instance = None
+    
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance</code></pre>
+        
+        <h4>Object Representation Methods</h4>
+        <pre><code>class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+    
+    def __str__(self):
+        return f"Point at ({self.x}, {self.y})"
+    
+    def __repr__(self):
+        return f"Point(x={self.x}, y={self.y})"
+
+p = Point(3, 4)
+print(str(p))   # Point at (3, 4)
+print(repr(p))  # Point(x=3, y=4)</code></pre>
+    </section>
+    
+    <section id="variables">
+        <h2>5. Instance vs Class Variables</h2>
+        
+        <h3>Instance Variables</h3>
+        <p>Unique to each instance, defined in <code>__init__</code>:</p>
+        <pre><code>class Dog:
+    def __init__(self, name):
+        self.name = name  # Instance variable
+
+d1 = Dog("Fido")
+d2 = Dog("Buddy")
+print(d1.name, d2.name)  # Fido Buddy</code></pre>
+        
+        <h3>Class Variables</h3>
+        <p>Shared among all instances, defined in class body:</p>
+        <pre><code>class Dog:
+    species = "Canis familiaris"  # Class variable
+    
+    def __init__(self, name):
+        self.name = name
+
+d1 = Dog("Fido")
+d2 = Dog("Buddy")
+print(d1.species, d2.species)  # Same for both
+
+Dog.species = "Canis lupus"  # Changes all instances
+print(d1.species)  # Canis lupus</code></pre>
+        
+        <div class="warning">
+            <p><strong>Warning:</strong> Be careful with mutable class variables as they're shared across all instances!</p>
+        </div>
+        
+        <h4>Common Use Cases</h4>
+        <ul>
+            <li>Constants (e.g., <code>PI = 3.14159</code>)</li>
+            <li>Counters (e.g., instance counting)</li>
+            <li>Default values</li>
+        </ul>
+    </section>
+    
+    <section id="advanced">
+        <h2>6. Advanced OOP Concepts</h2>
+        
+        <h3>Name Mangling (__var)</h3>
+        <p>Python adds class name prefix to "private" attributes:</p>
+        <pre><code>class MyClass:
+    def __init__(self):
+        self.__private = "secret"  # Name mangled to _MyClass__private
+
+obj = MyClass()
+print(obj.__dict__)  # {'_MyClass__private': 'secret'}</code></pre>
+        
+        <h3>Property Decorators</h3>
+        <pre><code>class Circle:
+    def __init__(self, radius):
+        self._radius = radius
+    
+    @property
+    def radius(self):
+        """Get the radius"""
+        return self._radius
+    
+    @radius.setter
+    def radius(self, value):
+        if value <= 0:
+            raise ValueError("Radius must be positive")
+        self._radius = value
+    
+    @radius.deleter
+    def radius(self):
+        print("Deleting radius")
+        del self._radius
+
+c = Circle(5)
+print(c.radius)  # Uses getter
+c.radius = 10    # Uses setter
+del c.radius     # Uses deleter</code></pre>
+        
+        <h3>Class Composition</h3>
+        <p>"Has-a" relationship (alternative to inheritance):</p>
+        <pre><code>class Engine:
+    def start(self):
+        print("Engine started")
+
+class Car:
+    def __init__(self):
+        self.engine = Engine()  # Composition
+    
+    def start(self):
+        self.engine.start()
+
+my_car = Car()
+my_car.start()  # Engine started</code></pre>
+    </section>
+    
+    <section id="patterns">
+        <h2>7. Practical Patterns and Best Practices</h2>
+        
+        <h3>Common Patterns</h3>
+        
+        <h4>Singleton Pattern</h4>
+        <pre><code>class Singleton:
+    _instance = None
+    
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
+a = Singleton()
+b = Singleton()
+print(a is b)  # True</code></pre>
+        
+        <h4>Factory Method</h4>
+        <pre><code>class ShapeFactory:
+    @staticmethod
+    def create_shape(shape_type):
+        if shape_type == "circle":
+            return Circle()
+        elif shape_type == "square":
+            return Square()
+        raise ValueError("Invalid shape type")
+
+shape = ShapeFactory.create_shape("circle")</code></pre>
+        
+        <h3>Performance Considerations</h3>
+        
+        <h4>__slots__ Optimization</h4>
+        <p>Reduces memory usage by preventing dynamic attribute creation:</p>
+        <pre><code>class Point:
+    __slots__ = ['x', 'y']  # Only these attributes allowed
+    
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y</code></pre>
+        
+        <h4>Method Resolution Order (MRO)</h4>
+        <p>Determines method lookup order in inheritance:</p>
+        <pre><code>class A:
+    def method(self):
+        print("A")
+
+class B(A):
+    def method(self):
+        print("B")
+        super().method()
+
+class C(A):
+    def method(self):
+        print("C")
+        super().method()
+
+class D(B, C):
+    def method(self):
+        print("D")
+        super().method()
+
+d = D()
+d.method()
+# Output:
+# D
+# B
+# C
+# A
+
+print(D.__mro__)  # Shows method resolution order</code></pre>
+    </section>
+    
+    <section id="debugging">
+        <h2>8. Debugging and Introspection</h2>
+        
+        <h3>Inspection Tools</h3>
+        
+        <h4>type() and isinstance()</h4>
+        <pre><code>class Animal: pass
+class Dog(Animal): pass
+
+d = Dog()
+print(type(d))          # &lt;class '__main__.Dog'>
+print(isinstance(d, Dog))    # True
+print(isinstance(d, Animal)) # True (inheritance)</code></pre>
+        
+        <h4>dir() Function</h4>
+        <p>Lists attributes and methods of an object:</p>
+        <pre><code>print(dir(d))  # ['__class__', '__delattr__', ...]</code></pre>
+        
+        <h4>inspect Module</h4>
+        <pre><code>import inspect
+
+print(inspect.getmembers(d))  # Detailed member info
+print(inspect.getsource(Dog)) # Shows class source code</code></pre>
+        
+        <h3>Common Pitfalls</h3>
+        
+        <h4>Mutable Default Arguments</h4>
+        <pre><code>class BadIdea:
+    def __init__(self, items=[]):  # Shared across instances!
+        self.items = items
+
+a = BadIdea()
+a.items.append(1)
+b = BadIdea()
+print(b.items)  # [1] - Surprise!</code></pre>
+        
+        <h4>Accidental Class Variable Sharing</h4>
+        <pre><code>class Dog:
+    tricks = []  # Shared by all dogs!
+    
+    def add_trick(self, trick):
+        self.tricks.append(trick)
+
+d1 = Dog()
+d2 = Dog()
+d1.add_trick("roll over")
+print(d2.tricks)  # ['roll over'] - Oops!</code></pre>
+    </section>
+    
+    <section id="example">
+        <h2>Complete Code Example</h2>
+        
+        <pre><code>class Person:
+    """A class representing a person"""
+    species = "Homo sapiens"  # Class variable
+    
+    def __init__(self, name: str, age: int):
+        self.name = name  # Instance variable
+        self.age = age    # Instance variable
+    
+    @classmethod
+    def from_birth_year(cls, name: str, birth_year: int) -> 'Person':
+        """Alternative constructor"""
+        return cls(name, 2023 - birth_year)
+    
+    @property
+    def is_adult(self) -> bool:
+        """Computed property"""
+        return self.age >= 18
+    
+    def __str__(self) -> str:
+        return f"{self.name} ({self.age})"
+    
+    def __repr__(self) -> str:
+        return f"Person(name='{self.name}', age={self.age})"
+
+# Usage
+p1 = Person("Alice", 25)
+p2 = Person.from_birth_year("Bob", 1990)
+
+print(p1)           # Alice (25)
+print(repr(p2))     # Person(name='Bob', age=33)
+print(p1.is_adult)  # True</code></pre>
+    </section>
+    
+    <footer>
+        <p>© 2023 Python Developer Guide. All rights reserved.</p>
+        <p>References: Python documentation, Fluent Python by Luciano Ramalho, Python Tricks by Dan Bader</p>
+    </footer>
+</body>
+</html>
