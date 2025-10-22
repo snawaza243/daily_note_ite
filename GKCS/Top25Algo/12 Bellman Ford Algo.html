@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Binary Search</title>
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .itepost-section-title {
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.8em;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+            margin-top: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .itepost-section-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .itepost-section-content p {
+            margin-bottom: 16px;
+        }
+
+        pre {
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        strong {
+            color: #2E7D32;
+        }
+    </style>
+
+    <!-- Add this CSS -->
+    <style>
+        .code-language-buttons {
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .code-language-btn {
+            padding: 5px 12px;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .code-language-btn:hover {
+            background-color: #e9e9e9;
+        }
+
+        .code-language-btn.active {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .language-code-block {
+            display: none;
+        }
+
+        .language-code-block.active {
+            display: block;
+        }
+    </style>
+
+    <!-- Add this script after jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Process each implementation section
+            $('.itepost-section-content').each(function () {
+                const $section = $(this);
+                const $implementationTitle = $section.find('p:contains("Implementation in Multiple Languages:")');
+
+                if ($implementationTitle.length > 0) {
+                    const $codeBlocks = $implementationTitle.nextUntil('p').filter('pre');
+
+                    if ($codeBlocks.length > 0) {
+                        // Create language buttons container
+                        const $buttonsContainer = $('<div class="code-language-buttons"></div>');
+
+                        // Extract languages and create buttons
+                        const languages = [];
+                        $codeBlocks.each(function () {
+                            const $codeBlock = $(this);
+                            const languageClass = $codeBlock.find('code').attr('class');
+                            let languageName = 'Unknown';
+
+                            if (languageClass) {
+                                // Extract language name from class (e.g., "language-python" -> "python")
+                                const match = languageClass.match(/language-(\w+)/);
+                                if (match) {
+                                    languageName = match[1].toUpperCase();
+                                }
+                            }
+
+                            languages.push({
+                                name: languageName,
+                                element: $codeBlock
+                            });
+
+                            // Add class to code block for easier selection
+                            $codeBlock.addClass('language-code-block').addClass('lang-' + languageName.toLowerCase());
+                        });
+
+                        // Create buttons for each language
+                        languages.forEach((lang, index) => {
+                            const $button = $('<button class="code-language-btn">' + lang.name + '</button>');
+
+                            // Make first button active by default
+                            if (index === 0) {
+                                $button.addClass('active');
+                                lang.element.addClass('active');
+                            }
+
+                            $button.on('click', function () {
+                                // Remove active class from all buttons and code blocks
+                                $buttonsContainer.find('.code-language-btn').removeClass('active');
+                                $section.find('.language-code-block').removeClass('active');
+
+                                // Add active class to clicked button and corresponding code block
+                                $(this).addClass('active');
+                                lang.element.addClass('active');
+                            });
+
+                            $buttonsContainer.append($button);
+                        });
+
+                        // Insert buttons after the implementation title
+                        $implementationTitle.after($buttonsContainer);
+                    }
+                }
+            });
+        });
+
+    </script>
+</head>
+ 
+<body>
+    <div class="itepost-section-title">Bellman-Ford Algorithm</div>
+    <div class="itepost-section-content">
+      <p><strong>Category:</strong> Graphs (Blue)</p>
+      
+      <p><strong>Introduction:</strong> The Bellman-Ford algorithm is a shortest path algorithm that computes the shortest paths from a single source vertex to all other vertices in a weighted digraph. Unlike Dijkstra's algorithm, Bellman-Ford can handle graphs with negative edge weights, making it more versatile. It works by relaxing all edges repeatedly and can detect negative weight cycles. Think of it like sending scouts along all possible routes multiple times to find the absolute shortest path, even if some roads have negative tolls (you get paid to use them).</p>
+      
+      <p><strong>Working Principle:</strong> The algorithm follows these key steps:
+        <ol>
+            <li><strong>Initialize:</strong> Set distance to source as 0 and all other vertices as infinity</li>
+            <li><strong>Relax Edges:</strong> For each edge (u, v) with weight w, if distance[u] + w < distance[v], update distance[v]</li>
+            <li><strong>Repeat:</strong> Perform the relaxation step V-1 times (where V is number of vertices)</li>
+            <li><strong>Check Cycles:</strong> Perform one more relaxation to detect negative weight cycles</li>
+        </ol>
+        <strong>Pseudocode:</strong><br>
+        <code>
+        BELLMAN-FORD(G, w, s):<br>
+        &nbsp;&nbsp;// Initialize distances<br>
+        &nbsp;&nbsp;for each vertex v in G.V:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;v.distance = ∞<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;v.predecessor = NIL<br>
+        &nbsp;&nbsp;s.distance = 0<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;// Relax edges repeatedly<br>
+        &nbsp;&nbsp;for i = 1 to |G.V| - 1:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;for each edge (u, v) in G.E:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if u.distance + w(u, v) < v.distance:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v.distance = u.distance + w(u, v)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v.predecessor = u<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;// Check for negative weight cycles<br>
+        &nbsp;&nbsp;for each edge (u, v) in G.E:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;if u.distance + w(u, v) < v.distance:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return "Graph contains negative weight cycle"<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;return "No negative cycles found"<br>
+        </code>
+      </p>
+      
+      <p><strong>Example & Dry Run:</strong><br>
+        Consider this graph with 5 vertices (0-4) and edges:
+        <ul>
+            <li>0→1: 6</li>
+            <li>0→2: 7</li>
+            <li>1→2: 8</li>
+            <li>1→3: 5</li>
+            <li>1→4: -4</li>
+            <li>2→3: -3</li>
+            <li>2→4: 9</li>
+            <li>3→1: -2</li>
+            <li>4→0: 2</li>
+            <li>4→3: 7</li>
+        </ul>
+        <strong>Step-by-step execution from source vertex 0:</strong>
+        <ul>
+            <li><strong>Initialization:</strong> dist[0]=0, others=∞</li>
+            <li><strong>Iteration 1:</strong> Update dist[1]=6, dist[2]=7</li>
+            <li><strong>Iteration 2:</strong> Update dist[3]=4 (via 2), dist[4]=2 (via 1)</li>
+            <li><strong>Iteration 3:</strong> Update dist[1]=2 (via 3), dist[4]=2 remains</li>
+            <li><strong>Iteration 4:</strong> Update dist[2]=10 (via 1), dist[3]=8 (via 1→2)</li>
+            <li><strong>Cycle Check:</strong> No negative cycles detected</li>
+            <li><strong>Result:</strong> Shortest paths: 0→1:2, 0→2:7, 0→3:4, 0→4:2</li>
+        </ul>
+      </p>
+      
+      <p><strong>Time and Space Complexity:</strong>
+        <ul>
+            <li><strong>Time Complexity:</strong> O(V × E) - For V-1 iterations over E edges</li>
+            <li><strong>Space Complexity:</strong> O(V) - For storing distances and predecessors</li>
+            <li><strong>Best Case:</strong> O(E) - When graph is a linked list</li>
+            <li><strong>Worst Case:</strong> O(V × E) - Complete graph</li>
+            <li><strong>Negative Cycle Detection:</strong> O(E) - One additional pass</li>
+        </ul>
+      </p>
+      
+      <p><strong>Implementation in Multiple Languages:</strong></p>
+      
+      <div class="code-language-buttons">
+        <button class="code-language-btn active" data-language="c">C</button>
+        <button class="code-language-btn" data-language="cpp">C++</button>
+        <button class="code-language-btn" data-language="csharp">C#</button>
+        <button class="code-language-btn" data-language="java">Java</button>
+        <button class="code-language-btn" data-language="python">Python</button>
+        <button class="code-language-btn" data-language="javascript">JavaScript</button>
+      </div>
+      
+      <div class="language-code-block active" id="c-code">
+        <pre><code class="language-c">// C Code Example
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;limits.h&gt;
+
+#define INF INT_MAX
+
+// Structure to represent an edge
+struct Edge {
+    int src, dest, weight;
+};
+
+// Structure to represent a graph
+struct Graph {
+    int V, E;
+    struct Edge* edges;
+};
+
+// Create a graph with V vertices and E edges
+struct Graph* createGraph(int V, int E) {
+    struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
+    graph->V = V;
+    graph->E = E;
+    graph->edges = (struct Edge*)malloc(E * sizeof(struct Edge));
+    return graph;
+}
+
+// Bellman-Ford algorithm
+int bellmanFord(struct Graph* graph, int src, int dist[]) {
+    int V = graph->V;
+    int E = graph->E;
+    
+    // Initialize distances
+    for (int i = 0; i < V; i++) {
+        dist[i] = INF;
+    }
+    dist[src] = 0;
+    
+    // Relax all edges V-1 times
+    for (int i = 1; i <= V - 1; i++) {
+        for (int j = 0; j < E; j++) {
+            int u = graph->edges[j].src;
+            int v = graph->edges[j].dest;
+            int weight = graph->edges[j].weight;
+            
+            if (dist[u] != INF && dist[u] + weight < dist[v]) {
+                dist[v] = dist[u] + weight;
+            }
+        }
+    }
+    
+    // Check for negative weight cycles
+    for (int i = 0; i < E; i++) {
+        int u = graph->edges[i].src;
+        int v = graph->edges[i].dest;
+        int weight = graph->edges[i].weight;
+        
+        if (dist[u] != INF && dist[u] + weight < dist[v]) {
+            return 0; // Negative cycle found
+        }
+    }
+    
+    return 1; // No negative cycles
+}
+
+// Print shortest distances
+void printDistances(int dist[], int V) {
+    printf("Vertex\tDistance from Source\n");
+    for (int i = 0; i < V; i++) {
+        if (dist[i] == INF) {
+            printf("%d\tINF\n", i);
+        } else {
+            printf("%d\t%d\n", i, dist[i]);
+        }
+    }
+}
+
+// Example usage:
+/*
+int main() {
+    int V = 5; // Number of vertices
+    int E = 8; // Number of edges
+    struct Graph* graph = createGraph(V, E);
+    
+    // Add edges
+    graph->edges[0].src = 0; graph->edges[0].dest = 1; graph->edges[0].weight = -1;
+    graph->edges[1].src = 0; graph->edges[1].dest = 2; graph->edges[1].weight = 4;
+    graph->edges[2].src = 1; graph->edges[2].dest = 2; graph->edges[2].weight = 3;
+    graph->edges[3].src = 1; graph->edges[3].dest = 3; graph->edges[3].weight = 2;
+    graph->edges[4].src = 1; graph->edges[4].dest = 4; graph->edges[4].weight = 2;
+    graph->edges[5].src = 3; graph->edges[5].dest = 2; graph->edges[5].weight = 5;
+    graph->edges[6].src = 3; graph->edges[6].dest = 1; graph->edges[6].weight = 1;
+    graph->edges[7].src = 4; graph->edges[7].dest = 3; graph->edges[7].weight = -3;
+    
+    int dist[V];
+    if (bellmanFord(graph, 0, dist)) {
+        printDistances(dist, V);
+    } else {
+        printf("Graph contains negative weight cycle\n");
+    }
+    
+    free(graph->edges);
+    free(graph);
+    return 0;
+}
+*/</code></pre>
+      </div>
+
+      <div class="language-code-block" id="cpp-code">
+        <pre><code class="language-cpp">// C++ Code Example
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;climits&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+struct Edge {
+    int source, destination, weight;
+    
+    Edge(int s, int d, int w) : source(s), destination(d), weight(w) {}
+};
+
+class BellmanFord {
+private:
+    int vertices;
+    vector<Edge> edges;
+    
+public:
+    BellmanFord(int V) : vertices(V) {}
+    
+    void addEdge(int source, int destination, int weight) {
+        edges.push_back(Edge(source, destination, weight));
+    }
+    
+    // Standard Bellman-Ford algorithm
+    bool findShortestPaths(int source, vector<int>& distances) {
+        distances.assign(vertices, INT_MAX);
+        distances[source] = 0;
+        
+        // Relax all edges V-1 times
+        for (int i = 1; i <= vertices - 1; i++) {
+            for (const Edge& edge : edges) {
+                if (distances[edge.source] != INT_MAX && 
+                    distances[edge.source] + edge.weight < distances[edge.destination]) {
+                    distances[edge.destination] = distances[edge.source] + edge.weight;
+                }
+            }
+        }
+        
+        // Check for negative weight cycles
+        for (const Edge& edge : edges) {
+            if (distances[edge.source] != INT_MAX && 
+                distances[edge.source] + edge.weight < distances[edge.destination]) {
+                return false; // Negative cycle detected
+            }
+        }
+        
+        return true; // No negative cycles
+    }
+    
+    // Bellman-Ford with path reconstruction
+    bool findShortestPathsWithPath(int source, vector<int>& distances, vector<int>& predecessors) {
+        distances.assign(vertices, INT_MAX);
+        predecessors.assign(vertices, -1);
+        distances[source] = 0;
+        
+        // Relax all edges V-1 times
+        for (int i = 1; i <= vertices - 1; i++) {
+            for (const Edge& edge : edges) {
+                if (distances[edge.source] != INT_MAX && 
+                    distances[edge.source] + edge.weight < distances[edge.destination]) {
+                    distances[edge.destination] = distances[edge.source] + edge.weight;
+                    predecessors[edge.destination] = edge.source;
+                }
+            }
+        }
+        
+        // Check for negative weight cycles
+        for (const Edge& edge : edges) {
+            if (distances[edge.source] != INT_MAX && 
+                distances[edge.source] + edge.weight < distances[edge.destination]) {
+                return false; // Negative cycle detected
+            }
+        }
+        
+        return true; // No negative cycles
+    }
+    
+    // Reconstruct path from source to destination
+    vector<int> getPath(int destination, const vector<int>& predecessors) {
+        vector<int> path;
+        if (predecessors[destination] == -1) {
+            return path; // No path exists
+        }
+        
+        for (int v = destination; v != -1; v = predecessors[v]) {
+            path.push_back(v);
+        }
+        reverse(path.begin(), path.end());
+        return path;
+    }
+    
+    void printShortestPaths(int source) {
+        vector<int> distances, predecessors;
+        
+        if (findShortestPathsWithPath(source, distances, predecessors)) {
+            cout << "Shortest paths from vertex " << source << ":\n";
+            for (int i = 0; i < vertices; i++) {
+                cout << "Vertex " << i << ": Distance = ";
+                if (distances[i] == INT_MAX) {
+                    cout << "INF";
+                } else {
+                    cout << distances[i];
+                }
+                
+                cout << ", Path: ";
+                vector<int> path = getPath(i, predecessors);
+                if (path.empty()) {
+                    cout << "No path";
+                } else {
+                    for (size_t j = 0; j < path.size(); j++) {
+                        cout << path[j];
+                        if (j != path.size() - 1) cout << " -> ";
+                    }
+                }
+                cout << endl;
+            }
+        } else {
+            cout << "Graph contains negative weight cycle!" << endl;
+        }
+    }
+};
+
+// Example usage:
+/*
+int main() {
+    BellmanFord graph(5);
+    
+    graph.addEdge(0, 1, -1);
+    graph.addEdge(0, 2, 4);
+    graph.addEdge(1, 2, 3);
+    graph.addEdge(1, 3, 2);
+    graph.addEdge(1, 4, 2);
+    graph.addEdge(3, 2, 5);
+    graph.addEdge(3, 1, 1);
+    graph.addEdge(4, 3, -3);
+    
+    graph.printShortestPaths(0);
+    return 0;
+}
+*/</code></pre>
+      </div>
+
+      <div class="language-code-block" id="csharp-code">
+        <pre><code class="language-csharp">// C# Code Example
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class Edge {
+    public int Source { get; set; }
+    public int Destination { get; set; }
+    public int Weight { get; set; }
+    
+    public Edge(int source, int destination, int weight) {
+        Source = source;
+        Destination = destination;
+        Weight = weight;
+    }
+}
+
+public class BellmanFord {
+    private int vertices;
+    private List<Edge> edges;
+    
+    public BellmanFord(int vertices) {
+        this.vertices = vertices;
+        this.edges = new List<Edge>();
+    }
+    
+    public void AddEdge(int source, int destination, int weight) {
+        edges.Add(new Edge(source, destination, weight));
+    }
+    
+    // Standard Bellman-Ford implementation
+    public (bool success, int[] distances) FindShortestPaths(int source) {
+        int[] distances = new int[vertices];
+        int[] predecessors = new int[vertices];
+        
+        // Initialize distances
+        for (int i = 0; i < vertices; i++) {
+            distances[i] = int.MaxValue;
+            predecessors[i] = -1;
+        }
+        distances[source] = 0;
+        
+        // Relax edges V-1 times
+        for (int i = 1; i <= vertices - 1; i++) {
+            foreach (var edge in edges) {
+                if (distances[edge.Source] != int.MaxValue && 
+                    distances[edge.Source] + edge.Weight < distances[edge.Destination]) {
+                    distances[edge.Destination] = distances[edge.Source] + edge.Weight;
+                    predecessors[edge.Destination] = edge.Source;
+                }
+            }
+        }
+        
+        // Check for negative cycles
+        foreach (var edge in edges) {
+            if (distances[edge.Source] != int.MaxValue && 
+                distances[edge.Source] + edge.Weight < distances[edge.Destination]) {
+                return (false, null); // Negative cycle detected
+            }
+        }
+        
+        return (true, distances);
+    }
+    
+    // Bellman-Ford with path reconstruction
+    public (bool success, int[] distances, int[] predecessors) FindShortestPathsWithPath(int source) {
+        int[] distances = new int[vertices];
+        int[] predecessors = new int[vertices];
+        
+        // Initialize
+        for (int i = 0; i < vertices; i++) {
+            distances[i] = int.MaxValue;
+            predecessors[i] = -1;
+        }
+        distances[source] = 0;
+        
+        // Relax edges
+        for (int i = 1; i <= vertices - 1; i++) {
+            foreach (var edge in edges) {
+                if (distances[edge.Source] != int.MaxValue && 
+                    distances[edge.Source] + edge.Weight < distances[edge.Destination]) {
+                    distances[edge.Destination] = distances[edge.Source] + edge.Weight;
+                    predecessors[edge.Destination] = edge.Source;
+                }
+            }
+        }
+        
+        // Check for negative cycles
+        foreach (var edge in edges) {
+            if (distances[edge.Source] != int.MaxValue && 
+                distances[edge.Source] + edge.Weight < distances[edge.Destination]) {
+                return (false, null, null);
+            }
+        }
+        
+        return (true, distances, predecessors);
+    }
+    
+    // Reconstruct path
+    public List<int> GetPath(int destination, int[] predecessors) {
+        List<int> path = new List<int>();
+        if (predecessors[destination] == -1) {
+            return path;
+        }
+        
+        for (int v = destination; v != -1; v = predecessors[v]) {
+            path.Add(v);
+        }
+        path.Reverse();
+        return path;
+    }
+    
+    public void PrintShortestPaths(int source) {
+        var result = FindShortestPathsWithPath(source);
+        
+        if (result.success) {
+            Console.WriteLine($"Shortest paths from vertex {source}:");
+            for (int i = 0; i < vertices; i++) {
+                Console.Write($"Vertex {i}: Distance = ");
+                if (result.distances[i] == int.MaxValue) {
+                    Console.Write("INF");
+                } else {
+                    Console.Write(result.distances[i]);
+                }
+                
+                Console.Write(", Path: ");
+                List<int> path = GetPath(i, result.predecessors);
+                if (path.Count == 0) {
+                    Console.Write("No path");
+                } else {
+                    Console.Write(string.Join(" -> ", path));
+                }
+                Console.WriteLine();
+            }
+        } else {
+            Console.WriteLine("Graph contains negative weight cycle!");
+        }
+    }
+    
+    // Detect negative cycles reachable from source
+    public List<int> DetectNegativeCycle(int source) {
+        int[] distances = new int[vertices];
+        int[] predecessors = new int[vertices];
+        
+        for (int i = 0; i < vertices; i++) {
+            distances[i] = int.MaxValue;
+            predecessors[i] = -1;
+        }
+        distances[source] = 0;
+        
+        // Relax edges V times (one extra to detect cycle)
+        int lastUpdatedVertex = -1;
+        for (int i = 0; i < vertices; i++) {
+            lastUpdatedVertex = -1;
+            foreach (var edge in edges) {
+                if (distances[edge.Source] != int.MaxValue && 
+                    distances[edge.Source] + edge.Weight < distances[edge.Destination]) {
+                    distances[edge.Destination] = distances[edge.Source] + edge.Weight;
+                    predecessors[edge.Destination] = edge.Source;
+                    lastUpdatedVertex = edge.Destination;
+                }
+            }
+        }
+        
+        // If we updated in the V-th iteration, negative cycle exists
+        if (lastUpdatedVertex != -1) {
+            // Find the cycle
+            List<int> cycle = new List<int>();
+            int vertexInCycle = lastUpdatedVertex;
+            
+            // Move back V steps to ensure we're in the cycle
+            for (int i = 0; i < vertices; i++) {
+                vertexInCycle = predecessors[vertexInCycle];
+            }
+            
+            // Reconstruct the cycle
+            for (int current = vertexInCycle; ; current = predecessors[current]) {
+                cycle.Add(current);
+                if (current == vertexInCycle && cycle.Count > 1) {
+                    break;
+                }
+            }
+            cycle.Reverse();
+            return cycle;
+        }
+        
+        return null; // No negative cycle
+    }
+}
+
+// Example usage:
+/*
+class Program {
+    static void Main() {
+        BellmanFord graph = new BellmanFord(5);
+        
+        graph.AddEdge(0, 1, -1);
+        graph.AddEdge(0, 2, 4);
+        graph.AddEdge(1, 2, 3);
+        graph.AddEdge(1, 3, 2);
+        graph.AddEdge(1, 4, 2);
+        graph.AddEdge(3, 2, 5);
+        graph.AddEdge(3, 1, 1);
+        graph.AddEdge(4, 3, -3);
+        
+        graph.PrintShortestPaths(0);
+    }
+}
+*/</code></pre>
+      </div>
+
+      <div class="language-code-block" id="java-code">
+        <pre><code class="language-java">// Java Code Example
+import java.util.*;
+
+class Edge {
+    int source, destination, weight;
+    
+    public Edge(int source, int destination, int weight) {
+        this.source = source;
+        this.destination = destination;
+        this.weight = weight;
+    }
+}
+
+public class BellmanFord {
+    private int vertices;
+    private List<Edge> edges;
+    
+    public BellmanFord(int vertices) {
+        this.vertices = vertices;
+        this.edges = new ArrayList<>();
+    }
+    
+    public void addEdge(int source, int destination, int weight) {
+        edges.add(new Edge(source, destination, weight));
+    }
+    
+    // Standard Bellman-Ford algorithm
+    public boolean findShortestPaths(int source, int[] distances) {
+        Arrays.fill(distances, Integer.MAX_VALUE);
+        distances[source] = 0;
+        
+        // Relax all edges V-1 times
+        for (int i = 1; i <= vertices - 1; i++) {
+            for (Edge edge : edges) {
+                if (distances[edge.source] != Integer.MAX_VALUE && 
+                    distances[edge.source] + edge.weight < distances[edge.destination]) {
+                    distances[edge.destination] = distances[edge.source] + edge.weight;
+                }
+            }
+        }
+        
+        // Check for negative weight cycles
+        for (Edge edge : edges) {
+            if (distances[edge.source] != Integer.MAX_VALUE && 
+                distances[edge.source] + edge.weight < distances[edge.destination]) {
+                return false; // Negative cycle detected
+            }
+        }
+        
+        return true; // No negative cycles
+    }
+    
+    // Bellman-Ford with path reconstruction
+    public boolean findShortestPathsWithPath(int source, int[] distances, int[] predecessors) {
+        Arrays.fill(distances, Integer.MAX_VALUE);
+        Arrays.fill(predecessors, -1);
+        distances[source] = 0;
+        
+        // Relax all edges V-1 times
+        for (int i = 1; i <= vertices - 1; i++) {
+            for (Edge edge : edges) {
+                if (distances[edge.source] != Integer.MAX_VALUE && 
+                    distances[edge.source] + edge.weight < distances[edge.destination]) {
+                    distances[edge.destination] = distances[edge.source] + edge.weight;
+                    predecessors[edge.destination] = edge.source;
+                }
+            }
+        }
+        
+        // Check for negative weight cycles
+        for (Edge edge : edges) {
+            if (distances[edge.source] != Integer.MAX_VALUE && 
+                distances[edge.source] + edge.weight < distances[edge.destination]) {
+                return false; // Negative cycle detected
+            }
+        }
+        
+        return true; // No negative cycles
+    }
+    
+    // Reconstruct path from source to destination
+    public List<Integer> getPath(int destination, int[] predecessors) {
+        List<Integer> path = new ArrayList<>();
+        if (predecessors[destination] == -1) {
+            return path; // No path exists
+        }
+        
+        for (int v = destination; v != -1; v = predecessors[v]) {
+            path.add(v);
+        }
+        Collections.reverse(path);
+        return path;
+    }
+    
+    public void printShortestPaths(int source) {
+        int[] distances = new int[vertices];
+        int[] predecessors = new int[vertices];
+        
+        if (findShortestPathsWithPath(source, distances, predecessors)) {
+            System.out.println("Shortest paths from vertex " + source + ":");
+            for (int i = 0; i < vertices; i++) {
+                System.out.print("Vertex " + i + ": Distance = ");
+                if (distances[i] == Integer.MAX_VALUE) {
+                    System.out.print("INF");
+                } else {
+                    System.out.print(distances[i]);
+                }
+                
+                System.out.print(", Path: ");
+                List<Integer> path = getPath(i, predecessors);
+                if (path.isEmpty()) {
+                    System.out.print("No path");
+                } else {
+                    for (int j = 0; j < path.size(); j++) {
+                        System.out.print(path.get(j));
+                        if (j != path.size() - 1) System.out.print(" -> ");
+                    }
+                }
+                System.out.println();
+            }
+        } else {
+            System.out.println("Graph contains negative weight cycle!");
+        }
+    }
+    
+    // Detect negative cycles reachable from source
+    public List<Integer> detectNegativeCycle(int source) {
+        int[] distances = new int[vertices];
+        int[] predecessors = new int[vertices];
+        
+        Arrays.fill(distances, Integer.MAX_VALUE);
+        Arrays.fill(predecessors, -1);
+        distances[source] = 0;
+        
+        // Relax edges V times (one extra to detect cycle)
+        int lastUpdatedVertex = -1;
+        for (int i = 0; i < vertices; i++) {
+            lastUpdatedVertex = -1;
+            for (Edge edge : edges) {
+                if (distances[edge.source] != Integer.MAX_VALUE && 
+                    distances[edge.source] + edge.weight < distances[edge.destination]) {
+                    distances[edge.destination] = distances[edge.source] + edge.weight;
+                    predecessors[edge.destination] = edge.source;
+                    lastUpdatedVertex = edge.destination;
+                }
+            }
+        }
+        
+        // If we updated in the V-th iteration, negative cycle exists
+        if (lastUpdatedVertex != -1) {
+            // Find the cycle
+            List<Integer> cycle = new ArrayList<>();
+            int vertexInCycle = lastUpdatedVertex;
+            
+            // Move back V steps to ensure we're in the cycle
+            for (int i = 0; i < vertices; i++) {
+                vertexInCycle = predecessors[vertexInCycle];
+            }
+            
+            // Reconstruct the cycle
+            for (int current = vertexInCycle; ; current = predecessors[current]) {
+                cycle.add(current);
+                if (current == vertexInCycle && cycle.size() > 1) {
+                    break;
+                }
+            }
+            Collections.reverse(cycle);
+            return cycle;
+        }
+        
+        return null; // No negative cycle
+    }
+    
+    // Example usage
+    public static void main(String[] args) {
+        BellmanFord graph = new BellmanFord(5);
+        
+        graph.addEdge(0, 1, -1);
+        graph.addEdge(0, 2, 4);
+        graph.addEdge(1, 2, 3);
+        graph.addEdge(1, 3, 2);
+        graph.addEdge(1, 4, 2);
+        graph.addEdge(3, 2, 5);
+        graph.addEdge(3, 1, 1);
+        graph.addEdge(4, 3, -3);
+        
+        graph.printShortestPaths(0);
+    }
+}</code></pre>
+      </div>
+
+      <div class="language-code-block" id="python-code">
+        <pre><code class="language-python"># Python Code Example
+import sys
+
+class BellmanFord:
+    def __init__(self, vertices):
+        self.vertices = vertices
+        self.edges = []
+    
+    def add_edge(self, source, destination, weight):
+        self.edges.append((source, destination, weight))
+    
+    def find_shortest_paths(self, source):
+        # Initialize distances
+        distances = [sys.maxsize] * self.vertices
+        predecessors = [-1] * self.vertices
+        distances[source] = 0
+        
+        # Relax edges V-1 times
+        for _ in range(self.vertices - 1):
+            updated = False
+            for u, v, w in self.edges:
+                if distances[u] != sys.maxsize and distances[u] + w < distances[v]:
+                    distances[v] = distances[u] + w
+                    predecessors[v] = u
+                    updated = True
+            # Early termination if no updates
+            if not updated:
+                break
+        
+        # Check for negative cycles
+        for u, v, w in self.edges:
+            if distances[u] != sys.maxsize and distances[u] + w < distances[v]:
+                return False, None, None  # Negative cycle detected
+        
+        return True, distances, predecessors
+    
+    def get_path(self, destination, predecessors):
+        path = []
+        if predecessors[destination] == -1:
+            return path
+        
+        current = destination
+        while current != -1:
+            path.append(current)
+            current = predecessors[current]
+        path.reverse()
+        return path
+    
+    def print_shortest_paths(self, source):
+        success, distances, predecessors = self.find_shortest_paths(source)
+        
+        if success:
+            print(f"Shortest paths from vertex {source}:")
+            for i in range(self.vertices):
+                print(f"Vertex {i}: Distance = ", end="")
+                if distances[i] == sys.maxsize:
+                    print("INF", end="")
+                else:
+                    print(distances[i], end="")
+                
+                print(", Path: ", end="")
+                path = self.get_path(i, predecessors)
+                if not path:
+                    print("No path", end="")
+                else:
+                    print(" -> ".join(map(str, path)), end="")
+                print()
+        else:
+            print("Graph contains negative weight cycle!")
+    
+    def detect_negative_cycle(self, source):
+        distances = [sys.maxsize] * self.vertices
+        predecessors = [-1] * self.vertices
+        distances[source] = 0
+        
+        # Relax edges V times
+        last_updated_vertex = -1
+        for i in range(self.vertices):
+            last_updated_vertex = -1
+            for u, v, w in self.edges:
+                if distances[u] != sys.maxsize and distances[u] + w < distances[v]:
+                    distances[v] = distances[u] + w
+                    predecessors[v] = u
+                    last_updated_vertex = v
+        
+        # If we updated in the V-th iteration, negative cycle exists
+        if last_updated_vertex != -1:
+            # Find the cycle
+            cycle = []
+            vertex_in_cycle = last_updated_vertex
+            
+            # Move back V steps to ensure we're in the cycle
+            for _ in range(self.vertices):
+                vertex_in_cycle = predecessors[vertex_in_cycle]
+            
+            # Reconstruct the cycle
+            current = vertex_in_cycle
+            while True:
+                cycle.append(current)
+                current = predecessors[current]
+                if current == vertex_in_cycle and len(cycle) > 1:
+                    break
+            cycle.reverse()
+            return cycle
+        
+        return None  # No negative cycle
+
+# Alternative functional implementation
+def bellman_ford_functional(vertices, edges, source):
+    distances = [float('inf')] * vertices
+    predecessors = [-1] * vertices
+    distances[source] = 0
+    
+    # Relax edges V-1 times
+    for _ in range(vertices - 1):
+        updated = False
+        for u, v, w in edges:
+            if distances[u] != float('inf') and distances[u] + w < distances[v]:
+                distances[v] = distances[u] + w
+                predecessors[v] = u
+                updated = True
+        if not updated:
+            break
+    
+    # Check for negative cycles
+    for u, v, w in edges:
+        if distances[u] != float('inf') and distances[u] + w < distances[v]:
+            return False, None, None
+    
+    return True, distances, predecessors
+
+# Example usage:
+def example_usage():
+    graph = BellmanFord(5)
+    
+    graph.add_edge(0, 1, -1)
+    graph.add_edge(0, 2, 4)
+    graph.add_edge(1, 2, 3)
+    graph.add_edge(1, 3, 2)
+    graph.add_edge(1, 4, 2)
+    graph.add_edge(3, 2, 5)
+    graph.add_edge(3, 1, 1)
+    graph.add_edge(4, 3, -3)
+    
+    graph.print_shortest_paths(0)
+
+# Uncomment to run example
+# example_usage()</code></pre>
+      </div>
+
+      <div class="language-code-block" id="javascript-code">
+        <pre><code class="language-javascript">// JavaScript Code Example
+class BellmanFord {
+    constructor(vertices) {
+        this.vertices = vertices;
+        this.edges = [];
+    }
+    
+    addEdge(source, destination, weight) {
+        this.edges.push({ source, destination, weight });
+    }
+    
+    findShortestPaths(source) {
+        const distances = new Array(this.vertices).fill(Number.MAX_SAFE_INTEGER);
+        const predecessors = new Array(this.vertices).fill(-1);
+        distances[source] = 0;
+        
+        // Relax edges V-1 times
+        for (let i = 1; i <= this.vertices - 1; i++) {
+            let updated = false;
+            for (const edge of this.edges) {
+                if (distances[edge.source] !== Number.MAX_SAFE_INTEGER && 
+                    distances[edge.source] + edge.weight < distances[edge.destination]) {
+                    distances[edge.destination] = distances[edge.source] + edge.weight;
+                    predecessors[edge.destination] = edge.source;
+                    updated = true;
+                }
+            }
+            // Early termination if no updates
+            if (!updated) break;
+        }
+        
+        // Check for negative cycles
+        for (const edge of this.edges) {
+            if (distances[edge.source] !== Number.MAX_SAFE_INTEGER && 
+                distances[edge.source] + edge.weight < distances[edge.destination]) {
+                return { success: false, distances: null, predecessors: null };
+            }
+        }
+        
+        return { success: true, distances, predecessors };
+    }
+    
+    getPath(destination, predecessors) {
+        const path = [];
+        if (predecessors[destination] === -1) {
+            return path;
+        }
+        
+        let current = destination;
+        while (current !== -1) {
+            path.push(current);
+            current = predecessors[current];
+        }
+        path.reverse();
+        return path;
+    }
+    
+    printShortestPaths(source) {
+        const result = this.findShortestPaths(source);
+        
+        if (result.success) {
+            console.log(`Shortest paths from vertex ${source}:`);
+            for (let i = 0; i < this.vertices; i++) {
+                process.stdout.write(`Vertex ${i}: Distance = `);
+                if (result.distances[i] === Number.MAX_SAFE_INTEGER) {
+                    process.stdout.write("INF");
+                } else {
+                    process.stdout.write(result.distances[i].toString());
+                }
+                
+                process.stdout.write(", Path: ");
+                const path = this.getPath(i, result.predecessors);
+                if (path.length === 0) {
+                    process.stdout.write("No path");
+                } else {
+                    process.stdout.write(path.join(" -> "));
+                }
+                console.log();
+            }
+        } else {
+            console.log("Graph contains negative weight cycle!");
+        }
+    }
+    
+    detectNegativeCycle(source) {
+        const distances = new Array(this.vertices).fill(Number.MAX_SAFE_INTEGER);
+        const predecessors = new Array(this.vertices).fill(-1);
+        distances[source] = 0;
+        
+        // Relax edges V times
+        let lastUpdatedVertex = -1;
+        for (let i = 0; i < this.vertices; i++) {
+            lastUpdatedVertex = -1;
+            for (const edge of this.edges) {
+                if (distances[edge.source] !== Number.MAX_SAFE_INTEGER && 
+                    distances[edge.source] + edge.weight < distances[edge.destination]) {
+                    distances[edge.destination] = distances[edge.source] + edge.weight;
+                    predecessors[edge.destination] = edge.source;
+                    lastUpdatedVertex = edge.destination;
+                }
+            }
+        }
+        
+        // If we updated in the V-th iteration, negative cycle exists
+        if (lastUpdatedVertex !== -1) {
+            // Find the cycle
+            const cycle = [];
+            let vertexInCycle = lastUpdatedVertex;
+            
+            // Move back V steps to ensure we're in the cycle
+            for (let i = 0; i < this.vertices; i++) {
+                vertexInCycle = predecessors[vertexInCycle];
+            }
+            
+            // Reconstruct the cycle
+            let current = vertexInCycle;
+            while (true) {
+                cycle.push(current);
+                current = predecessors[current];
+                if (current === vertexInCycle && cycle.length > 1) {
+                    break;
+                }
+            }
+            cycle.reverse();
+            return cycle;
+        }
+        
+        return null; // No negative cycle
+    }
+}
+
+// Functional programming style
+function bellmanFordFunctional(vertices, edges, source) {
+    let distances = new Array(vertices).fill(Number.MAX_SAFE_INTEGER);
+    let predecessors = new Array(vertices).fill(-1);
+    distances[source] = 0;
+    
+    // Relax edges V-1 times
+    for (let i = 1; i <= vertices - 1; i++) {
+        let updated = false;
+        for (const edge of edges) {
+            if (distances[edge.source] !== Number.MAX_SAFE_INTEGER && 
+                distances[edge.source] + edge.weight < distances[edge.destination]) {
+                distances[edge.destination] = distances[edge.source] + edge.weight;
+                predecessors[edge.destination] = edge.source;
+                updated = true;
+            }
+        }
+        if (!updated) break;
+    }
+    
+    // Check for negative cycles
+    for (const edge of edges) {
+        if (distances[edge.source] !== Number.MAX_SAFE_INTEGER && 
+            distances[edge.source] + edge.weight < distances[edge.destination]) {
+            return { success: false, distances: null, predecessors: null };
+        }
+    }
+    
+    return { success: true, distances, predecessors };
+}
+
+// Example usage:
+function exampleUsage() {
+    const graph = new BellmanFord(5);
+    
+    graph.addEdge(0, 1, -1);
+    graph.addEdge(0, 2, 4);
+    graph.addEdge(1, 2, 3);
+    graph.addEdge(1, 3, 2);
+    graph.addEdge(1, 4, 2);
+    graph.addEdge(3, 2, 5);
+    graph.addEdge(3, 1, 1);
+    graph.addEdge(4, 3, -3);
+    
+    graph.printShortestPaths(0);
+}
+
+// Uncomment to run example
+// exampleUsage();</code></pre>
+      </div>
+      
+      <p><strong>Practice Idea:</strong> Implement Bellman-Ford algorithm to find shortest paths in a graph with at least 6 vertices and 10 edges, including some negative weights. Then modify the algorithm to detect and print all negative weight cycles in the graph. Finally, implement a version that can handle dynamic edge weight updates efficiently.</p>
+      
+      <p><strong>Real-world Applications:</strong>
+        <ul>
+            <li><strong>Network Routing Protocols:</strong> Used in distance-vector routing protocols like RIP (Routing Information Protocol)</li>
+            <li><strong>Currency Arbitrage:</strong> Detecting profitable currency exchange cycles in foreign exchange markets</li>
+            <li><strong>Game Theory:</strong> Finding optimal strategies in games with negative rewards</li>
+            <li><strong>Financial Analysis:</strong> Detecting arbitrage opportunities in stock and commodity markets</li>
+            <li><strong>Transportation Networks:</strong> Route planning with roads that have negative costs (toll rebates)</li>
+            <li><strong>Circuit Analysis:</strong> Finding shortest paths in electrical circuits with negative resistances</li>
+            <li><strong>Project Management:</strong> Critical path method with negative task durations</li>
+            <li><strong>Robotics:</strong> Path planning with terrain that has negative costs (downhill slopes)</li>
+        </ul>
+      </p>
+      
+      <p><strong>Summary:</strong> The Bellman-Ford algorithm is a robust shortest path algorithm that can handle graphs with negative edge weights and detect negative weight cycles. While its O(V×E) time complexity makes it less efficient than Dijkstra's algorithm for graphs without negative weights, its ability to work with negative weights and detect cycles makes it indispensable for many real-world applications. The algorithm's iterative relaxation approach guarantees correctness and provides a foundation for understanding more complex graph algorithms.</p>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const languageButtons = document.querySelectorAll('.code-language-btn');
+        const codeBlocks = document.querySelectorAll('.language-code-block');
+        
+        languageButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const targetLanguage = this.getAttribute('data-language');
+                
+                // Update active button
+                languageButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show corresponding code block
+                codeBlocks.forEach(block => {
+                    if (block.id === `${targetLanguage}-code`) {
+                        block.classList.add('active');
+                    } else {
+                        block.classList.remove('active');
+                    }
+                });
+            });
+        });
+    });
+    </script>
+</body>
+</html>

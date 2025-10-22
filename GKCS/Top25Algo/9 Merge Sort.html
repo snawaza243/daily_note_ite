@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Binary Search</title>
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .itepost-section-title {
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.8em;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+            margin-top: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .itepost-section-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .itepost-section-content p {
+            margin-bottom: 16px;
+        }
+
+        pre {
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        strong {
+            color: #2E7D32;
+        }
+    </style>
+
+    <!-- Add this CSS -->
+    <style>
+        .code-language-buttons {
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .code-language-btn {
+            padding: 5px 12px;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .code-language-btn:hover {
+            background-color: #e9e9e9;
+        }
+
+        .code-language-btn.active {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .language-code-block {
+            display: none;
+        }
+
+        .language-code-block.active {
+            display: block;
+        }
+    </style>
+
+    <!-- Add this script after jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Process each implementation section
+            $('.itepost-section-content').each(function () {
+                const $section = $(this);
+                const $implementationTitle = $section.find('p:contains("Implementation in Multiple Languages:")');
+
+                if ($implementationTitle.length > 0) {
+                    const $codeBlocks = $implementationTitle.nextUntil('p').filter('pre');
+
+                    if ($codeBlocks.length > 0) {
+                        // Create language buttons container
+                        const $buttonsContainer = $('<div class="code-language-buttons"></div>');
+
+                        // Extract languages and create buttons
+                        const languages = [];
+                        $codeBlocks.each(function () {
+                            const $codeBlock = $(this);
+                            const languageClass = $codeBlock.find('code').attr('class');
+                            let languageName = 'Unknown';
+
+                            if (languageClass) {
+                                // Extract language name from class (e.g., "language-python" -> "python")
+                                const match = languageClass.match(/language-(\w+)/);
+                                if (match) {
+                                    languageName = match[1].toUpperCase();
+                                }
+                            }
+
+                            languages.push({
+                                name: languageName,
+                                element: $codeBlock
+                            });
+
+                            // Add class to code block for easier selection
+                            $codeBlock.addClass('language-code-block').addClass('lang-' + languageName.toLowerCase());
+                        });
+
+                        // Create buttons for each language
+                        languages.forEach((lang, index) => {
+                            const $button = $('<button class="code-language-btn">' + lang.name + '</button>');
+
+                            // Make first button active by default
+                            if (index === 0) {
+                                $button.addClass('active');
+                                lang.element.addClass('active');
+                            }
+
+                            $button.on('click', function () {
+                                // Remove active class from all buttons and code blocks
+                                $buttonsContainer.find('.code-language-btn').removeClass('active');
+                                $section.find('.language-code-block').removeClass('active');
+
+                                // Add active class to clicked button and corresponding code block
+                                $(this).addClass('active');
+                                lang.element.addClass('active');
+                            });
+
+                            $buttonsContainer.append($button);
+                        });
+
+                        // Insert buttons after the implementation title
+                        $implementationTitle.after($buttonsContainer);
+                    }
+                }
+            });
+        });
+
+    </script>
+</head>
+<body>
+    <div class="itepost-section-title">Merge Sort</div>
+    <div class="itepost-section-content">
+      <p><strong>Category:</strong> Sorting (Green)</p>
+      
+      <p><strong>Introduction:</strong> Merge Sort is a classic divide-and-conquer sorting algorithm that works by recursively dividing the array into smaller subarrays until each subarray contains a single element, then merging those subarrays in a sorted manner. Think of it like sorting a deck of cards by splitting it into smaller piles, sorting each pile, and then carefully merging them back together. Merge Sort is known for its stable O(n log n) performance in all cases and is particularly useful for sorting linked lists and large datasets that don't fit in memory.</p>
+      
+      <p><strong>Working Principle:</strong> The algorithm follows these key steps:
+        <ol>
+            <li><strong>Divide:</strong> Recursively split the array into two halves until each subarray has only one element</li>
+            <li><strong>Conquer:</strong> Sort each pair of single-element arrays by comparing and merging them</li>
+            <li><strong>Combine:</strong> Recursively merge the sorted subarrays to produce larger sorted arrays until the entire array is sorted</li>
+        </ol>
+        The key operation is the <strong>merge</strong> function, which combines two sorted arrays into one sorted array.
+        <br><br>
+        <strong>Pseudocode:</strong><br>
+        <code>
+        mergeSort(arr, left, right):<br>
+        &nbsp;&nbsp;if left < right:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;mid = left + (right - left) / 2<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;// Recursively sort first and second halves<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;mergeSort(arr, left, mid)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;mergeSort(arr, mid + 1, right)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;// Merge the sorted halves<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;merge(arr, left, mid, right)<br>
+        <br>
+        merge(arr, left, mid, right):<br>
+        &nbsp;&nbsp;// Create temporary arrays<br>
+        &nbsp;&nbsp;n1 = mid - left + 1<br>
+        &nbsp;&nbsp;n2 = right - mid<br>
+        &nbsp;&nbsp;leftArr = array of size n1<br>
+        &nbsp;&nbsp;rightArr = array of size n2<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;// Copy data to temporary arrays<br>
+        &nbsp;&nbsp;for i from 0 to n1-1:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;leftArr[i] = arr[left + i]<br>
+        &nbsp;&nbsp;for j from 0 to n2-1:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;rightArr[j] = arr[mid + 1 + j]<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;// Merge the temporary arrays back into arr[left..right]<br>
+        &nbsp;&nbsp;i = 0, j = 0, k = left<br>
+        &nbsp;&nbsp;while i < n1 and j < n2:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;if leftArr[i] <= rightArr[j]:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arr[k] = leftArr[i]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i++<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;else:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arr[k] = rightArr[j]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;j++<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;k++<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;// Copy remaining elements<br>
+        &nbsp;&nbsp;while i < n1:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;arr[k] = leftArr[i]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;i++, k++<br>
+        &nbsp;&nbsp;while j < n2:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;arr[k] = rightArr[j]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;j++, k++<br>
+        </code>
+      </p>
+      
+      <p><strong>Example & Dry Run:</strong><br>
+        Let's sort the array: <code>[38, 27, 43, 3, 9, 82, 10]</code>
+        <ul>
+            <li><strong>Step 1 - Divide:</strong> Split into [38, 27, 43, 3] and [9, 82, 10]</li>
+            <li><strong>Step 2 - Recursively divide left:</strong> [38, 27] and [43, 3] → [38], [27], [43], [3]</li>
+            <li><strong>Step 3 - Merge left:</strong> Merge [38] and [27] → [27, 38], merge [43] and [3] → [3, 43]</li>
+            <li><strong>Step 4 - Merge left halves:</strong> Merge [27, 38] and [3, 43] → [3, 27, 38, 43]</li>
+            <li><strong>Step 5 - Recursively divide right:</strong> [9, 82] and [10] → [9], [82], [10]</li>
+            <li><strong>Step 6 - Merge right:</strong> Merge [9] and [82] → [9, 82], then merge with [10] → [9, 10, 82]</li>
+            <li><strong>Step 7 - Final merge:</strong> Merge [3, 27, 38, 43] and [9, 10, 82] → [3, 9, 10, 27, 38, 43, 82]</li>
+            <li><strong>Result:</strong> Sorted array: <code>[3, 9, 10, 27, 38, 43, 82]</code></li>
+        </ul>
+      </p>
+      
+      <p><strong>Time and Space Complexity:</strong>
+        <ul>
+            <li><strong>Best Case:</strong> O(n log n) - Consistent performance regardless of input order</li>
+            <li><strong>Average Case:</strong> O(n log n) - Reliable and predictable</li>
+            <li><strong>Worst Case:</strong> O(n log n) - Guaranteed performance makes it suitable for real-time systems</li>
+            <li><strong>Space Complexity:</strong> O(n) - Requires additional space for temporary arrays during merging</li>
+            <li><strong>Stability:</strong> Stable - Maintains relative order of equal elements</li>
+        </ul>
+      </p>
+      
+      <p><strong>Implementation in Multiple Languages:</strong></p>
+      
+      <div class="code-language-buttons">
+        <button class="code-language-btn active" data-language="c">C</button>
+        <button class="code-language-btn" data-language="cpp">C++</button>
+        <button class="code-language-btn" data-language="csharp">C#</button>
+        <button class="code-language-btn" data-language="java">Java</button>
+        <button class="code-language-btn" data-language="python">Python</button>
+        <button class="code-language-btn" data-language="javascript">JavaScript</button>
+      </div>
+      
+      <div class="language-code-block active" id="c-code">
+        <pre><code class="language-c">// C Code Example
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+// Merge two subarrays of arr[]
+void merge(int arr[], int left, int mid, int right) {
+    int i, j, k;
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+
+    // Create temporary arrays
+    int* leftArr = (int*)malloc(n1 * sizeof(int));
+    int* rightArr = (int*)malloc(n2 * sizeof(int));
+
+    // Copy data to temporary arrays
+    for (i = 0; i < n1; i++)
+        leftArr[i] = arr[left + i];
+    for (j = 0; j < n2; j++)
+        rightArr[j] = arr[mid + 1 + j];
+
+    // Merge the temporary arrays back into arr[left..right]
+    i = 0;
+    j = 0;
+    k = left;
+    
+    while (i < n1 && j < n2) {
+        if (leftArr[i] <= rightArr[j]) {
+            arr[k] = leftArr[i];
+            i++;
+        } else {
+            arr[k] = rightArr[j];
+            j++;
+        }
+        k++;
+    }
+
+    // Copy remaining elements of leftArr[]
+    while (i < n1) {
+        arr[k] = leftArr[i];
+        i++;
+        k++;
+    }
+
+    // Copy remaining elements of rightArr[]
+    while (j < n2) {
+        arr[k] = rightArr[j];
+        j++;
+        k++;
+    }
+
+    free(leftArr);
+    free(rightArr);
+}
+
+// Main merge sort function
+void mergeSort(int arr[], int left, int right) {
+    if (left < right) {
+        // Same as (left + right) / 2, but avoids overflow
+        int mid = left + (right - left) / 2;
+
+        // Sort first and second halves
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+
+        // Merge the sorted halves
+        merge(arr, left, mid, right);
+    }
+}
+
+// Iterative merge sort (bottom-up approach)
+void iterativeMergeSort(int arr[], int n) {
+    int curr_size;  // Current size of subarrays to be merged
+    int left_start; // Starting index of left subarray
+
+    // Merge subarrays in bottom up manner
+    for (curr_size = 1; curr_size <= n - 1; curr_size = 2 * curr_size) {
+        for (left_start = 0; left_start < n - 1; left_start += 2 * curr_size) {
+            int mid = left_start + curr_size - 1;
+            int right_end = (left_start + 2 * curr_size - 1) < (n - 1) ? 
+                           (left_start + 2 * curr_size - 1) : (n - 1);
+
+            merge(arr, left_start, mid, right_end);
+        }
+    }
+}
+
+// In-place merge (uses O(1) extra space but O(n^2) time)
+void inPlaceMerge(int arr[], int left, int mid, int right) {
+    int i = left;
+    int j = mid + 1;
+    
+    if (arr[mid] <= arr[j]) {
+        return; // Already sorted
+    }
+    
+    while (i <= mid && j <= right) {
+        if (arr[i] <= arr[j]) {
+            i++;
+        } else {
+            int value = arr[j];
+            int index = j;
+            
+            // Shift all elements between i and j to the right
+            while (index != i) {
+                arr[index] = arr[index - 1];
+                index--;
+            }
+            arr[i] = value;
+            
+            i++;
+            mid++;
+            j++;
+        }
+    }
+}
+
+// Example usage:
+// int arr[] = {38, 27, 43, 3, 9, 82, 10};
+// int n = sizeof(arr) / sizeof(arr[0]);
+// mergeSort(arr, 0, n - 1);</code></pre>
+      </div>
+
+      <div class="language-code-block" id="cpp-code">
+        <pre><code class="language-cpp">// C++ Code Example
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+#include &lt;iostream&gt;
+using namespace std;
+
+class MergeSort {
+private:
+    // Merge two sorted subarrays
+    static void merge(vector<int>& arr, int left, int mid, int right) {
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+
+        // Create temporary vectors
+        vector<int> leftArr(n1);
+        vector<int> rightArr(n2);
+
+        // Copy data to temporary vectors
+        for (int i = 0; i < n1; i++)
+            leftArr[i] = arr[left + i];
+        for (int j = 0; j < n2; j++)
+            rightArr[j] = arr[mid + 1 + j];
+
+        // Merge the temporary vectors back into arr[left..right]
+        int i = 0, j = 0, k = left;
+        
+        while (i < n1 && j < n2) {
+            if (leftArr[i] <= rightArr[j]) {
+                arr[k] = leftArr[i];
+                i++;
+            } else {
+                arr[k] = rightArr[j];
+                j++;
+            }
+            k++;
+        }
+
+        // Copy remaining elements
+        while (i < n1) {
+            arr[k] = leftArr[i];
+            i++;
+            k++;
+        }
+
+        while (j < n2) {
+            arr[k] = rightArr[j];
+            j++;
+            k++;
+        }
+    }
+
+public:
+    // Recursive merge sort
+    static void sort(vector<int>& arr, int left, int right) {
+        if (left < right) {
+            int mid = left + (right - left) / 2;
+
+            sort(arr, left, mid);
+            sort(arr, mid + 1, right);
+
+            merge(arr, left, mid, right);
+        }
+    }
+
+    // Template version for different data types
+    template<typename T>
+    static void sortGeneric(vector<T>& arr, int left, int right) {
+        if (left < right) {
+            int mid = left + (right - left) / 2;
+
+            sortGeneric(arr, left, mid);
+            sortGeneric(arr, mid + 1, right);
+
+            // Merge operation would be implemented here
+            int n1 = mid - left + 1;
+            int n2 = right - mid;
+            vector<T> leftArr(n1);
+            vector<T> rightArr(n2);
+
+            for (int i = 0; i < n1; i++)
+                leftArr[i] = arr[left + i];
+            for (int j = 0; j < n2; j++)
+                rightArr[j] = arr[mid + 1 + j];
+
+            int i = 0, j = 0, k = left;
+            while (i < n1 && j < n2) {
+                if (leftArr[i] <= rightArr[j]) {
+                    arr[k] = leftArr[i];
+                    i++;
+                } else {
+                    arr[k] = rightArr[j];
+                    j++;
+                }
+                k++;
+            }
+
+            while (i < n1) arr[k++] = leftArr[i++];
+            while (j < n2) arr[k++] = rightArr[j++];
+        }
+    }
+
+    // Iterative merge sort (bottom-up)
+    static void sortIterative(vector<int>& arr) {
+        int n = arr.size();
+        
+        for (int curr_size = 1; curr_size <= n - 1; curr_size = 2 * curr_size) {
+            for (int left_start = 0; left_start < n - 1; left_start += 2 * curr_size) {
+                int mid = min(left_start + curr_size - 1, n - 1);
+                int right_end = min(left_start + 2 * curr_size - 1, n - 1);
+
+                merge(arr, left_start, mid, right_end);
+            }
+        }
+    }
+
+    // Merge sort with insertion sort optimization for small arrays
+    static void optimizedSort(vector<int>& arr, int left, int right, int threshold = 10) {
+        if (right - left <= threshold) {
+            // Use insertion sort for small arrays
+            for (int i = left + 1; i <= right; i++) {
+                int key = arr[i];
+                int j = i - 1;
+                while (j >= left && arr[j] > key) {
+                    arr[j + 1] = arr[j];
+                    j--;
+                }
+                arr[j + 1] = key;
+            }
+        } else {
+            int mid = left + (right - left) / 2;
+            optimizedSort(arr, left, mid, threshold);
+            optimizedSort(arr, mid + 1, right, threshold);
+            merge(arr, left, mid, right);
+        }
+    }
+};
+
+// Example usage:
+// vector<int> arr = {38, 27, 43, 3, 9, 82, 10};
+// MergeSort::sort(arr, 0, arr.size() - 1);</code></pre>
+      </div>
+
+      <div class="language-code-block" id="csharp-code">
+        <pre><code class="language-csharp">// C# Code Example
+using System;
+
+public class MergeSort {
+    // Merge two sorted subarrays
+    private static void Merge(int[] arr, int left, int mid, int right) {
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+
+        // Create temporary arrays
+        int[] leftArr = new int[n1];
+        int[] rightArr = new int[n2];
+
+        // Copy data to temporary arrays
+        for (int x = 0; x < n1; x++)
+            leftArr[x] = arr[left + x];
+        for (int y = 0; y < n2; y++)
+            rightArr[y] = arr[mid + 1 + y];
+
+        // Merge the temporary arrays
+        int i = 0, j = 0, k = left;
+        
+        while (i < n1 && j < n2) {
+            if (leftArr[i] <= rightArr[j]) {
+                arr[k] = leftArr[i];
+                i++;
+            } else {
+                arr[k] = rightArr[j];
+                j++;
+            }
+            k++;
+        }
+
+        // Copy remaining elements
+        while (i < n1) {
+            arr[k] = leftArr[i];
+            i++;
+            k++;
+        }
+
+        while (j < n2) {
+            arr[k] = rightArr[j];
+            j++;
+            k++;
+        }
+    }
+
+    public static void Sort(int[] arr, int left, int right) {
+        if (left < right) {
+            int mid = left + (right - left) / 2;
+
+            Sort(arr, left, mid);
+            Sort(arr, mid + 1, right);
+
+            Merge(arr, left, mid, right);
+        }
+    }
+
+    // Generic merge sort
+    public static void SortGeneric<T>(T[] arr, int left, int right) where T : IComparable<T> {
+        if (left < right) {
+            int mid = left + (right - left) / 2;
+
+            SortGeneric(arr, left, mid);
+            SortGeneric(arr, mid + 1, right);
+
+            // Merge operation
+            int n1 = mid - left + 1;
+            int n2 = right - mid;
+            T[] leftArr = new T[n1];
+            T[] rightArr = new T[n2];
+
+            for (int x = 0; x < n1; x++)
+                leftArr[x] = arr[left + x];
+            for (int y = 0; y < n2; y++)
+                rightArr[y] = arr[mid + 1 + y];
+
+            int i = 0, j = 0, k = left;
+            while (i < n1 && j < n2) {
+                if (leftArr[i].CompareTo(rightArr[j]) <= 0) {
+                    arr[k] = leftArr[i];
+                    i++;
+                } else {
+                    arr[k] = rightArr[j];
+                    j++;
+                }
+                k++;
+            }
+
+            while (i < n1) arr[k++] = leftArr[i++];
+            while (j < n2) arr[k++] = rightArr[j++];
+        }
+    }
+
+    // Iterative merge sort
+    public static void SortIterative(int[] arr) {
+        int n = arr.Length;
+        
+        for (int currSize = 1; currSize <= n - 1; currSize = 2 * currSize) {
+            for (int leftStart = 0; leftStart < n - 1; leftStart += 2 * currSize) {
+                int mid = Math.Min(leftStart + currSize - 1, n - 1);
+                int rightEnd = Math.Min(leftStart + 2 * currSize - 1, n - 1);
+
+                Merge(arr, leftStart, mid, rightEnd);
+            }
+        }
+    }
+
+    // Returns a new sorted array without modifying original
+    public static int[] SortImmutable(int[] arr) {
+        int[] sorted = new int[arr.Length];
+        Array.Copy(arr, sorted, arr.Length);
+        Sort(sorted, 0, sorted.Length - 1);
+        return sorted;
+    }
+}
+
+// Example usage:
+// int[] arr = {38, 27, 43, 3, 9, 82, 10};
+// MergeSort.Sort(arr, 0, arr.Length - 1);</code></pre>
+      </div>
+
+      <div class="language-code-block" id="java-code">
+        <pre><code class="language-java">// Java Code Example
+import java.util.Arrays;
+
+public class MergeSort {
+    
+    // Merge two sorted subarrays
+    private static void merge(int[] arr, int left, int mid, int right) {
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+
+        // Create temporary arrays
+        int[] leftArr = new int[n1];
+        int[] rightArr = new int[n2];
+
+        // Copy data to temporary arrays
+        for (int i = 0; i < n1; i++)
+            leftArr[i] = arr[left + i];
+        for (int j = 0; j < n2; j++)
+            rightArr[j] = arr[mid + 1 + j];
+
+        // Merge the temporary arrays
+        int i = 0, j = 0, k = left;
+        
+        while (i < n1 && j < n2) {
+            if (leftArr[i] <= rightArr[j]) {
+                arr[k] = leftArr[i];
+                i++;
+            } else {
+                arr[k] = rightArr[j];
+                j++;
+            }
+            k++;
+        }
+
+        // Copy remaining elements
+        while (i < n1) {
+            arr[k] = leftArr[i];
+            i++;
+            k++;
+        }
+
+        while (j < n2) {
+            arr[k] = rightArr[j];
+            j++;
+            k++;
+        }
+    }
+
+    public static void sort(int[] arr, int left, int right) {
+        if (left < right) {
+            int mid = left + (right - left) / 2;
+
+            sort(arr, left, mid);
+            sort(arr, mid + 1, right);
+
+            merge(arr, left, mid, right);
+        }
+    }
+
+    // Generic merge sort
+    public static <T extends Comparable<T>> void sortGeneric(T[] arr, int left, int right) {
+        if (left < right) {
+            int mid = left + (right - left) / 2;
+
+            sortGeneric(arr, left, mid);
+            sortGeneric(arr, mid + 1, right);
+
+            // Merge operation
+            int n1 = mid - left + 1;
+            int n2 = right - mid;
+            T[] leftArr = Arrays.copyOfRange(arr, left, mid + 1);
+            T[] rightArr = Arrays.copyOfRange(arr, mid + 1, right + 1);
+
+            int i = 0, j = 0, k = left;
+            while (i < n1 && j < n2) {
+                if (leftArr[i].compareTo(rightArr[j]) <= 0) {
+                    arr[k] = leftArr[i];
+                    i++;
+                } else {
+                    arr[k] = rightArr[j];
+                    j++;
+                }
+                k++;
+            }
+
+            while (i < n1) arr[k++] = leftArr[i++];
+            while (j < n2) arr[k++] = rightArr[j++];
+        }
+    }
+
+    // Iterative merge sort
+    public static void sortIterative(int[] arr) {
+        int n = arr.length;
+        
+        for (int currSize = 1; currSize < n; currSize = 2 * currSize) {
+            for (int leftStart = 0; leftStart < n - 1; leftStart += 2 * currSize) {
+                int mid = Math.min(leftStart + currSize - 1, n - 1);
+                int rightEnd = Math.min(leftStart + 2 * currSize - 1, n - 1);
+
+                merge(arr, leftStart, mid, rightEnd);
+            }
+        }
+    }
+
+    // Merge sort with insertion sort optimization
+    public static void optimizedSort(int[] arr, int left, int right, int threshold) {
+        if (right - left <= threshold) {
+            // Use insertion sort for small arrays
+            for (int i = left + 1; i <= right; i++) {
+                int key = arr[i];
+                int j = i - 1;
+                while (j >= left && arr[j] > key) {
+                    arr[j + 1] = arr[j];
+                    j--;
+                }
+                arr[j + 1] = key;
+            }
+        } else {
+            int mid = left + (right - left) / 2;
+            optimizedSort(arr, left, mid, threshold);
+            optimizedSort(arr, mid + 1, right, threshold);
+            merge(arr, left, mid, right);
+        }
+    }
+
+    // Returns a new sorted array
+    public static int[] sortImmutable(int[] arr) {
+        int[] sorted = Arrays.copyOf(arr, arr.length);
+        sort(sorted, 0, sorted.length - 1);
+        return sorted;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {38, 27, 43, 3, 9, 82, 10};
+        sort(arr, 0, arr.length - 1);
+        System.out.println(Arrays.toString(arr)); // [3, 9, 10, 27, 38, 43, 82]
+    }
+}</code></pre>
+      </div>
+
+      <div class="language-code-block" id="python-code">
+        <pre><code class="language-python"># Python Code Example
+def merge(arr, left, mid, right):
+    """
+    Merge two sorted subarrays arr[left:mid+1] and arr[mid+1:right+1]
+    """
+    n1 = mid - left + 1
+    n2 = right - mid
+
+    # Create temporary arrays
+    left_arr = [0] * n1
+    right_arr = [0] * n2
+
+    # Copy data to temporary arrays
+    for i in range(n1):
+        left_arr[i] = arr[left + i]
+    for j in range(n2):
+        right_arr[j] = arr[mid + 1 + j]
+
+    # Merge the temporary arrays back into arr[left..right]
+    i = 0  # Initial index of first subarray
+    j = 0  # Initial index of second subarray
+    k = left  # Initial index of merged subarray
+
+    while i < n1 and j < n2:
+        if left_arr[i] <= right_arr[j]:
+            arr[k] = left_arr[i]
+            i += 1
+        else:
+            arr[k] = right_arr[j]
+            j += 1
+        k += 1
+
+    # Copy remaining elements of left_arr[]
+    while i < n1:
+        arr[k] = left_arr[i]
+        i += 1
+        k += 1
+
+    # Copy remaining elements of right_arr[]
+    while j < n2:
+        arr[k] = right_arr[j]
+        j += 1
+        k += 1
+
+def merge_sort(arr, left=0, right=None):
+    """
+    Main merge sort function.
+    
+    Args:
+        arr: List to be sorted
+        left: Starting index
+        right: Ending index
+    
+    Returns:
+        The sorted list (in-place)
+    """
+    if right is None:
+        right = len(arr) - 1
+    
+    if left < right:
+        # Same as (left + right) // 2, but avoids overflow
+        mid = left + (right - left) // 2
+
+        # Sort first and second halves
+        merge_sort(arr, left, mid)
+        merge_sort(arr, mid + 1, right)
+
+        # Merge the sorted halves
+        merge(arr, left, mid, right)
+    
+    return arr
+
+# Iterative merge sort (bottom-up)
+def iterative_merge_sort(arr):
+    n = len(arr)
+    curr_size = 1
+    
+    while curr_size < n - 1:
+        left = 0
+        while left < n - 1:
+            mid = min(left + curr_size - 1, n - 1)
+            right = min(left + 2 * curr_size - 1, n - 1)
+            
+            merge(arr, left, mid, right)
+            left += 2 * curr_size
+        
+        curr_size = 2 * curr_size
+    
+    return arr
+
+# Merge sort with insertion sort optimization
+def optimized_merge_sort(arr, left=0, right=None, threshold=10):
+    if right is None:
+        right = len(arr) - 1
+    
+    if right - left <= threshold:
+        # Use insertion sort for small arrays
+        for i in range(left + 1, right + 1):
+            key = arr[i]
+            j = i - 1
+            while j >= left and arr[j] > key:
+                arr[j + 1] = arr[j]
+                j -= 1
+            arr[j + 1] = key
+    else:
+        mid = left + (right - left) // 2
+        optimized_merge_sort(arr, left, mid, threshold)
+        optimized_merge_sort(arr, mid + 1, right, threshold)
+        merge(arr, left, mid, right)
+    
+    return arr
+
+# Functional programming style (immutable)
+def merge_sort_immutable(arr):
+    if len(arr) <= 1:
+        return arr
+    
+    mid = len(arr) // 2
+    left = merge_sort_immutable(arr[:mid])
+    right = merge_sort_immutable(arr[mid:])
+    
+    return merge_immutable(left, right)
+
+def merge_immutable(left, right):
+    result = []
+    i = j = 0
+    
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    
+    result.extend(left[i:])
+    result.extend(right[j:])
+    return result
+
+# Example usage:
+# arr = [38, 27, 43, 3, 9, 82, 10]
+# merge_sort(arr)
+# print(arr)  # Output: [3, 9, 10, 27, 38, 43, 82]</code></pre>
+      </div>
+
+      <div class="language-code-block" id="javascript-code">
+        <pre><code class="language-javascript">// JavaScript Code Example
+function merge(arr, left, mid, right) {
+    const n1 = mid - left + 1;
+    const n2 = right - mid;
+
+    // Create temporary arrays
+    const leftArr = new Array(n1);
+    const rightArr = new Array(n2);
+
+    // Copy data to temporary arrays
+    for (let i = 0; i < n1; i++) {
+        leftArr[i] = arr[left + i];
+    }
+    for (let j = 0; j < n2; j++) {
+        rightArr[j] = arr[mid + 1 + j];
+    }
+
+    // Merge the temporary arrays back into arr[left..right]
+    let i = 0, j = 0, k = left;
+    
+    while (i < n1 && j < n2) {
+        if (leftArr[i] <= rightArr[j]) {
+            arr[k] = leftArr[i];
+            i++;
+        } else {
+            arr[k] = rightArr[j];
+            j++;
+        }
+        k++;
+    }
+
+    // Copy remaining elements of leftArr[]
+    while (i < n1) {
+        arr[k] = leftArr[i];
+        i++;
+        k++;
+    }
+
+    // Copy remaining elements of rightArr[]
+    while (j < n2) {
+        arr[k] = rightArr[j];
+        j++;
+        k++;
+    }
+}
+
+function mergeSort(arr, left = 0, right = arr.length - 1) {
+    if (left < right) {
+        // Same as Math.floor((left + right) / 2), but avoids overflow
+        const mid = left + Math.floor((right - left) / 2);
+
+        // Sort first and second halves
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+
+        // Merge the sorted halves
+        merge(arr, left, mid, right);
+    }
+    return arr;
+}
+
+// Iterative merge sort (bottom-up)
+function iterativeMergeSort(arr) {
+    const n = arr.length;
+    
+    for (let currSize = 1; currSize < n; currSize = 2 * currSize) {
+        for (let leftStart = 0; leftStart < n - 1; leftStart += 2 * currSize) {
+            const mid = Math.min(leftStart + currSize - 1, n - 1);
+            const rightEnd = Math.min(leftStart + 2 * currSize - 1, n - 1);
+
+            merge(arr, leftStart, mid, rightEnd);
+        }
+    }
+    return arr;
+}
+
+// Merge sort with insertion sort optimization
+function optimizedMergeSort(arr, left = 0, right = arr.length - 1, threshold = 10) {
+    if (right - left <= threshold) {
+        // Use insertion sort for small arrays
+        for (let i = left + 1; i <= right; i++) {
+            const key = arr[i];
+            let j = i - 1;
+            while (j >= left && arr[j] > key) {
+                arr[j + 1] = arr[j];
+                j--;
+            }
+            arr[j + 1] = key;
+        }
+    } else {
+        const mid = left + Math.floor((right - left) / 2);
+        optimizedMergeSort(arr, left, mid, threshold);
+        optimizedMergeSort(arr, mid + 1, right, threshold);
+        merge(arr, left, mid, right);
+    }
+    return arr;
+}
+
+// Functional programming style (immutable)
+function mergeSortImmutable(arr) {
+    if (arr.length <= 1) {
+        return arr;
+    }
+    
+    const mid = Math.floor(arr.length / 2);
+    const left = mergeSortImmutable(arr.slice(0, mid));
+    const right = mergeSortImmutable(arr.slice(mid));
+    
+    return mergeImmutable(left, right);
+}
+
+function mergeImmutable(left, right) {
+    const result = [];
+    let i = 0, j = 0;
+    
+    while (i < left.length && j < right.length) {
+        if (left[i] <= right[j]) {
+            result.push(left[i]);
+            i++;
+        } else {
+            result.push(right[j]);
+            j++;
+        }
+    }
+    
+    return result.concat(left.slice(i)).concat(right.slice(j));
+}
+
+// Generic merge sort with custom comparator
+function mergeSortCustom(arr, compareFn = (a, b) => a - b) {
+    if (arr.length <= 1) {
+        return arr;
+    }
+    
+    const mid = Math.floor(arr.length / 2);
+    const left = mergeSortCustom(arr.slice(0, mid), compareFn);
+    const right = mergeSortCustom(arr.slice(mid), compareFn);
+    
+    return mergeCustom(left, right, compareFn);
+}
+
+function mergeCustom(left, right, compareFn) {
+    const result = [];
+    let i = 0, j = 0;
+    
+    while (i < left.length && j < right.length) {
+        if (compareFn(left[i], right[j]) <= 0) {
+            result.push(left[i]);
+            i++;
+        } else {
+            result.push(right[j]);
+            j++;
+        }
+    }
+    
+    return result.concat(left.slice(i)).concat(right.slice(j));
+}
+
+// Example usage:
+// const arr = [38, 27, 43, 3, 9, 82, 10];
+// mergeSort(arr);
+// console.log(arr);  // Output: [3, 9, 10, 27, 38, 43, 82]</code></pre>
+      </div>
+      
+      <p><strong>Practice Idea:</strong> Implement both recursive and iterative versions of Merge Sort and compare their performance. Create a hybrid version that switches to Insertion Sort for small subarrays (typically less than 10 elements). Then, implement an in-place merge sort that uses O(1) extra space (though with O(n²) time complexity for the merge operation).</p>
+      
+      <p><strong>Real-world Applications:</strong>
+        <ul>
+            <li><strong>External Sorting:</strong> Ideal for sorting large files that don't fit in memory (used in database systems)</li>
+            <li><strong>Linked List Sorting:</strong> Excellent for sorting linked lists due to sequential access pattern</li>
+            <li><strong>Stable Sorting:</strong> Used when maintaining the relative order of equal elements is important</li>
+            <li><strong>Inversion Counting:</strong> Efficiently counts inversions in an array (used in collaborative filtering)</li>
+            <li><strong>Merge Operations:</strong> Foundation for merge operations in version control systems like Git</li>
+            <li><strong>Big Data Processing:</strong> Used in MapReduce and distributed sorting algorithms</li>
+            <li><strong>Computer Graphics:</strong> Sorting polygons by depth for proper rendering</li>
+            <li><strong>Scientific Computing:</strong> Sorting large datasets for analysis and visualization</li>
+        </ul>
+      </p>
+      
+      <p><strong>Summary:</strong> Merge Sort is a reliable, efficient sorting algorithm with guaranteed O(n log n) performance in all cases. Its divide-and-conquer approach and stable nature make it particularly valuable for sorting linked lists, large external datasets, and scenarios where predictable performance is crucial. While it requires O(n) auxiliary space, its consistent behavior and excellent worst-case performance make it a fundamental algorithm in computer science with widespread practical applications.</p>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const languageButtons = document.querySelectorAll('.code-language-btn');
+        const codeBlocks = document.querySelectorAll('.language-code-block');
+        
+        languageButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const targetLanguage = this.getAttribute('data-language');
+                
+                // Update active button
+                languageButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show corresponding code block
+                codeBlocks.forEach(block => {
+                    if (block.id === `${targetLanguage}-code`) {
+                        block.classList.add('active');
+                    } else {
+                        block.classList.remove('active');
+                    }
+                });
+            });
+        });
+    });
+    </script>
+</body>
+
+
+</html>

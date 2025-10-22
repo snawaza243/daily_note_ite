@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Binary Search</title>
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .itepost-section-title {
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.8em;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+            margin-top: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .itepost-section-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .itepost-section-content p {
+            margin-bottom: 16px;
+        }
+
+        pre {
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        strong {
+            color: #2E7D32;
+        }
+    </style>
+
+    <!-- Add this CSS -->
+    <style>
+        .code-language-buttons {
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .code-language-btn {
+            padding: 5px 12px;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .code-language-btn:hover {
+            background-color: #e9e9e9;
+        }
+
+        .code-language-btn.active {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .language-code-block {
+            display: none;
+        }
+
+        .language-code-block.active {
+            display: block;
+        }
+    </style>
+
+    <!-- Add this script after jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Process each implementation section
+            $('.itepost-section-content').each(function () {
+                const $section = $(this);
+                const $implementationTitle = $section.find('p:contains("Implementation in Multiple Languages:")');
+
+                if ($implementationTitle.length > 0) {
+                    const $codeBlocks = $implementationTitle.nextUntil('p').filter('pre');
+
+                    if ($codeBlocks.length > 0) {
+                        // Create language buttons container
+                        const $buttonsContainer = $('<div class="code-language-buttons"></div>');
+
+                        // Extract languages and create buttons
+                        const languages = [];
+                        $codeBlocks.each(function () {
+                            const $codeBlock = $(this);
+                            const languageClass = $codeBlock.find('code').attr('class');
+                            let languageName = 'Unknown';
+
+                            if (languageClass) {
+                                // Extract language name from class (e.g., "language-python" -> "python")
+                                const match = languageClass.match(/language-(\w+)/);
+                                if (match) {
+                                    languageName = match[1].toUpperCase();
+                                }
+                            }
+
+                            languages.push({
+                                name: languageName,
+                                element: $codeBlock
+                            });
+
+                            // Add class to code block for easier selection
+                            $codeBlock.addClass('language-code-block').addClass('lang-' + languageName.toLowerCase());
+                        });
+
+                        // Create buttons for each language
+                        languages.forEach((lang, index) => {
+                            const $button = $('<button class="code-language-btn">' + lang.name + '</button>');
+
+                            // Make first button active by default
+                            if (index === 0) {
+                                $button.addClass('active');
+                                lang.element.addClass('active');
+                            }
+
+                            $button.on('click', function () {
+                                // Remove active class from all buttons and code blocks
+                                $buttonsContainer.find('.code-language-btn').removeClass('active');
+                                $section.find('.language-code-block').removeClass('active');
+
+                                // Add active class to clicked button and corresponding code block
+                                $(this).addClass('active');
+                                lang.element.addClass('active');
+                            });
+
+                            $buttonsContainer.append($button);
+                        });
+
+                        // Insert buttons after the implementation title
+                        $implementationTitle.after($buttonsContainer);
+                    }
+                }
+            });
+        });
+
+    </script>
+</head>
+ <body>
+    <div class="itepost-section-title">Quick Select Algorithm</div>
+    <div class="itepost-section-content">
+      <p><strong>Category:</strong> Arrays (Purple)</p>
+      
+      <p><strong>Introduction:</strong> Quick Select is an efficient algorithm for finding the k-th smallest (or largest) element in an unordered list. Think of it as a smarter version of sorting - instead of sorting the entire array to find the k-th element, Quick Select cleverly partitions the data to find what you need much faster. It's widely used in statistics (finding medians), data analysis, and anywhere you need quick access to order statistics without the overhead of full sorting. The algorithm is particularly valuable because it achieves average O(n) time complexity, making it much faster than sorting for this specific task.</p>
+      
+      <p><strong>Working Principle:</strong> Quick Select works by applying the same partitioning strategy as QuickSort, but only recursing into the partition that contains the desired element. Here's how it works step by step:
+        <ol>
+            <li><strong>Choose Pivot:</strong> Select a pivot element from the array (often randomly or using median-of-three)</li>
+            <li><strong>Partition:</strong> Rearrange the array so all elements smaller than pivot come before it, and all elements greater come after it</li>
+            <li><strong>Determine Position:</strong> After partitioning, the pivot is in its final sorted position</li>
+            <li><strong>Recurse Selectively:</strong> Based on the pivot's position relative to k, recursively search only in the relevant partition</li>
+        </ol>
+        
+        <strong>Pseudocode:</strong><br>
+        <code>
+        quickSelect(arr, left, right, k):<br>
+        &nbsp;&nbsp;if left == right:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;return arr[left]<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;// Choose random pivot and partition<br>
+        &nbsp;&nbsp;pivotIndex = randomPartition(arr, left, right)<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;// The pivot is in its final sorted position<br>
+        &nbsp;&nbsp;if k == pivotIndex:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;return arr[k]<br>
+        &nbsp;&nbsp;else if k < pivotIndex:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;// k-th smallest is in left partition<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;return quickSelect(arr, left, pivotIndex - 1, k)<br>
+        &nbsp;&nbsp;else:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;// k-th smallest is in right partition<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;return quickSelect(arr, pivotIndex + 1, right, k)<br>
+        <br>
+        partition(arr, left, right, pivotIndex):<br>
+        &nbsp;&nbsp;pivotValue = arr[pivotIndex]<br>
+        &nbsp;&nbsp;swap arr[pivotIndex] and arr[right]  // Move pivot to end<br>
+        &nbsp;&nbsp;storeIndex = left<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;for i from left to right-1:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;if arr[i] < pivotValue:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;swap arr[storeIndex] and arr[i]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;storeIndex++<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;swap arr[right] and arr[storeIndex]  // Move pivot to final position<br>
+        &nbsp;&nbsp;return storeIndex<br>
+        </code>
+      </p>
+      
+      <p><strong>Example & Dry Run:</strong><br>
+        Let's find the 3rd smallest element (k=2, 0-indexed) in array: [7, 10, 4, 3, 20, 15]
+        <ul>
+            <li><strong>Initial Array:</strong> [7, 10, 4, 3, 20, 15], k=2</li>
+            <li><strong>Step 1:</strong> Choose pivot = 7 (first element), partition: [4, 3, 7, 10, 20, 15]</li>
+            <li><strong>Step 2:</strong> Pivot index = 2, k=2 → found! Return 7</li>
+        </ul>
+        
+        Another example: Find 4th smallest (k=3) in [12, 3, 5, 7, 4, 19, 26]
+        <ul>
+            <li><strong>Initial:</strong> [12, 3, 5, 7, 4, 19, 26], k=3</li>
+            <li><strong>Step 1:</strong> Pivot = 12 → partition: [3, 5, 7, 4, 12, 19, 26], pivot index=4</li>
+            <li><strong>Step 2:</strong> k=3 < pivot index=4 → search left: [3, 5, 7, 4], k=3</li>
+            <li><strong>Step 3:</strong> Pivot = 3 → partition: [3, 5, 7, 4], pivot index=0</li>
+            <li><strong>Step 4:</strong> k=3 > pivot index=0 → search right: [5, 7, 4], k=2</li>
+            <li><strong>Step 5:</strong> Pivot = 5 → partition: [4, 5, 7], pivot index=1</li>
+            <li><strong>Step 6:</strong> k=2 > pivot index=1 → search right: [7], k=0</li>
+            <li><strong>Step 7:</strong> Single element → return 7</li>
+            <li><strong>Result:</strong> 4th smallest element is 7</li>
+        </ul>
+      </p>
+      
+      <p><strong>Time and Space Complexity:</strong>
+        <ul>
+            <li><strong>Best Case Time:</strong> O(n) - When pivot consistently divides array in half</li>
+            <li><strong>Average Case Time:</strong> O(n) - Expected performance with random pivot</li>
+            <li><strong>Worst Case Time:</strong> O(n²) - When pivot is always smallest/largest element</li>
+            <li><strong>Space Complexity:</strong> O(1) iterative, O(log n) recursive (call stack)</li>
+            <li><strong>Memory Usage:</strong> In-place algorithm, uses constant extra space</li>
+        </ul>
+      </p>
+      
+      <p><strong>Implementation in Multiple Languages:</strong></p>
+      
+      <div class="code-language-buttons">
+        <button class="code-language-btn active" data-language="c">C</button>
+        <button class="code-language-btn" data-language="cpp">C++</button>
+        <button class="code-language-btn" data-language="csharp">C#</button>
+        <button class="code-language-btn" data-language="java">Java</button>
+        <button class="code-language-btn" data-language="python">Python</button>
+        <button class="code-language-btn" data-language="javascript">JavaScript</button>
+      </div>
+      
+      <div class="language-code-block active" id="c-code">
+        <pre><code class="language-c">// C Code Example
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;time.h&gt;
+
+// Swap two elements
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+// Partition function
+int partition(int arr[], int left, int right, int pivotIndex) {
+    int pivotValue = arr[pivotIndex];
+    swap(&arr[pivotIndex], &arr[right]); // Move pivot to end
+    int storeIndex = left;
+    
+    for (int i = left; i < right; i++) {
+        if (arr[i] < pivotValue) {
+            swap(&arr[storeIndex], &arr[i]);
+            storeIndex++;
+        }
+    }
+    swap(&arr[right], &arr[storeIndex]); // Move pivot to final position
+    return storeIndex;
+}
+
+// Random partition to avoid worst-case scenarios
+int randomPartition(int arr[], int left, int right) {
+    int pivotIndex = left + rand() % (right - left + 1);
+    return partition(arr, left, right, pivotIndex);
+}
+
+// Quick Select recursive implementation
+int quickSelectRecursive(int arr[], int left, int right, int k) {
+    if (left == right) return arr[left];
+    
+    int pivotIndex = randomPartition(arr, left, right);
+    
+    if (k == pivotIndex) {
+        return arr[k];
+    } else if (k < pivotIndex) {
+        return quickSelectRecursive(arr, left, pivotIndex - 1, k);
+    } else {
+        return quickSelectRecursive(arr, pivotIndex + 1, right, k);
+    }
+}
+
+// Quick Select iterative implementation
+int quickSelectIterative(int arr[], int left, int right, int k) {
+    while (left <= right) {
+        if (left == right) return arr[left];
+        
+        int pivotIndex = randomPartition(arr, left, right);
+        
+        if (k == pivotIndex) {
+            return arr[k];
+        } else if (k < pivotIndex) {
+            right = pivotIndex - 1;
+        } else {
+            left = pivotIndex + 1;
+        }
+    }
+    return arr[left]; // Should never reach here for valid k
+}
+
+// Wrapper function for k-th smallest (1-indexed)
+int kthSmallest(int arr[], int n, int k) {
+    srand(time(NULL)); // Seed for random
+    return quickSelectRecursive(arr, 0, n - 1, k - 1);
+}
+
+// Wrapper function for k-th largest (1-indexed)
+int kthLargest(int arr[], int n, int k) {
+    srand(time(NULL));
+    return quickSelectRecursive(arr, 0, n - 1, n - k);
+}
+
+// Example usage and testing
+void printArray(int arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+// Example usage:
+/*
+int main() {
+    int arr[] = {12, 3, 5, 7, 4, 19, 26};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int k = 4;
+    
+    printf("Original array: ");
+    printArray(arr, n);
+    
+    int result = kthSmallest(arr, n, k);
+    printf("%d-th smallest element is: %d\n", k, result);
+    
+    k = 2;
+    result = kthLargest(arr, n, k);
+    printf("%d-th largest element is: %d\n", k, result);
+    
+    return 0;
+}
+*/</code></pre>
+      </div>
+
+      <div class="language-code-block" id="cpp-code">
+        <pre><code class="language-cpp">// C++ Code Example
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;random&gt;
+#include &lt;algorithm&gt;
+#include &lt;chrono&gt;
+using namespace std;
+
+class QuickSelect {
+private:
+    // Random number generator
+    static int getRandomIndex(int left, int right) {
+        random_device rd;
+        mt19937 gen(rd());
+        uniform_int_distribution<> dis(left, right);
+        return dis(gen);
+    }
+    
+    // Partition function
+    static int partition(vector&lt;int&gt;& arr, int left, int right, int pivotIndex) {
+        int pivotValue = arr[pivotIndex];
+        swap(arr[pivotIndex], arr[right]); // Move pivot to end
+        int storeIndex = left;
+        
+        for (int i = left; i < right; i++) {
+            if (arr[i] < pivotValue) {
+                swap(arr[storeIndex], arr[i]);
+                storeIndex++;
+            }
+        }
+        swap(arr[right], arr[storeIndex]); // Move pivot to final position
+        return storeIndex;
+    }
+    
+    // Random partition
+    static int randomPartition(vector&lt;int&gt;& arr, int left, int right) {
+        int pivotIndex = getRandomIndex(left, right);
+        return partition(arr, left, right, pivotIndex);
+    }
+
+public:
+    // Recursive Quick Select
+    static int quickSelectRecursive(vector&lt;int&gt;& arr, int left, int right, int k) {
+        if (left == right) return arr[left];
+        
+        int pivotIndex = randomPartition(arr, left, right);
+        
+        if (k == pivotIndex) {
+            return arr[k];
+        } else if (k < pivotIndex) {
+            return quickSelectRecursive(arr, left, pivotIndex - 1, k);
+        } else {
+            return quickSelectRecursive(arr, pivotIndex + 1, right, k);
+        }
+    }
+    
+    // Iterative Quick Select
+    static int quickSelectIterative(vector&lt;int&gt;& arr, int left, int right, int k) {
+        while (left <= right) {
+            if (left == right) return arr[left];
+            
+            int pivotIndex = randomPartition(arr, left, right);
+            
+            if (k == pivotIndex) {
+                return arr[k];
+            } else if (k < pivotIndex) {
+                right = pivotIndex - 1;
+            } else {
+                left = pivotIndex + 1;
+            }
+        }
+        return arr[left];
+    }
+    
+    // Wrapper for k-th smallest (1-indexed)
+    static int kthSmallest(vector&lt;int&gt;& arr, int k) {
+        return quickSelectRecursive(arr, 0, arr.size() - 1, k - 1);
+    }
+    
+    // Wrapper for k-th largest (1-indexed)
+    static int kthLargest(vector&lt;int&gt;& arr, int k) {
+        return quickSelectRecursive(arr, 0, arr.size() - 1, arr.size() - k);
+    }
+    
+    // Median using Quick Select
+    static double median(vector&lt;int&gt;& arr) {
+        int n = arr.size();
+        if (n % 2 == 1) {
+            return quickSelectRecursive(arr, 0, n - 1, n / 2);
+        } else {
+            int first = quickSelectRecursive(arr, 0, n - 1, n / 2 - 1);
+            int second = quickSelectRecursive(arr, 0, n - 1, n / 2);
+            return (first + second) / 2.0;
+        }
+    }
+};
+
+// Alternative implementation with different pivot strategies
+class AdvancedQuickSelect {
+private:
+    // Median-of-three pivot selection
+    static int medianOfThree(vector&lt;int&gt;& arr, int left, int right) {
+        int mid = left + (right - left) / 2;
+        
+        // Sort left, mid, right
+        if (arr[left] > arr[mid]) swap(arr[left], arr[mid]);
+        if (arr[left] > arr[right]) swap(arr[left], arr[right]);
+        if (arr[mid] > arr[right]) swap(arr[mid], arr[right]);
+        
+        return mid; // Return median index
+    }
+    
+    static int partition(vector&lt;int&gt;& arr, int left, int right, int pivotIndex) {
+        int pivotValue = arr[pivotIndex];
+        swap(arr[pivotIndex], arr[right]);
+        int storeIndex = left;
+        
+        for (int i = left; i < right; i++) {
+            if (arr[i] < pivotValue) {
+                swap(arr[storeIndex], arr[i]);
+                storeIndex++;
+            }
+        }
+        swap(arr[right], arr[storeIndex]);
+        return storeIndex;
+    }
+
+public:
+    static int selectWithMedianPivot(vector&lt;int&gt;& arr, int left, int right, int k) {
+        if (left == right) return arr[left];
+        
+        int pivotIndex = medianOfThree(arr, left, right);
+        pivotIndex = partition(arr, left, right, pivotIndex);
+        
+        if (k == pivotIndex) {
+            return arr[k];
+        } else if (k < pivotIndex) {
+            return selectWithMedianPivot(arr, left, pivotIndex - 1, k);
+        } else {
+            return selectWithMedianPivot(arr, pivotIndex + 1, right, k);
+        }
+    }
+};
+
+// Example usage:
+/*
+int main() {
+    vector&lt;int&gt; arr = {12, 3, 5, 7, 4, 19, 26};
+    
+    cout << "Original array: ";
+    for (int num : arr) cout << num << " ";
+    cout << endl;
+    
+    int k = 4;
+    int result = QuickSelect::kthSmallest(arr, k);
+    cout << k << "-th smallest element is: " << result << endl;
+    
+    k = 2;
+    result = QuickSelect::kthLargest(arr, k);
+    cout << k << "-th largest element is: " << result << endl;
+    
+    double med = QuickSelect::median(arr);
+    cout << "Median is: " << med << endl;
+    
+    return 0;
+}
+*/</code></pre>
+      </div>
+
+      <div class="language-code-block" id="csharp-code">
+        <pre><code class="language-csharp">// C# Code Example
+using System;
+using System.Collections.Generic;
+
+public class QuickSelect {
+    private static Random random = new Random();
+    
+    // Swap two elements
+    private static void Swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    
+    // Partition function
+    private static int Partition(int[] arr, int left, int right, int pivotIndex) {
+        int pivotValue = arr[pivotIndex];
+        Swap(arr, pivotIndex, right); // Move pivot to end
+        int storeIndex = left;
+        
+        for (int i = left; i < right; i++) {
+            if (arr[i] < pivotValue) {
+                Swap(arr, storeIndex, i);
+                storeIndex++;
+            }
+        }
+        Swap(arr, right, storeIndex); // Move pivot to final position
+        return storeIndex;
+    }
+    
+    // Random partition
+    private static int RandomPartition(int[] arr, int left, int right) {
+        int pivotIndex = left + random.Next(right - left + 1);
+        return Partition(arr, left, right, pivotIndex);
+    }
+    
+    // Recursive Quick Select
+    public static int QuickSelectRecursive(int[] arr, int left, int right, int k) {
+        if (left == right) return arr[left];
+        
+        int pivotIndex = RandomPartition(arr, left, right);
+        
+        if (k == pivotIndex) {
+            return arr[k];
+        } else if (k < pivotIndex) {
+            return QuickSelectRecursive(arr, left, pivotIndex - 1, k);
+        } else {
+            return QuickSelectRecursive(arr, pivotIndex + 1, right, k);
+        }
+    }
+    
+    // Iterative Quick Select
+    public static int QuickSelectIterative(int[] arr, int left, int right, int k) {
+        while (left <= right) {
+            if (left == right) return arr[left];
+            
+            int pivotIndex = RandomPartition(arr, left, right);
+            
+            if (k == pivotIndex) {
+                return arr[k];
+            } else if (k < pivotIndex) {
+                right = pivotIndex - 1;
+            } else {
+                left = pivotIndex + 1;
+            }
+        }
+        return arr[left];
+    }
+    
+    // Wrapper for k-th smallest (1-indexed)
+    public static int KthSmallest(int[] arr, int k) {
+        return QuickSelectRecursive(arr, 0, arr.Length - 1, k - 1);
+    }
+    
+    // Wrapper for k-th largest (1-indexed)
+    public static int KthLargest(int[] arr, int k) {
+        return QuickSelectRecursive(arr, 0, arr.Length - 1, arr.Length - k);
+    }
+    
+    // Median using Quick Select
+    public static double Median(int[] arr) {
+        int n = arr.Length;
+        if (n % 2 == 1) {
+            return QuickSelectRecursive(arr, 0, n - 1, n / 2);
+        } else {
+            int first = QuickSelectRecursive(arr, 0, n - 1, n / 2 - 1);
+            int second = QuickSelectRecursive(arr, 0, n - 1, n / 2);
+            return (first + second) / 2.0;
+        }
+    }
+}
+
+// Advanced implementation with different pivot strategies
+public class AdvancedQuickSelect {
+    private static Random random = new Random();
+    
+    // Median-of-three pivot selection
+    private static int MedianOfThree(int[] arr, int left, int right) {
+        int mid = left + (right - left) / 2;
+        
+        // Sort left, mid, right
+        if (arr[left] > arr[mid]) Swap(arr, left, mid);
+        if (arr[left] > arr[right]) Swap(arr, left, right);
+        if (arr[mid] > arr[right]) Swap(arr, mid, right);
+        
+        return mid; // Return median index
+    }
+    
+    private static void Swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    
+    private static int Partition(int[] arr, int left, int right, int pivotIndex) {
+        int pivotValue = arr[pivotIndex];
+        Swap(arr, pivotIndex, right);
+        int storeIndex = left;
+        
+        for (int i = left; i < right; i++) {
+            if (arr[i] < pivotValue) {
+                Swap(arr, storeIndex, i);
+                storeIndex++;
+            }
+        }
+        Swap(arr, right, storeIndex);
+        return storeIndex;
+    }
+    
+    public static int SelectWithMedianPivot(int[] arr, int left, int right, int k) {
+        if (left == right) return arr[left];
+        
+        int pivotIndex = MedianOfThree(arr, left, right);
+        pivotIndex = Partition(arr, left, right, pivotIndex);
+        
+        if (k == pivotIndex) {
+            return arr[k];
+        } else if (k < pivotIndex) {
+            return SelectWithMedianPivot(arr, left, pivotIndex - 1, k);
+        } else {
+            return SelectWithMedianPivot(arr, pivotIndex + 1, right, k);
+        }
+    }
+}
+
+// Example usage:
+/*
+class Program {
+    static void Main() {
+        int[] arr = {12, 3, 5, 7, 4, 19, 26};
+        
+        Console.Write("Original array: ");
+        Console.WriteLine(string.Join(" ", arr));
+        
+        int k = 4;
+        int result = QuickSelect.KthSmallest(arr, k);
+        Console.WriteLine($"{k}-th smallest element is: {result}");
+        
+        k = 2;
+        result = QuickSelect.KthLargest(arr, k);
+        Console.WriteLine($"{k}-th largest element is: {result}");
+        
+        double med = QuickSelect.Median(arr);
+        Console.WriteLine($"Median is: {med}");
+    }
+}
+*/</code></pre>
+      </div>
+
+      <div class="language-code-block" id="java-code">
+        <pre><code class="language-java">// Java Code Example
+import java.util.Random;
+
+public class QuickSelect {
+    private static Random random = new Random();
+    
+    // Swap two elements
+    private static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    
+    // Partition function
+    private static int partition(int[] arr, int left, int right, int pivotIndex) {
+        int pivotValue = arr[pivotIndex];
+        swap(arr, pivotIndex, right); // Move pivot to end
+        int storeIndex = left;
+        
+        for (int i = left; i < right; i++) {
+            if (arr[i] < pivotValue) {
+                swap(arr, storeIndex, i);
+                storeIndex++;
+            }
+        }
+        swap(arr, right, storeIndex); // Move pivot to final position
+        return storeIndex;
+    }
+    
+    // Random partition
+    private static int randomPartition(int[] arr, int left, int right) {
+        int pivotIndex = left + random.nextInt(right - left + 1);
+        return partition(arr, left, right, pivotIndex);
+    }
+    
+    // Recursive Quick Select
+    public static int quickSelectRecursive(int[] arr, int left, int right, int k) {
+        if (left == right) return arr[left];
+        
+        int pivotIndex = randomPartition(arr, left, right);
+        
+        if (k == pivotIndex) {
+            return arr[k];
+        } else if (k < pivotIndex) {
+            return quickSelectRecursive(arr, left, pivotIndex - 1, k);
+        } else {
+            return quickSelectRecursive(arr, pivotIndex + 1, right, k);
+        }
+    }
+    
+    // Iterative Quick Select
+    public static int quickSelectIterative(int[] arr, int left, int right, int k) {
+        while (left <= right) {
+            if (left == right) return arr[left];
+            
+            int pivotIndex = randomPartition(arr, left, right);
+            
+            if (k == pivotIndex) {
+                return arr[k];
+            } else if (k < pivotIndex) {
+                right = pivotIndex - 1;
+            } else {
+                left = pivotIndex + 1;
+            }
+        }
+        return arr[left];
+    }
+    
+    // Wrapper for k-th smallest (1-indexed)
+    public static int kthSmallest(int[] arr, int k) {
+        return quickSelectRecursive(arr, 0, arr.length - 1, k - 1);
+    }
+    
+    // Wrapper for k-th largest (1-indexed)
+    public static int kthLargest(int[] arr, int k) {
+        return quickSelectRecursive(arr, 0, arr.length - 1, arr.length - k);
+    }
+    
+    // Median using Quick Select
+    public static double median(int[] arr) {
+        int n = arr.length;
+        if (n % 2 == 1) {
+            return quickSelectRecursive(arr, 0, n - 1, n / 2);
+        } else {
+            int first = quickSelectRecursive(arr, 0, n - 1, n / 2 - 1);
+            int second = quickSelectRecursive(arr, 0, n - 1, n / 2);
+            return (first + second) / 2.0;
+        }
+    }
+}
+
+// Advanced implementation with different pivot strategies
+class AdvancedQuickSelect {
+    private static Random random = new Random();
+    
+    // Median-of-three pivot selection
+    private static int medianOfThree(int[] arr, int left, int right) {
+        int mid = left + (right - left) / 2;
+        
+        // Sort left, mid, right
+        if (arr[left] > arr[mid]) swap(arr, left, mid);
+        if (arr[left] > arr[right]) swap(arr, left, right);
+        if (arr[mid] > arr[right]) swap(arr, mid, right);
+        
+        return mid; // Return median index
+    }
+    
+    private static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    
+    private static int partition(int[] arr, int left, int right, int pivotIndex) {
+        int pivotValue = arr[pivotIndex];
+        swap(arr, pivotIndex, right);
+        int storeIndex = left;
+        
+        for (int i = left; i < right; i++) {
+            if (arr[i] < pivotValue) {
+                swap(arr, storeIndex, i);
+                storeIndex++;
+            }
+        }
+        swap(arr, right, storeIndex);
+        return storeIndex;
+    }
+    
+    public static int selectWithMedianPivot(int[] arr, int left, int right, int k) {
+        if (left == right) return arr[left];
+        
+        int pivotIndex = medianOfThree(arr, left, right);
+        pivotIndex = partition(arr, left, right, pivotIndex);
+        
+        if (k == pivotIndex) {
+            return arr[k];
+        } else if (k < pivotIndex) {
+            return selectWithMedianPivot(arr, left, pivotIndex - 1, k);
+        } else {
+            return selectWithMedianPivot(arr, pivotIndex + 1, right, k);
+        }
+    }
+}
+
+// Example usage:
+class Main {
+    public static void main(String[] args) {
+        int[] arr = {12, 3, 5, 7, 4, 19, 26};
+        
+        System.out.print("Original array: ");
+        for (int num : arr) System.out.print(num + " ");
+        System.out.println();
+        
+        int k = 4;
+        int result = QuickSelect.kthSmallest(arr, k);
+        System.out.println(k + "-th smallest element is: " + result);
+        
+        k = 2;
+        result = QuickSelect.kthLargest(arr, k);
+        System.out.println(k + "-th largest element is: " + result);
+        
+        double med = QuickSelect.median(arr);
+        System.out.println("Median is: " + med);
+    }
+}</code></pre>
+      </div>
+
+      <div class="language-code-block" id="python-code">
+        <pre><code class="language-python"># Python Code Example
+import random
+from typing import List, Union
+
+class QuickSelect:
+    @staticmethod
+    def partition(arr: List[int], left: int, right: int, pivot_index: int) -> int:
+        pivot_value = arr[pivot_index]
+        # Move pivot to end
+        arr[pivot_index], arr[right] = arr[right], arr[pivot_index]
+        store_index = left
+        
+        for i in range(left, right):
+            if arr[i] < pivot_value:
+                arr[store_index], arr[i] = arr[i], arr[store_index]
+                store_index += 1
+        
+        # Move pivot to final position
+        arr[right], arr[store_index] = arr[store_index], arr[right]
+        return store_index
+    
+    @staticmethod
+    def random_partition(arr: List[int], left: int, right: int) -> int:
+        pivot_index = random.randint(left, right)
+        return QuickSelect.partition(arr, left, right, pivot_index)
+    
+    @staticmethod
+    def quick_select_recursive(arr: List[int], left: int, right: int, k: int) -> int:
+        if left == right:
+            return arr[left]
+        
+        pivot_index = QuickSelect.random_partition(arr, left, right)
+        
+        if k == pivot_index:
+            return arr[k]
+        elif k < pivot_index:
+            return QuickSelect.quick_select_recursive(arr, left, pivot_index - 1, k)
+        else:
+            return QuickSelect.quick_select_recursive(arr, pivot_index + 1, right, k)
+    
+    @staticmethod
+    def quick_select_iterative(arr: List[int], left: int, right: int, k: int) -> int:
+        while left <= right:
+            if left == right:
+                return arr[left]
+            
+            pivot_index = QuickSelect.random_partition(arr, left, right)
+            
+            if k == pivot_index:
+                return arr[k]
+            elif k < pivot_index:
+                right = pivot_index - 1
+            else:
+                left = pivot_index + 1
+        
+        return arr[left]
+    
+    @staticmethod
+    def kth_smallest(arr: List[int], k: int) -> int:
+        """Find k-th smallest element (1-indexed)"""
+        return QuickSelect.quick_select_recursive(arr, 0, len(arr) - 1, k - 1)
+    
+    @staticmethod
+    def kth_largest(arr: List[int], k: int) -> int:
+        """Find k-th largest element (1-indexed)"""
+        return QuickSelect.quick_select_recursive(arr, 0, len(arr) - 1, len(arr) - k)
+    
+    @staticmethod
+    def median(arr: List[int]) -> Union[int, float]:
+        """Find median using Quick Select"""
+        n = len(arr)
+        if n % 2 == 1:
+            return QuickSelect.quick_select_recursive(arr, 0, n - 1, n // 2)
+        else:
+            first = QuickSelect.quick_select_recursive(arr, 0, n - 1, n // 2 - 1)
+            second = QuickSelect.quick_select_recursive(arr, 0, n - 1, n // 2)
+            return (first + second) / 2
+
+class AdvancedQuickSelect:
+    @staticmethod
+    def median_of_three(arr: List[int], left: int, right: int) -> int:
+        mid = left + (right - left) // 2
+        
+        # Sort left, mid, right
+        if arr[left] > arr[mid]:
+            arr[left], arr[mid] = arr[mid], arr[left]
+        if arr[left] > arr[right]:
+            arr[left], arr[right] = arr[right], arr[left]
+        if arr[mid] > arr[right]:
+            arr[mid], arr[right] = arr[right], arr[mid]
+        
+        return mid  # Return median index
+    
+    @staticmethod
+    def partition(arr: List[int], left: int, right: int, pivot_index: int) -> int:
+        pivot_value = arr[pivot_index]
+        arr[pivot_index], arr[right] = arr[right], arr[pivot_index]
+        store_index = left
+        
+        for i in range(left, right):
+            if arr[i] < pivot_value:
+                arr[store_index], arr[i] = arr[i], arr[store_index]
+                store_index += 1
+        
+        arr[right], arr[store_index] = arr[store_index], arr[right]
+        return store_index
+    
+    @staticmethod
+    def select_with_median_pivot(arr: List[int], left: int, right: int, k: int) -> int:
+        if left == right:
+            return arr[left]
+        
+        pivot_index = AdvancedQuickSelect.median_of_three(arr, left, right)
+        pivot_index = AdvancedQuickSelect.partition(arr, left, right, pivot_index)
+        
+        if k == pivot_index:
+            return arr[k]
+        elif k < pivot_index:
+            return AdvancedQuickSelect.select_with_median_pivot(arr, left, pivot_index - 1, k)
+        else:
+            return AdvancedQuickSelect.select_with_median_pivot(arr, pivot_index + 1, right, k)
+
+# Functional programming style
+def quick_select_functional(arr: List[int], k: int) -> int:
+    """Functional style Quick Select for k-th smallest (0-indexed)"""
+    if len(arr) == 1:
+        return arr[0]
+    
+    pivot = random.choice(arr)
+    lows = [x for x in arr if x < pivot]
+    highs = [x for x in arr if x > pivot]
+    pivots = [x for x in arr if x == pivot]
+    
+    if k < len(lows):
+        return quick_select_functional(lows, k)
+    elif k < len(lows) + len(pivots):
+        return pivots[0]
+    else:
+        return quick_select_functional(highs, k - len(lows) - len(pivots))
+
+# Example usage:
+def example_usage():
+    arr = [12, 3, 5, 7, 4, 19, 26]
+    
+    print("Original array:", arr)
+    
+    k = 4
+    result = QuickSelect.kth_smallest(arr.copy(), k)
+    print(f"{k}-th smallest element is: {result}")
+    
+    k = 2
+    result = QuickSelect.kth_largest(arr.copy(), k)
+    print(f"{k}-th largest element is: {result}")
+    
+    med = QuickSelect.median(arr.copy())
+    print(f"Median is: {med}")
+    
+    # Functional style
+    k = 3  # 0-indexed
+    result = quick_select_functional(arr.copy(), k)
+    print(f"{k + 1}-th smallest (functional) is: {result}")
+
+# Uncomment to run example
+# example_usage()</code></pre>
+      </div>
+
+      <div class="language-code-block" id="javascript-code">
+        <pre><code class="language-javascript">// JavaScript Code Example
+class QuickSelect {
+    // Partition function
+    static partition(arr, left, right, pivotIndex) {
+        const pivotValue = arr[pivotIndex];
+        // Move pivot to end
+        [arr[pivotIndex], arr[right]] = [arr[right], arr[pivotIndex]];
+        let storeIndex = left;
+        
+        for (let i = left; i < right; i++) {
+            if (arr[i] < pivotValue) {
+                [arr[storeIndex], arr[i]] = [arr[i], arr[storeIndex]];
+                storeIndex++;
+            }
+        }
+        
+        // Move pivot to final position
+        [arr[right], arr[storeIndex]] = [arr[storeIndex], arr[right]];
+        return storeIndex;
+    }
+    
+    // Random partition
+    static randomPartition(arr, left, right) {
+        const pivotIndex = left + Math.floor(Math.random() * (right - left + 1));
+        return this.partition(arr, left, right, pivotIndex);
+    }
+    
+    // Recursive Quick Select
+    static quickSelectRecursive(arr, left, right, k) {
+        if (left === right) return arr[left];
+        
+        const pivotIndex = this.randomPartition(arr, left, right);
+        
+        if (k === pivotIndex) {
+            return arr[k];
+        } else if (k < pivotIndex) {
+            return this.quickSelectRecursive(arr, left, pivotIndex - 1, k);
+        } else {
+            return this.quickSelectRecursive(arr, pivotIndex + 1, right, k);
+        }
+    }
+    
+    // Iterative Quick Select
+    static quickSelectIterative(arr, left, right, k) {
+        while (left <= right) {
+            if (left === right) return arr[left];
+            
+            const pivotIndex = this.randomPartition(arr, left, right);
+            
+            if (k === pivotIndex) {
+                return arr[k];
+            } else if (k < pivotIndex) {
+                right = pivotIndex - 1;
+            } else {
+                left = pivotIndex + 1;
+            }
+        }
+        return arr[left];
+    }
+    
+    // Wrapper for k-th smallest (1-indexed)
+    static kthSmallest(arr, k) {
+        return this.quickSelectRecursive([...arr], 0, arr.length - 1, k - 1);
+    }
+    
+    // Wrapper for k-th largest (1-indexed)
+    static kthLargest(arr, k) {
+        return this.quickSelectRecursive([...arr], 0, arr.length - 1, arr.length - k);
+    }
+    
+    // Median using Quick Select
+    static median(arr) {
+        const n = arr.length;
+        if (n % 2 === 1) {
+            return this.quickSelectRecursive([...arr], 0, n - 1, Math.floor(n / 2));
+        } else {
+            const first = this.quickSelectRecursive([...arr], 0, n - 1, n / 2 - 1);
+            const second = this.quickSelectRecursive([...arr], 0, n - 1, n / 2);
+            return (first + second) / 2;
+        }
+    }
+}
+
+// Advanced implementation with different pivot strategies
+class AdvancedQuickSelect {
+    // Median-of-three pivot selection
+    static medianOfThree(arr, left, right) {
+        const mid = left + Math.floor((right - left) / 2);
+        
+        // Sort left, mid, right
+        if (arr[left] > arr[mid]) [arr[left], arr[mid]] = [arr[mid], arr[left]];
+        if (arr[left] > arr[right]) [arr[left], arr[right]] = [arr[right], arr[left]];
+        if (arr[mid] > arr[right]) [arr[mid], arr[right]] = [arr[right], arr[mid]];
+        
+        return mid; // Return median index
+    }
+    
+    static partition(arr, left, right, pivotIndex) {
+        const pivotValue = arr[pivotIndex];
+        [arr[pivotIndex], arr[right]] = [arr[right], arr[pivotIndex]];
+        let storeIndex = left;
+        
+        for (let i = left; i < right; i++) {
+            if (arr[i] < pivotValue) {
+                [arr[storeIndex], arr[i]] = [arr[i], arr[storeIndex]];
+                storeIndex++;
+            }
+        }
+        
+        [arr[right], arr[storeIndex]] = [arr[storeIndex], arr[right]];
+        return storeIndex;
+    }
+    
+    static selectWithMedianPivot(arr, left, right, k) {
+        if (left === right) return arr[left];
+        
+        let pivotIndex = this.medianOfThree(arr, left, right);
+        pivotIndex = this.partition(arr, left, right, pivotIndex);
+        
+        if (k === pivotIndex) {
+            return arr[k];
+        } else if (k < pivotIndex) {
+            return this.selectWithMedianPivot(arr, left, pivotIndex - 1, k);
+        } else {
+            return this.selectWithMedianPivot(arr, pivotIndex + 1, right, k);
+        }
+    }
+}
+
+// Functional programming style
+function quickSelectFunctional(arr, k) {
+    if (arr.length === 1) return arr[0];
+    
+    const pivot = arr[Math.floor(Math.random() * arr.length)];
+    const lows = arr.filter(x => x < pivot);
+    const highs = arr.filter(x => x > pivot);
+    const pivots = arr.filter(x => x === pivot);
+    
+    if (k < lows.length) {
+        return quickSelectFunctional(lows, k);
+    } else if (k < lows.length + pivots.length) {
+        return pivots[0];
+    } else {
+        return quickSelectFunctional(highs, k - lows.length - pivots.length);
+    }
+}
+
+// Example usage:
+function exampleUsage() {
+    const arr = [12, 3, 5, 7, 4, 19, 26];
+    
+    console.log("Original array:", arr);
+    
+    let k = 4;
+    let result = QuickSelect.kthSmallest(arr, k);
+    console.log(`${k}-th smallest element is: ${result}`);
+    
+    k = 2;
+    result = QuickSelect.kthLargest(arr, k);
+    console.log(`${k}-th largest element is: ${result}`);
+    
+    const med = QuickSelect.median(arr);
+    console.log(`Median is: ${med}`);
+    
+    // Functional style
+    k = 3; // 0-indexed
+    result = quickSelectFunctional([...arr], k);
+    console.log(`${k + 1}-th smallest (functional) is: ${result}`);
+}
+
+// Uncomment to run example
+// exampleUsage();</code></pre>
+      </div>
+      
+      <p><strong>Practice Idea:</strong> Implement Quick Select to find the median of an array, then extend it to find multiple order statistics efficiently. Create a program that can find the k smallest elements in an array without fully sorting it. Then implement different pivot selection strategies (first element, last element, random, median-of-three) and compare their performance on various input distributions.</p>
+      
+      <p><strong>Real-world Applications:</strong>
+        <ul>
+            <li><strong>Statistics & Data Analysis:</strong> Finding medians, quartiles, and other order statistics</li>
+            <li><strong>Database Systems:</strong> Efficient query processing for top-k queries</li>
+            <li><strong>Machine Learning:</strong> K-nearest neighbors algorithm and clustering</li>
+            <li><strong>Financial Systems:</strong> Finding percentiles for risk analysis and portfolio management</li>
+            <li><strong>Operating Systems:</strong> Process scheduling and resource allocation</li>
+            <li><strong>Computer Graphics:</strong> Median cut algorithm for color quantization</li>
+            <li><strong>Networking:</strong> Load balancing and finding network performance metrics</li>
+            <li><strong>Gaming:</strong> Leaderboard systems and ranking algorithms</li>
+        </ul>
+      </p>
+      
+      <p><strong>Summary:</strong> Quick Select is a powerful algorithm that efficiently finds the k-th smallest or largest element in an unsorted list with average O(n) time complexity. By leveraging the partitioning strategy of QuickSort but only recursing into the relevant partition, it avoids the O(n log n) overhead of full sorting. This makes it invaluable for applications requiring quick access to order statistics, from statistical analysis and database queries to machine learning and financial systems. Mastering Quick Select provides a fundamental tool for efficient data processing and algorithm optimization.</p>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const languageButtons = document.querySelectorAll('.code-language-btn');
+        const codeBlocks = document.querySelectorAll('.language-code-block');
+        
+        languageButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const targetLanguage = this.getAttribute('data-language');
+                
+                // Update active button
+                languageButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show corresponding code block
+                codeBlocks.forEach(block => {
+                    if (block.id === `${targetLanguage}-code`) {
+                        block.classList.add('active');
+                    } else {
+                        block.classList.remove('active');
+                    }
+                });
+            });
+        });
+    });
+    </script>
+</body>
+
+</html>

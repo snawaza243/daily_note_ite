@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Binary Search</title>
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .itepost-section-title {
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.8em;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+            margin-top: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .itepost-section-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .itepost-section-content p {
+            margin-bottom: 16px;
+        }
+
+        pre {
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        strong {
+            color: #2E7D32;
+        }
+    </style>
+
+    <!-- Add this CSS -->
+    <style>
+        .code-language-buttons {
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .code-language-btn {
+            padding: 5px 12px;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .code-language-btn:hover {
+            background-color: #e9e9e9;
+        }
+
+        .code-language-btn.active {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .language-code-block {
+            display: none;
+        }
+
+        .language-code-block.active {
+            display: block;
+        }
+    </style>
+
+    <!-- Add this script after jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Process each implementation section
+            $('.itepost-section-content').each(function () {
+                const $section = $(this);
+                const $implementationTitle = $section.find('p:contains("Implementation in Multiple Languages:")');
+
+                if ($implementationTitle.length > 0) {
+                    const $codeBlocks = $implementationTitle.nextUntil('p').filter('pre');
+
+                    if ($codeBlocks.length > 0) {
+                        // Create language buttons container
+                        const $buttonsContainer = $('<div class="code-language-buttons"></div>');
+
+                        // Extract languages and create buttons
+                        const languages = [];
+                        $codeBlocks.each(function () {
+                            const $codeBlock = $(this);
+                            const languageClass = $codeBlock.find('code').attr('class');
+                            let languageName = 'Unknown';
+
+                            if (languageClass) {
+                                // Extract language name from class (e.g., "language-python" -> "python")
+                                const match = languageClass.match(/language-(\w+)/);
+                                if (match) {
+                                    languageName = match[1].toUpperCase();
+                                }
+                            }
+
+                            languages.push({
+                                name: languageName,
+                                element: $codeBlock
+                            });
+
+                            // Add class to code block for easier selection
+                            $codeBlock.addClass('language-code-block').addClass('lang-' + languageName.toLowerCase());
+                        });
+
+                        // Create buttons for each language
+                        languages.forEach((lang, index) => {
+                            const $button = $('<button class="code-language-btn">' + lang.name + '</button>');
+
+                            // Make first button active by default
+                            if (index === 0) {
+                                $button.addClass('active');
+                                lang.element.addClass('active');
+                            }
+
+                            $button.on('click', function () {
+                                // Remove active class from all buttons and code blocks
+                                $buttonsContainer.find('.code-language-btn').removeClass('active');
+                                $section.find('.language-code-block').removeClass('active');
+
+                                // Add active class to clicked button and corresponding code block
+                                $(this).addClass('active');
+                                lang.element.addClass('active');
+                            });
+
+                            $buttonsContainer.append($button);
+                        });
+
+                        // Insert buttons after the implementation title
+                        $implementationTitle.after($buttonsContainer);
+                    }
+                }
+            });
+        });
+
+    </script>
+</head>
+ <body>
+    <div class="itepost-section-title">Selection Sort</div>
+    <div class="itepost-section-content">
+      <p><strong>Category:</strong> Sorting (Green)</p>
+      
+      <p><strong>Introduction:</strong> Selection Sort is a simple, intuitive sorting algorithm that works by repeatedly finding the minimum element from the unsorted portion and putting it at the beginning. Think of it like selecting the smallest card from a hand of playing cards and placing it in front, then repeating with the remaining cards. While not efficient for large datasets, it's easy to understand and has the advantage of making the minimum number of swaps (O(n) swaps), which can be beneficial when memory writes are expensive.</p>
+      
+      <p><strong>Working Principle:</strong> The algorithm maintains two subarrays: the sorted subarray and the unsorted subarray. In each iteration, it finds the minimum element from the unsorted subarray and swaps it with the first element of the unsorted subarray:
+        <ol>
+            <li>Start with the entire array as unsorted.</li>
+            <li>Find the minimum element in the unsorted subarray.</li>
+            <li>Swap it with the first element of the unsorted subarray.</li>
+            <li>Move the boundary between sorted and unsorted subarrays one element to the right.</li>
+            <li>Repeat until the entire array is sorted.</li>
+        </ol>
+        <strong>Pseudocode:</strong><br>
+        <code>
+        selectionSort(arr):<br>
+        &nbsp;&nbsp;n = length(arr)<br>
+        &nbsp;&nbsp;for i from 0 to n-1:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;min_index = i<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;for j from i+1 to n-1:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if arr[j] < arr[min_index]:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;min_index = j<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;swap arr[i] and arr[min_index]<br>
+        </code>
+      </p>
+      
+      <p><strong>Example & Dry Run:</strong><br>
+        Let's sort the array: <code>[64, 25, 12, 22, 11]</code>
+        <ul>
+            <li><strong>Pass 1:</strong> Find min in [64,25,12,22,11] → min=11 at index 4 → Swap with index 0 → <code>[11, 25, 12, 22, 64]</code></li>
+            <li><strong>Pass 2:</strong> Find min in [25,12,22,64] → min=12 at index 2 → Swap with index 1 → <code>[11, 12, 25, 22, 64]</code></li>
+            <li><strong>Pass 3:</strong> Find min in [25,22,64] → min=22 at index 3 → Swap with index 2 → <code>[11, 12, 22, 25, 64]</code></li>
+            <li><strong>Pass 4:</strong> Find min in [25,64] → min=25 at index 3 → Already in position → <code>[11, 12, 22, 25, 64]</code></li>
+            <li><strong>Pass 5:</strong> Only one element left → Array is sorted</li>
+            <li><strong>Result:</strong> Sorted array: <code>[11, 12, 22, 25, 64]</code></li>
+        </ul>
+      </p>
+      
+      <p><strong>Time and Space Complexity:</strong>
+        <ul>
+            <li><strong>Best Case:</strong> O(n²) - Still makes all comparisons</li>
+            <li><strong>Average Case:</strong> O(n²) - Quadratic time complexity</li>
+            <li><strong>Worst Case:</strong> O(n²) - Reverse sorted or random data</li>
+            <li><strong>Space Complexity:</strong> O(1) - In-place sorting, uses constant extra space</li>
+            <li><strong>Swaps:</strong> O(n) - Makes exactly n-1 swaps in worst case</li>
+        </ul>
+      </p>
+      
+      <p><strong>Implementation in Multiple Languages:</strong></p>
+      
+      <div class="code-language-buttons">
+        <button class="code-language-btn active" data-language="c">C</button>
+        <button class="code-language-btn" data-language="cpp">C++</button>
+        <button class="code-language-btn" data-language="csharp">C#</button>
+        <button class="code-language-btn" data-language="java">Java</button>
+        <button class="code-language-btn" data-language="python">Python</button>
+        <button class="code-language-btn" data-language="javascript">JavaScript</button>
+      </div>
+      
+      <div class="language-code-block active" id="c-code">
+        <pre><code class="language-c">// C Code Example
+#include &lt;stdio.h&gt;
+
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void selectionSort(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        int min_index = i;
+        
+        // Find the minimum element in unsorted array
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] < arr[min_index]) {
+                min_index = j;
+            }
+        }
+        
+        // Swap the found minimum element with the first element
+        swap(&arr[min_index], &arr[i]);
+    }
+}
+
+// Selection sort that also finds maximum (dual selection)
+void selectionSortDual(int arr[], int n) {
+    int left = 0, right = n - 1;
+    
+    while (left < right) {
+        int min_index = left;
+        int max_index = right;
+        
+        // Find min and max in current range
+        for (int i = left; i <= right; i++) {
+            if (arr[i] < arr[min_index]) min_index = i;
+            if (arr[i] > arr[max_index]) max_index = i;
+        }
+        
+        // Swap min with left position
+        swap(&arr[min_index], &arr[left]);
+        
+        // If max was at left, it's now at min_index
+        if (max_index == left) {
+            max_index = min_index;
+        }
+        
+        // Swap max with right position
+        swap(&arr[max_index], &arr[right]);
+        
+        left++;
+        right--;
+    }
+}
+
+// Example usage:
+// int arr[] = {64, 25, 12, 22, 11};
+// int n = sizeof(arr) / sizeof(arr[0]);
+// selectionSort(arr, n);</code></pre>
+      </div>
+
+      <div class="language-code-block" id="cpp-code">
+        <pre><code class="language-cpp">// C++ Code Example
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+#include &lt;iostream&gt;
+using namespace std;
+
+void selectionSort(vector<int>& arr) {
+    int n = arr.size();
+    for (int i = 0; i < n - 1; i++) {
+        int min_index = i;
+        
+        // Find the minimum element in unsorted array
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] < arr[min_index]) {
+                min_index = j;
+            }
+        }
+        
+        // Swap the found minimum element with the first element
+        swap(arr[min_index], arr[i]);
+    }
+}
+
+// Template version for different data types
+template<typename T>
+void selectionSortGeneric(vector<T>& arr) {
+    int n = arr.size();
+    for (int i = 0; i < n - 1; i++) {
+        int min_index = i;
+        
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] < arr[min_index]) {
+                min_index = j;
+            }
+        }
+        
+        if (min_index != i) {
+            swap(arr[min_index], arr[i]);
+        }
+    }
+}
+
+// Stable selection sort (maintains relative order of equal elements)
+void stableSelectionSort(vector<int>& arr) {
+    int n = arr.size();
+    for (int i = 0; i < n - 1; i++) {
+        int min_index = i;
+        
+        // Find minimum element
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] < arr[min_index]) {
+                min_index = j;
+            }
+        }
+        
+        // Shift elements instead of swapping to maintain stability
+        int min_value = arr[min_index];
+        while (min_index > i) {
+            arr[min_index] = arr[min_index - 1];
+            min_index--;
+        }
+        arr[i] = min_value;
+    }
+}
+
+// Example usage:
+// vector<int> arr = {64, 25, 12, 22, 11};
+// selectionSort(arr);</code></pre>
+      </div>
+
+      <div class="language-code-block" id="csharp-code">
+        <pre><code class="language-csharp">// C# Code Example
+using System;
+
+public class SelectionSort {
+    public static void Sort(int[] arr) {
+        int n = arr.Length;
+        for (int i = 0; i < n - 1; i++) {
+            int min_index = i;
+            
+            // Find the minimum element in unsorted array
+            for (int j = i + 1; j < n; j++) {
+                if (arr[j] < arr[min_index]) {
+                    min_index = j;
+                }
+            }
+            
+            // Swap the found minimum element with the first element
+            int temp = arr[min_index];
+            arr[min_index] = arr[i];
+            arr[i] = temp;
+        }
+    }
+    
+    // Generic version
+    public static void SortGeneric<T>(T[] arr) where T : IComparable<T> {
+        int n = arr.Length;
+        for (int i = 0; i < n - 1; i++) {
+            int min_index = i;
+            
+            for (int j = i + 1; j < n; j++) {
+                if (arr[j].CompareTo(arr[min_index]) < 0) {
+                    min_index = j;
+                }
+            }
+            
+            if (min_index != i) {
+                T temp = arr[min_index];
+                arr[min_index] = arr[i];
+                arr[i] = temp;
+            }
+        }
+    }
+    
+    // Version that returns comparison and swap counts
+    public static (int comparisons, int swaps) SortWithMetrics(int[] arr) {
+        int comparisons = 0;
+        int swaps = 0;
+        int n = arr.Length;
+        
+        for (int i = 0; i < n - 1; i++) {
+            int min_index = i;
+            
+            for (int j = i + 1; j < n; j++) {
+                comparisons++;
+                if (arr[j] < arr[min_index]) {
+                    min_index = j;
+                }
+            }
+            
+            if (min_index != i) {
+                swaps++;
+                int temp = arr[min_index];
+                arr[min_index] = arr[i];
+                arr[i] = temp;
+            }
+        }
+        
+        return (comparisons, swaps);
+    }
+}
+
+// Example usage:
+// int[] arr = {64, 25, 12, 22, 11};
+// SelectionSort.Sort(arr);</code></pre>
+      </div>
+
+      <div class="language-code-block" id="java-code">
+        <pre><code class="language-java">// Java Code Example
+public class SelectionSort {
+    public static void sort(int[] arr) {
+        int n = arr.length;
+        for (int i = 0; i < n - 1; i++) {
+            int min_index = i;
+            
+            // Find the minimum element in unsorted array
+            for (int j = i + 1; j < n; j++) {
+                if (arr[j] < arr[min_index]) {
+                    min_index = j;
+                }
+            }
+            
+            // Swap the found minimum element with the first element
+            int temp = arr[min_index];
+            arr[min_index] = arr[i];
+            arr[i] = temp;
+        }
+    }
+    
+    // Generic version
+    public static <T extends Comparable<T>> void sortGeneric(T[] arr) {
+        int n = arr.length;
+        for (int i = 0; i < n - 1; i++) {
+            int min_index = i;
+            
+            for (int j = i + 1; j < n; j++) {
+                if (arr[j].compareTo(arr[min_index]) < 0) {
+                    min_index = j;
+                }
+            }
+            
+            if (min_index != i) {
+                T temp = arr[min_index];
+                arr[min_index] = arr[i];
+                arr[i] = temp;
+            }
+        }
+    }
+    
+    // Selection sort for descending order
+    public static void sortDescending(int[] arr) {
+        int n = arr.length;
+        for (int i = 0; i < n - 1; i++) {
+            int max_index = i;
+            
+            // Find the maximum element instead of minimum
+            for (int j = i + 1; j < n; j++) {
+                if (arr[j] > arr[max_index]) {
+                    max_index = j;
+                }
+            }
+            
+            // Swap the found maximum element with the first element
+            int temp = arr[max_index];
+            arr[max_index] = arr[i];
+            arr[i] = temp;
+        }
+    }
+    
+    public static void main(String[] args) {
+        int[] arr = {64, 25, 12, 22, 11};
+        sort(arr);
+        // Array is now sorted: [11, 12, 22, 25, 64]
+    }
+}</code></pre>
+      </div>
+
+      <div class="language-code-block" id="python-code">
+        <pre><code class="language-python"># Python Code Example
+def selection_sort(arr):
+    """
+    Sorts an array using selection sort algorithm.
+    
+    Args:
+        arr: List of comparable elements
+    
+    Returns:
+        The sorted list (in-place sort)
+    """
+    n = len(arr)
+    for i in range(n - 1):
+        min_index = i
+        
+        # Find the minimum element in unsorted array
+        for j in range(i + 1, n):
+            if arr[j] < arr[min_index]:
+                min_index = j
+        
+        # Swap the found minimum element with the first element
+        arr[i], arr[min_index] = arr[min_index], arr[i]
+    
+    return arr
+
+# Selection sort for descending order
+def selection_sort_descending(arr):
+    n = len(arr)
+    for i in range(n - 1):
+        max_index = i
+        
+        # Find the maximum element in unsorted array
+        for j in range(i + 1, n):
+            if arr[j] > arr[max_index]:
+                max_index = j
+        
+        # Swap the found maximum element with the first element
+        arr[i], arr[max_index] = arr[max_index], arr[i]
+    
+    return arr
+
+# Version that returns metrics
+def selection_sort_with_metrics(arr):
+    comparisons = 0
+    swaps = 0
+    n = len(arr)
+    
+    for i in range(n - 1):
+        min_index = i
+        
+        for j in range(i + 1, n):
+            comparisons += 1
+            if arr[j] < arr[min_index]:
+                min_index = j
+        
+        if min_index != i:
+            swaps += 1
+            arr[i], arr[min_index] = arr[min_index], arr[i]
+    
+    return arr, comparisons, swaps
+
+# Stable selection sort
+def stable_selection_sort(arr):
+    n = len(arr)
+    for i in range(n - 1):
+        min_index = i
+        
+        # Find minimum element
+        for j in range(i + 1, n):
+            if arr[j] < arr[min_index]:
+                min_index = j
+        
+        # Shift elements to maintain stability
+        min_value = arr[min_index]
+        while min_index > i:
+            arr[min_index] = arr[min_index - 1]
+            min_index -= 1
+        arr[i] = min_value
+    
+    return arr
+
+# Example usage:
+# arr = [64, 25, 12, 22, 11]
+# selection_sort(arr)
+# print(arr)  # Output: [11, 12, 22, 25, 64]</code></pre>
+      </div>
+
+      <div class="language-code-block" id="javascript-code">
+        <pre><code class="language-javascript">// JavaScript Code Example
+function selectionSort(arr) {
+    const n = arr.length;
+    for (let i = 0; i < n - 1; i++) {
+        let minIndex = i;
+        
+        // Find the minimum element in unsorted array
+        for (let j = i + 1; j < n; j++) {
+            if (arr[j] < arr[minIndex]) {
+                minIndex = j;
+            }
+        }
+        
+        // Swap the found minimum element with the first element
+        [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
+    }
+    return arr;
+}
+
+// Selection sort for descending order
+function selectionSortDescending(arr) {
+    const n = arr.length;
+    for (let i = 0; i < n - 1; i++) {
+        let maxIndex = i;
+        
+        // Find the maximum element in unsorted array
+        for (let j = i + 1; j < n; j++) {
+            if (arr[j] > arr[maxIndex]) {
+                maxIndex = j;
+            }
+        }
+        
+        // Swap the found maximum element with the first element
+        [arr[i], arr[maxIndex]] = [arr[maxIndex], arr[i]];
+    }
+    return arr;
+}
+
+// Version with metrics
+function selectionSortWithMetrics(arr) {
+    let comparisons = 0;
+    let swaps = 0;
+    const n = arr.length;
+    
+    for (let i = 0; i < n - 1; i++) {
+        let minIndex = i;
+        
+        for (let j = i + 1; j < n; j++) {
+            comparisons++;
+            if (arr[j] < arr[minIndex]) {
+                minIndex = j;
+            }
+        }
+        
+        if (minIndex !== i) {
+            swaps++;
+            [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
+        }
+    }
+    
+    return { sortedArray: arr, comparisons, swaps };
+}
+
+// Functional programming style (immutable)
+function selectionSortImmutable(arr) {
+    const sorted = [...arr];
+    selectionSort(sorted);
+    return sorted;
+}
+
+// Generic version with custom comparator
+function selectionSortCustom(arr, compareFn = (a, b) => a - b) {
+    const n = arr.length;
+    for (let i = 0; i < n - 1; i++) {
+        let extremeIndex = i;
+        
+        for (let j = i + 1; j < n; j++) {
+            if (compareFn(arr[j], arr[extremeIndex]) < 0) {
+                extremeIndex = j;
+            }
+        }
+        
+        if (extremeIndex !== i) {
+            [arr[i], arr[extremeIndex]] = [arr[extremeIndex], arr[i]];
+        }
+    }
+    return arr;
+}
+
+// Example usage:
+// const arr = [64, 25, 12, 22, 11];
+// selectionSort(arr);
+// console.log(arr);  // Output: [11, 12, 22, 25, 64]</code></pre>
+      </div>
+      
+      <p><strong>Practice Idea:</strong> Implement a bidirectional selection sort that finds both the minimum and maximum elements in each pass and places them at the beginning and end of the unsorted portion respectively. This reduces the number of passes by half. Then, create a version that can sort an array of custom objects based on a specific property.</p>
+      
+      <p><strong>Real-world Applications:</strong>
+        <ul>
+            <li><strong>Small Datasets:</strong> Useful for small arrays where simplicity is more important than efficiency</li>
+            <li><strong>Memory-Constrained Systems:</strong> When memory writes are expensive, as it makes minimum swaps</li>
+            <li><strong>Educational Tool:</strong> Excellent for teaching sorting algorithm concepts due to its simplicity</li>
+            <li><strong>Hardware Sorting:</strong> Sometimes used in hardware implementations due to predictable behavior</li>
+            <li><strong>Partially Sorted Data:</strong> Can be efficient when only a few elements are out of place</li>
+            <li><strong>Embedded Systems:</strong> In systems with limited computational resources for small datasets</li>
+            <li><strong>Algorithm Building Block:</strong> Used as a component in more complex algorithms</li>
+        </ul>
+      </p>
+      
+      <p><strong>Summary:</strong> Selection Sort is a fundamental sorting algorithm that demonstrates the basic principles of comparison-based sorting. While its O(n²) time complexity makes it inefficient for large datasets, its simplicity, predictable behavior, and minimal number of swaps make it suitable for specific use cases. Understanding Selection Sort provides a solid foundation for learning more advanced sorting algorithms and helps develop intuition about algorithm analysis and optimization.</p>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const languageButtons = document.querySelectorAll('.code-language-btn');
+        const codeBlocks = document.querySelectorAll('.language-code-block');
+        
+        languageButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const targetLanguage = this.getAttribute('data-language');
+                
+                // Update active button
+                languageButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show corresponding code block
+                codeBlocks.forEach(block => {
+                    if (block.id === `${targetLanguage}-code`) {
+                        block.classList.add('active');
+                    } else {
+                        block.classList.remove('active');
+                    }
+                });
+            });
+        });
+    });
+    </script>
+</body>
+
+</html>

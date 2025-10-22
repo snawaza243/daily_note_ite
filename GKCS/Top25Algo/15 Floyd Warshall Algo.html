@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Binary Search</title>
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .itepost-section-title {
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.8em;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+            margin-top: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .itepost-section-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .itepost-section-content p {
+            margin-bottom: 16px;
+        }
+
+        pre {
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        strong {
+            color: #2E7D32;
+        }
+    </style>
+
+    <!-- Add this CSS -->
+    <style>
+        .code-language-buttons {
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .code-language-btn {
+            padding: 5px 12px;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .code-language-btn:hover {
+            background-color: #e9e9e9;
+        }
+
+        .code-language-btn.active {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .language-code-block {
+            display: none;
+        }
+
+        .language-code-block.active {
+            display: block;
+        }
+    </style>
+
+    <!-- Add this script after jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Process each implementation section
+            $('.itepost-section-content').each(function () {
+                const $section = $(this);
+                const $implementationTitle = $section.find('p:contains("Implementation in Multiple Languages:")');
+
+                if ($implementationTitle.length > 0) {
+                    const $codeBlocks = $implementationTitle.nextUntil('p').filter('pre');
+
+                    if ($codeBlocks.length > 0) {
+                        // Create language buttons container
+                        const $buttonsContainer = $('<div class="code-language-buttons"></div>');
+
+                        // Extract languages and create buttons
+                        const languages = [];
+                        $codeBlocks.each(function () {
+                            const $codeBlock = $(this);
+                            const languageClass = $codeBlock.find('code').attr('class');
+                            let languageName = 'Unknown';
+
+                            if (languageClass) {
+                                // Extract language name from class (e.g., "language-python" -> "python")
+                                const match = languageClass.match(/language-(\w+)/);
+                                if (match) {
+                                    languageName = match[1].toUpperCase();
+                                }
+                            }
+
+                            languages.push({
+                                name: languageName,
+                                element: $codeBlock
+                            });
+
+                            // Add class to code block for easier selection
+                            $codeBlock.addClass('language-code-block').addClass('lang-' + languageName.toLowerCase());
+                        });
+
+                        // Create buttons for each language
+                        languages.forEach((lang, index) => {
+                            const $button = $('<button class="code-language-btn">' + lang.name + '</button>');
+
+                            // Make first button active by default
+                            if (index === 0) {
+                                $button.addClass('active');
+                                lang.element.addClass('active');
+                            }
+
+                            $button.on('click', function () {
+                                // Remove active class from all buttons and code blocks
+                                $buttonsContainer.find('.code-language-btn').removeClass('active');
+                                $section.find('.language-code-block').removeClass('active');
+
+                                // Add active class to clicked button and corresponding code block
+                                $(this).addClass('active');
+                                lang.element.addClass('active');
+                            });
+
+                            $buttonsContainer.append($button);
+                        });
+
+                        // Insert buttons after the implementation title
+                        $implementationTitle.after($buttonsContainer);
+                    }
+                }
+            });
+        });
+
+    </script>
+</head>
+ <body>
+    <div class="itepost-section-title">Floyd-Warshall Algorithm</div>
+    <div class="itepost-section-content">
+      <p><strong>Category:</strong> Graphs (Blue)</p>
+      
+      <p><strong>Introduction:</strong> The Floyd-Warshall algorithm is a dynamic programming algorithm that computes the shortest paths between all pairs of vertices in a weighted graph. Unlike Dijkstra's algorithm which finds shortest paths from a single source, Floyd-Warshall finds shortest paths between every pair of vertices. It can handle both positive and negative edge weights (but not negative cycles) and works for both directed and undirected graphs. Think of it like creating a complete distance table between all cities in a road network, considering all possible intermediate stops.</p>
+      
+      <p><strong>Working Principle:</strong> The algorithm uses dynamic programming with this key insight: The shortest path from i to j using vertices {1, 2, ..., k} as intermediates is either:
+        <ol>
+            <li>The known shortest path from i to j using vertices {1, 2, ..., k-1}, OR</li>
+            <li>The path from i to k plus the path from k to j, both using vertices {1, 2, ..., k-1}</li>
+        </ol>
+        The algorithm builds the solution incrementally by considering each vertex as a potential intermediate.
+        <br><br>
+        <strong>Pseudocode:</strong><br>
+        <code>
+        FLOYD-WARSHALL(W):<br>
+        &nbsp;&nbsp;n = rows[W]<br>
+        &nbsp;&nbsp;D⁽⁰⁾ = W  // Initial distance matrix<br>
+        &nbsp;&nbsp;for k from 1 to n:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;for i from 1 to n:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for j from 1 to n:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D⁽ᵏ⁾[i][j] = min(D⁽ᵏ⁻¹⁾[i][j], D⁽ᵏ⁻¹⁾[i][k] + D⁽ᵏ⁻¹⁾[k][j])<br>
+        &nbsp;&nbsp;return D⁽ⁿ⁾<br>
+        </code>
+        For path reconstruction, we maintain a predecessor matrix π where π[i][j] is the predecessor of j on the shortest path from i to j.
+      </p>
+      
+      <p><strong>Example & Dry Run:</strong><br>
+        Consider this graph with 4 vertices and the following adjacency matrix:
+        <pre>
+        INF   5   INF  10
+        INF  INF   3  INF
+        INF  INF  INF   1
+        INF  INF  INF  INF
+        </pre>
+        <strong>Step-by-step execution:</strong>
+        <ul>
+            <li><strong>Initial (k=0):</strong> Direct edges only</li>
+            <li><strong>k=1:</strong> Using vertex 1 as intermediate → No improvements</li>
+            <li><strong>k=2:</strong> Using vertices {1,2} as intermediates → 
+                <ul>
+                    <li>Path 1→3: 1→2→3 = 5+3 = 8 (better than INF)</li>
+                    <li>Path 1→4: 1→2→3→4 = 5+3+1 = 9 (better than 10)</li>
+                </ul>
+            </li>
+            <li><strong>k=3:</strong> Using vertices {1,2,3} as intermediates → 
+                <ul>
+                    <li>Path 2→4: 2→3→4 = 3+1 = 4 (better than INF)</li>
+                </ul>
+            </li>
+            <li><strong>k=4:</strong> Using all vertices → No further improvements</li>
+            <li><strong>Result:</strong> All pairs shortest paths computed</li>
+        </ul>
+      </p>
+      
+      <p><strong>Time and Space Complexity:</strong>
+        <ul>
+            <li><strong>Time Complexity:</strong> O(V³) - Three nested loops over V vertices</li>
+            <li><strong>Space Complexity:</strong> O(V²) - For storing distance and predecessor matrices</li>
+            <li><strong>Best Case:</strong> O(V³) - Consistent performance regardless of graph density</li>
+            <li><strong>Worst Case:</strong> O(V³) - No worst-case degradation</li>
+            <li><strong>Negative Cycle Detection:</strong> O(V) - Check diagonal of distance matrix</li>
+        </ul>
+      </p>
+      
+      <p><strong>Implementation in Multiple Languages:</strong></p>
+      
+      <div class="code-language-buttons">
+        <button class="code-language-btn active" data-language="c">C</button>
+        <button class="code-language-btn" data-language="cpp">C++</button>
+        <button class="code-language-btn" data-language="csharp">C#</button>
+        <button class="code-language-btn" data-language="java">Java</button>
+        <button class="code-language-btn" data-language="python">Python</button>
+        <button class="code-language-btn" data-language="javascript">JavaScript</button>
+      </div>
+      
+      <div class="language-code-block active" id="c-code">
+        <pre><code class="language-c">// C Code Example
+#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
+
+#define INF INT_MAX
+#define V 4
+
+// Function to print the solution matrix
+void printSolution(int dist[][V]) {
+    printf("Shortest distances between every pair of vertices:\n");
+    for (int i = 0; i < V; i++) {
+        for (int j = 0; j < V; j++) {
+            if (dist[i][j] == INF) {
+                printf("%7s", "INF");
+            } else {
+                printf("%7d", dist[i][j]);
+            }
+        }
+        printf("\n");
+    }
+}
+
+// Floyd Warshall algorithm with path reconstruction
+void floydWarshall(int graph[][V]) {
+    int dist[V][V];  // Distance matrix
+    int next[V][V];  // Next node in shortest path
+    
+    // Initialize distance and next matrices
+    for (int i = 0; i < V; i++) {
+        for (int j = 0; j < V; j++) {
+            dist[i][j] = graph[i][j];
+            if (graph[i][j] != INF && i != j) {
+                next[i][j] = j;
+            } else {
+                next[i][j] = -1;
+            }
+        }
+    }
+    
+    // Floyd Warshall algorithm
+    for (int k = 0; k < V; k++) {
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                // Avoid overflow by checking for INF
+                if (dist[i][k] != INF && dist[k][j] != INF && 
+                    dist[i][k] + dist[k][j] < dist[i][j]) {
+                    dist[i][j] = dist[i][k] + dist[k][j];
+                    next[i][j] = next[i][k];
+                }
+            }
+        }
+    }
+    
+    // Check for negative cycles
+    for (int i = 0; i < V; i++) {
+        if (dist[i][i] < 0) {
+            printf("Graph contains negative weight cycle\n");
+            return;
+        }
+    }
+    
+    printSolution(dist);
+}
+
+// Reconstruct path from i to j
+void printPath(int next[][V], int i, int j) {
+    if (next[i][j] == -1) {
+        printf("No path exists from %d to %d\n", i, j);
+        return;
+    }
+    
+    printf("Path from %d to %d: %d", i, j, i);
+    int current = i;
+    while (current != j) {
+        current = next[current][j];
+        printf(" -> %d", current);
+    }
+    printf("\n");
+}
+
+// Floyd Warshall with path reconstruction
+void floydWarshallWithPath(int graph[][V]) {
+    int dist[V][V];
+    int next[V][V];
+    
+    // Initialize matrices
+    for (int i = 0; i < V; i++) {
+        for (int j = 0; j < V; j++) {
+            dist[i][j] = graph[i][j];
+            if (graph[i][j] != INF && i != j) {
+                next[i][j] = j;
+            } else {
+                next[i][j] = -1;
+            }
+        }
+    }
+    
+    // Main algorithm
+    for (int k = 0; k < V; k++) {
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                if (dist[i][k] != INF && dist[k][j] != INF && 
+                    dist[i][k] + dist[k][j] < dist[i][j]) {
+                    dist[i][j] = dist[i][k] + dist[k][j];
+                    next[i][j] = next[i][k];
+                }
+            }
+        }
+    }
+    
+    // Print all paths
+    printf("All shortest paths:\n");
+    for (int i = 0; i < V; i++) {
+        for (int j = 0; j < V; j++) {
+            if (i != j) {
+                printPath(next, i, j);
+            }
+        }
+    }
+}
+
+// Transitive closure (Warshall's algorithm)
+void transitiveClosure(int graph[][V]) {
+    int reach[V][V];
+    
+    // Initialize reachability matrix
+    for (int i = 0; i < V; i++) {
+        for (int j = 0; j < V; j++) {
+            reach[i][j] = graph[i][j] != INF ? 1 : 0;
+        }
+        reach[i][i] = 1; // Every vertex is reachable from itself
+    }
+    
+    // Warshall's algorithm
+    for (int k = 0; k < V; k++) {
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                reach[i][j] = reach[i][j] || (reach[i][k] && reach[k][j]);
+            }
+        }
+    }
+    
+    printf("Transitive closure:\n");
+    for (int i = 0; i < V; i++) {
+        for (int j = 0; j < V; j++) {
+            printf("%d ", reach[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+// Example usage:
+/*
+int main() {
+    // Example graph
+    int graph[V][V] = {
+        {0, 5, INF, 10},
+        {INF, 0, 3, INF},
+        {INF, INF, 0, 1},
+        {INF, INF, INF, 0}
+    };
+    
+    floydWarshall(graph);
+    printf("\n");
+    floydWarshallWithPath(graph);
+    printf("\n");
+    transitiveClosure(graph);
+    
+    return 0;
+}
+*/</code></pre>
+      </div>
+
+      <div class="language-code-block" id="cpp-code">
+        <pre><code class="language-cpp">// C++ Code Example
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;climits&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+class FloydWarshall {
+private:
+    int vertices;
+    vector<vector<int>> dist;
+    vector<vector<int>> next;
+    
+public:
+    FloydWarshall(int V) : vertices(V) {
+        dist.resize(V, vector<int>(V, INT_MAX));
+        next.resize(V, vector<int>(V, -1));
+        
+        // Initialize diagonal
+        for (int i = 0; i < V; i++) {
+            dist[i][i] = 0;
+        }
+    }
+    
+    void addEdge(int u, int v, int weight) {
+        dist[u][v] = weight;
+        if (u != v && weight != INT_MAX) {
+            next[u][v] = v;
+        }
+    }
+    
+    // Standard Floyd Warshall algorithm
+    void computeShortestPaths() {
+        for (int k = 0; k < vertices; k++) {
+            for (int i = 0; i < vertices; i++) {
+                for (int j = 0; j < vertices; j++) {
+                    if (dist[i][k] != INT_MAX && dist[k][j] != INT_MAX && 
+                        dist[i][k] + dist[k][j] < dist[i][j]) {
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                        next[i][j] = next[i][k];
+                    }
+                }
+            }
+        }
+    }
+    
+    // Check for negative cycles
+    bool hasNegativeCycle() {
+        for (int i = 0; i < vertices; i++) {
+            if (dist[i][i] < 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    // Reconstruct path from u to v
+    vector<int> getPath(int u, int v) {
+        vector<int> path;
+        if (next[u][v] == -1) {
+            return path; // No path exists
+        }
+        
+        path.push_back(u);
+        while (u != v) {
+            u = next[u][v];
+            path.push_back(u);
+        }
+        return path;
+    }
+    
+    void printAllPairsShortestPaths() {
+        if (hasNegativeCycle()) {
+            cout << "Graph contains negative weight cycle!" << endl;
+            return;
+        }
+        
+        cout << "Shortest distances between every pair of vertices:" << endl;
+        for (int i = 0; i < vertices; i++) {
+            for (int j = 0; j < vertices; j++) {
+                if (dist[i][j] == INT_MAX) {
+                    cout << "INF ";
+                } else {
+                    cout << dist[i][j] << " ";
+                }
+            }
+            cout << endl;
+        }
+    }
+    
+    void printAllPaths() {
+        if (hasNegativeCycle()) {
+            cout << "Graph contains negative weight cycle!" << endl;
+            return;
+        }
+        
+        cout << "All shortest paths:" << endl;
+        for (int i = 0; i < vertices; i++) {
+            for (int j = 0; j < vertices; j++) {
+                if (i != j) {
+                    vector<int> path = getPath(i, j);
+                    if (!path.empty()) {
+                        cout << "Path from " << i << " to " << j << ": ";
+                        for (size_t k = 0; k < path.size(); k++) {
+                            cout << path[k];
+                            if (k != path.size() - 1) cout << " -> ";
+                        }
+                        cout << " (distance: " << dist[i][j] << ")" << endl;
+                    }
+                }
+            }
+        }
+    }
+    
+    // Get shortest distance between two vertices
+    int getDistance(int u, int v) {
+        return dist[u][v];
+    }
+};
+
+// Alternative implementation with static method
+class FloydWarshallStatic {
+public:
+    static vector<vector<int>> computeAllPairs(vector<vector<int>>& graph) {
+        int V = graph.size();
+        vector<vector<int>> dist = graph;
+        
+        for (int k = 0; k < V; k++) {
+            for (int i = 0; i < V; i++) {
+                for (int j = 0; j < V; j++) {
+                    if (dist[i][k] != INT_MAX && dist[k][j] != INT_MAX && 
+                        dist[i][k] + dist[k][j] < dist[i][j]) {
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                    }
+                }
+            }
+        }
+        
+        return dist;
+    }
+    
+    static bool detectNegativeCycles(const vector<vector<int>>& dist) {
+        int V = dist.size();
+        for (int i = 0; i < V; i++) {
+            if (dist[i][i] < 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+};
+
+// Transitive closure using Floyd Warshall
+class TransitiveClosure {
+public:
+    static vector<vector<bool>> computeClosure(const vector<vector<int>>& graph) {
+        int V = graph.size();
+        vector<vector<bool>> reach(V, vector<bool>(V, false));
+        
+        // Initialize reachability matrix
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                reach[i][j] = graph[i][j] != INT_MAX;
+            }
+            reach[i][i] = true;
+        }
+        
+        // Warshall's algorithm
+        for (int k = 0; k < V; k++) {
+            for (int i = 0; i < V; i++) {
+                for (int j = 0; j < V; j++) {
+                    reach[i][j] = reach[i][j] || (reach[i][k] && reach[k][j]);
+                }
+            }
+        }
+        
+        return reach;
+    }
+};
+
+// Example usage:
+/*
+int main() {
+    FloydWarshall fw(4);
+    
+    fw.addEdge(0, 1, 5);
+    fw.addEdge(0, 3, 10);
+    fw.addEdge(1, 2, 3);
+    fw.addEdge(2, 3, 1);
+    
+    fw.computeShortestPaths();
+    fw.printAllPairsShortestPaths();
+    cout << endl;
+    fw.printAllPaths();
+    
+    return 0;
+}
+*/</code></pre>
+      </div>
+
+      <div class="language-code-block" id="csharp-code">
+        <pre><code class="language-csharp">// C# Code Example
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class FloydWarshall {
+    private int vertices;
+    private int[,] dist;
+    private int[,] next;
+    
+    public FloydWarshall(int V) {
+        vertices = V;
+        dist = new int[V, V];
+        next = new int[V, V];
+        
+        // Initialize with infinity and -1
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                dist[i, j] = int.MaxValue;
+                next[i, j] = -1;
+            }
+            dist[i, i] = 0;
+        }
+    }
+    
+    public void AddEdge(int u, int v, int weight) {
+        dist[u, v] = weight;
+        if (u != v && weight != int.MaxValue) {
+            next[u, v] = v;
+        }
+    }
+    
+    public void ComputeShortestPaths() {
+        for (int k = 0; k < vertices; k++) {
+            for (int i = 0; i < vertices; i++) {
+                for (int j = 0; j < vertices; j++) {
+                    if (dist[i, k] != int.MaxValue && dist[k, j] != int.MaxValue && 
+                        dist[i, k] + dist[k, j] < dist[i, j]) {
+                        dist[i, j] = dist[i, k] + dist[k, j];
+                        next[i, j] = next[i, k];
+                    }
+                }
+            }
+        }
+    }
+    
+    public bool HasNegativeCycle() {
+        for (int i = 0; i < vertices; i++) {
+            if (dist[i, i] < 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public List<int> GetPath(int u, int v) {
+        List<int> path = new List<int>();
+        if (next[u, v] == -1) {
+            return path; // No path exists
+        }
+        
+        path.Add(u);
+        while (u != v) {
+            u = next[u, v];
+            path.Add(u);
+        }
+        return path;
+    }
+    
+    public void PrintAllPairsShortestPaths() {
+        if (HasNegativeCycle()) {
+            Console.WriteLine("Graph contains negative weight cycle!");
+            return;
+        }
+        
+        Console.WriteLine("Shortest distances between every pair of vertices:");
+        for (int i = 0; i < vertices; i++) {
+            for (int j = 0; j < vertices; j++) {
+                if (dist[i, j] == int.MaxValue) {
+                    Console.Write("INF ");
+                } else {
+                    Console.Write(dist[i, j] + " ");
+                }
+            }
+            Console.WriteLine();
+        }
+    }
+    
+    public void PrintAllPaths() {
+        if (HasNegativeCycle()) {
+            Console.WriteLine("Graph contains negative weight cycle!");
+            return;
+        }
+        
+        Console.WriteLine("All shortest paths:");
+        for (int i = 0; i < vertices; i++) {
+            for (int j = 0; j < vertices; j++) {
+                if (i != j) {
+                    List<int> path = GetPath(i, j);
+                    if (path.Count > 0) {
+                        Console.WriteLine($"Path from {i} to {j}: {string.Join(" -> ", path)} (distance: {dist[i, j]})");
+                    }
+                }
+            }
+        }
+    }
+    
+    public int GetDistance(int u, int v) {
+        return dist[u, v];
+    }
+}
+
+// Static implementation
+public static class FloydWarshallStatic {
+    public static int[,] ComputeAllPairs(int[,] graph) {
+        int V = graph.GetLength(0);
+        int[,] dist = (int[,])graph.Clone();
+        
+        for (int k = 0; k < V; k++) {
+            for (int i = 0; i < V; i++) {
+                for (int j = 0; j < V; j++) {
+                    if (dist[i, k] != int.MaxValue && dist[k, j] != int.MaxValue && 
+                        dist[i, k] + dist[k, j] < dist[i, j]) {
+                        dist[i, j] = dist[i, k] + dist[k, j];
+                    }
+                }
+            }
+        }
+        
+        return dist;
+    }
+    
+    public static bool DetectNegativeCycles(int[,] dist) {
+        int V = dist.GetLength(0);
+        for (int i = 0; i < V; i++) {
+            if (dist[i, i] < 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+// Transitive closure
+public class TransitiveClosure {
+    public static bool[,] ComputeClosure(int[,] graph) {
+        int V = graph.GetLength(0);
+        bool[,] reach = new bool[V, V];
+        
+        // Initialize reachability matrix
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                reach[i, j] = graph[i, j] != int.MaxValue;
+            }
+            reach[i, i] = true;
+        }
+        
+        // Warshall's algorithm
+        for (int k = 0; k < V; k++) {
+            for (int i = 0; i < V; i++) {
+                for (int j = 0; j < V; j++) {
+                    reach[i, j] = reach[i, j] || (reach[i, k] && reach[k, j]);
+                }
+            }
+        }
+        
+        return reach;
+    }
+}
+
+// Example usage:
+/*
+class Program {
+    static void Main() {
+        FloydWarshall fw = new FloydWarshall(4);
+        
+        fw.AddEdge(0, 1, 5);
+        fw.AddEdge(0, 3, 10);
+        fw.AddEdge(1, 2, 3);
+        fw.AddEdge(2, 3, 1);
+        
+        fw.ComputeShortestPaths();
+        fw.PrintAllPairsShortestPaths();
+        Console.WriteLine();
+        fw.PrintAllPaths();
+    }
+}
+*/</code></pre>
+      </div>
+
+      <div class="language-code-block" id="java-code">
+        <pre><code class="language-java">// Java Code Example
+import java.util.*;
+
+public class FloydWarshall {
+    private int vertices;
+    private int[][] dist;
+    private int[][] next;
+    
+    public FloydWarshall(int V) {
+        this.vertices = V;
+        this.dist = new int[V][V];
+        this.next = new int[V][V];
+        
+        // Initialize with infinity and -1
+        for (int i = 0; i < V; i++) {
+            Arrays.fill(dist[i], Integer.MAX_VALUE);
+            Arrays.fill(next[i], -1);
+            dist[i][i] = 0;
+        }
+    }
+    
+    public void addEdge(int u, int v, int weight) {
+        dist[u][v] = weight;
+        if (u != v && weight != Integer.MAX_VALUE) {
+            next[u][v] = v;
+        }
+    }
+    
+    public void computeShortestPaths() {
+        for (int k = 0; k < vertices; k++) {
+            for (int i = 0; i < vertices; i++) {
+                for (int j = 0; j < vertices; j++) {
+                    if (dist[i][k] != Integer.MAX_VALUE && dist[k][j] != Integer.MAX_VALUE && 
+                        dist[i][k] + dist[k][j] < dist[i][j]) {
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                        next[i][j] = next[i][k];
+                    }
+                }
+            }
+        }
+    }
+    
+    public boolean hasNegativeCycle() {
+        for (int i = 0; i < vertices; i++) {
+            if (dist[i][i] < 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public List<Integer> getPath(int u, int v) {
+        List<Integer> path = new ArrayList<>();
+        if (next[u][v] == -1) {
+            return path; // No path exists
+        }
+        
+        path.add(u);
+        while (u != v) {
+            u = next[u][v];
+            path.add(u);
+        }
+        return path;
+    }
+    
+    public void printAllPairsShortestPaths() {
+        if (hasNegativeCycle()) {
+            System.out.println("Graph contains negative weight cycle!");
+            return;
+        }
+        
+        System.out.println("Shortest distances between every pair of vertices:");
+        for (int i = 0; i < vertices; i++) {
+            for (int j = 0; j < vertices; j++) {
+                if (dist[i][j] == Integer.MAX_VALUE) {
+                    System.out.print("INF ");
+                } else {
+                    System.out.print(dist[i][j] + " ");
+                }
+            }
+            System.out.println();
+        }
+    }
+    
+    public void printAllPaths() {
+        if (hasNegativeCycle()) {
+            System.out.println("Graph contains negative weight cycle!");
+            return;
+        }
+        
+        System.out.println("All shortest paths:");
+        for (int i = 0; i < vertices; i++) {
+            for (int j = 0; j < vertices; j++) {
+                if (i != j) {
+                    List<Integer> path = getPath(i, j);
+                    if (!path.isEmpty()) {
+                        System.out.print("Path from " + i + " to " + j + ": ");
+                        for (int k = 0; k < path.size(); k++) {
+                            System.out.print(path.get(k));
+                            if (k != path.size() - 1) System.out.print(" -> ");
+                        }
+                        System.out.println(" (distance: " + dist[i][j] + ")");
+                    }
+                }
+            }
+        }
+    }
+    
+    public int getDistance(int u, int v) {
+        return dist[u][v];
+    }
+}
+
+// Static implementation
+class FloydWarshallStatic {
+    public static int[][] computeAllPairs(int[][] graph) {
+        int V = graph.length;
+        int[][] dist = new int[V][V];
+        
+        // Copy the graph
+        for (int i = 0; i < V; i++) {
+            System.arraycopy(graph[i], 0, dist[i], 0, V);
+        }
+        
+        for (int k = 0; k < V; k++) {
+            for (int i = 0; i < V; i++) {
+                for (int j = 0; j < V; j++) {
+                    if (dist[i][k] != Integer.MAX_VALUE && dist[k][j] != Integer.MAX_VALUE && 
+                        dist[i][k] + dist[k][j] < dist[i][j]) {
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                    }
+                }
+            }
+        }
+        
+        return dist;
+    }
+    
+    public static boolean detectNegativeCycles(int[][] dist) {
+        int V = dist.length;
+        for (int i = 0; i < V; i++) {
+            if (dist[i][i] < 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+// Transitive closure
+class TransitiveClosure {
+    public static boolean[][] computeClosure(int[][] graph) {
+        int V = graph.length;
+        boolean[][] reach = new boolean[V][V];
+        
+        // Initialize reachability matrix
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                reach[i][j] = graph[i][j] != Integer.MAX_VALUE;
+            }
+            reach[i][i] = true;
+        }
+        
+        // Warshall's algorithm
+        for (int k = 0; k < V; k++) {
+            for (int i = 0; i < V; i++) {
+                for (int j = 0; j < V; j++) {
+                    reach[i][j] = reach[i][j] || (reach[i][k] && reach[k][j]);
+                }
+            }
+        }
+        
+        return reach;
+    }
+}
+
+// Example usage
+class Main {
+    public static void main(String[] args) {
+        FloydWarshall fw = new FloydWarshall(4);
+        
+        fw.addEdge(0, 1, 5);
+        fw.addEdge(0, 3, 10);
+        fw.addEdge(1, 2, 3);
+        fw.addEdge(2, 3, 1);
+        
+        fw.computeShortestPaths();
+        fw.printAllPairsShortestPaths();
+        System.out.println();
+        fw.printAllPaths();
+    }
+}</code></pre>
+      </div>
+
+      <div class="language-code-block" id="python-code">
+        <pre><code class="language-python"># Python Code Example
+import sys
+
+class FloydWarshall:
+    def __init__(self, vertices):
+        self.vertices = vertices
+        self.dist = [[sys.maxsize] * vertices for _ in range(vertices)]
+        self.next_node = [[-1] * vertices for _ in range(vertices)]
+        
+        # Initialize diagonal
+        for i in range(vertices):
+            self.dist[i][i] = 0
+    
+    def add_edge(self, u, v, weight):
+        self.dist[u][v] = weight
+        if u != v and weight != sys.maxsize:
+            self.next_node[u][v] = v
+    
+    def compute_shortest_paths(self):
+        for k in range(self.vertices):
+            for i in range(self.vertices):
+                for j in range(self.vertices):
+                    if (self.dist[i][k] != sys.maxsize and 
+                        self.dist[k][j] != sys.maxsize and 
+                        self.dist[i][k] + self.dist[k][j] < self.dist[i][j]):
+                        self.dist[i][j] = self.dist[i][k] + self.dist[k][j]
+                        self.next_node[i][j] = self.next_node[i][k]
+    
+    def has_negative_cycle(self):
+        for i in range(self.vertices):
+            if self.dist[i][i] < 0:
+                return True
+        return False
+    
+    def get_path(self, u, v):
+        path = []
+        if self.next_node[u][v] == -1:
+            return path  # No path exists
+        
+        path.append(u)
+        while u != v:
+            u = self.next_node[u][v]
+            path.append(u)
+        return path
+    
+    def print_all_pairs_shortest_paths(self):
+        if self.has_negative_cycle():
+            print("Graph contains negative weight cycle!")
+            return
+        
+        print("Shortest distances between every pair of vertices:")
+        for i in range(self.vertices):
+            for j in range(self.vertices):
+                if self.dist[i][j] == sys.maxsize:
+                    print("INF", end=" ")
+                else:
+                    print(self.dist[i][j], end=" ")
+            print()
+    
+    def print_all_paths(self):
+        if self.has_negative_cycle():
+            print("Graph contains negative weight cycle!")
+            return
+        
+        print("All shortest paths:")
+        for i in range(self.vertices):
+            for j in range(self.vertices):
+                if i != j:
+                    path = self.get_path(i, j)
+                    if path:
+                        print(f"Path from {i} to {j}: {' -> '.join(map(str, path))} (distance: {self.dist[i][j]})")
+    
+    def get_distance(self, u, v):
+        return self.dist[u][v]
+
+# Static implementation
+def floyd_warshall_static(graph):
+    V = len(graph)
+    dist = [row[:] for row in graph]  # Create a copy
+    
+    for k in range(V):
+        for i in range(V):
+            for j in range(V):
+                if (dist[i][k] != float('inf') and 
+                    dist[k][j] != float('inf') and 
+                    dist[i][k] + dist[k][j] < dist[i][j]):
+                    dist[i][j] = dist[i][k] + dist[k][j]
+    
+    return dist
+
+def detect_negative_cycles(dist):
+    V = len(dist)
+    for i in range(V):
+        if dist[i][i] < 0:
+            return True
+    return False
+
+# Transitive closure (Warshall's algorithm)
+def transitive_closure(graph):
+    V = len(graph)
+    reach = [[False] * V for _ in range(V)]
+    
+    # Initialize reachability matrix
+    for i in range(V):
+        for j in range(V):
+            reach[i][j] = graph[i][j] != float('inf')
+        reach[i][i] = True
+    
+    # Warshall's algorithm
+    for k in range(V):
+        for i in range(V):
+            for j in range(V):
+                reach[i][j] = reach[i][j] or (reach[i][k] and reach[k][j])
+    
+    return reach
+
+# Functional programming style
+def floyd_warshall_functional(graph):
+    V = len(graph)
+    dist = [row[:] for row in graph]
+    
+    for k in range(V):
+        for i in range(V):
+            if dist[i][k] != float('inf'):
+                for j in range(V):
+                    if (dist[k][j] != float('inf') and 
+                        dist[i][k] + dist[k][j] < dist[i][j]):
+                        dist[i][j] = dist[i][k] + dist[k][j]
+    
+    return dist
+
+# Example usage:
+def example_usage():
+    fw = FloydWarshall(4)
+    
+    fw.add_edge(0, 1, 5)
+    fw.add_edge(0, 3, 10)
+    fw.add_edge(1, 2, 3)
+    fw.add_edge(2, 3, 1)
+    
+    fw.compute_shortest_paths()
+    fw.print_all_pairs_shortest_paths()
+    print()
+    fw.print_all_paths()
+
+# Uncomment to run example
+# example_usage()</code></pre>
+      </div>
+
+      <div class="language-code-block" id="javascript-code">
+        <pre><code class="language-javascript">// JavaScript Code Example
+class FloydWarshall {
+    constructor(vertices) {
+        this.vertices = vertices;
+        this.dist = new Array(vertices);
+        this.next = new Array(vertices);
+        
+        // Initialize matrices
+        for (let i = 0; i < vertices; i++) {
+            this.dist[i] = new Array(vertices).fill(Number.MAX_SAFE_INTEGER);
+            this.next[i] = new Array(vertices).fill(-1);
+            this.dist[i][i] = 0;
+        }
+    }
+    
+    addEdge(u, v, weight) {
+        this.dist[u][v] = weight;
+        if (u !== v && weight !== Number.MAX_SAFE_INTEGER) {
+            this.next[u][v] = v;
+        }
+    }
+    
+    computeShortestPaths() {
+        for (let k = 0; k < this.vertices; k++) {
+            for (let i = 0; i < this.vertices; i++) {
+                for (let j = 0; j < this.vertices; j++) {
+                    if (this.dist[i][k] !== Number.MAX_SAFE_INTEGER && 
+                        this.dist[k][j] !== Number.MAX_SAFE_INTEGER && 
+                        this.dist[i][k] + this.dist[k][j] < this.dist[i][j]) {
+                        this.dist[i][j] = this.dist[i][k] + this.dist[k][j];
+                        this.next[i][j] = this.next[i][k];
+                    }
+                }
+            }
+        }
+    }
+    
+    hasNegativeCycle() {
+        for (let i = 0; i < this.vertices; i++) {
+            if (this.dist[i][i] < 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    getPath(u, v) {
+        const path = [];
+        if (this.next[u][v] === -1) {
+            return path; // No path exists
+        }
+        
+        path.push(u);
+        let current = u;
+        while (current !== v) {
+            current = this.next[current][v];
+            path.push(current);
+        }
+        return path;
+    }
+    
+    printAllPairsShortestPaths() {
+        if (this.hasNegativeCycle()) {
+            console.log("Graph contains negative weight cycle!");
+            return;
+        }
+        
+        console.log("Shortest distances between every pair of vertices:");
+        for (let i = 0; i < this.vertices; i++) {
+            let row = "";
+            for (let j = 0; j < this.vertices; j++) {
+                if (this.dist[i][j] === Number.MAX_SAFE_INTEGER) {
+                    row += "INF ";
+                } else {
+                    row += this.dist[i][j] + " ";
+                }
+            }
+            console.log(row);
+        }
+    }
+    
+    printAllPaths() {
+        if (this.hasNegativeCycle()) {
+            console.log("Graph contains negative weight cycle!");
+            return;
+        }
+        
+        console.log("All shortest paths:");
+        for (let i = 0; i < this.vertices; i++) {
+            for (let j = 0; j < this.vertices; j++) {
+                if (i !== j) {
+                    const path = this.getPath(i, j);
+                    if (path.length > 0) {
+                        console.log(`Path from ${i} to ${j}: ${path.join(' -> ')} (distance: ${this.dist[i][j]})`);
+                    }
+                }
+            }
+        }
+    }
+    
+    getDistance(u, v) {
+        return this.dist[u][v];
+    }
+}
+
+// Static implementation
+function floydWarshallStatic(graph) {
+    const V = graph.length;
+    const dist = graph.map(row => [...row]); // Create a copy
+    
+    for (let k = 0; k < V; k++) {
+        for (let i = 0; i < V; i++) {
+            for (let j = 0; j < V; j++) {
+                if (dist[i][k] !== Number.MAX_SAFE_INTEGER && 
+                    dist[k][j] !== Number.MAX_SAFE_INTEGER && 
+                    dist[i][k] + dist[k][j] < dist[i][j]) {
+                    dist[i][j] = dist[i][k] + dist[k][j];
+                }
+            }
+        }
+    }
+    
+    return dist;
+}
+
+function detectNegativeCycles(dist) {
+    const V = dist.length;
+    for (let i = 0; i < V; i++) {
+        if (dist[i][i] < 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Transitive closure
+function transitiveClosure(graph) {
+    const V = graph.length;
+    const reach = new Array(V);
+    
+    // Initialize reachability matrix
+    for (let i = 0; i < V; i++) {
+        reach[i] = new Array(V).fill(false);
+        for (let j = 0; j < V; j++) {
+            reach[i][j] = graph[i][j] !== Number.MAX_SAFE_INTEGER;
+        }
+        reach[i][i] = true;
+    }
+    
+    // Warshall's algorithm
+    for (let k = 0; k < V; k++) {
+        for (let i = 0; i < V; i++) {
+            for (let j = 0; j < V; j++) {
+                reach[i][j] = reach[i][j] || (reach[i][k] && reach[k][j]);
+            }
+        }
+    }
+    
+    return reach;
+}
+
+// Functional programming style
+function floydWarshallFunctional(graph) {
+    const V = graph.length;
+    let dist = graph.map(row => [...row]);
+    
+    for (let k = 0; k < V; k++) {
+        dist = dist.map((row, i) => 
+            row.map((current, j) => {
+                if (dist[i][k] !== Number.MAX_SAFE_INTEGER && 
+                    dist[k][j] !== Number.MAX_SAFE_INTEGER && 
+                    dist[i][k] + dist[k][j] < current) {
+                    return dist[i][k] + dist[k][j];
+                }
+                return current;
+            })
+        );
+    }
+    
+    return dist;
+}
+
+// Example usage:
+function exampleUsage() {
+    const fw = new FloydWarshall(4);
+    
+    fw.addEdge(0, 1, 5);
+    fw.addEdge(0, 3, 10);
+    fw.addEdge(1, 2, 3);
+    fw.addEdge(2, 3, 1);
+    
+    fw.computeShortestPaths();
+    fw.printAllPairsShortestPaths();
+    console.log();
+    fw.printAllPaths();
+}
+
+// Uncomment to run example
+// exampleUsage();</code></pre>
+      </div>
+      
+      <p><strong>Practice Idea:</strong> Implement Floyd-Warshall algorithm to compute all pairs shortest paths for a graph with at least 5 vertices. Then modify the algorithm to detect and report negative cycles. Finally, implement the transitive closure variant (Warshall's algorithm) to determine reachability between all pairs of vertices.</p>
+      
+      <p><strong>Real-world Applications:</strong>
+        <ul>
+            <li><strong>Network Routing:</strong> Computing routing tables in computer networks</li>
+            <li><strong>Transportation Planning:</strong> Finding shortest routes between all pairs of locations</li>
+            <li><strong>Social Network Analysis:</strong> Computing distances between all pairs of users</li>
+            <li><strong>Compiler Optimization:</strong> Data flow analysis and dependency resolution</li>
+            <li><strong>Game Development:</strong> Precomputing distances for AI pathfinding</li>
+            <li><strong>Database Systems:</strong> Query optimization and join ordering</li>
+            <li><strong>Circuit Design:</strong> Timing analysis and critical path finding</li>
+            <li><strong>Image Processing:</strong> Distance transforms and morphological operations</li>
+        </ul>
+      </p>
+      
+      <p><strong>Summary:</strong> The Floyd-Warshall algorithm is a powerful dynamic programming approach for solving the all-pairs shortest paths problem. Its O(V³) time complexity makes it suitable for small to medium-sized graphs, and its ability to handle negative weights (but not negative cycles) gives it an advantage over Dijkstra's algorithm for certain applications. The algorithm's simplicity and the valuable information it provides about the entire graph structure make it indispensable in network analysis, routing protocols, and many optimization problems.</p>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const languageButtons = document.querySelectorAll('.code-language-btn');
+        const codeBlocks = document.querySelectorAll('.language-code-block');
+        
+        languageButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const targetLanguage = this.getAttribute('data-language');
+                
+                // Update active button
+                languageButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show corresponding code block
+                codeBlocks.forEach(block => {
+                    if (block.id === `${targetLanguage}-code`) {
+                        block.classList.add('active');
+                    } else {
+                        block.classList.remove('active');
+                    }
+                });
+            });
+        });
+    });
+    </script>
+</body>
+
+</html>

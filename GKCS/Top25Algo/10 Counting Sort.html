@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Binary Search</title>
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .itepost-section-title {
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.8em;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+            margin-top: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .itepost-section-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .itepost-section-content p {
+            margin-bottom: 16px;
+        }
+
+        pre {
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        strong {
+            color: #2E7D32;
+        }
+    </style>
+
+    <!-- Add this CSS -->
+    <style>
+        .code-language-buttons {
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .code-language-btn {
+            padding: 5px 12px;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .code-language-btn:hover {
+            background-color: #e9e9e9;
+        }
+
+        .code-language-btn.active {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .language-code-block {
+            display: none;
+        }
+
+        .language-code-block.active {
+            display: block;
+        }
+    </style>
+
+    <!-- Add this script after jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Process each implementation section
+            $('.itepost-section-content').each(function () {
+                const $section = $(this);
+                const $implementationTitle = $section.find('p:contains("Implementation in Multiple Languages:")');
+
+                if ($implementationTitle.length > 0) {
+                    const $codeBlocks = $implementationTitle.nextUntil('p').filter('pre');
+
+                    if ($codeBlocks.length > 0) {
+                        // Create language buttons container
+                        const $buttonsContainer = $('<div class="code-language-buttons"></div>');
+
+                        // Extract languages and create buttons
+                        const languages = [];
+                        $codeBlocks.each(function () {
+                            const $codeBlock = $(this);
+                            const languageClass = $codeBlock.find('code').attr('class');
+                            let languageName = 'Unknown';
+
+                            if (languageClass) {
+                                // Extract language name from class (e.g., "language-python" -> "python")
+                                const match = languageClass.match(/language-(\w+)/);
+                                if (match) {
+                                    languageName = match[1].toUpperCase();
+                                }
+                            }
+
+                            languages.push({
+                                name: languageName,
+                                element: $codeBlock
+                            });
+
+                            // Add class to code block for easier selection
+                            $codeBlock.addClass('language-code-block').addClass('lang-' + languageName.toLowerCase());
+                        });
+
+                        // Create buttons for each language
+                        languages.forEach((lang, index) => {
+                            const $button = $('<button class="code-language-btn">' + lang.name + '</button>');
+
+                            // Make first button active by default
+                            if (index === 0) {
+                                $button.addClass('active');
+                                lang.element.addClass('active');
+                            }
+
+                            $button.on('click', function () {
+                                // Remove active class from all buttons and code blocks
+                                $buttonsContainer.find('.code-language-btn').removeClass('active');
+                                $section.find('.language-code-block').removeClass('active');
+
+                                // Add active class to clicked button and corresponding code block
+                                $(this).addClass('active');
+                                lang.element.addClass('active');
+                            });
+
+                            $buttonsContainer.append($button);
+                        });
+
+                        // Insert buttons after the implementation title
+                        $implementationTitle.after($buttonsContainer);
+                    }
+                }
+            });
+        });
+
+    </script>
+</head>
+ 
+<body>
+    <div class="itepost-section-title">Counting Sort</div>
+    <div class="itepost-section-content">
+      <p><strong>Category:</strong> Sorting (Green)</p>
+      
+      <p><strong>Introduction:</strong> Counting Sort is a non-comparison-based sorting algorithm that works by counting the number of occurrences of each distinct element in the input array, then using this information to determine the positions of elements in the sorted output. It's particularly efficient when the range of potential items (k) is not significantly larger than the number of items (n). Think of it like sorting exam scores where you know the possible grades are between 0 and 100 - you can simply count how many students got each score and reconstruct the sorted list.</p>
+      
+      <p><strong>Working Principle:</strong> The algorithm operates in four main phases:
+        <ol>
+            <li><strong>Find Range:</strong> Determine the minimum and maximum values in the input array</li>
+            <li><strong>Count Frequencies:</strong> Create a count array to store the frequency of each element</li>
+            <li><strong>Calculate Positions:</strong> Transform the count array to store cumulative counts (positions)</li>
+            <li><strong>Build Output:</strong> Place elements in their correct positions in the output array</li>
+        </ol>
+        <strong>Pseudocode:</strong><br>
+        <code>
+        countingSort(arr):<br>
+        &nbsp;&nbsp;n = length(arr)<br>
+        &nbsp;&nbsp;// Find the range of input values<br>
+        &nbsp;&nbsp;max_val = findMax(arr)<br>
+        &nbsp;&nbsp;min_val = findMin(arr)<br>
+        &nbsp;&nbsp;range = max_val - min_val + 1<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;// Initialize count array with zeros<br>
+        &nbsp;&nbsp;count = array of size range, initialized to 0<br>
+        &nbsp;&nbsp;output = array of size n<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;// Store count of each element<br>
+        &nbsp;&nbsp;for i from 0 to n-1:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;count[arr[i] - min_val] += 1<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;// Change count[i] to store cumulative count<br>
+        &nbsp;&nbsp;for i from 1 to range-1:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;count[i] += count[i - 1]<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;// Build the output array<br>
+        &nbsp;&nbsp;for i from n-1 down to 0:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;output[count[arr[i] - min_val] - 1] = arr[i]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;count[arr[i] - min_val] -= 1<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;// Copy output back to original array<br>
+        &nbsp;&nbsp;for i from 0 to n-1:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;arr[i] = output[i]<br>
+        </code>
+      </p>
+      
+      <p><strong>Example & Dry Run:</strong><br>
+        Let's sort the array: <code>[4, 2, 2, 8, 3, 3, 1]</code>
+        <ul>
+            <li><strong>Step 1 - Find Range:</strong> min=1, max=8 → range=8</li>
+            <li><strong>Step 2 - Count Frequencies:</strong> 
+                <ul>
+                    <li>Count[1] = 1 (one occurrence of 1)</li>
+                    <li>Count[2] = 2 (two occurrences of 2)</li>
+                    <li>Count[3] = 2 (two occurrences of 3)</li>
+                    <li>Count[4] = 1 (one occurrence of 4)</li>
+                    <li>Count[5-7] = 0</li>
+                    <li>Count[8] = 1 (one occurrence of 8)</li>
+                </ul>
+            </li>
+            <li><strong>Step 3 - Cumulative Count:</strong> [1, 3, 5, 6, 6, 6, 6, 7]</li>
+            <li><strong>Step 4 - Build Output:</strong>
+                <ul>
+                    <li>Process 1: position = count[1-1] - 1 = 1-1 = 0 → output[0]=1</li>
+                    <li>Process 3: position = count[3-1] - 1 = 5-1 = 4 → output[4]=3</li>
+                    <li>Process 3: position = count[3-1] - 1 = 4-1 = 3 → output[3]=3</li>
+                    <li>Process 8: position = count[8-1] - 1 = 7-1 = 6 → output[6]=8</li>
+                    <li>Process 2: position = count[2-1] - 1 = 3-1 = 2 → output[2]=2</li>
+                    <li>Process 2: position = count[2-1] - 1 = 2-1 = 1 → output[1]=2</li>
+                    <li>Process 4: position = count[4-1] - 1 = 6-1 = 5 → output[5]=4</li>
+                </ul>
+            </li>
+            <li><strong>Result:</strong> Sorted array: <code>[1, 2, 2, 3, 3, 4, 8]</code></li>
+        </ul>
+      </p>
+      
+      <p><strong>Time and Space Complexity:</strong>
+        <ul>
+            <li><strong>Best Case:</strong> O(n + k) where k is the range of input</li>
+            <li><strong>Average Case:</strong> O(n + k) - Consistent performance</li>
+            <li><strong>Worst Case:</strong> O(n + k) - No worst-case scenarios like comparison sorts</li>
+            <li><strong>Space Complexity:</strong> O(n + k) - Requires additional arrays for count and output</li>
+            <li><strong>Stability:</strong> Stable - Maintains relative order of equal elements</li>
+            <li><strong>Comparison-based:</strong> No - Doesn't compare elements directly</li>
+        </ul>
+      </p>
+      
+      <p><strong>Implementation in Multiple Languages:</strong></p>
+      
+      <div class="code-language-buttons">
+        <button class="code-language-btn active" data-language="c">C</button>
+        <button class="code-language-btn" data-language="cpp">C++</button>
+        <button class="code-language-btn" data-language="csharp">C#</button>
+        <button class="code-language-btn" data-language="java">Java</button>
+        <button class="code-language-btn" data-language="python">Python</button>
+        <button class="code-language-btn" data-language="javascript">JavaScript</button>
+      </div>
+      
+      <div class="language-code-block active" id="c-code">
+        <pre><code class="language-c">// C Code Example
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;limits.h&gt;
+
+// Find maximum value in array
+int findMax(int arr[], int n) {
+    int max = arr[0];
+    for (int i = 1; i < n; i++) {
+        if (arr[i] > max) {
+            max = arr[i];
+        }
+    }
+    return max;
+}
+
+// Find minimum value in array
+int findMin(int arr[], int n) {
+    int min = arr[0];
+    for (int i = 1; i < n; i++) {
+        if (arr[i] < min) {
+            min = arr[i];
+        }
+    }
+    return min;
+}
+
+// Standard counting sort implementation
+void countingSort(int arr[], int n) {
+    if (n <= 1) return;
+    
+    // Find the range of input values
+    int max_val = findMax(arr, n);
+    int min_val = findMin(arr, n);
+    int range = max_val - min_val + 1;
+    
+    // Create count array and initialize to 0
+    int* count = (int*)calloc(range, sizeof(int));
+    int* output = (int*)malloc(n * sizeof(int));
+    
+    if (count == NULL || output == NULL) {
+        printf("Memory allocation failed\n");
+        return;
+    }
+    
+    // Store count of each element
+    for (int i = 0; i < n; i++) {
+        count[arr[i] - min_val]++;
+    }
+    
+    // Change count[i] to store cumulative count
+    for (int i = 1; i < range; i++) {
+        count[i] += count[i - 1];
+    }
+    
+    // Build the output array (process from end for stability)
+    for (int i = n - 1; i >= 0; i--) {
+        output[count[arr[i] - min_val] - 1] = arr[i];
+        count[arr[i] - min_val]--;
+    }
+    
+    // Copy output back to original array
+    for (int i = 0; i < n; i++) {
+        arr[i] = output[i];
+    }
+    
+    free(count);
+    free(output);
+}
+
+// Simplified version when range is known (0 to max)
+void countingSortSimple(int arr[], int n, int max_val) {
+    int* count = (int*)calloc(max_val + 1, sizeof(int));
+    int* output = (int*)malloc(n * sizeof(int));
+    
+    // Count occurrences
+    for (int i = 0; i < n; i++) {
+        count[arr[i]]++;
+    }
+    
+    // Build output directly without cumulative count
+    int index = 0;
+    for (int i = 0; i <= max_val; i++) {
+        while (count[i] > 0) {
+            output[index++] = i;
+            count[i]--;
+        }
+    }
+    
+    // Copy back
+    for (int i = 0; i < n; i++) {
+        arr[i] = output[i];
+    }
+    
+    free(count);
+    free(output);
+}
+
+// Counting sort for characters
+void countingSortChars(char arr[], int n) {
+    const int RANGE = 256; // ASCII range
+    
+    int count[RANGE] = {0};
+    char output[n];
+    
+    // Count occurrences
+    for (int i = 0; i < n; i++) {
+        count[(unsigned char)arr[i]]++;
+    }
+    
+    // Cumulative count
+    for (int i = 1; i < RANGE; i++) {
+        count[i] += count[i - 1];
+    }
+    
+    // Build output array
+    for (int i = n - 1; i >= 0; i--) {
+        output[count[(unsigned char)arr[i]] - 1] = arr[i];
+        count[(unsigned char)arr[i]]--;
+    }
+    
+    // Copy back
+    for (int i = 0; i < n; i++) {
+        arr[i] = output[i];
+    }
+}
+
+// Example usage:
+// int arr[] = {4, 2, 2, 8, 3, 3, 1};
+// int n = sizeof(arr) / sizeof(arr[0]);
+// countingSort(arr, n);</code></pre>
+      </div>
+
+      <div class="language-code-block" id="cpp-code">
+        <pre><code class="language-cpp">// C++ Code Example
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+#include &lt;iostream&gt;
+#include &lt;limits&gt;
+using namespace std;
+
+class CountingSort {
+public:
+    // Standard counting sort implementation
+    static void sort(vector<int>& arr) {
+        if (arr.size() <= 1) return;
+        
+        // Find range
+        int max_val = *max_element(arr.begin(), arr.end());
+        int min_val = *min_element(arr.begin(), arr.end());
+        int range = max_val - min_val + 1;
+        
+        vector<int> count(range, 0);
+        vector<int> output(arr.size());
+        
+        // Count occurrences
+        for (int num : arr) {
+            count[num - min_val]++;
+        }
+        
+        // Cumulative count
+        for (int i = 1; i < range; i++) {
+            count[i] += count[i - 1];
+        }
+        
+        // Build output array (stable)
+        for (int i = arr.size() - 1; i >= 0; i--) {
+            output[count[arr[i] - min_val] - 1] = arr[i];
+            count[arr[i] - min_val]--;
+        }
+        
+        // Copy back
+        arr = output;
+    }
+    
+    // Simplified version for known range (0 to max)
+    static void sortSimple(vector<int>& arr, int max_val) {
+        vector<int> count(max_val + 1, 0);
+        vector<int> output(arr.size());
+        
+        // Count occurrences
+        for (int num : arr) {
+            count[num]++;
+        }
+        
+        // Build output directly
+        int index = 0;
+        for (int i = 0; i <= max_val; i++) {
+            for (int j = 0; j < count[i]; j++) {
+                output[index++] = i;
+            }
+        }
+        
+        arr = output;
+    }
+    
+    // Counting sort for characters
+    static void sortChars(vector<char>& arr) {
+        const int RANGE = 256;
+        vector<int> count(RANGE, 0);
+        vector<char> output(arr.size());
+        
+        // Count occurrences
+        for (char c : arr) {
+            count[static_cast<unsigned char>(c)]++;
+        }
+        
+        // Cumulative count
+        for (int i = 1; i < RANGE; i++) {
+            count[i] += count[i - 1];
+        }
+        
+        // Build output array
+        for (int i = arr.size() - 1; i >= 0; i--) {
+            output[count[static_cast<unsigned char>(arr[i])] - 1] = arr[i];
+            count[static_cast<unsigned char>(arr[i])]--;
+        }
+        
+        arr = output;
+    }
+    
+    // Generic counting sort for any integer-like type
+    template<typename T>
+    static void sortGeneric(vector<T>& arr) {
+        if (arr.size() <= 1) return;
+        
+        T max_val = *max_element(arr.begin(), arr.end());
+        T min_val = *min_element(arr.begin(), arr.end());
+        int range = max_val - min_val + 1;
+        
+        vector<int> count(range, 0);
+        vector<T> output(arr.size());
+        
+        for (const T& elem : arr) {
+            count[elem - min_val]++;
+        }
+        
+        for (int i = 1; i < range; i++) {
+            count[i] += count[i - 1];
+        }
+        
+        for (int i = arr.size() - 1; i >= 0; i--) {
+            output[count[arr[i] - min_val] - 1] = arr[i];
+            count[arr[i] - min_val]--;
+        }
+        
+        arr = output;
+    }
+};
+
+// Example usage:
+// vector<int> arr = {4, 2, 2, 8, 3, 3, 1};
+// CountingSort::sort(arr);</code></pre>
+      </div>
+
+      <div class="language-code-block" id="csharp-code">
+        <pre><code class="language-csharp">// C# Code Example
+using System;
+using System.Linq;
+
+public class CountingSort {
+    // Standard counting sort implementation
+    public static void Sort(int[] arr) {
+        if (arr.Length <= 1) return;
+        
+        // Find range
+        int maxVal = arr.Max();
+        int minVal = arr.Min();
+        int range = maxVal - minVal + 1;
+        
+        int[] count = new int[range];
+        int[] output = new int[arr.Length];
+        
+        // Count occurrences
+        foreach (int num in arr) {
+            count[num - minVal]++;
+        }
+        
+        // Cumulative count
+        for (int i = 1; i < range; i++) {
+            count[i] += count[i - 1];
+        }
+        
+        // Build output array (stable)
+        for (int i = arr.Length - 1; i >= 0; i--) {
+            output[count[arr[i] - minVal] - 1] = arr[i];
+            count[arr[i] - minVal]--;
+        }
+        
+        // Copy back
+        Array.Copy(output, arr, arr.Length);
+    }
+    
+    // Simplified version for known range
+    public static void SortSimple(int[] arr, int maxVal) {
+        int[] count = new int[maxVal + 1];
+        int[] output = new int[arr.Length];
+        
+        // Count occurrences
+        foreach (int num in arr) {
+            count[num]++;
+        }
+        
+        // Build output directly
+        int index = 0;
+        for (int i = 0; i <= maxVal; i++) {
+            for (int j = 0; j < count[i]; j++) {
+                output[index++] = i;
+            }
+        }
+        
+        Array.Copy(output, arr, arr.Length);
+    }
+    
+    // Counting sort for characters
+    public static void SortChars(char[] arr) {
+        const int RANGE = 256;
+        int[] count = new int[RANGE];
+        char[] output = new char[arr.Length];
+        
+        // Count occurrences
+        foreach (char c in arr) {
+            count[(byte)c]++;
+        }
+        
+        // Cumulative count
+        for (int i = 1; i < RANGE; i++) {
+            count[i] += count[i - 1];
+        }
+        
+        // Build output array
+        for (int i = arr.Length - 1; i >= 0; i--) {
+            output[count[(byte)arr[i]] - 1] = arr[i];
+            count[(byte)arr[i]]--;
+        }
+        
+        Array.Copy(output, arr, arr.Length);
+    }
+    
+    // Counting sort that returns a new sorted array
+    public static int[] SortImmutable(int[] arr) {
+        int[] sorted = new int[arr.Length];
+        Array.Copy(arr, sorted, arr.Length);
+        Sort(sorted);
+        return sorted;
+    }
+    
+    // Counting sort with custom key selector
+    public static void SortByKey<T>(T[] arr, Func<T, int> keySelector) {
+        if (arr.Length <= 1) return;
+        
+        var keys = arr.Select(keySelector).ToArray();
+        int maxVal = keys.Max();
+        int minVal = keys.Min();
+        int range = maxVal - minVal + 1;
+        
+        int[] count = new int[range];
+        T[] output = new T[arr.Length];
+        
+        // Count occurrences
+        foreach (int key in keys) {
+            count[key - minVal]++;
+        }
+        
+        // Cumulative count
+        for (int i = 1; i < range; i++) {
+            count[i] += count[i - 1];
+        }
+        
+        // Build output array
+        for (int i = arr.Length - 1; i >= 0; i--) {
+            int key = keySelector(arr[i]);
+            output[count[key - minVal] - 1] = arr[i];
+            count[key - minVal]--;
+        }
+        
+        Array.Copy(output, arr, arr.Length);
+    }
+}
+
+// Example usage:
+// int[] arr = {4, 2, 2, 8, 3, 3, 1};
+// CountingSort.Sort(arr);</code></pre>
+      </div>
+
+      <div class="language-code-block" id="java-code">
+        <pre><code class="language-java">// Java Code Example
+import java.util.Arrays;
+
+public class CountingSort {
+    
+    // Standard counting sort implementation
+    public static void sort(int[] arr) {
+        if (arr.length <= 1) return;
+        
+        // Find range
+        int maxVal = Arrays.stream(arr).max().getAsInt();
+        int minVal = Arrays.stream(arr).min().getAsInt();
+        int range = maxVal - minVal + 1;
+        
+        int[] count = new int[range];
+        int[] output = new int[arr.length];
+        
+        // Count occurrences
+        for (int num : arr) {
+            count[num - minVal]++;
+        }
+        
+        // Cumulative count
+        for (int i = 1; i < range; i++) {
+            count[i] += count[i - 1];
+        }
+        
+        // Build output array (stable)
+        for (int i = arr.length - 1; i >= 0; i--) {
+            output[count[arr[i] - minVal] - 1] = arr[i];
+            count[arr[i] - minVal]--;
+        }
+        
+        // Copy back
+        System.arraycopy(output, 0, arr, 0, arr.length);
+    }
+    
+    // Simplified version for known range (0 to max)
+    public static void sortSimple(int[] arr, int maxVal) {
+        int[] count = new int[maxVal + 1];
+        int[] output = new int[arr.length];
+        
+        // Count occurrences
+        for (int num : arr) {
+            count[num]++;
+        }
+        
+        // Build output directly
+        int index = 0;
+        for (int i = 0; i <= maxVal; i++) {
+            for (int j = 0; j < count[i]; j++) {
+                output[index++] = i;
+            }
+        }
+        
+        System.arraycopy(output, 0, arr, 0, arr.length);
+    }
+    
+    // Counting sort for characters
+    public static void sortChars(char[] arr) {
+        final int RANGE = 256;
+        int[] count = new int[RANGE];
+        char[] output = new char[arr.length];
+        
+        // Count occurrences
+        for (char c : arr) {
+            count[(int) c]++;
+        }
+        
+        // Cumulative count
+        for (int i = 1; i < RANGE; i++) {
+            count[i] += count[i - 1];
+        }
+        
+        // Build output array
+        for (int i = arr.length - 1; i >= 0; i--) {
+            output[count[(int) arr[i]] - 1] = arr[i];
+            count[(int) arr[i]]--;
+        }
+        
+        System.arraycopy(output, 0, arr, 0, arr.length);
+    }
+    
+    // Returns a new sorted array
+    public static int[] sortImmutable(int[] arr) {
+        int[] sorted = Arrays.copyOf(arr, arr.length);
+        sort(sorted);
+        return sorted;
+    }
+    
+    // Counting sort for negative numbers with custom range
+    public static void sortWithRange(int[] arr, int minVal, int maxVal) {
+        int range = maxVal - minVal + 1;
+        int[] count = new int[range];
+        int[] output = new int[arr.length];
+        
+        // Count occurrences
+        for (int num : arr) {
+            count[num - minVal]++;
+        }
+        
+        // Cumulative count
+        for (int i = 1; i < range; i++) {
+            count[i] += count[i - 1];
+        }
+        
+        // Build output array
+        for (int i = arr.length - 1; i >= 0; i--) {
+            output[count[arr[i] - minVal] - 1] = arr[i];
+            count[arr[i] - minVal]--;
+        }
+        
+        System.arraycopy(output, 0, arr, 0, arr.length);
+    }
+    
+    // Counting sort that also returns the count array
+    public static int[] sortWithCounts(int[] arr) {
+        if (arr.length <= 1) return new int[0];
+        
+        int maxVal = Arrays.stream(arr).max().getAsInt();
+        int minVal = Arrays.stream(arr).min().getAsInt();
+        int range = maxVal - minVal + 1;
+        
+        int[] count = new int[range];
+        int[] output = new int[arr.length];
+        
+        // Count occurrences
+        for (int num : arr) {
+            count[num - minVal]++;
+        }
+        
+        int[] originalCount = count.clone();
+        
+        // Cumulative count
+        for (int i = 1; i < range; i++) {
+            count[i] += count[i - 1];
+        }
+        
+        // Build output array
+        for (int i = arr.length - 1; i >= 0; i--) {
+            output[count[arr[i] - minVal] - 1] = arr[i];
+            count[arr[i] - minVal]--;
+        }
+        
+        System.arraycopy(output, 0, arr, 0, arr.length);
+        return originalCount;
+    }
+    
+    public static void main(String[] args) {
+        int[] arr = {4, 2, 2, 8, 3, 3, 1};
+        sort(arr);
+        System.out.println(Arrays.toString(arr)); // [1, 2, 2, 3, 3, 4, 8]
+    }
+}</code></pre>
+      </div>
+
+      <div class="language-code-block" id="python-code">
+        <pre><code class="language-python"># Python Code Example
+def counting_sort(arr):
+    """
+    Standard counting sort implementation.
+    
+    Args:
+        arr: List of integers to be sorted
+    
+    Returns:
+        The sorted list
+    """
+    if len(arr) <= 1:
+        return arr
+    
+    # Find the range of input values
+    max_val = max(arr)
+    min_val = min(arr)
+    range_val = max_val - min_val + 1
+    
+    # Initialize count array
+    count = [0] * range_val
+    output = [0] * len(arr)
+    
+    # Store count of each element
+    for num in arr:
+        count[num - min_val] += 1
+    
+    # Change count to store cumulative count
+    for i in range(1, range_val):
+        count[i] += count[i - 1]
+    
+    # Build the output array (process from end for stability)
+    for i in range(len(arr) - 1, -1, -1):
+        output[count[arr[i] - min_val] - 1] = arr[i]
+        count[arr[i] - min_val] -= 1
+    
+    return output
+
+def counting_sort_simple(arr, max_val=None):
+    """
+    Simplified counting sort for non-negative integers.
+    
+    Args:
+        arr: List of non-negative integers
+        max_val: Maximum value in array (if known)
+    
+    Returns:
+        The sorted list
+    """
+    if len(arr) <= 1:
+        return arr
+    
+    if max_val is None:
+        max_val = max(arr)
+    
+    count = [0] * (max_val + 1)
+    output = []
+    
+    # Count occurrences
+    for num in arr:
+        count[num] += 1
+    
+    # Build output directly
+    for i in range(max_val + 1):
+        output.extend([i] * count[i])
+    
+    return output
+
+def counting_sort_chars(arr):
+    """
+    Counting sort for characters.
+    
+    Args:
+        arr: List of characters
+    
+    Returns:
+        The sorted list
+    """
+    if len(arr) <= 1:
+        return arr
+    
+    RANGE = 256  # ASCII range
+    count = [0] * RANGE
+    output = [None] * len(arr)
+    
+    # Count occurrences
+    for char in arr:
+        count[ord(char)] += 1
+    
+    # Cumulative count
+    for i in range(1, RANGE):
+        count[i] += count[i - 1]
+    
+    # Build output array
+    for i in range(len(arr) - 1, -1, -1):
+        output[count[ord(arr[i])] - 1] = arr[i]
+        count[ord(arr[i])] -= 1
+    
+    return output
+
+def counting_sort_immutable(arr):
+    """
+    Returns a new sorted array without modifying the original.
+    """
+    return counting_sort(arr)
+
+def counting_sort_with_range(arr, min_val, max_val):
+    """
+    Counting sort with specified range.
+    
+    Args:
+        arr: List of integers
+        min_val: Minimum value in range
+        max_val: Maximum value in range
+    
+    Returns:
+        The sorted list
+    """
+    range_val = max_val - min_val + 1
+    count = [0] * range_val
+    output = [0] * len(arr)
+    
+    # Count occurrences
+    for num in arr:
+        count[num - min_val] += 1
+    
+    # Cumulative count
+    for i in range(1, range_val):
+        count[i] += count[i - 1]
+    
+    # Build output array
+    for i in range(len(arr) - 1, -1, -1):
+        output[count[arr[i] - min_val] - 1] = arr[i]
+        count[arr[i] - min_val] -= 1
+    
+    return output
+
+# Example usage:
+# arr = [4, 2, 2, 8, 3, 3, 1]
+# sorted_arr = counting_sort(arr)
+# print(sorted_arr)  # Output: [1, 2, 2, 3, 3, 4, 8]</code></pre>
+      </div>
+
+      <div class="language-code-block" id="javascript-code">
+        <pre><code class="language-javascript">// JavaScript Code Example
+function countingSort(arr) {
+    if (arr.length <= 1) return arr;
+    
+    // Find range
+    const maxVal = Math.max(...arr);
+    const minVal = Math.min(...arr);
+    const range = maxVal - minVal + 1;
+    
+    // Initialize arrays
+    const count = new Array(range).fill(0);
+    const output = new Array(arr.length);
+    
+    // Count occurrences
+    for (let i = 0; i < arr.length; i++) {
+        count[arr[i] - minVal]++;
+    }
+    
+    // Cumulative count
+    for (let i = 1; i < range; i++) {
+        count[i] += count[i - 1];
+    }
+    
+    // Build output array (stable)
+    for (let i = arr.length - 1; i >= 0; i--) {
+        output[count[arr[i] - minVal] - 1] = arr[i];
+        count[arr[i] - minVal]--;
+    }
+    
+    return output;
+}
+
+// Simplified version for non-negative integers
+function countingSortSimple(arr, maxVal = null) {
+    if (arr.length <= 1) return arr;
+    
+    if (maxVal === null) {
+        maxVal = Math.max(...arr);
+    }
+    
+    const count = new Array(maxVal + 1).fill(0);
+    const output = [];
+    
+    // Count occurrences
+    for (let i = 0; i < arr.length; i++) {
+        count[arr[i]]++;
+    }
+    
+    // Build output directly
+    for (let i = 0; i <= maxVal; i++) {
+        for (let j = 0; j < count[i]; j++) {
+            output.push(i);
+        }
+    }
+    
+    return output;
+}
+
+// Counting sort for characters
+function countingSortChars(arr) {
+    const RANGE = 256;
+    const count = new Array(RANGE).fill(0);
+    const output = new Array(arr.length);
+    
+    // Count occurrences
+    for (let i = 0; i < arr.length; i++) {
+        count[arr[i].charCodeAt(0)]++;
+    }
+    
+    // Cumulative count
+    for (let i = 1; i < RANGE; i++) {
+        count[i] += count[i - 1];
+    }
+    
+    // Build output array
+    for (let i = arr.length - 1; i >= 0; i--) {
+        output[count[arr[i].charCodeAt(0)] - 1] = arr[i];
+        count[arr[i].charCodeAt(0)]--;
+    }
+    
+    return output;
+}
+
+// In-place counting sort (modifies original array)
+function countingSortInPlace(arr) {
+    if (arr.length <= 1) return arr;
+    
+    const maxVal = Math.max(...arr);
+    const minVal = Math.min(...arr);
+    const range = maxVal - minVal + 1;
+    
+    const count = new Array(range).fill(0);
+    const output = new Array(arr.length);
+    
+    // Count occurrences
+    for (let i = 0; i < arr.length; i++) {
+        count[arr[i] - minVal]++;
+    }
+    
+    // Cumulative count
+    for (let i = 1; i < range; i++) {
+        count[i] += count[i - 1];
+    }
+    
+    // Build output array
+    for (let i = arr.length - 1; i >= 0; i--) {
+        output[count[arr[i] - minVal] - 1] = arr[i];
+        count[arr[i] - minVal]--;
+    }
+    
+    // Copy back to original array
+    for (let i = 0; i < arr.length; i++) {
+        arr[i] = output[i];
+    }
+    
+    return arr;
+}
+
+// Counting sort with custom range
+function countingSortWithRange(arr, minVal, maxVal) {
+    const range = maxVal - minVal + 1;
+    const count = new Array(range).fill(0);
+    const output = new Array(arr.length);
+    
+    // Count occurrences
+    for (let i = 0; i < arr.length; i++) {
+        count[arr[i] - minVal]++;
+    }
+    
+    // Cumulative count
+    for (let i = 1; i < range; i++) {
+        count[i] += count[i - 1];
+    }
+    
+    // Build output array
+    for (let i = arr.length - 1; i >= 0; i--) {
+        output[count[arr[i] - minVal] - 1] = arr[i];
+        count[arr[i] - minVal]--;
+    }
+    
+    return output;
+}
+
+// Functional programming style (immutable)
+function countingSortImmutable(arr) {
+    return countingSort(arr);
+}
+
+// Example usage:
+// const arr = [4, 2, 2, 8, 3, 3, 1];
+// const sorted = countingSort(arr);
+// console.log(sorted);  // Output: [1, 2, 2, 3, 3, 4, 8]</code></pre>
+      </div>
+      
+      <p><strong>Practice Idea:</strong> Implement Counting Sort for different data types (characters, negative numbers, custom objects). Create a version that can handle very large ranges by using a sparse array or hash map for the count array. Then, implement Radix Sort using Counting Sort as a subroutine for each digit position.</p>
+      
+      <p><strong>Real-world Applications:</strong>
+        <ul>
+            <li><strong>Small Range Sorting:</strong> Excellent for sorting data with limited range like ages (0-120), grades (0-100), or test scores</li>
+            <li><strong>Histogram Generation:</strong> Used to create frequency distributions and histograms</li>
+            <li><strong>Radix Sort Subroutine:</strong> Serves as the stable sorting subroutine in Radix Sort</li>
+            <li><strong>Database Systems:</strong> Used in database query processing for sorting with known value ranges</li>
+            <li><strong>String Sorting:</strong> Efficient for sorting characters and strings with limited character sets</li>
+            <li><strong>Image Processing:</strong> Used in histogram equalization and image enhancement algorithms</li>
+            <li><strong>Statistical Analysis:</strong> For counting frequencies and generating cumulative distributions</li>
+            <li><strong>Compression Algorithms:</strong> Used in some data compression techniques that rely on frequency counting</li>
+        </ul>
+      </p>
+      
+      <p><strong>Summary:</strong> Counting Sort is a highly efficient non-comparison-based sorting algorithm that excels when the range of input values (k) is not significantly larger than the number of elements (n). With its O(n + k) time complexity, it can outperform comparison-based sorts like Quick Sort and Merge Sort in specific scenarios. Its stable nature and predictable performance make it invaluable as a building block for more complex algorithms like Radix Sort and for applications dealing with data of known limited ranges.</p>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const languageButtons = document.querySelectorAll('.code-language-btn');
+        const codeBlocks = document.querySelectorAll('.language-code-block');
+        
+        languageButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const targetLanguage = this.getAttribute('data-language');
+                
+                // Update active button
+                languageButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show corresponding code block
+                codeBlocks.forEach(block => {
+                    if (block.id === `${targetLanguage}-code`) {
+                        block.classList.add('active');
+                    } else {
+                        block.classList.remove('active');
+                    }
+                });
+            });
+        });
+    });
+    </script>
+</body>
+</html>

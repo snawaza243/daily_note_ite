@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Binary Search</title>
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .itepost-section-title {
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.8em;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+            margin-top: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .itepost-section-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .itepost-section-content p {
+            margin-bottom: 16px;
+        }
+        pre {
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        strong {
+            color: #2E7D32;
+        }
+    </style>
+
+    <!-- Add this CSS -->
+<style>
+.code-language-buttons {
+    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.code-language-btn {
+    padding: 5px 12px;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+}
+
+.code-language-btn:hover {
+    background-color: #e9e9e9;
+}
+
+.code-language-btn.active {
+    background-color: #4CAF50;
+    color: white;
+    border-color: #4CAF50;
+}
+
+.language-code-block {
+    display: none;
+}
+
+.language-code-block.active {
+    display: block;
+}
+</style>
+
+<!-- Add this script after jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Process each implementation section
+    $('.itepost-section-content').each(function() {
+        const $section = $(this);
+        const $implementationTitle = $section.find('p:contains("Implementation in Multiple Languages:")');
+        
+        if ($implementationTitle.length > 0) {
+            const $codeBlocks = $implementationTitle.nextUntil('p').filter('pre');
+            
+            if ($codeBlocks.length > 0) {
+                // Create language buttons container
+                const $buttonsContainer = $('<div class="code-language-buttons"></div>');
+                
+                // Extract languages and create buttons
+                const languages = [];
+                $codeBlocks.each(function() {
+                    const $codeBlock = $(this);
+                    const languageClass = $codeBlock.find('code').attr('class');
+                    let languageName = 'Unknown';
+                    
+                    if (languageClass) {
+                        // Extract language name from class (e.g., "language-python" -> "python")
+                        const match = languageClass.match(/language-(\w+)/);
+                        if (match) {
+                            languageName = match[1].toUpperCase();
+                        }
+                    }
+                    
+                    languages.push({
+                        name: languageName,
+                        element: $codeBlock
+                    });
+                    
+                    // Add class to code block for easier selection
+                    $codeBlock.addClass('language-code-block').addClass('lang-' + languageName.toLowerCase());
+                });
+                
+                // Create buttons for each language
+                languages.forEach((lang, index) => {
+                    const $button = $('<button class="code-language-btn">' + lang.name + '</button>');
+                    
+                    // Make first button active by default
+                    if (index === 0) {
+                        $button.addClass('active');
+                        lang.element.addClass('active');
+                    }
+                    
+                    $button.on('click', function() {
+                        // Remove active class from all buttons and code blocks
+                        $buttonsContainer.find('.code-language-btn').removeClass('active');
+                        $section.find('.language-code-block').removeClass('active');
+                        
+                        // Add active class to clicked button and corresponding code block
+                        $(this).addClass('active');
+                        lang.element.addClass('active');
+                    });
+                    
+                    $buttonsContainer.append($button);
+                });
+                
+                // Insert buttons after the implementation title
+                $implementationTitle.after($buttonsContainer);
+            }
+        }
+    });
+});
+
+</script>
+</head>
+<body>
+    <div class="itepost-section-title">Breadth-First Search (BFS)</div>
+    <div class="itepost-section-content">
+      <p><strong>Category:</strong> Searching (Green)</p>
+      
+      <p><strong>Introduction:</strong> Breadth-First Search (BFS) is a fundamental graph traversal algorithm that explores all neighbors at the present depth level before moving on to nodes at the next depth level. Imagine it like ripples spreading out from a stone dropped in water - it explores uniformly in all directions. BFS is particularly useful for finding the shortest path in unweighted graphs and is essential for level-order tree traversal, social network analysis, and web crawling.</p>
+      
+      <p><strong>Working Principle:</strong> BFS uses a queue to keep track of vertices to visit:
+        <ol>
+            <li>Start at the root node and mark it as visited.</li>
+            <li>Add the root node to a queue.</li>
+            <li>While the queue is not empty:
+                <ul>
+                    <li>Dequeue the front node.</li>
+                    <li>Process the node (e.g., print or store).</li>
+                    <li>Enqueue all unvisited neighbors of the node.</li>
+                    <li>Mark these neighbors as visited.</li>
+                </ul>
+            </li>
+            <li>Repeat until the queue is empty.</li>
+        </ol>
+        <strong>Pseudocode:</strong><br>
+        <code>
+        BFS(graph, start):<br>
+        &nbsp;&nbsp;queue = new Queue()<br>
+        &nbsp;&nbsp;visited = set()<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;queue.enqueue(start)<br>
+        &nbsp;&nbsp;visited.add(start)<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;while queue is not empty:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;current = queue.dequeue()<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;process(current)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;for each neighbor in graph[current]:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if neighbor not in visited:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;visited.add(neighbor)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;queue.enqueue(neighbor)<br>
+        </code>
+      </p>
+      
+      <p><strong>Example & Dry Run:</strong><br>
+        Consider this graph represented as an adjacency list:<br>
+        <code>
+        A: [B, C]<br>
+        B: [A, D, E]<br>
+        C: [A, F]<br>
+        D: [B]<br>
+        E: [B, F]<br>
+        F: [C, E]<br>
+        </code>
+        Starting from node A, BFS traversal:
+        <ul>
+            <li><strong>Level 0:</strong> Visit A → Queue: [A]</li>
+            <li><strong>Level 1:</strong> Process A, enqueue B and C → Queue: [B, C]</li>
+            <li><strong>Level 1:</strong> Process B, enqueue D and E → Queue: [C, D, E]</li>
+            <li><strong>Level 1:</strong> Process C, enqueue F → Queue: [D, E, F]</li>
+            <li><strong>Level 2:</strong> Process D → Queue: [E, F]</li>
+            <li><strong>Level 2:</strong> Process E → Queue: [F]</li>
+            <li><strong>Level 2:</strong> Process F → Queue: []</li>
+            <li><strong>Result:</strong> Traversal order: A → B → C → D → E → F</li>
+        </ul>
+      </p>
+      
+      <p><strong>Time and Space Complexity:</strong>
+        <ul>
+            <li><strong>Time Complexity:</strong> O(V + E) where V is vertices and E is edges</li>
+            <li><strong>Space Complexity:</strong> O(V) for storing visited set and queue</li>
+            <li><strong>Best Case:</strong> O(1) - Target node is the start node</li>
+            <li><strong>Worst Case:</strong> O(V + E) - Traverse entire graph</li>
+        </ul>
+      </p>
+      
+      <p><strong>Implementation in Multiple Languages:</strong></p>
+      
+      <div class="code-language-buttons">
+        <button class="code-language-btn active" data-language="c">C</button>
+        <button class="code-language-btn" data-language="cpp">C++</button>
+        <button class="code-language-btn" data-language="csharp">C#</button>
+        <button class="code-language-btn" data-language="java">Java</button>
+        <button class="code-language-btn" data-language="python">Python</button>
+        <button class="code-language-btn" data-language="javascript">JavaScript</button>
+      </div>
+      
+      <div class="language-code-block active" id="c-code">
+        <pre><code class="language-c">// C Code Example (BFS with adjacency matrix)
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#define MAX 100
+
+int graph[MAX][MAX];
+int visited[MAX];
+int queue[MAX];
+int front = -1, rear = -1;
+
+void enqueue(int node) {
+    if (rear == MAX - 1) return;
+    if (front == -1) front = 0;
+    queue[++rear] = node;
+}
+
+int dequeue() {
+    if (front == -1 || front > rear) return -1;
+    return queue[front++];
+}
+
+int isEmpty() {
+    return front == -1 || front > rear;
+}
+
+void bfs(int start, int n) {
+    enqueue(start);
+    visited[start] = 1;
+    
+    while (!isEmpty()) {
+        int current = dequeue();
+        printf("%d ", current);
+        
+        for (int i = 0; i < n; i++) {
+            if (graph[current][i] && !visited[i]) {
+                visited[i] = 1;
+                enqueue(i);
+            }
+        }
+    }
+}
+
+// Example usage:
+// Initialize graph with edges
+// bfs(0, 6); // Start from node 0 with 6 nodes total</code></pre>
+      </div>
+
+      <div class="language-code-block" id="cpp-code">
+        <pre><code class="language-cpp">// C++ Code Example (BFS with adjacency list)
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;unordered_set&gt;
+using namespace std;
+
+void bfs(const vector<vector<int>>& graph, int start) {
+    unordered_set<int> visited;
+    queue<int> q;
+    
+    q.push(start);
+    visited.insert(start);
+    
+    while (!q.empty()) {
+        int current = q.front();
+        q.pop();
+        cout << current << " ";  // Process the node
+        
+        for (int neighbor : graph[current]) {
+            if (visited.find(neighbor) == visited.end()) {
+                visited.insert(neighbor);
+                q.push(neighbor);
+            }
+        }
+    }
+}
+
+// BFS with distance tracking
+void bfsWithDistance(const vector<vector<int>>& graph, int start) {
+    vector<bool> visited(graph.size(), false);
+    vector<int> distance(graph.size(), -1);
+    queue<int> q;
+    
+    q.push(start);
+    visited[start] = true;
+    distance[start] = 0;
+    
+    while (!q.empty()) {
+        int current = q.front();
+        q.pop();
+        cout << "Node " << current << " at distance " << distance[current] << endl;
+        
+        for (int neighbor : graph[current]) {
+            if (!visited[neighbor]) {
+                visited[neighbor] = true;
+                distance[neighbor] = distance[current] + 1;
+                q.push(neighbor);
+            }
+        }
+    }
+}
+
+// Example usage:
+// vector<vector<int>> graph = {{1,2}, {0,3,4}, {0,5}, {1}, {1,5}, {2,4}};
+// bfs(graph, 0);</code></pre>
+      </div>
+
+      <div class="language-code-block" id="csharp-code">
+        <pre><code class="language-csharp">// C# Code Example (BFS with adjacency list)
+using System;
+using System.Collections.Generic;
+
+public class BFS {
+    public static void BreadthFirstSearch(Dictionary<int, List<int>> graph, int start) {
+        HashSet<int> visited = new HashSet<int>();
+        Queue<int> queue = new Queue<int>();
+        
+        queue.Enqueue(start);
+        visited.Add(start);
+        
+        while (queue.Count > 0) {
+            int current = queue.Dequeue();
+            Console.Write(current + " ");  // Process the node
+            
+            foreach (int neighbor in graph[current]) {
+                if (!visited.Contains(neighbor)) {
+                    visited.Add(neighbor);
+                    queue.Enqueue(neighbor);
+                }
+            }
+        }
+    }
+    
+    // BFS with level tracking
+    public static void BFSWithLevels(Dictionary<int, List<int>> graph, int start) {
+        HashSet<int> visited = new HashSet<int>();
+        Queue<int> queue = new Queue<int>();
+        Dictionary<int, int> levels = new Dictionary<int, int>();
+        
+        queue.Enqueue(start);
+        visited.Add(start);
+        levels[start] = 0;
+        
+        while (queue.Count > 0) {
+            int current = queue.Dequeue();
+            Console.WriteLine($"Node {current} at level {levels[current]}");
+            
+            foreach (int neighbor in graph[current]) {
+                if (!visited.Contains(neighbor)) {
+                    visited.Add(neighbor);
+                    levels[neighbor] = levels[current] + 1;
+                    queue.Enqueue(neighbor);
+                }
+            }
+        }
+    }
+}
+
+// Example usage:
+// var graph = new Dictionary<int, List<int>> {
+//     {0, new List<int> {1, 2}},
+//     {1, new List<int> {0, 3, 4}},
+//     {2, new List<int> {0, 5}},
+//     {3, new List<int> {1}},
+//     {4, new List<int> {1, 5}},
+//     {5, new List<int> {2, 4}}
+// };
+// BFS.BreadthFirstSearch(graph, 0);</code></pre>
+      </div>
+
+      <div class="language-code-block" id="java-code">
+        <pre><code class="language-java">// Java Code Example (BFS with adjacency list)
+import java.util.*;
+
+public class BreadthFirstSearch {
+    public static void bfs(Map<Integer, List<Integer>> graph, int start) {
+        Set<Integer> visited = new HashSet<>();
+        Queue<Integer> queue = new LinkedList<>();
+        
+        queue.offer(start);
+        visited.add(start);
+        
+        while (!queue.isEmpty()) {
+            int current = queue.poll();
+            System.out.print(current + " ");  // Process the node
+            
+            for (int neighbor : graph.get(current)) {
+                if (!visited.contains(neighbor)) {
+                    visited.add(neighbor);
+                    queue.offer(neighbor);
+                }
+            }
+        }
+    }
+    
+    // BFS with path reconstruction
+    public static List<Integer> bfsShortestPath(Map<Integer, List<Integer>> graph, 
+                                               int start, int target) {
+        Set<Integer> visited = new HashSet<>();
+        Queue<Integer> queue = new LinkedList<>();
+        Map<Integer, Integer> parent = new HashMap<>();
+        
+        queue.offer(start);
+        visited.add(start);
+        parent.put(start, -1);
+        
+        while (!queue.isEmpty()) {
+            int current = queue.poll();
+            
+            if (current == target) {
+                // Reconstruct path
+                List<Integer> path = new ArrayList<>();
+                for (int node = target; node != -1; node = parent.get(node)) {
+                    path.add(node);
+                }
+                Collections.reverse(path);
+                return path;
+            }
+            
+            for (int neighbor : graph.get(current)) {
+                if (!visited.contains(neighbor)) {
+                    visited.add(neighbor);
+                    parent.put(neighbor, current);
+                    queue.offer(neighbor);
+                }
+            }
+        }
+        return new ArrayList<>();  // No path found
+    }
+    
+    public static void main(String[] args) {
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        graph.put(0, Arrays.asList(1, 2));
+        graph.put(1, Arrays.asList(0, 3, 4));
+        graph.put(2, Arrays.asList(0, 5));
+        graph.put(3, Arrays.asList(1));
+        graph.put(4, Arrays.asList(1, 5));
+        graph.put(5, Arrays.asList(2, 4));
+        
+        bfs(graph, 0);
+    }
+}</code></pre>
+      </div>
+
+      <div class="language-code-block" id="python-code">
+        <pre><code class="language-python"># Python Code Example (BFS with adjacency list)
+from collections import deque
+
+def bfs(graph, start):
+    visited = set()
+    queue = deque([start])
+    visited.add(start)
+    
+    while queue:
+        current = queue.popleft()
+        print(current, end=' ')  # Process the node
+        
+        for neighbor in graph[current]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+
+# BFS with level tracking
+def bfs_with_levels(graph, start):
+    visited = set()
+    queue = deque([(start, 0)])  # (node, level)
+    visited.add(start)
+    
+    while queue:
+        current, level = queue.popleft()
+        print(f"Node {current} at level {level}")
+        
+        for neighbor in graph[current]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append((neighbor, level + 1))
+
+# BFS for shortest path in unweighted graph
+def bfs_shortest_path(graph, start, target):
+    visited = set()
+    queue = deque([start])
+    visited.add(start)
+    parent = {start: None}
+    
+    while queue:
+        current = queue.popleft()
+        
+        if current == target:
+            # Reconstruct path
+            path = []
+            while current is not None:
+                path.append(current)
+                current = parent[current]
+            return path[::-1]
+        
+        for neighbor in graph[current]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                parent[neighbor] = current
+                queue.append(neighbor)
+    
+    return None  # No path found
+
+# Example usage:
+# graph = {
+#     0: [1, 2],
+#     1: [0, 3, 4],
+#     2: [0, 5],
+#     3: [1],
+#     4: [1, 5],
+#     5: [2, 4]
+# }
+# bfs(graph, 0)</code></pre>
+      </div>
+
+      <div class="language-code-block" id="javascript-code">
+        <pre><code class="language-javascript">// JavaScript Code Example (BFS with adjacency list)
+function bfs(graph, start) {
+    const visited = new Set();
+    const queue = [start];
+    visited.add(start);
+    
+    while (queue.length > 0) {
+        const current = queue.shift();
+        console.log(current);  // Process the node
+        
+        for (const neighbor of graph[current]) {
+            if (!visited.has(neighbor)) {
+                visited.add(neighbor);
+                queue.push(neighbor);
+            }
+        }
+    }
+}
+
+// BFS with level tracking
+function bfsWithLevels(graph, start) {
+    const visited = new Set();
+    const queue = [[start, 0]];  // [node, level]
+    visited.add(start);
+    
+    while (queue.length > 0) {
+        const [current, level] = queue.shift();
+        console.log(`Node ${current} at level ${level}`);
+        
+        for (const neighbor of graph[current]) {
+            if (!visited.has(neighbor)) {
+                visited.add(neighbor);
+                queue.push([neighbor, level + 1]);
+            }
+        }
+    }
+}
+
+// BFS for shortest path
+function bfsShortestPath(graph, start, target) {
+    const visited = new Set();
+    const queue = [start];
+    const parent = new Map();
+    
+    visited.add(start);
+    parent.set(start, null);
+    
+    while (queue.length > 0) {
+        const current = queue.shift();
+        
+        if (current === target) {
+            // Reconstruct path
+            const path = [];
+            let node = target;
+            while (node !== null) {
+                path.push(node);
+                node = parent.get(node);
+            }
+            return path.reverse();
+        }
+        
+        for (const neighbor of graph[current]) {
+            if (!visited.has(neighbor)) {
+                visited.add(neighbor);
+                parent.set(neighbor, current);
+                queue.push(neighbor);
+            }
+        }
+    }
+    return null;  // No path found
+}
+
+// Example usage:
+// const graph = {
+//     0: [1, 2],
+//     1: [0, 3, 4],
+//     2: [0, 5],
+//     3: [1],
+//     4: [1, 5],
+//     5: [2, 4]
+// };
+// bfs(graph, 0);</code></pre>
+      </div>
+      
+      <p><strong>Practice Idea:</strong> Implement BFS to find the shortest path between two nodes in an unweighted graph. Track the path by storing parent information for each node and reconstruct the path once the target is found.</p>
+      
+      <p><strong>Real-world Applications:</strong>
+        <ul>
+            <li><strong>Shortest Path Finding:</strong> GPS navigation systems for unweighted networks</li>
+            <li><strong>Social Networks:</strong> Finding connections and degrees of separation</li>
+            <li><strong>Web Crawling:</strong> Systematically exploring websites level by level</li>
+            <li><strong>Network Broadcasting:</strong> Sending messages to all connected nodes</li>
+            <li><strong>Puzzle Solving:</strong> Solving games like Rubik's cube or sliding puzzles</li>
+            <li><strong>Connected Components:</strong> Finding all nodes connected to a starting node</li>
+            <li><strong>Level Order Traversal:</strong> Binary tree traversal level by level</li>
+            <li><strong>Peer-to-Peer Networks:</strong> Discovering nodes in distributed systems</li>
+        </ul>
+      </p>
+      
+      <p><strong>Summary:</strong> Breadth-First Search is a cornerstone graph algorithm that explores nodes level by level, making it perfect for finding shortest paths in unweighted graphs. Its O(V+E) time complexity and systematic approach make it invaluable for network analysis, web crawling, and pathfinding. While it may use more memory than DFS for wide graphs, its guarantee of finding the shortest path makes it essential for many real-world applications.</p>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const languageButtons = document.querySelectorAll('.code-language-btn');
+        const codeBlocks = document.querySelectorAll('.language-code-block');
+        
+        languageButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const targetLanguage = this.getAttribute('data-language');
+                
+                // Update active button
+                languageButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show corresponding code block
+                codeBlocks.forEach(block => {
+                    if (block.id === `${targetLanguage}-code`) {
+                        block.classList.add('active');
+                    } else {
+                        block.classList.remove('active');
+                    }
+                });
+            });
+        });
+    });
+    </script>
+</body>
+</html>

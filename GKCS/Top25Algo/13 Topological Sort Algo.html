@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Binary Search</title>
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .itepost-section-title {
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.8em;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+            margin-top: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .itepost-section-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .itepost-section-content p {
+            margin-bottom: 16px;
+        }
+
+        pre {
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        strong {
+            color: #2E7D32;
+        }
+    </style>
+
+    <!-- Add this CSS -->
+    <style>
+        .code-language-buttons {
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .code-language-btn {
+            padding: 5px 12px;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .code-language-btn:hover {
+            background-color: #e9e9e9;
+        }
+
+        .code-language-btn.active {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .language-code-block {
+            display: none;
+        }
+
+        .language-code-block.active {
+            display: block;
+        }
+    </style>
+
+    <!-- Add this script after jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Process each implementation section
+            $('.itepost-section-content').each(function () {
+                const $section = $(this);
+                const $implementationTitle = $section.find('p:contains("Implementation in Multiple Languages:")');
+
+                if ($implementationTitle.length > 0) {
+                    const $codeBlocks = $implementationTitle.nextUntil('p').filter('pre');
+
+                    if ($codeBlocks.length > 0) {
+                        // Create language buttons container
+                        const $buttonsContainer = $('<div class="code-language-buttons"></div>');
+
+                        // Extract languages and create buttons
+                        const languages = [];
+                        $codeBlocks.each(function () {
+                            const $codeBlock = $(this);
+                            const languageClass = $codeBlock.find('code').attr('class');
+                            let languageName = 'Unknown';
+
+                            if (languageClass) {
+                                // Extract language name from class (e.g., "language-python" -> "python")
+                                const match = languageClass.match(/language-(\w+)/);
+                                if (match) {
+                                    languageName = match[1].toUpperCase();
+                                }
+                            }
+
+                            languages.push({
+                                name: languageName,
+                                element: $codeBlock
+                            });
+
+                            // Add class to code block for easier selection
+                            $codeBlock.addClass('language-code-block').addClass('lang-' + languageName.toLowerCase());
+                        });
+
+                        // Create buttons for each language
+                        languages.forEach((lang, index) => {
+                            const $button = $('<button class="code-language-btn">' + lang.name + '</button>');
+
+                            // Make first button active by default
+                            if (index === 0) {
+                                $button.addClass('active');
+                                lang.element.addClass('active');
+                            }
+
+                            $button.on('click', function () {
+                                // Remove active class from all buttons and code blocks
+                                $buttonsContainer.find('.code-language-btn').removeClass('active');
+                                $section.find('.language-code-block').removeClass('active');
+
+                                // Add active class to clicked button and corresponding code block
+                                $(this).addClass('active');
+                                lang.element.addClass('active');
+                            });
+
+                            $buttonsContainer.append($button);
+                        });
+
+                        // Insert buttons after the implementation title
+                        $implementationTitle.after($buttonsContainer);
+                    }
+                }
+            });
+        });
+
+    </script>
+</head>
+ <body>
+    <div class="itepost-section-title">Topological Sort</div>
+    <div class="itepost-section-content">
+      <p><strong>Category:</strong> Graphs (Blue)</p>
+      
+      <p><strong>Introduction:</strong> Topological Sort is a linear ordering of the vertices of a directed acyclic graph (DAG) such that for every directed edge (u → v), vertex u comes before vertex v in the ordering. Think of it like arranging tasks with dependencies - you need to complete prerequisite tasks before the ones that depend on them. Topological sorting is only possible for DAGs (graphs without cycles) and has applications in task scheduling, build systems, course prerequisites, and dependency resolution.</p>
+      
+      <p><strong>Working Principle:</strong> There are two main approaches to topological sorting:
+        <ol>
+            <li><strong>Kahn's Algorithm (BFS-based):</strong> Uses indegree counting and a queue</li>
+            <li><strong>DFS-based Algorithm:</strong> Uses depth-first search and a stack</li>
+        </ol>
+        <strong>Pseudocode (Kahn's Algorithm):</strong><br>
+        <code>
+        TOPOLOGICAL-SORT(G):<br>
+        &nbsp;&nbsp;// Compute indegree for each vertex<br>
+        &nbsp;&nbsp;for each vertex v in G:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;indegree[v] = 0<br>
+        &nbsp;&nbsp;for each edge (u, v) in G:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;indegree[v] += 1<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;// Initialize queue with vertices of indegree 0<br>
+        &nbsp;&nbsp;Q = empty queue<br>
+        &nbsp;&nbsp;for each vertex v in G:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;if indegree[v] == 0:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Q.enqueue(v)<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;// Process vertices<br>
+        &nbsp;&nbsp;result = []<br>
+        &nbsp;&nbsp;while Q is not empty:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;u = Q.dequeue()<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;result.append(u)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;for each neighbor v of u:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;indegree[v] -= 1<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if indegree[v] == 0:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Q.enqueue(v)<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;if |result| != |G.V|:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;return "Graph has a cycle"<br>
+        &nbsp;&nbsp;else:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;return result<br>
+        </code>
+        <br>
+        <strong>Pseudocode (DFS-based):</strong><br>
+        <code>
+        TOPOLOGICAL-SORT-DFS(G):<br>
+        &nbsp;&nbsp;visited = set()<br>
+        &nbsp;&nbsp;stack = []<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;for each vertex v in G:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;if v not in visited:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DFS-VISIT(v, visited, stack)<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;return reversed(stack)<br>
+        <br>
+        DFS-VISIT(v, visited, stack):<br>
+        &nbsp;&nbsp;visited.add(v)<br>
+        &nbsp;&nbsp;for each neighbor u of v:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;if u not in visited:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DFS-VISIT(u, visited, stack)<br>
+        &nbsp;&nbsp;stack.push(v)<br>
+        </code>
+      </p>
+      
+      <p><strong>Example & Dry Run:</strong><br>
+        Consider this DAG representing course prerequisites:
+        <ul>
+            <li>C1 → C2, C1 → C3</li>
+            <li>C2 → C4</li>
+            <li>C3 → C4, C3 → C5</li>
+            <li>C4 → C6</li>
+            <li>C5 → C6</li>
+        </ul>
+        <strong>Using Kahn's Algorithm:</strong>
+        <ul>
+            <li><strong>Step 1:</strong> Indegrees: C1:0, C2:1, C3:1, C4:2, C5:1, C6:2</li>
+            <li><strong>Step 2:</strong> Queue: [C1]</li>
+            <li><strong>Step 3:</strong> Process C1 → Update C2:0, C3:0 → Queue: [C2, C3]</li>
+            <li><strong>Step 4:</strong> Process C2 → Update C4:1 → Queue: [C3, C4]</li>
+            <li><strong>Step 5:</strong> Process C3 → Update C4:0, C5:0 → Queue: [C4, C5]</li>
+            <li><strong>Step 6:</strong> Process C4 → Update C6:1 → Queue: [C5, C6]</li>
+            <li><strong>Step 7:</strong> Process C5 → Update C6:0 → Queue: [C6]</li>
+            <li><strong>Step 8:</strong> Process C6 → Queue: []</li>
+            <li><strong>Result:</strong> Topological order: C1, C2, C3, C4, C5, C6</li>
+        </ul>
+      </p>
+      
+      <p><strong>Time and Space Complexity:</strong>
+        <ul>
+            <li><strong>Time Complexity:</strong> O(V + E) - Both Kahn's and DFS approaches</li>
+            <li><strong>Space Complexity:</strong> O(V) - For storing indegree/visited arrays and queue/stack</li>
+            <li><strong>Cycle Detection:</strong> O(1) - Can detect cycles during the process</li>
+            <li><strong>Best Case:</strong> O(V + E) - Consistent performance</li>
+            <li><strong>Worst Case:</strong> O(V + E) - No worst-case degradation</li>
+        </ul>
+      </p>
+      
+      <p><strong>Implementation in Multiple Languages:</strong></p>
+      
+      <div class="code-language-buttons">
+        <button class="code-language-btn active" data-language="c">C</button>
+        <button class="code-language-btn" data-language="cpp">C++</button>
+        <button class="code-language-btn" data-language="csharp">C#</button>
+        <button class="code-language-btn" data-language="java">Java</button>
+        <button class="code-language-btn" data-language="python">Python</button>
+        <button class="code-language-btn" data-language="javascript">JavaScript</button>
+      </div>
+      
+      <div class="language-code-block active" id="c-code">
+        <pre><code class="language-c">// C Code Example
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;limits.h&gt;
+
+// Structure for adjacency list node
+struct AdjListNode {
+    int dest;
+    struct AdjListNode* next;
+};
+
+// Structure for adjacency list
+struct AdjList {
+    struct AdjListNode* head;
+};
+
+// Structure for graph
+struct Graph {
+    int V;
+    struct AdjList* array;
+};
+
+// Create a new adjacency list node
+struct AdjListNode* newAdjListNode(int dest) {
+    struct AdjListNode* newNode = (struct AdjListNode*)malloc(sizeof(struct AdjListNode));
+    newNode->dest = dest;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Create a graph with V vertices
+struct Graph* createGraph(int V) {
+    struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
+    graph->V = V;
+    graph->array = (struct AdjList*)malloc(V * sizeof(struct AdjList));
+    
+    for (int i = 0; i < V; i++) {
+        graph->array[i].head = NULL;
+    }
+    return graph;
+}
+
+// Add an edge to directed graph
+void addEdge(struct Graph* graph, int src, int dest) {
+    struct AdjListNode* newNode = newAdjListNode(dest);
+    newNode->next = graph->array[src].head;
+    graph->array[src].head = newNode;
+}
+
+// Queue structure for Kahn's algorithm
+struct Queue {
+    int front, rear, size;
+    unsigned capacity;
+    int* array;
+};
+
+struct Queue* createQueue(unsigned capacity) {
+    struct Queue* queue = (struct Queue*)malloc(sizeof(struct Queue));
+    queue->capacity = capacity;
+    queue->front = queue->size = 0;
+    queue->rear = capacity - 1;
+    queue->array = (int*)malloc(capacity * sizeof(int));
+    return queue;
+}
+
+int isFull(struct Queue* queue) {
+    return (queue->size == queue->capacity);
+}
+
+int isEmpty(struct Queue* queue) {
+    return (queue->size == 0);
+}
+
+void enqueue(struct Queue* queue, int item) {
+    if (isFull(queue)) return;
+    queue->rear = (queue->rear + 1) % queue->capacity;
+    queue->array[queue->rear] = item;
+    queue->size++;
+}
+
+int dequeue(struct Queue* queue) {
+    if (isEmpty(queue)) return INT_MIN;
+    int item = queue->array[queue->front];
+    queue->front = (queue->front + 1) % queue->capacity;
+    queue->size--;
+    return item;
+}
+
+// Kahn's algorithm for topological sort
+int topologicalSortKahn(struct Graph* graph, int* result) {
+    int V = graph->V;
+    int* indegree = (int*)calloc(V, sizeof(int));
+    
+    // Calculate indegree of each vertex
+    for (int v = 0; v < V; v++) {
+        struct AdjListNode* temp = graph->array[v].head;
+        while (temp) {
+            indegree[temp->dest]++;
+            temp = temp->next;
+        }
+    }
+    
+    // Create queue and enqueue vertices with indegree 0
+    struct Queue* queue = createQueue(V);
+    for (int i = 0; i < V; i++) {
+        if (indegree[i] == 0) {
+            enqueue(queue, i);
+        }
+    }
+    
+    // Initialize count of visited vertices
+    int count = 0;
+    
+    // Process vertices
+    while (!isEmpty(queue)) {
+        int u = dequeue(queue);
+        result[count++] = u;
+        
+        // Decrease indegree of all adjacent vertices
+        struct AdjListNode* temp = graph->array[u].head;
+        while (temp) {
+            int v = temp->dest;
+            indegree[v]--;
+            if (indegree[v] == 0) {
+                enqueue(queue, v);
+            }
+            temp = temp->next;
+        }
+    }
+    
+    free(indegree);
+    free(queue->array);
+    free(queue);
+    
+    // Check if there was a cycle
+    if (count != V) {
+        return 0; // Cycle exists
+    }
+    return 1; // No cycle
+}
+
+// DFS-based topological sort
+void topologicalSortDFSUtil(struct Graph* graph, int v, int* visited, int* stack, int* stackIndex) {
+    visited[v] = 1;
+    
+    struct AdjListNode* temp = graph->array[v].head;
+    while (temp) {
+        int adj = temp->dest;
+        if (!visited[adj]) {
+            topologicalSortDFSUtil(graph, adj, visited, stack, stackIndex);
+        }
+        temp = temp->next;
+    }
+    
+    stack[(*stackIndex)++] = v;
+}
+
+int topologicalSortDFS(struct Graph* graph, int* result) {
+    int V = graph->V;
+    int* visited = (int*)calloc(V, sizeof(int));
+    int* stack = (int*)malloc(V * sizeof(int));
+    int stackIndex = 0;
+    
+    for (int i = 0; i < V; i++) {
+        if (!visited[i]) {
+            topologicalSortDFSUtil(graph, i, visited, stack, &stackIndex);
+        }
+    }
+    
+    // Reverse the stack to get topological order
+    for (int i = 0; i < V; i++) {
+        result[i] = stack[V - 1 - i];
+    }
+    
+    free(visited);
+    free(stack);
+    return 1;
+}
+
+// Example usage:
+/*
+int main() {
+    int V = 6;
+    struct Graph* graph = createGraph(V);
+    
+    addEdge(graph, 5, 2);
+    addEdge(graph, 5, 0);
+    addEdge(graph, 4, 0);
+    addEdge(graph, 4, 1);
+    addEdge(graph, 2, 3);
+    addEdge(graph, 3, 1);
+    
+    int result[V];
+    if (topologicalSortKahn(graph, result)) {
+        printf("Topological order: ");
+        for (int i = 0; i < V; i++) {
+            printf("%d ", result[i]);
+        }
+        printf("\n");
+    } else {
+        printf("Graph contains a cycle\n");
+    }
+    
+    return 0;
+}
+*/</code></pre>
+      </div>
+
+      <div class="language-code-block" id="cpp-code">
+        <pre><code class="language-cpp">// C++ Code Example
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;stack&gt;
+using namespace std;
+
+class TopologicalSort {
+private:
+    int vertices;
+    vector<vector<int>> adj;
+    
+public:
+    TopologicalSort(int V) : vertices(V), adj(V) {}
+    
+    void addEdge(int u, int v) {
+        adj[u].push_back(v);
+    }
+    
+    // Kahn's algorithm (BFS-based)
+    vector<int> topologicalSortKahn() {
+        vector<int> indegree(vertices, 0);
+        vector<int> result;
+        
+        // Calculate indegree of each vertex
+        for (int i = 0; i < vertices; i++) {
+            for (int neighbor : adj[i]) {
+                indegree[neighbor]++;
+            }
+        }
+        
+        // Queue for vertices with indegree 0
+        queue<int> q;
+        for (int i = 0; i < vertices; i++) {
+            if (indegree[i] == 0) {
+                q.push(i);
+            }
+        }
+        
+        // Process vertices
+        int count = 0;
+        while (!q.empty()) {
+            int u = q.front();
+            q.pop();
+            result.push_back(u);
+            count++;
+            
+            // Decrease indegree of neighbors
+            for (int neighbor : adj[u]) {
+                indegree[neighbor]--;
+                if (indegree[neighbor] == 0) {
+                    q.push(neighbor);
+                }
+            }
+        }
+        
+        // Check for cycle
+        if (count != vertices) {
+            throw runtime_error("Graph contains a cycle");
+        }
+        
+        return result;
+    }
+    
+    // DFS-based topological sort
+    vector<int> topologicalSortDFS() {
+        vector<int> result;
+        vector<bool> visited(vertices, false);
+        stack<int> st;
+        
+        for (int i = 0; i < vertices; i++) {
+            if (!visited[i]) {
+                dfsUtil(i, visited, st);
+            }
+        }
+        
+        while (!st.empty()) {
+            result.push_back(st.top());
+            st.pop();
+        }
+        
+        return result;
+    }
+    
+private:
+    void dfsUtil(int v, vector<bool>& visited, stack<int>& st) {
+        visited[v] = true;
+        
+        for (int neighbor : adj[v]) {
+            if (!visited[neighbor]) {
+                dfsUtil(neighbor, visited, st);
+            }
+        }
+        
+        st.push(v);
+    }
+    
+public:
+    // All possible topological sorts
+    void allTopologicalSortsUtil(vector<int>& result, vector<bool>& visited, vector<int>& indegree) {
+        bool flag = false;
+        
+        for (int i = 0; i < vertices; i++) {
+            if (!visited[i] && indegree[i] == 0) {
+                visited[i] = true;
+                result.push_back(i);
+                
+                // Decrease indegree of neighbors
+                for (int neighbor : adj[i]) {
+                    indegree[neighbor]--;
+                }
+                
+                allTopologicalSortsUtil(result, visited, indegree);
+                
+                // Backtrack
+                visited[i] = false;
+                result.pop_back();
+                for (int neighbor : adj[i]) {
+                    indegree[neighbor]++;
+                }
+                
+                flag = true;
+            }
+        }
+        
+        if (!flag) {
+            // Print one possible ordering
+            for (int v : result) {
+                cout << v << " ";
+            }
+            cout << endl;
+        }
+    }
+    
+    void allTopologicalSorts() {
+        vector<bool> visited(vertices, false);
+        vector<int> result;
+        vector<int> indegree(vertices, 0);
+        
+        // Calculate indegree
+        for (int i = 0; i < vertices; i++) {
+            for (int neighbor : adj[i]) {
+                indegree[neighbor]++;
+            }
+        }
+        
+        cout << "All topological sorts:\n";
+        allTopologicalSortsUtil(result, visited, indegree);
+    }
+    
+    // Print topological order
+    void printTopologicalOrder() {
+        try {
+            vector<int> order = topologicalSortKahn();
+            cout << "Topological order (Kahn's): ";
+            for (int v : order) {
+                cout << v << " ";
+            }
+            cout << endl;
+            
+            vector<int> orderDFS = topologicalSortDFS();
+            cout << "Topological order (DFS): ";
+            for (int v : orderDFS) {
+                cout << v << " ";
+            }
+            cout << endl;
+        } catch (const runtime_error& e) {
+            cout << e.what() << endl;
+        }
+    }
+};
+
+// Example usage:
+/*
+int main() {
+    TopologicalSort graph(6);
+    
+    graph.addEdge(5, 2);
+    graph.addEdge(5, 0);
+    graph.addEdge(4, 0);
+    graph.addEdge(4, 1);
+    graph.addEdge(2, 3);
+    graph.addEdge(3, 1);
+    
+    graph.printTopologicalOrder();
+    
+    // Uncomment to see all possible topological sorts
+    // graph.allTopologicalSorts();
+    
+    return 0;
+}
+*/</code></pre>
+      </div>
+
+      <div class="language-code-block" id="csharp-code">
+        <pre><code class="language-csharp">// C# Code Example
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class TopologicalSort {
+    private int vertices;
+    private List<int>[] adj;
+    
+    public TopologicalSort(int V) {
+        vertices = V;
+        adj = new List<int>[V];
+        for (int i = 0; i < V; i++) {
+            adj[i] = new List<int>();
+        }
+    }
+    
+    public void AddEdge(int u, int v) {
+        adj[u].Add(v);
+    }
+    
+    // Kahn's algorithm
+    public List<int> TopologicalSortKahn() {
+        int[] indegree = new int[vertices];
+        List<int> result = new List<int>();
+        
+        // Calculate indegree
+        for (int i = 0; i < vertices; i++) {
+            foreach (int neighbor in adj[i]) {
+                indegree[neighbor]++;
+            }
+        }
+        
+        // Queue for vertices with indegree 0
+        Queue<int> queue = new Queue<int>();
+        for (int i = 0; i < vertices; i++) {
+            if (indegree[i] == 0) {
+                queue.Enqueue(i);
+            }
+        }
+        
+        int count = 0;
+        while (queue.Count > 0) {
+            int u = queue.Dequeue();
+            result.Add(u);
+            count++;
+            
+            foreach (int neighbor in adj[u]) {
+                indegree[neighbor]--;
+                if (indegree[neighbor] == 0) {
+                    queue.Enqueue(neighbor);
+                }
+            }
+        }
+        
+        if (count != vertices) {
+            throw new InvalidOperationException("Graph contains a cycle");
+        }
+        
+        return result;
+    }
+    
+    // DFS-based topological sort
+    public List<int> TopologicalSortDFS() {
+        Stack<int> stack = new Stack<int>();
+        bool[] visited = new bool[vertices];
+        
+        for (int i = 0; i < vertices; i++) {
+            if (!visited[i]) {
+                DFSUtil(i, visited, stack);
+            }
+        }
+        
+        return stack.ToList();
+    }
+    
+    private void DFSUtil(int v, bool[] visited, Stack<int> stack) {
+        visited[v] = true;
+        
+        foreach (int neighbor in adj[v]) {
+            if (!visited[neighbor]) {
+                DFSUtil(neighbor, visited, stack);
+            }
+        }
+        
+        stack.Push(v);
+    }
+    
+    // Check if graph has cycle using DFS
+    public bool HasCycle() {
+        int[] color = new int[vertices]; // 0: white, 1: gray, 2: black
+        
+        for (int i = 0; i < vertices; i++) {
+            if (color[i] == 0) {
+                if (HasCycleDFSUtil(i, color)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    private bool HasCycleDFSUtil(int v, int[] color) {
+        color[v] = 1; // Gray - being visited
+        
+        foreach (int neighbor in adj[v]) {
+            if (color[neighbor] == 1) {
+                return true; // Back edge found - cycle exists
+            }
+            if (color[neighbor] == 0 && HasCycleDFSUtil(neighbor, color)) {
+                return true;
+            }
+        }
+        
+        color[v] = 2; // Black - fully visited
+        return false;
+    }
+    
+    // Get all topological orders
+    public void AllTopologicalSorts() {
+        bool[] visited = new bool[vertices];
+        int[] indegree = new int[vertices];
+        List<int> current = new List<int>();
+        
+        // Calculate indegree
+        for (int i = 0; i < vertices; i++) {
+            foreach (int neighbor in adj[i]) {
+                indegree[neighbor]++;
+            }
+        }
+        
+        Console.WriteLine("All topological sorts:");
+        AllTopologicalSortsUtil(visited, indegree, current);
+    }
+    
+    private void AllTopologicalSortsUtil(bool[] visited, int[] indegree, List<int> current) {
+        bool found = false;
+        
+        for (int i = 0; i < vertices; i++) {
+            if (!visited[i] && indegree[i] == 0) {
+                visited[i] = true;
+                current.Add(i);
+                
+                foreach (int neighbor in adj[i]) {
+                    indegree[neighbor]--;
+                }
+                
+                AllTopologicalSortsUtil(visited, indegree, current);
+                
+                // Backtrack
+                visited[i] = false;
+                current.RemoveAt(current.Count - 1);
+                foreach (int neighbor in adj[i]) {
+                    indegree[neighbor]++;
+                }
+                
+                found = true;
+            }
+        }
+        
+        if (!found) {
+            Console.WriteLine(string.Join(" ", current));
+        }
+    }
+    
+    public void PrintTopologicalOrder() {
+        if (HasCycle()) {
+            Console.WriteLine("Graph contains a cycle - no topological order exists");
+            return;
+        }
+        
+        try {
+            var kahnOrder = TopologicalSortKahn();
+            Console.WriteLine("Topological order (Kahn's): " + string.Join(" ", kahnOrder));
+            
+            var dfsOrder = TopologicalSortDFS();
+            Console.WriteLine("Topological order (DFS): " + string.Join(" ", dfsOrder));
+        } catch (InvalidOperationException e) {
+            Console.WriteLine(e.Message);
+        }
+    }
+}
+
+// Example usage:
+/*
+class Program {
+    static void Main() {
+        TopologicalSort graph = new TopologicalSort(6);
+        
+        graph.AddEdge(5, 2);
+        graph.AddEdge(5, 0);
+        graph.AddEdge(4, 0);
+        graph.AddEdge(4, 1);
+        graph.AddEdge(2, 3);
+        graph.AddEdge(3, 1);
+        
+        graph.PrintTopologicalOrder();
+        
+        // Uncomment to see all topological sorts
+        // graph.AllTopologicalSorts();
+    }
+}
+*/</code></pre>
+      </div>
+
+      <div class="language-code-block" id="java-code">
+        <pre><code class="language-java">// Java Code Example
+import java.util.*;
+
+public class TopologicalSort {
+    private int vertices;
+    private List<List<Integer>> adj;
+    
+    public TopologicalSort(int V) {
+        this.vertices = V;
+        adj = new ArrayList<>();
+        for (int i = 0; i < V; i++) {
+            adj.add(new ArrayList<>());
+        }
+    }
+    
+    public void addEdge(int u, int v) {
+        adj.get(u).add(v);
+    }
+    
+    // Kahn's algorithm
+    public List<Integer> topologicalSortKahn() {
+        int[] indegree = new int[vertices];
+        List<Integer> result = new ArrayList<>();
+        
+        // Calculate indegree
+        for (int i = 0; i < vertices; i++) {
+            for (int neighbor : adj.get(i)) {
+                indegree[neighbor]++;
+            }
+        }
+        
+        // Queue for vertices with indegree 0
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < vertices; i++) {
+            if (indegree[i] == 0) {
+                queue.add(i);
+            }
+        }
+        
+        int count = 0;
+        while (!queue.isEmpty()) {
+            int u = queue.poll();
+            result.add(u);
+            count++;
+            
+            for (int neighbor : adj.get(u)) {
+                indegree[neighbor]--;
+                if (indegree[neighbor] == 0) {
+                    queue.add(neighbor);
+                }
+            }
+        }
+        
+        if (count != vertices) {
+            throw new RuntimeException("Graph contains a cycle");
+        }
+        
+        return result;
+    }
+    
+    // DFS-based topological sort
+    public List<Integer> topologicalSortDFS() {
+        Stack<Integer> stack = new Stack<>();
+        boolean[] visited = new boolean[vertices];
+        
+        for (int i = 0; i < vertices; i++) {
+            if (!visited[i]) {
+                dfsUtil(i, visited, stack);
+            }
+        }
+        
+        List<Integer> result = new ArrayList<>();
+        while (!stack.isEmpty()) {
+            result.add(stack.pop());
+        }
+        return result;
+    }
+    
+    private void dfsUtil(int v, boolean[] visited, Stack<Integer> stack) {
+        visited[v] = true;
+        
+        for (int neighbor : adj.get(v)) {
+            if (!visited[neighbor]) {
+                dfsUtil(neighbor, visited, stack);
+            }
+        }
+        
+        stack.push(v);
+    }
+    
+    // Check for cycles
+    public boolean hasCycle() {
+        int[] color = new int[vertices]; // 0: white, 1: gray, 2: black
+        
+        for (int i = 0; i < vertices; i++) {
+            if (color[i] == 0) {
+                if (hasCycleDFSUtil(i, color)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    private boolean hasCycleDFSUtil(int v, int[] color) {
+        color[v] = 1; // Gray
+        
+        for (int neighbor : adj.get(v)) {
+            if (color[neighbor] == 1) {
+                return true; // Back edge found
+            }
+            if (color[neighbor] == 0 && hasCycleDFSUtil(neighbor, color)) {
+                return true;
+            }
+        }
+        
+        color[v] = 2; // Black
+        return false;
+    }
+    
+    // All possible topological sorts
+    public void allTopologicalSorts() {
+        boolean[] visited = new boolean[vertices];
+        int[] indegree = new int[vertices];
+        List<Integer> current = new ArrayList<>();
+        
+        // Calculate indegree
+        for (int i = 0; i < vertices; i++) {
+            for (int neighbor : adj.get(i)) {
+                indegree[neighbor]++;
+            }
+        }
+        
+        System.out.println("All topological sorts:");
+        allTopologicalSortsUtil(visited, indegree, current);
+    }
+    
+    private void allTopologicalSortsUtil(boolean[] visited, int[] indegree, List<Integer> current) {
+        boolean found = false;
+        
+        for (int i = 0; i < vertices; i++) {
+            if (!visited[i] && indegree[i] == 0) {
+                visited[i] = true;
+                current.add(i);
+                
+                for (int neighbor : adj.get(i)) {
+                    indegree[neighbor]--;
+                }
+                
+                allTopologicalSortsUtil(visited, indegree, current);
+                
+                // Backtrack
+                visited[i] = false;
+                current.remove(current.size() - 1);
+                for (int neighbor : adj.get(i)) {
+                    indegree[neighbor]++;
+                }
+                
+                found = true;
+            }
+        }
+        
+        if (!found) {
+            System.out.println(current);
+        }
+    }
+    
+    public void printTopologicalOrder() {
+        if (hasCycle()) {
+            System.out.println("Graph contains a cycle - no topological order exists");
+            return;
+        }
+        
+        try {
+            List<Integer> kahnOrder = topologicalSortKahn();
+            System.out.println("Topological order (Kahn's): " + kahnOrder);
+            
+            List<Integer> dfsOrder = topologicalSortDFS();
+            System.out.println("Topological order (DFS): " + dfsOrder);
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    // Example usage
+    public static void main(String[] args) {
+        TopologicalSort graph = new TopologicalSort(6);
+        
+        graph.addEdge(5, 2);
+        graph.addEdge(5, 0);
+        graph.addEdge(4, 0);
+        graph.addEdge(4, 1);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 1);
+        
+        graph.printTopologicalOrder();
+        
+        // Uncomment to see all topological sorts
+        // graph.allTopologicalSorts();
+    }
+}</code></pre>
+      </div>
+
+      <div class="language-code-block" id="python-code">
+        <pre><code class="language-python"># Python Code Example
+from collections import deque, defaultdict
+
+class TopologicalSort:
+    def __init__(self, vertices):
+        self.vertices = vertices
+        self.graph = defaultdict(list)
+    
+    def add_edge(self, u, v):
+        self.graph[u].append(v)
+    
+    # Kahn's algorithm
+    def topological_sort_kahn(self):
+        indegree = [0] * self.vertices
+        result = []
+        
+        # Calculate indegree
+        for u in range(self.vertices):
+            for v in self.graph[u]:
+                indegree[v] += 1
+        
+        # Queue for vertices with indegree 0
+        queue = deque()
+        for i in range(self.vertices):
+            if indegree[i] == 0:
+                queue.append(i)
+        
+        count = 0
+        while queue:
+            u = queue.popleft()
+            result.append(u)
+            count += 1
+            
+            for v in self.graph[u]:
+                indegree[v] -= 1
+                if indegree[v] == 0:
+                    queue.append(v)
+        
+        if count != self.vertices:
+            raise ValueError("Graph contains a cycle")
+        
+        return result
+    
+    # DFS-based topological sort
+    def topological_sort_dfs(self):
+        visited = [False] * self.vertices
+        stack = []
+        
+        for i in range(self.vertices):
+            if not visited[i]:
+                self._dfs_util(i, visited, stack)
+        
+        return stack[::-1]  # Reverse the stack
+    
+    def _dfs_util(self, v, visited, stack):
+        visited[v] = True
+        
+        for neighbor in self.graph[v]:
+            if not visited[neighbor]:
+                self._dfs_util(neighbor, visited, stack)
+        
+        stack.append(v)
+    
+    # Check for cycles using DFS
+    def has_cycle(self):
+        color = [0] * self.vertices  # 0: white, 1: gray, 2: black
+        
+        for i in range(self.vertices):
+            if color[i] == 0:
+                if self._has_cycle_dfs_util(i, color):
+                    return True
+        return False
+    
+    def _has_cycle_dfs_util(self, v, color):
+        color[v] = 1  # Gray - being visited
+        
+        for neighbor in self.graph[v]:
+            if color[neighbor] == 1:
+                return True  # Back edge found
+            if color[neighbor] == 0 and self._has_cycle_dfs_util(neighbor, color):
+                return True
+        
+        color[v] = 2  # Black - fully visited
+        return False
+    
+    # All possible topological sorts
+    def all_topological_sorts(self):
+        visited = [False] * self.vertices
+        indegree = [0] * self.vertices
+        current = []
+        
+        # Calculate indegree
+        for u in range(self.vertices):
+            for v in self.graph[u]:
+                indegree[v] += 1
+        
+        print("All topological sorts:")
+        self._all_topological_sorts_util(visited, indegree, current)
+    
+    def _all_topological_sorts_util(self, visited, indegree, current):
+        found = False
+        
+        for i in range(self.vertices):
+            if not visited[i] and indegree[i] == 0:
+                visited[i] = True
+                current.append(i)
+                
+                for neighbor in self.graph[i]:
+                    indegree[neighbor] -= 1
+                
+                self._all_topological_sorts_util(visited, indegree, current)
+                
+                # Backtrack
+                visited[i] = False
+                current.pop()
+                for neighbor in self.graph[i]:
+                    indegree[neighbor] += 1
+                
+                found = True
+        
+        if not found:
+            print(" ".join(map(str, current)))
+    
+    def print_topological_order(self):
+        if self.has_cycle():
+            print("Graph contains a cycle - no topological order exists")
+            return
+        
+        try:
+            kahn_order = self.topological_sort_kahn()
+            print(f"Topological order (Kahn's): {' '.join(map(str, kahn_order))}")
+            
+            dfs_order = self.topological_sort_dfs()
+            print(f"Topological order (DFS): {' '.join(map(str, dfs_order))}")
+        except ValueError as e:
+            print(e)
+
+# Functional programming style
+def topological_sort_functional(edges, vertices):
+    graph = defaultdict(list)
+    indegree = [0] * vertices
+    
+    # Build graph and calculate indegree
+    for u, v in edges:
+        graph[u].append(v)
+        indegree[v] += 1
+    
+    # Kahn's algorithm
+    queue = deque(i for i in range(vertices) if indegree[i] == 0)
+    result = []
+    
+    while queue:
+        u = queue.popleft()
+        result.append(u)
+        
+        for v in graph[u]:
+            indegree[v] -= 1
+            if indegree[v] == 0:
+                queue.append(v)
+    
+    if len(result) != vertices:
+        raise ValueError("Graph contains a cycle")
+    
+    return result
+
+# Example usage:
+def example_usage():
+    graph = TopologicalSort(6)
+    
+    graph.add_edge(5, 2)
+    graph.add_edge(5, 0)
+    graph.add_edge(4, 0)
+    graph.add_edge(4, 1)
+    graph.add_edge(2, 3)
+    graph.add_edge(3, 1)
+    
+    graph.print_topological_order()
+    
+    # Uncomment to see all topological sorts
+    # graph.all_topological_sorts()
+
+# Uncomment to run example
+# example_usage()</code></pre>
+      </div>
+
+      <div class="language-code-block" id="javascript-code">
+        <pre><code class="language-javascript">// JavaScript Code Example
+class TopologicalSort {
+    constructor(vertices) {
+        this.vertices = vertices;
+        this.adj = new Array(vertices);
+        for (let i = 0; i < vertices; i++) {
+            this.adj[i] = [];
+        }
+    }
+    
+    addEdge(u, v) {
+        this.adj[u].push(v);
+    }
+    
+    // Kahn's algorithm
+    topologicalSortKahn() {
+        const indegree = new Array(this.vertices).fill(0);
+        const result = [];
+        
+        // Calculate indegree
+        for (let i = 0; i < this.vertices; i++) {
+            for (const neighbor of this.adj[i]) {
+                indegree[neighbor]++;
+            }
+        }
+        
+        // Queue for vertices with indegree 0
+        const queue = [];
+        for (let i = 0; i < this.vertices; i++) {
+            if (indegree[i] === 0) {
+                queue.push(i);
+            }
+        }
+        
+        let count = 0;
+        while (queue.length > 0) {
+            const u = queue.shift();
+            result.push(u);
+            count++;
+            
+            for (const neighbor of this.adj[u]) {
+                indegree[neighbor]--;
+                if (indegree[neighbor] === 0) {
+                    queue.push(neighbor);
+                }
+            }
+        }
+        
+        if (count !== this.vertices) {
+            throw new Error("Graph contains a cycle");
+        }
+        
+        return result;
+    }
+    
+    // DFS-based topological sort
+    topologicalSortDFS() {
+        const visited = new Array(this.vertices).fill(false);
+        const stack = [];
+        
+        for (let i = 0; i < this.vertices; i++) {
+            if (!visited[i]) {
+                this.dfsUtil(i, visited, stack);
+            }
+        }
+        
+        return stack.reverse();
+    }
+    
+    dfsUtil(v, visited, stack) {
+        visited[v] = true;
+        
+        for (const neighbor of this.adj[v]) {
+            if (!visited[neighbor]) {
+                this.dfsUtil(neighbor, visited, stack);
+            }
+        }
+        
+        stack.push(v);
+    }
+    
+    // Check for cycles
+    hasCycle() {
+        const color = new Array(this.vertices).fill(0); // 0: white, 1: gray, 2: black
+        
+        for (let i = 0; i < this.vertices; i++) {
+            if (color[i] === 0) {
+                if (this.hasCycleDFSUtil(i, color)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    hasCycleDFSUtil(v, color) {
+        color[v] = 1; // Gray
+        
+        for (const neighbor of this.adj[v]) {
+            if (color[neighbor] === 1) {
+                return true; // Back edge found
+            }
+            if (color[neighbor] === 0 && this.hasCycleDFSUtil(neighbor, color)) {
+                return true;
+            }
+        }
+        
+        color[v] = 2; // Black
+        return false;
+    }
+    
+    // All possible topological sorts
+    allTopologicalSorts() {
+        const visited = new Array(this.vertices).fill(false);
+        const indegree = new Array(this.vertices).fill(0);
+        const current = [];
+        
+        // Calculate indegree
+        for (let i = 0; i < this.vertices; i++) {
+            for (const neighbor of this.adj[i]) {
+                indegree[neighbor]++;
+            }
+        }
+        
+        console.log("All topological sorts:");
+        this.allTopologicalSortsUtil(visited, indegree, current);
+    }
+    
+    allTopologicalSortsUtil(visited, indegree, current) {
+        let found = false;
+        
+        for (let i = 0; i < this.vertices; i++) {
+            if (!visited[i] && indegree[i] === 0) {
+                visited[i] = true;
+                current.push(i);
+                
+                for (const neighbor of this.adj[i]) {
+                    indegree[neighbor]--;
+                }
+                
+                this.allTopologicalSortsUtil(visited, indegree, current);
+                
+                // Backtrack
+                visited[i] = false;
+                current.pop();
+                for (const neighbor of this.adj[i]) {
+                    indegree[neighbor]++;
+                }
+                
+                found = true;
+            }
+        }
+        
+        if (!found) {
+            console.log(current.join(' '));
+        }
+    }
+    
+    printTopologicalOrder() {
+        if (this.hasCycle()) {
+            console.log("Graph contains a cycle - no topological order exists");
+            return;
+        }
+        
+        try {
+            const kahnOrder = this.topologicalSortKahn();
+            console.log("Topological order (Kahn's):", kahnOrder.join(' '));
+            
+            const dfsOrder = this.topologicalSortDFS();
+            console.log("Topological order (DFS):", dfsOrder.join(' '));
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+}
+
+// Functional programming style
+function topologicalSortFunctional(edges, vertices) {
+    const graph = new Array(vertices);
+    for (let i = 0; i < vertices; i++) {
+        graph[i] = [];
+    }
+    const indegree = new Array(vertices).fill(0);
+    
+    // Build graph and calculate indegree
+    for (const [u, v] of edges) {
+        graph[u].push(v);
+        indegree[v]++;
+    }
+    
+    // Kahn's algorithm
+    const queue = [];
+    for (let i = 0; i < vertices; i++) {
+        if (indegree[i] === 0) {
+            queue.push(i);
+        }
+    }
+    
+    const result = [];
+    while (queue.length > 0) {
+        const u = queue.shift();
+        result.push(u);
+        
+        for (const v of graph[u]) {
+            indegree[v]--;
+            if (indegree[v] === 0) {
+                queue.push(v);
+            }
+        }
+    }
+    
+    if (result.length !== vertices) {
+        throw new Error("Graph contains a cycle");
+    }
+    
+    return result;
+}
+
+// Example usage:
+function exampleUsage() {
+    const graph = new TopologicalSort(6);
+    
+    graph.addEdge(5, 2);
+    graph.addEdge(5, 0);
+    graph.addEdge(4, 0);
+    graph.addEdge(4, 1);
+    graph.addEdge(2, 3);
+    graph.addEdge(3, 1);
+    
+    graph.printTopologicalOrder();
+    
+    // Uncomment to see all topological sorts
+    // graph.allTopologicalSorts();
+}
+
+// Uncomment to run example
+// exampleUsage();</code></pre>
+      </div>
+      
+      <p><strong>Practice Idea:</strong> Implement both Kahn's algorithm and DFS-based topological sort for a graph with at least 8 vertices. Then modify the algorithms to handle graphs with cycles by detecting and reporting cycles. Finally, implement a function that generates all possible topological orders for a given DAG.</p>
+      
+      <p><strong>Real-world Applications:</strong>
+        <ul>
+            <li><strong>Build Systems:</strong> Determining the order to compile source files based on dependencies (Make, Maven, Gradle)</li>
+            <li><strong>Course Scheduling:</strong> Arranging courses based on prerequisite requirements</li>
+            <li><strong>Task Scheduling:</strong> Scheduling tasks with dependencies in project management</li>
+            <li><strong>Package Management:</strong> Resolving dependencies when installing software packages (apt, yum, npm)</li>
+            <li><strong>Instruction Scheduling:</strong> In compiler optimization for reordering instructions</li>
+            <li><strong>Data Processing Pipelines:</strong> Determining execution order of data processing steps</li>
+            <li><strong>Circuit Design:</strong> Signal propagation ordering in digital circuits</li>
+            <li><strong>Workflow Management:</strong> Determining execution order in business process workflows</li>
+        </ul>
+      </p>
+      
+      <p><strong>Summary:</strong> Topological Sort is a fundamental graph algorithm that provides a linear ordering of vertices in a directed acyclic graph respecting all dependencies. Both Kahn's algorithm (BFS-based) and DFS-based approaches efficiently solve this problem in O(V+E) time. The algorithm's ability to detect cycles and handle dependency resolution makes it indispensable in build systems, task scheduling, and many other real-world applications where ordering with constraints is required.</p>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const languageButtons = document.querySelectorAll('.code-language-btn');
+        const codeBlocks = document.querySelectorAll('.language-code-block');
+        
+        languageButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const targetLanguage = this.getAttribute('data-language');
+                
+                // Update active button
+                languageButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show corresponding code block
+                codeBlocks.forEach(block => {
+                    if (block.id === `${targetLanguage}-code`) {
+                        block.classList.add('active');
+                    } else {
+                        block.classList.remove('active');
+                    }
+                });
+            });
+        });
+    });
+    </script>
+</body>
+
+</html>

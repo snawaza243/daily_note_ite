@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Binary Search</title>
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .itepost-section-title {
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.8em;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+            margin-top: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .itepost-section-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .itepost-section-content p {
+            margin-bottom: 16px;
+        }
+
+        pre {
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        strong {
+            color: #2E7D32;
+        }
+    </style>
+
+    <!-- Add this CSS -->
+    <style>
+        .code-language-buttons {
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .code-language-btn {
+            padding: 5px 12px;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .code-language-btn:hover {
+            background-color: #e9e9e9;
+        }
+
+        .code-language-btn.active {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .language-code-block {
+            display: none;
+        }
+
+        .language-code-block.active {
+            display: block;
+        }
+    </style>
+
+    <!-- Add this script after jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Process each implementation section
+            $('.itepost-section-content').each(function () {
+                const $section = $(this);
+                const $implementationTitle = $section.find('p:contains("Implementation in Multiple Languages:")');
+
+                if ($implementationTitle.length > 0) {
+                    const $codeBlocks = $implementationTitle.nextUntil('p').filter('pre');
+
+                    if ($codeBlocks.length > 0) {
+                        // Create language buttons container
+                        const $buttonsContainer = $('<div class="code-language-buttons"></div>');
+
+                        // Extract languages and create buttons
+                        const languages = [];
+                        $codeBlocks.each(function () {
+                            const $codeBlock = $(this);
+                            const languageClass = $codeBlock.find('code').attr('class');
+                            let languageName = 'Unknown';
+
+                            if (languageClass) {
+                                // Extract language name from class (e.g., "language-python" -> "python")
+                                const match = languageClass.match(/language-(\w+)/);
+                                if (match) {
+                                    languageName = match[1].toUpperCase();
+                                }
+                            }
+
+                            languages.push({
+                                name: languageName,
+                                element: $codeBlock
+                            });
+
+                            // Add class to code block for easier selection
+                            $codeBlock.addClass('language-code-block').addClass('lang-' + languageName.toLowerCase());
+                        });
+
+                        // Create buttons for each language
+                        languages.forEach((lang, index) => {
+                            const $button = $('<button class="code-language-btn">' + lang.name + '</button>');
+
+                            // Make first button active by default
+                            if (index === 0) {
+                                $button.addClass('active');
+                                lang.element.addClass('active');
+                            }
+
+                            $button.on('click', function () {
+                                // Remove active class from all buttons and code blocks
+                                $buttonsContainer.find('.code-language-btn').removeClass('active');
+                                $section.find('.language-code-block').removeClass('active');
+
+                                // Add active class to clicked button and corresponding code block
+                                $(this).addClass('active');
+                                lang.element.addClass('active');
+                            });
+
+                            $buttonsContainer.append($button);
+                        });
+
+                        // Insert buttons after the implementation title
+                        $implementationTitle.after($buttonsContainer);
+                    }
+                }
+            });
+        });
+
+    </script>
+</head>
+ <body>
+    <div class="itepost-section-title">Insertion Sort</div>
+    <div class="itepost-section-content">
+      <p><strong>Category:</strong> Sorting (Green)</p>
+      
+      <p><strong>Introduction:</strong> Insertion Sort is a simple, intuitive sorting algorithm that builds the final sorted array one element at a time, similar to how you might sort playing cards in your hands. It works by taking one element from the unsorted portion and inserting it into its correct position in the sorted portion. While not the most efficient for large datasets, it's easy to understand, efficient for small datasets, and has the advantage of being an "in-place" algorithm that requires minimal additional memory.</p>
+      
+      <p><strong>Working Principle:</strong> The algorithm divides the array into sorted and unsorted parts, then repeatedly takes the first element from the unsorted part and inserts it into the correct position in the sorted part:
+        <ol>
+            <li>Start with the second element (index 1) as the first element is trivially sorted.</li>
+            <li>Compare the current element with the elements in the sorted portion.</li>
+            <li>Shift all larger elements one position to the right to make space.</li>
+            <li>Insert the current element into its correct position.</li>
+            <li>Repeat for all elements in the array.</li>
+        </ol>
+        <strong>Pseudocode:</strong><br>
+        <code>
+        insertionSort(arr):<br>
+        &nbsp;&nbsp;for i from 1 to length(arr)-1:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;key = arr[i]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;j = i - 1<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;// Move elements greater than key one position ahead<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;while j >= 0 and arr[j] > key:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arr[j + 1] = arr[j]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;j = j - 1<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;arr[j + 1] = key<br>
+        </code>
+      </p>
+      
+      <p><strong>Example & Dry Run:</strong><br>
+        Let's sort the array: <code>[5, 2, 4, 6, 1, 3]</code>
+        <ul>
+            <li><strong>Step 1:</strong> i=1, key=2 → Compare with 5 → Shift 5 → Insert 2 → <code>[2, 5, 4, 6, 1, 3]</code></li>
+            <li><strong>Step 2:</strong> i=2, key=4 → Compare with 5 → Shift 5 → Insert 4 → <code>[2, 4, 5, 6, 1, 3]</code></li>
+            <li><strong>Step 3:</strong> i=3, key=6 → Already in position → <code>[2, 4, 5, 6, 1, 3]</code></li>
+            <li><strong>Step 4:</strong> i=4, key=1 → Compare with 6,5,4,2 → Shift all → Insert 1 → <code>[1, 2, 4, 5, 6, 3]</code></li>
+            <li><strong>Step 5:</strong> i=5, key=3 → Compare with 6,5,4,2 → Shift 6,5,4 → Insert 3 → <code>[1, 2, 3, 4, 5, 6]</code></li>
+            <li><strong>Result:</strong> Sorted array: <code>[1, 2, 3, 4, 5, 6]</code></li>
+        </ul>
+      </p>
+      
+      <p><strong>Time and Space Complexity:</strong>
+        <ul>
+            <li><strong>Best Case:</strong> O(n) - When array is already sorted</li>
+            <li><strong>Average Case:</strong> O(n²) - For random data</li>
+            <li><strong>Worst Case:</strong> O(n²) - When array is reverse sorted</li>
+            <li><strong>Space Complexity:</strong> O(1) - In-place sorting, uses constant extra space</li>
+        </ul>
+      </p>
+      
+      <p><strong>Implementation in Multiple Languages:</strong></p>
+      
+      <div class="code-language-buttons">
+        <button class="code-language-btn active" data-language="c">C</button>
+        <button class="code-language-btn" data-language="cpp">C++</button>
+        <button class="code-language-btn" data-language="csharp">C#</button>
+        <button class="code-language-btn" data-language="java">Java</button>
+        <button class="code-language-btn" data-language="python">Python</button>
+        <button class="code-language-btn" data-language="javascript">JavaScript</button>
+      </div>
+      
+      <div class="language-code-block active" id="c-code">
+        <pre><code class="language-c">// C Code Example
+#include &lt;stdio.h&gt;
+
+void insertionSort(int arr[], int n) {
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        
+        // Move elements greater than key one position ahead
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+// Recursive version
+void insertionSortRecursive(int arr[], int n) {
+    if (n <= 1) return;
+    
+    // Sort first n-1 elements
+    insertionSortRecursive(arr, n - 1);
+    
+    // Insert last element at correct position
+    int last = arr[n - 1];
+    int j = n - 2;
+    
+    while (j >= 0 && arr[j] > last) {
+        arr[j + 1] = arr[j];
+        j--;
+    }
+    arr[j + 1] = last;
+}
+
+// Example usage:
+// int arr[] = {5, 2, 4, 6, 1, 3};
+// int n = sizeof(arr) / sizeof(arr[0]);
+// insertionSort(arr, n);</code></pre>
+      </div>
+
+      <div class="language-code-block" id="cpp-code">
+        <pre><code class="language-cpp">// C++ Code Example
+#include &lt;vector&gt;
+#include &lt;iostream&gt;
+using namespace std;
+
+void insertionSort(vector<int>& arr) {
+    for (int i = 1; i < arr.size(); i++) {
+        int key = arr[i];
+        int j = i - 1;
+        
+        // Move elements greater than key one position ahead
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+// Template version for different data types
+template<typename T>
+void insertionSortGeneric(vector<T>& arr) {
+    for (int i = 1; i < arr.size(); i++) {
+        T key = arr[i];
+        int j = i - 1;
+        
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+// Example usage:
+// vector<int> arr = {5, 2, 4, 6, 1, 3};
+// insertionSort(arr);</code></pre>
+      </div>
+
+      <div class="language-code-block" id="csharp-code">
+        <pre><code class="language-csharp">// C# Code Example
+using System;
+
+public class InsertionSort {
+    public static void Sort(int[] arr) {
+        for (int i = 1; i < arr.Length; i++) {
+            int key = arr[i];
+            int j = i - 1;
+            
+            // Move elements greater than key one position ahead
+            while (j >= 0 && arr[j] > key) {
+                arr[j + 1] = arr[j];
+                j--;
+            }
+            arr[j + 1] = key;
+        }
+    }
+    
+    // Generic version
+    public static void SortGeneric<T>(T[] arr) where T : IComparable<T> {
+        for (int i = 1; i < arr.Length; i++) {
+            T key = arr[i];
+            int j = i - 1;
+            
+            while (j >= 0 && arr[j].CompareTo(key) > 0) {
+                arr[j + 1] = arr[j];
+                j--;
+            }
+            arr[j + 1] = key;
+        }
+    }
+    
+    // Version with comparison counter
+    public static int SortWithCount(int[] arr) {
+        int comparisons = 0;
+        for (int i = 1; i < arr.Length; i++) {
+            int key = arr[i];
+            int j = i - 1;
+            
+            while (j >= 0 && arr[j] > key) {
+                comparisons++;
+                arr[j + 1] = arr[j];
+                j--;
+            }
+            if (j >= 0) comparisons++; // Count the last comparison that broke the loop
+            arr[j + 1] = key;
+        }
+        return comparisons;
+    }
+}
+
+// Example usage:
+// int[] arr = {5, 2, 4, 6, 1, 3};
+// InsertionSort.Sort(arr);</code></pre>
+      </div>
+
+      <div class="language-code-block" id="java-code">
+        <pre><code class="language-java">// Java Code Example
+public class InsertionSort {
+    public static void sort(int[] arr) {
+        for (int i = 1; i < arr.length; i++) {
+            int key = arr[i];
+            int j = i - 1;
+            
+            // Move elements greater than key one position ahead
+            while (j >= 0 && arr[j] > key) {
+                arr[j + 1] = arr[j];
+                j--;
+            }
+            arr[j + 1] = key;
+        }
+    }
+    
+    // Generic version
+    public static <T extends Comparable<T>> void sortGeneric(T[] arr) {
+        for (int i = 1; i < arr.length; i++) {
+            T key = arr[i];
+            int j = i - 1;
+            
+            while (j >= 0 && arr[j].compareTo(key) > 0) {
+                arr[j + 1] = arr[j];
+                j--;
+            }
+            arr[j + 1] = key;
+        }
+    }
+    
+    // Version that returns the sorted array (immutable original)
+    public static int[] sortImmutable(int[] arr) {
+        int[] sorted = arr.clone();
+        sort(sorted);
+        return sorted;
+    }
+    
+    public static void main(String[] args) {
+        int[] arr = {5, 2, 4, 6, 1, 3};
+        sort(arr);
+        // Array is now sorted: [1, 2, 3, 4, 5, 6]
+    }
+}</code></pre>
+      </div>
+
+      <div class="language-code-block" id="python-code">
+        <pre><code class="language-python"># Python Code Example
+def insertion_sort(arr):
+    """
+    Sorts an array using insertion sort algorithm.
+    
+    Args:
+        arr: List of comparable elements
+    
+    Returns:
+        The sorted list (in-place sort)
+    """
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+        
+        # Move elements greater than key one position ahead
+        while j >= 0 and arr[j] > key:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key
+    
+    return arr
+
+# Recursive version
+def insertion_sort_recursive(arr, n=None):
+    if n is None:
+        n = len(arr)
+    
+    # Base case
+    if n <= 1:
+        return
+    
+    # Sort first n-1 elements
+    insertion_sort_recursive(arr, n - 1)
+    
+    # Insert last element at correct position
+    last = arr[n - 1]
+    j = n - 2
+    
+    while j >= 0 and arr[j] > last:
+        arr[j + 1] = arr[j]
+        j -= 1
+    arr[j + 1] = last
+
+# Version that returns a new sorted list
+def insertion_sort_immutable(arr):
+    sorted_arr = arr.copy()
+    insertion_sort(sorted_arr)
+    return sorted_arr
+
+# Example usage:
+# arr = [5, 2, 4, 6, 1, 3]
+# insertion_sort(arr)
+# print(arr)  # Output: [1, 2, 3, 4, 5, 6]</code></pre>
+      </div>
+
+      <div class="language-code-block" id="javascript-code">
+        <pre><code class="language-javascript">// JavaScript Code Example
+function insertionSort(arr) {
+    for (let i = 1; i < arr.length; i++) {
+        let key = arr[i];
+        let j = i - 1;
+        
+        // Move elements greater than key one position ahead
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+    return arr;
+}
+
+// Recursive version
+function insertionSortRecursive(arr, n = arr.length) {
+    // Base case
+    if (n <= 1) return arr;
+    
+    // Sort first n-1 elements
+    insertionSortRecursive(arr, n - 1);
+    
+    // Insert last element at correct position
+    let last = arr[n - 1];
+    let j = n - 2;
+    
+    while (j >= 0 && arr[j] > last) {
+        arr[j + 1] = arr[j];
+        j--;
+    }
+    arr[j + 1] = last;
+    
+    return arr;
+}
+
+// Functional programming style (immutable)
+function insertionSortImmutable(arr) {
+    const sorted = [...arr];
+    insertionSort(sorted);
+    return sorted;
+}
+
+// Version with callback for custom comparison
+function insertionSortCustom(arr, compareFn = (a, b) => a - b) {
+    for (let i = 1; i < arr.length; i++) {
+        let key = arr[i];
+        let j = i - 1;
+        
+        while (j >= 0 && compareFn(arr[j], key) > 0) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+    return arr;
+}
+
+// Example usage:
+// const arr = [5, 2, 4, 6, 1, 3];
+// insertionSort(arr);
+// console.log(arr);  // Output: [1, 2, 3, 4, 5, 6]</code></pre>
+      </div>
+      
+      <p><strong>Practice Idea:</strong> Modify the insertion sort algorithm to sort in descending order instead of ascending order. Then, create a version that can sort an array of strings alphabetically. Finally, implement a version that counts and returns the number of comparisons and swaps made during the sorting process.</p>
+      
+      <p><strong>Real-world Applications:</strong>
+        <ul>
+            <li><strong>Small Datasets:</strong> Excellent performance for small arrays (typically n &lt; 50)</li>
+            <li><strong>Nearly Sorted Data:</strong> Very efficient when the array is already mostly sorted</li>
+            <li><strong>Online Algorithms:</strong> Useful when data is received continuously and needs to be maintained in sorted order</li>
+            <li><strong>Hybrid Algorithms:</strong> Used as the base case in more complex algorithms like Timsort</li>
+            <li><strong>Card Games:</strong> The natural way humans sort playing cards in their hands</li>
+            <li><strong>Database Optimization:</strong> Sometimes used in database query optimization for small result sets</li>
+            <li><strong>Educational Tool:</strong> Excellent for teaching sorting algorithm concepts due to its simplicity</li>
+        </ul>
+      </p>
+      
+      <p><strong>Summary:</strong> Insertion Sort is a fundamental sorting algorithm that every programmer should understand. While its O(n²) time complexity makes it inefficient for large datasets, its simplicity, in-place nature, and excellent performance on small or nearly sorted data make it practical for many real-world scenarios. It serves as an important building block for understanding more complex algorithms and is often used as a component in hybrid sorting approaches.</p>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const languageButtons = document.querySelectorAll('.code-language-btn');
+        const codeBlocks = document.querySelectorAll('.language-code-block');
+        
+        languageButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const targetLanguage = this.getAttribute('data-language');
+                
+                // Update active button
+                languageButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show corresponding code block
+                codeBlocks.forEach(block => {
+                    if (block.id === `${targetLanguage}-code`) {
+                        block.classList.add('active');
+                    } else {
+                        block.classList.remove('active');
+                    }
+                });
+            });
+        });
+    });
+    </script>
+</body>
+
+</html>

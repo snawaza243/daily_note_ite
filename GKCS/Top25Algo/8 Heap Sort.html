@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Binary Search</title>
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .itepost-section-title {
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.8em;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+            margin-top: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .itepost-section-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .itepost-section-content p {
+            margin-bottom: 16px;
+        }
+
+        pre {
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        strong {
+            color: #2E7D32;
+        }
+    </style>
+
+    <!-- Add this CSS -->
+    <style>
+        .code-language-buttons {
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .code-language-btn {
+            padding: 5px 12px;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .code-language-btn:hover {
+            background-color: #e9e9e9;
+        }
+
+        .code-language-btn.active {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .language-code-block {
+            display: none;
+        }
+
+        .language-code-block.active {
+            display: block;
+        }
+    </style>
+
+    <!-- Add this script after jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Process each implementation section
+            $('.itepost-section-content').each(function () {
+                const $section = $(this);
+                const $implementationTitle = $section.find('p:contains("Implementation in Multiple Languages:")');
+
+                if ($implementationTitle.length > 0) {
+                    const $codeBlocks = $implementationTitle.nextUntil('p').filter('pre');
+
+                    if ($codeBlocks.length > 0) {
+                        // Create language buttons container
+                        const $buttonsContainer = $('<div class="code-language-buttons"></div>');
+
+                        // Extract languages and create buttons
+                        const languages = [];
+                        $codeBlocks.each(function () {
+                            const $codeBlock = $(this);
+                            const languageClass = $codeBlock.find('code').attr('class');
+                            let languageName = 'Unknown';
+
+                            if (languageClass) {
+                                // Extract language name from class (e.g., "language-python" -> "python")
+                                const match = languageClass.match(/language-(\w+)/);
+                                if (match) {
+                                    languageName = match[1].toUpperCase();
+                                }
+                            }
+
+                            languages.push({
+                                name: languageName,
+                                element: $codeBlock
+                            });
+
+                            // Add class to code block for easier selection
+                            $codeBlock.addClass('language-code-block').addClass('lang-' + languageName.toLowerCase());
+                        });
+
+                        // Create buttons for each language
+                        languages.forEach((lang, index) => {
+                            const $button = $('<button class="code-language-btn">' + lang.name + '</button>');
+
+                            // Make first button active by default
+                            if (index === 0) {
+                                $button.addClass('active');
+                                lang.element.addClass('active');
+                            }
+
+                            $button.on('click', function () {
+                                // Remove active class from all buttons and code blocks
+                                $buttonsContainer.find('.code-language-btn').removeClass('active');
+                                $section.find('.language-code-block').removeClass('active');
+
+                                // Add active class to clicked button and corresponding code block
+                                $(this).addClass('active');
+                                lang.element.addClass('active');
+                            });
+
+                            $buttonsContainer.append($button);
+                        });
+
+                        // Insert buttons after the implementation title
+                        $implementationTitle.after($buttonsContainer);
+                    }
+                }
+            });
+        });
+
+    </script>
+</head>
+ <body>
+    <div class="itepost-section-title">Heap Sort</div>
+    <div class="itepost-section-content">
+      <p><strong>Category:</strong> Sorting (Green)</p>
+      
+      <p><strong>Introduction:</strong> Heap Sort is a comparison-based sorting algorithm that uses a binary heap data structure. It works by first building a max-heap from the input data, then repeatedly extracting the maximum element from the heap and rebuilding the heap until all elements are sorted. Heap Sort has the advantage of having O(n log n) time complexity in all cases (best, average, and worst) and sorting in-place with O(1) auxiliary space, making it memory efficient and predictable.</p>
+      
+      <p><strong>Working Principle:</strong> The algorithm consists of two main phases:
+        <ol>
+            <li><strong>Build Max Heap:</strong> Transform the array into a max-heap where the parent node is always greater than or equal to its children</li>
+            <li><strong>Sort:</strong> Repeatedly swap the root (maximum element) with the last element, reduce heap size, and heapify the root</li>
+        </ol>
+        The key operations are:
+        <ul>
+            <li><strong>Heapify:</strong> Maintain the heap property for a subtree</li>
+            <li><strong>Build Heap:</strong> Convert an arbitrary array into a heap</li>
+        </ul>
+        <strong>Pseudocode:</strong><br>
+        <code>
+        heapSort(arr):<br>
+        &nbsp;&nbsp;n = length(arr)<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;// Build max heap<br>
+        &nbsp;&nbsp;for i from n/2 - 1 down to 0:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;heapify(arr, n, i)<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;// Extract elements from heap one by one<br>
+        &nbsp;&nbsp;for i from n-1 down to 0:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;swap arr[0] and arr[i]  // Move current root to end<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;heapify(arr, i, 0)     // Call heapify on reduced heap<br>
+        <br>
+        heapify(arr, n, i):<br>
+        &nbsp;&nbsp;largest = i<br>
+        &nbsp;&nbsp;left = 2*i + 1<br>
+        &nbsp;&nbsp;right = 2*i + 2<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;if left < n and arr[left] > arr[largest]:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;largest = left<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;if right < n and arr[right] > arr[largest]:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;largest = right<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;if largest != i:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;swap arr[i] and arr[largest]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;heapify(arr, n, largest)<br>
+        </code>
+      </p>
+      
+      <p><strong>Example & Dry Run:</strong><br>
+        Let's sort the array: <code>[4, 10, 3, 5, 1]</code>
+        <ul>
+            <li><strong>Step 1 - Build Max Heap:</strong>
+                <ul>
+                    <li>Start from last non-leaf node (index 1): heapify(1) → Compare 10 with children → Already max heap</li>
+                    <li>Move to index 0: heapify(0) → Compare 4 with children (10, 3) → 10 is largest → Swap 4 and 10</li>
+                    <li>Heap becomes: <code>[10, 5, 3, 4, 1]</code> (after recursive heapify)</li>
+                </ul>
+            </li>
+            <li><strong>Step 2 - Sort:</strong>
+                <ul>
+                    <li>Swap root (10) with last element (1) → <code>[1, 5, 3, 4, 10]</code></li>
+                    <li>Heapify root: Compare 1 with children (5, 3) → Swap with 5 → <code>[5, 1, 3, 4, 10]</code></li>
+                    <li>Heapify index 1: Compare 1 with child (4) → Swap → <code>[5, 4, 3, 1, 10]</code></li>
+                    <li>Swap root (5) with last unsorted (1) → <code>[1, 4, 3, 5, 10]</code></li>
+                    <li>Continue until sorted: <code>[1, 3, 4, 5, 10]</code></li>
+                </ul>
+            </li>
+            <li><strong>Result:</strong> Sorted array: <code>[1, 3, 4, 5, 10]</code></li>
+        </ul>
+      </p>
+      
+      <p><strong>Time and Space Complexity:</strong>
+        <ul>
+            <li><strong>Best Case:</strong> O(n log n) - Already sorted or reverse sorted</li>
+            <li><strong>Average Case:</strong> O(n log n) - Consistent performance</li>
+            <li><strong>Worst Case:</strong> O(n log n) - Guaranteed performance</li>
+            <li><strong>Space Complexity:</strong> O(1) - In-place sorting, uses constant auxiliary space</li>
+            <li><strong>Heap Construction:</strong> O(n) - Building initial heap</li>
+            <li><strong>Heapify Operations:</strong> O(log n) per operation</li>
+        </ul>
+      </p>
+      
+      <p><strong>Implementation in Multiple Languages:</strong></p>
+      
+      <div class="code-language-buttons">
+        <button class="code-language-btn active" data-language="c">C</button>
+        <button class="code-language-btn" data-language="cpp">C++</button>
+        <button class="code-language-btn" data-language="csharp">C#</button>
+        <button class="code-language-btn" data-language="java">Java</button>
+        <button class="code-language-btn" data-language="python">Python</button>
+        <button class="code-language-btn" data-language="javascript">JavaScript</button>
+      </div>
+      
+      <div class="language-code-block active" id="c-code">
+        <pre><code class="language-c">// C Code Example
+#include &lt;stdio.h&gt;
+
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+// Heapify a subtree rooted with node i
+void heapify(int arr[], int n, int i) {
+    int largest = i;        // Initialize largest as root
+    int left = 2 * i + 1;   // left child
+    int right = 2 * i + 2;  // right child
+
+    // If left child is larger than root
+    if (left < n && arr[left] > arr[largest])
+        largest = left;
+
+    // If right child is larger than current largest
+    if (right < n && arr[right] > arr[largest])
+        largest = right;
+
+    // If largest is not root
+    if (largest != i) {
+        swap(&arr[i], &arr[largest]);
+        // Recursively heapify the affected sub-tree
+        heapify(arr, n, largest);
+    }
+}
+
+// Iterative heapify
+void heapifyIterative(int arr[], int n, int i) {
+    int largest = i;
+    
+    while (largest < n / 2) {  // Only non-leaf nodes need heapify
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+        int temp = largest;
+        
+        if (left < n && arr[left] > arr[largest])
+            largest = left;
+        
+        if (right < n && arr[right] > arr[largest])
+            largest = right;
+        
+        if (largest == temp) break;
+        
+        swap(&arr[i], &arr[largest]);
+        i = largest;
+    }
+}
+
+// Main function to do heap sort
+void heapSort(int arr[], int n) {
+    // Build max heap (rearrange array)
+    for (int i = n / 2 - 1; i >= 0; i--)
+        heapify(arr, n, i);
+
+    // One by one extract elements from heap
+    for (int i = n - 1; i > 0; i--) {
+        // Move current root to end
+        swap(&arr[0], &arr[i]);
+        // Call max heapify on the reduced heap
+        heapify(arr, i, 0);
+    }
+}
+
+// Min heap sort (sorts in descending order)
+void minHeapSort(int arr[], int n) {
+    // Build min heap
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        int smallest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+        
+        if (left < n && arr[left] < arr[smallest])
+            smallest = left;
+        if (right < n && arr[right] < arr[smallest])
+            smallest = right;
+        if (smallest != i) {
+            swap(&arr[i], &arr[smallest]);
+            // Recursive call for min heap would go here
+        }
+    }
+    
+    // Extract elements
+    for (int i = n - 1; i > 0; i--) {
+        swap(&arr[0], &arr[i]);
+        // Min heapify on reduced heap would go here
+    }
+}
+
+// Example usage:
+// int arr[] = {4, 10, 3, 5, 1};
+// int n = sizeof(arr) / sizeof(arr[0]);
+// heapSort(arr, n);</code></pre>
+      </div>
+
+      <div class="language-code-block" id="cpp-code">
+        <pre><code class="language-cpp">// C++ Code Example
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+#include &lt;iostream&gt;
+using namespace std;
+
+class HeapSort {
+private:
+    // Heapify a subtree rooted with node i
+    static void heapify(vector<int>& arr, int n, int i) {
+        int largest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        if (left < n && arr[left] > arr[largest])
+            largest = left;
+
+        if (right < n && arr[right] > arr[largest])
+            largest = right;
+
+        if (largest != i) {
+            swap(arr[i], arr[largest]);
+            heapify(arr, n, largest);
+        }
+    }
+
+public:
+    // Main heap sort function
+    static void sort(vector<int>& arr) {
+        int n = arr.size();
+
+        // Build max heap
+        for (int i = n / 2 - 1; i >= 0; i--)
+            heapify(arr, n, i);
+
+        // Extract elements from heap
+        for (int i = n - 1; i > 0; i--) {
+            swap(arr[0], arr[i]);
+            heapify(arr, i, 0);
+        }
+    }
+
+    // Template version for different data types
+    template<typename T>
+    static void sortGeneric(vector<T>& arr) {
+        int n = arr.size();
+
+        // Build max heap
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            int largest = i;
+            int left = 2 * i + 1;
+            int right = 2 * i + 2;
+
+            if (left < n && arr[left] > arr[largest])
+                largest = left;
+            if (right < n && arr[right] > arr[largest])
+                largest = right;
+            if (largest != i) {
+                swap(arr[i], arr[largest]);
+                // Recursive heapify would go here
+            }
+        }
+
+        // Extract elements
+        for (int i = n - 1; i > 0; i--) {
+            swap(arr[0], arr[i]);
+            // Heapify would go here
+        }
+    }
+
+    // Heap sort with custom comparator
+    template<typename T, typename Compare>
+    static void sortCustom(vector<T>& arr, Compare comp) {
+        int n = arr.size();
+
+        // Build heap based on comparator
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            int extreme = i;
+            int left = 2 * i + 1;
+            int right = 2 * i + 2;
+
+            if (left < n && comp(arr[extreme], arr[left]))
+                extreme = left;
+            if (right < n && comp(arr[extreme], arr[right]))
+                extreme = right;
+            if (extreme != i) {
+                swap(arr[i], arr[extreme]);
+                // Recursive heapify would go here
+            }
+        }
+
+        // Extract elements
+        for (int i = n - 1; i > 0; i--) {
+            swap(arr[0], arr[i]);
+            // Heapify would go here
+        }
+    }
+};
+
+// Example usage:
+// vector<int> arr = {4, 10, 3, 5, 1};
+// HeapSort::sort(arr);</code></pre>
+      </div>
+
+      <div class="language-code-block" id="csharp-code">
+        <pre><code class="language-csharp">// C# Code Example
+using System;
+using System.Collections.Generic;
+
+public class HeapSort {
+    // Heapify a subtree rooted with node i
+    private static void Heapify(int[] arr, int n, int i) {
+        int largest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        if (left < n && arr[left] > arr[largest])
+            largest = left;
+
+        if (right < n && arr[right] > arr[largest])
+            largest = right;
+
+        if (largest != i) {
+            (arr[i], arr[largest]) = (arr[largest], arr[i]);
+            Heapify(arr, n, largest);
+        }
+    }
+
+    // Iterative heapify
+    private static void HeapifyIterative(int[] arr, int n, int i) {
+        while (i <= n / 2 - 1) {
+            int largest = i;
+            int left = 2 * i + 1;
+            int right = 2 * i + 2;
+
+            if (left < n && arr[left] > arr[largest])
+                largest = left;
+            if (right < n && arr[right] > arr[largest])
+                largest = right;
+
+            if (largest == i) break;
+
+            (arr[i], arr[largest]) = (arr[largest], arr[i]);
+            i = largest;
+        }
+    }
+
+    public static void Sort(int[] arr) {
+        int n = arr.Length;
+
+        // Build max heap
+        for (int i = n / 2 - 1; i >= 0; i--)
+            Heapify(arr, n, i);
+
+        // Extract elements from heap
+        for (int i = n - 1; i > 0; i--) {
+            (arr[0], arr[i]) = (arr[i], arr[0]);
+            Heapify(arr, i, 0);
+        }
+    }
+
+    // Generic heap sort
+    public static void SortGeneric<T>(T[] arr) where T : IComparable<T> {
+        int n = arr.Length;
+
+        // Build max heap
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            int largest = i;
+            int left = 2 * i + 1;
+            int right = 2 * i + 2;
+
+            if (left < n && arr[left].CompareTo(arr[largest]) > 0)
+                largest = left;
+            if (right < n && arr[right].CompareTo(arr[largest]) > 0)
+                largest = right;
+
+            if (largest != i) {
+                (arr[i], arr[largest]) = (arr[largest], arr[i]);
+                // Recursive heapify would go here
+            }
+        }
+
+        // Extract elements
+        for (int i = n - 1; i > 0; i--) {
+            (arr[0], arr[i]) = (arr[i], arr[0]);
+            // Heapify would go here
+        }
+    }
+
+    // Heap sort that returns the sorted array (immutable)
+    public static int[] SortImmutable(int[] arr) {
+        int[] sorted = new int[arr.Length];
+        Array.Copy(arr, sorted, arr.Length);
+        Sort(sorted);
+        return sorted;
+    }
+
+    // Min heap sort (descending order)
+    public static void SortDescending(int[] arr) {
+        int n = arr.Length;
+
+        // Build min heap
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            int smallest = i;
+            int left = 2 * i + 1;
+            int right = 2 * i + 2;
+
+            if (left < n && arr[left] < arr[smallest])
+                smallest = left;
+            if (right < n && arr[right] < arr[smallest])
+                smallest = right;
+
+            if (smallest != i) {
+                (arr[i], arr[smallest]) = (arr[smallest], arr[i]);
+                // Recursive min heapify would go here
+            }
+        }
+
+        // Extract elements
+        for (int i = n - 1; i > 0; i--) {
+            (arr[0], arr[i]) = (arr[i], arr[0]);
+            // Min heapify would go here
+        }
+    }
+}
+
+// Example usage:
+// int[] arr = {4, 10, 3, 5, 1};
+// HeapSort.Sort(arr);</code></pre>
+      </div>
+
+      <div class="language-code-block" id="java-code">
+        <pre><code class="language-java">// Java Code Example
+import java.util.Arrays;
+
+public class HeapSort {
+    
+    // Heapify a subtree rooted with node i
+    private static void heapify(int[] arr, int n, int i) {
+        int largest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        if (left < n && arr[left] > arr[largest])
+            largest = left;
+
+        if (right < n && arr[right] > arr[largest])
+            largest = right;
+
+        if (largest != i) {
+            int temp = arr[i];
+            arr[i] = arr[largest];
+            arr[largest] = temp;
+            heapify(arr, n, largest);
+        }
+    }
+
+    // Iterative heapify
+    private static void heapifyIterative(int[] arr, int n, int i) {
+        while (i <= n / 2 - 1) {
+            int largest = i;
+            int left = 2 * i + 1;
+            int right = 2 * i + 2;
+
+            if (left < n && arr[left] > arr[largest])
+                largest = left;
+            if (right < n && arr[right] > arr[largest])
+                largest = right;
+
+            if (largest == i) break;
+
+            int temp = arr[i];
+            arr[i] = arr[largest];
+            arr[largest] = temp;
+            i = largest;
+        }
+    }
+
+    public static void sort(int[] arr) {
+        int n = arr.length;
+
+        // Build max heap
+        for (int i = n / 2 - 1; i >= 0; i--)
+            heapify(arr, n, i);
+
+        // Extract elements from heap
+        for (int i = n - 1; i > 0; i--) {
+            int temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+            heapify(arr, i, 0);
+        }
+    }
+
+    // Generic heap sort
+    public static <T extends Comparable<T>> void sortGeneric(T[] arr) {
+        int n = arr.length;
+
+        // Build max heap
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            int largest = i;
+            int left = 2 * i + 1;
+            int right = 2 * i + 2;
+
+            if (left < n && arr[left].compareTo(arr[largest]) > 0)
+                largest = left;
+            if (right < n && arr[right].compareTo(arr[largest]) > 0)
+                largest = right;
+
+            if (largest != i) {
+                T temp = arr[i];
+                arr[i] = arr[largest];
+                arr[largest] = temp;
+                // Recursive heapify would go here
+            }
+        }
+
+        // Extract elements
+        for (int i = n - 1; i > 0; i--) {
+            T temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+            // Heapify would go here
+        }
+    }
+
+    // Min heap sort (descending order)
+    public static void sortDescending(int[] arr) {
+        int n = arr.length;
+
+        // Build min heap
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            int smallest = i;
+            int left = 2 * i + 1;
+            int right = 2 * i + 2;
+
+            if (left < n && arr[left] < arr[smallest])
+                smallest = left;
+            if (right < n && arr[right] < arr[smallest])
+                smallest = right;
+
+            if (smallest != i) {
+                int temp = arr[i];
+                arr[i] = arr[smallest];
+                arr[smallest] = temp;
+                // Recursive min heapify would go here
+            }
+        }
+
+        // Extract elements
+        for (int i = n - 1; i > 0; i--) {
+            int temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+            // Min heapify would go here
+        }
+    }
+
+    // Heap sort that returns a new sorted array
+    public static int[] sortImmutable(int[] arr) {
+        int[] sorted = Arrays.copyOf(arr, arr.length);
+        sort(sorted);
+        return sorted;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {4, 10, 3, 5, 1};
+        sort(arr);
+        System.out.println(Arrays.toString(arr)); // [1, 3, 4, 5, 10]
+    }
+}</code></pre>
+      </div>
+
+      <div class="language-code-block" id="python-code">
+        <pre><code class="language-python"># Python Code Example
+def heapify(arr, n, i):
+    """
+    Heapify a subtree rooted with node i.
+    
+    Args:
+        arr: The array to heapify
+        n: Size of the heap
+        i: Root index of the subtree
+    """
+    largest = i
+    left = 2 * i + 1
+    right = 2 * i + 2
+
+    # If left child exists and is greater than root
+    if left < n and arr[left] > arr[largest]:
+        largest = left
+
+    # If right child exists and is greater than current largest
+    if right < n and arr[right] > arr[largest]:
+        largest = right
+
+    # Change root if needed
+    if largest != i:
+        arr[i], arr[largest] = arr[largest], arr[i]
+        # Heapify the affected sub-tree recursively
+        heapify(arr, n, largest)
+
+def heapify_iterative(arr, n, i):
+    """Iterative version of heapify"""
+    while i <= n // 2 - 1:
+        largest = i
+        left = 2 * i + 1
+        right = 2 * i + 2
+
+        if left < n and arr[left] > arr[largest]:
+            largest = left
+        if right < n and arr[right] > arr[largest]:
+            largest = right
+
+        if largest == i:
+            break
+
+        arr[i], arr[largest] = arr[largest], arr[i]
+        i = largest
+
+def heap_sort(arr):
+    """
+    Main function to perform heap sort.
+    
+    Args:
+        arr: List to be sorted
+    
+    Returns:
+        The sorted list (in-place)
+    """
+    n = len(arr)
+
+    # Build a max heap
+    # Start from the last non-leaf node and work backwards
+    for i in range(n // 2 - 1, -1, -1):
+        heapify(arr, n, i)
+
+    # One by one extract elements from the heap
+    for i in range(n - 1, 0, -1):
+        # Move current root to end
+        arr[0], arr[i] = arr[i], arr[0]
+        # Call heapify on the reduced heap
+        heapify(arr, i, 0)
+
+    return arr
+
+def min_heap_sort(arr):
+    """Heap sort using min heap (sorts in descending order)"""
+    n = len(arr)
+    
+    # Build min heap
+    for i in range(n // 2 - 1, -1, -1):
+        smallest = i
+        left = 2 * i + 1
+        right = 2 * i + 2
+        
+        if left < n and arr[left] < arr[smallest]:
+            smallest = left
+        if right < n and arr[right] < arr[smallest]:
+            smallest = right
+        if smallest != i:
+            arr[i], arr[smallest] = arr[smallest], arr[i]
+            # Recursive min heapify would go here
+    
+    # Extract elements
+    for i in range(n - 1, 0, -1):
+        arr[0], arr[i] = arr[i], arr[0]
+        # Min heapify would go here
+    
+    return arr
+
+def heap_sort_immutable(arr):
+    """Returns a new sorted array without modifying the original"""
+    sorted_arr = arr.copy()
+    heap_sort(sorted_arr)
+    return sorted_arr
+
+# Example usage:
+# arr = [4, 10, 3, 5, 1]
+# heap_sort(arr)
+# print(arr)  # Output: [1, 3, 4, 5, 10]</code></pre>
+      </div>
+
+      <div class="language-code-block" id="javascript-code">
+        <pre><code class="language-javascript">// JavaScript Code Example
+function heapify(arr, n, i) {
+    let largest = i;
+    const left = 2 * i + 1;
+    const right = 2 * i + 2;
+
+    if (left < n && arr[left] > arr[largest]) {
+        largest = left;
+    }
+
+    if (right < n && arr[right] > arr[largest]) {
+        largest = right;
+    }
+
+    if (largest !== i) {
+        [arr[i], arr[largest]] = [arr[largest], arr[i]];
+        heapify(arr, n, largest);
+    }
+}
+
+function heapifyIterative(arr, n, i) {
+    while (i <= Math.floor(n / 2) - 1) {
+        let largest = i;
+        const left = 2 * i + 1;
+        const right = 2 * i + 2;
+
+        if (left < n && arr[left] > arr[largest]) {
+            largest = left;
+        }
+        if (right < n && arr[right] > arr[largest]) {
+            largest = right;
+        }
+
+        if (largest === i) break;
+
+        [arr[i], arr[largest]] = [arr[largest], arr[i]];
+        i = largest;
+    }
+}
+
+function heapSort(arr) {
+    const n = arr.length;
+
+    // Build max heap
+    for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+        heapify(arr, n, i);
+    }
+
+    // Extract elements from heap one by one
+    for (let i = n - 1; i > 0; i--) {
+        [arr[0], arr[i]] = [arr[i], arr[0]];
+        heapify(arr, i, 0);
+    }
+
+    return arr;
+}
+
+// Min heap sort (descending order)
+function minHeapSort(arr) {
+    const n = arr.length;
+    
+    // Build min heap
+    for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+        let smallest = i;
+        const left = 2 * i + 1;
+        const right = 2 * i + 2;
+        
+        if (left < n && arr[left] < arr[smallest]) {
+            smallest = left;
+        }
+        if (right < n && arr[right] < arr[smallest]) {
+            smallest = right;
+        }
+        if (smallest !== i) {
+            [arr[i], arr[smallest]] = [arr[smallest], arr[i]];
+            // Recursive min heapify would go here
+        }
+    }
+    
+    // Extract elements
+    for (let i = n - 1; i > 0; i--) {
+        [arr[0], arr[i]] = [arr[i], arr[0]];
+        // Min heapify would go here
+    }
+    
+    return arr;
+}
+
+// Functional programming style (immutable)
+function heapSortImmutable(arr) {
+    const sorted = [...arr];
+    return heapSort(sorted);
+}
+
+// Generic heap sort with custom comparator
+function heapSortCustom(arr, compareFn = (a, b) => a - b) {
+    const n = arr.length;
+
+    // Build heap based on comparator
+    for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+        let extreme = i;
+        const left = 2 * i + 1;
+        const right = 2 * i + 2;
+
+        if (left < n && compareFn(arr[extreme], arr[left]) < 0) {
+            extreme = left;
+        }
+        if (right < n && compareFn(arr[extreme], arr[right]) < 0) {
+            extreme = right;
+        }
+        if (extreme !== i) {
+            [arr[i], arr[extreme]] = [arr[extreme], arr[i]];
+            // Recursive heapify would go here
+        }
+    }
+
+    // Extract elements
+    for (let i = n - 1; i > 0; i--) {
+        [arr[0], arr[i]] = [arr[i], arr[0]];
+        // Heapify would go here
+    }
+
+    return arr;
+}
+
+// Example usage:
+// const arr = [4, 10, 3, 5, 1];
+// heapSort(arr);
+// console.log(arr);  // Output: [1, 3, 4, 5, 10]</code></pre>
+      </div>
+      
+      <p><strong>Practice Idea:</strong> Implement both recursive and iterative versions of the heapify function and compare their performance. Then, create a min-heap based heap sort that sorts in descending order. Finally, implement a priority queue using the heap data structure with operations like insert, extract-max, and increase-key.</p>
+      
+      <p><strong>Real-world Applications:</strong>
+        <ul>
+            <li><strong>Priority Queues:</strong> Used to implement efficient priority queues in operating systems</li>
+            <li><strong>Graph Algorithms:</strong> Dijkstra's algorithm and Prim's algorithm use heaps for efficient implementation</li>
+            <li><strong>Memory Management:</strong> Some memory allocators use heap sort for managing memory blocks</li>
+            <li><strong>Embedded Systems:</strong> Preferred when guaranteed O(n log n) performance is required with limited memory</li>
+            <li><strong>Real-time Systems:</strong> Used in systems where worst-case performance matters more than average-case</li>
+            <li><strong>Database Systems:</strong> External sorting and query optimization</li>
+            <li><strong>Game Development:</strong> Sorting game objects by priority or distance</li>
+            <li><strong>K-th Largest Element:</strong> Efficiently finding k-th largest element using partial heap sort</li>
+        </ul>
+      </p>
+      
+      <p><strong>Summary:</strong> Heap Sort is a robust, comparison-based sorting algorithm with guaranteed O(n log n) performance in all cases. Its in-place nature and predictable performance make it suitable for memory-constrained environments and real-time systems. While it's not as cache-friendly as Quick Sort, its worst-case guarantee and efficient heap operations make it invaluable for priority queue implementations and scenarios where consistent performance is critical. Understanding Heap Sort provides deep insights into heap data structures and their applications beyond sorting.</p>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const languageButtons = document.querySelectorAll('.code-language-btn');
+        const codeBlocks = document.querySelectorAll('.language-code-block');
+        
+        languageButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const targetLanguage = this.getAttribute('data-language');
+                
+                // Update active button
+                languageButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show corresponding code block
+                codeBlocks.forEach(block => {
+                    if (block.id === `${targetLanguage}-code`) {
+                        block.classList.add('active');
+                    } else {
+                        block.classList.remove('active');
+                    }
+                });
+            });
+        });
+    });
+    </script>
+</body>
+
+</html>

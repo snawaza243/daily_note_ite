@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Binary Search</title>
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .itepost-section-title {
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.8em;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+            margin-top: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .itepost-section-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .itepost-section-content p {
+            margin-bottom: 16px;
+        }
+
+        pre {
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        strong {
+            color: #2E7D32;
+        }
+    </style>
+
+    <!-- Add this CSS -->
+    <style>
+        .code-language-buttons {
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .code-language-btn {
+            padding: 5px 12px;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .code-language-btn:hover {
+            background-color: #e9e9e9;
+        }
+
+        .code-language-btn.active {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .language-code-block {
+            display: none;
+        }
+
+        .language-code-block.active {
+            display: block;
+        }
+    </style>
+
+    <!-- Add this script after jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Process each implementation section
+            $('.itepost-section-content').each(function () {
+                const $section = $(this);
+                const $implementationTitle = $section.find('p:contains("Implementation in Multiple Languages:")');
+
+                if ($implementationTitle.length > 0) {
+                    const $codeBlocks = $implementationTitle.nextUntil('p').filter('pre');
+
+                    if ($codeBlocks.length > 0) {
+                        // Create language buttons container
+                        const $buttonsContainer = $('<div class="code-language-buttons"></div>');
+
+                        // Extract languages and create buttons
+                        const languages = [];
+                        $codeBlocks.each(function () {
+                            const $codeBlock = $(this);
+                            const languageClass = $codeBlock.find('code').attr('class');
+                            let languageName = 'Unknown';
+
+                            if (languageClass) {
+                                // Extract language name from class (e.g., "language-python" -> "python")
+                                const match = languageClass.match(/language-(\w+)/);
+                                if (match) {
+                                    languageName = match[1].toUpperCase();
+                                }
+                            }
+
+                            languages.push({
+                                name: languageName,
+                                element: $codeBlock
+                            });
+
+                            // Add class to code block for easier selection
+                            $codeBlock.addClass('language-code-block').addClass('lang-' + languageName.toLowerCase());
+                        });
+
+                        // Create buttons for each language
+                        languages.forEach((lang, index) => {
+                            const $button = $('<button class="code-language-btn">' + lang.name + '</button>');
+
+                            // Make first button active by default
+                            if (index === 0) {
+                                $button.addClass('active');
+                                lang.element.addClass('active');
+                            }
+
+                            $button.on('click', function () {
+                                // Remove active class from all buttons and code blocks
+                                $buttonsContainer.find('.code-language-btn').removeClass('active');
+                                $section.find('.language-code-block').removeClass('active');
+
+                                // Add active class to clicked button and corresponding code block
+                                $(this).addClass('active');
+                                lang.element.addClass('active');
+                            });
+
+                            $buttonsContainer.append($button);
+                        });
+
+                        // Insert buttons after the implementation title
+                        $implementationTitle.after($buttonsContainer);
+                    }
+                }
+            });
+        });
+
+    </script>
+</head>
+ 
+<body>
+    <div class="itepost-section-title">Dijkstra's Algorithm</div>
+    <div class="itepost-section-content">
+      <p><strong>Category:</strong> Graphs (Blue)</p>
+      
+      <p><strong>Introduction:</strong> Dijkstra's Algorithm is a famous greedy algorithm that finds the shortest paths from a single source vertex to all other vertices in a weighted graph with non-negative edge weights. Think of it like finding the shortest driving route between cities where all roads have positive distances. The algorithm maintains a set of vertices whose shortest distances are known and repeatedly selects the vertex with the minimum known distance, updating the distances of its neighbors. It's widely used in network routing protocols, GPS navigation, and social network analysis.</p>
+      
+      <p><strong>Working Principle:</strong> The algorithm follows these key steps:
+        <ol>
+            <li><strong>Initialize:</strong> Set distance to source as 0 and all other vertices as infinity</li>
+            <li><strong>Priority Queue:</strong> Use a min-priority queue to always process the vertex with smallest known distance</li>
+            <li><strong>Relaxation:</strong> For each neighbor of the current vertex, update distances if a shorter path is found</li>
+            <li><strong>Mark Visited:</strong> Once a vertex is processed, its shortest distance is finalized</li>
+            <li><strong>Repeat:</strong> Continue until all vertices are processed or the queue is empty</li>
+        </ol>
+        <strong>Pseudocode:</strong><br>
+        <code>
+        DIJKSTRA(G, w, s):<br>
+        &nbsp;&nbsp;// Initialize distances and predecessors<br>
+        &nbsp;&nbsp;for each vertex v in G.V:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;v.distance = ∞<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;v.predecessor = NIL<br>
+        &nbsp;&nbsp;s.distance = 0<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;// Initialize priority queue with all vertices<br>
+        &nbsp;&nbsp;Q = G.V<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;while Q is not empty:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;u = EXTRACT-MIN(Q)  // Vertex with smallest distance<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;for each neighbor v of u:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Relaxation step<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if v.distance > u.distance + w(u, v):<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v.distance = u.distance + w(u, v)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v.predecessor = u<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DECREASE-KEY(Q, v)  // Update priority<br>
+        </code>
+      </p>
+      
+      <p><strong>Example & Dry Run:</strong><br>
+        Consider this graph with 5 vertices and edges:
+        <ul>
+            <li>0→1: 4</li>
+            <li>0→2: 1</li>
+            <li>1→2: 2</li>
+            <li>1→3: 5</li>
+            <li>2→1: 2</li>
+            <li>2→3: 8</li>
+            <li>2→4: 9</li>
+            <li>3→4: 6</li>
+            <li>4→3: 6</li>
+        </ul>
+        <strong>Step-by-step execution from source vertex 0:</strong>
+        <ul>
+            <li><strong>Initialization:</strong> dist[0]=0, others=∞</li>
+            <li><strong>Step 1:</strong> Process vertex 0 (dist=0) → Update dist[1]=4, dist[2]=1</li>
+            <li><strong>Step 2:</strong> Process vertex 2 (dist=1) → Update dist[1]=3 (via 0→2→1), dist[3]=9, dist[4]=10</li>
+            <li><strong>Step 3:</strong> Process vertex 1 (dist=3) → Update dist[3]=8 (via 0→2→1→3)</li>
+            <li><strong>Step 4:</strong> Process vertex 3 (dist=8) → Update dist[4]=14 (but 10 is smaller)</li>
+            <li><strong>Step 5:</strong> Process vertex 4 (dist=10)</li>
+            <li><strong>Result:</strong> Shortest paths: 0→1:3, 0→2:1, 0→3:8, 0→4:10</li>
+        </ul>
+      </p>
+      
+      <p><strong>Time and Space Complexity:</strong>
+        <ul>
+            <li><strong>Time Complexity:</strong> 
+                <ul>
+                    <li>With array: O(V²)</li>
+                    <li>With binary heap: O((V + E) log V)</li>
+                    <li>With Fibonacci heap: O(E + V log V)</li>
+                </ul>
+            </li>
+            <li><strong>Space Complexity:</strong> O(V) - For storing distances and predecessors</li>
+            <li><strong>Best Case:</strong> O(V log V) - Sparse graphs with efficient priority queue</li>
+            <li><strong>Worst Case:</strong> O(V²) - Dense graphs with array implementation</li>
+            <li><strong>Limitation:</strong> Cannot handle negative edge weights</li>
+        </ul>
+      </p>
+      
+      <p><strong>Implementation in Multiple Languages:</strong></p>
+      
+      <div class="code-language-buttons">
+        <button class="code-language-btn active" data-language="c">C</button>
+        <button class="code-language-btn" data-language="cpp">C++</button>
+        <button class="code-language-btn" data-language="csharp">C#</button>
+        <button class="code-language-btn" data-language="java">Java</button>
+        <button class="code-language-btn" data-language="python">Python</button>
+        <button class="code-language-btn" data-language="javascript">JavaScript</button>
+      </div>
+      
+      <div class="language-code-block active" id="c-code">
+        <pre><code class="language-c">// C Code Example
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;limits.h&gt;
+#include &lt;stdbool.h&gt;
+
+#define INF INT_MAX
+#define V 9
+
+// Find vertex with minimum distance value
+int minDistance(int dist[], bool sptSet[]) {
+    int min = INF, min_index;
+    
+    for (int v = 0; v < V; v++) {
+        if (!sptSet[v] && dist[v] <= min) {
+            min = dist[v];
+            min_index = v;
+        }
+    }
+    return min_index;
+}
+
+// Print the solution
+void printSolution(int dist[]) {
+    printf("Vertex \t Distance from Source\n");
+    for (int i = 0; i < V; i++) {
+        if (dist[i] == INF) {
+            printf("%d \t\t INF\n", i);
+        } else {
+            printf("%d \t\t %d\n", i, dist[i]);
+        }
+    }
+}
+
+// Dijkstra's algorithm using adjacency matrix
+void dijkstraMatrix(int graph[V][V], int src) {
+    int dist[V];        // Shortest distances from src
+    bool sptSet[V];     // Shortest path tree set
+    
+    // Initialize all distances as INF and sptSet[] as false
+    for (int i = 0; i < V; i++) {
+        dist[i] = INF;
+        sptSet[i] = false;
+    }
+    
+    dist[src] = 0;  // Distance of source from itself is 0
+    
+    // Find shortest path for all vertices
+    for (int count = 0; count < V - 1; count++) {
+        // Pick the minimum distance vertex
+        int u = minDistance(dist, sptSet);
+        sptSet[u] = true;
+        
+        // Update dist value of adjacent vertices
+        for (int v = 0; v < V; v++) {
+            if (!sptSet[v] && graph[u][v] && dist[u] != INF && 
+                dist[u] + graph[u][v] < dist[v]) {
+                dist[v] = dist[u] + graph[u][v];
+            }
+        }
+    }
+    
+    printSolution(dist);
+}
+
+// Structure for adjacency list node
+struct AdjListNode {
+    int dest;
+    int weight;
+    struct AdjListNode* next;
+};
+
+// Structure for adjacency list
+struct AdjList {
+    struct AdjListNode* head;
+};
+
+// Structure for graph
+struct Graph {
+    int V;
+    struct AdjList* array;
+};
+
+// Create a new adjacency list node
+struct AdjListNode* newAdjListNode(int dest, int weight) {
+    struct AdjListNode* newNode = (struct AdjListNode*)malloc(sizeof(struct AdjListNode));
+    newNode->dest = dest;
+    newNode->weight = weight;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Create a graph with V vertices
+struct Graph* createGraph(int V) {
+    struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
+    graph->V = V;
+    graph->array = (struct AdjList*)malloc(V * sizeof(struct AdjList));
+    
+    for (int i = 0; i < V; i++) {
+        graph->array[i].head = NULL;
+    }
+    return graph;
+}
+
+// Add an edge to directed graph
+void addEdge(struct Graph* graph, int src, int dest, int weight) {
+    struct AdjListNode* newNode = newAdjListNode(dest, weight);
+    newNode->next = graph->array[src].head;
+    graph->array[src].head = newNode;
+}
+
+// Min-heap node structure
+struct MinHeapNode {
+    int v;
+    int dist;
+};
+
+// Min-heap structure
+struct MinHeap {
+    int size;
+    int capacity;
+    int *pos;   // Needed for decreaseKey()
+    struct MinHeapNode **array;
+};
+
+// Create a min heap node
+struct MinHeapNode* newMinHeapNode(int v, int dist) {
+    struct MinHeapNode* minHeapNode = (struct MinHeapNode*)malloc(sizeof(struct MinHeapNode));
+    minHeapNode->v = v;
+    minHeapNode->dist = dist;
+    return minHeapNode;
+}
+
+// Create a min heap
+struct MinHeap* createMinHeap(int capacity) {
+    struct MinHeap* minHeap = (struct MinHeap*)malloc(sizeof(struct MinHeap));
+    minHeap->pos = (int*)malloc(capacity * sizeof(int));
+    minHeap->size = 0;
+    minHeap->capacity = capacity;
+    minHeap->array = (struct MinHeapNode**)malloc(capacity * sizeof(struct MinHeapNode*));
+    return minHeap;
+}
+
+// Swap two min heap nodes
+void swapMinHeapNode(struct MinHeapNode** a, struct MinHeapNode** b) {
+    struct MinHeapNode* t = *a;
+    *a = *b;
+    *b = t;
+}
+
+// Heapify at given index
+void minHeapify(struct MinHeap* minHeap, int idx) {
+    int smallest, left, right;
+    smallest = idx;
+    left = 2 * idx + 1;
+    right = 2 * idx + 2;
+    
+    if (left < minHeap->size && 
+        minHeap->array[left]->dist < minHeap->array[smallest]->dist) {
+        smallest = left;
+    }
+    
+    if (right < minHeap->size && 
+        minHeap->array[right]->dist < minHeap->array[smallest]->dist) {
+        smallest = right;
+    }
+    
+    if (smallest != idx) {
+        struct MinHeapNode* smallestNode = minHeap->array[smallest];
+        struct MinHeapNode* idxNode = minHeap->array[idx];
+        
+        minHeap->pos[smallestNode->v] = idx;
+        minHeap->pos[idxNode->v] = smallest;
+        
+        swapMinHeapNode(&minHeap->array[smallest], &minHeap->array[idx]);
+        minHeapify(minHeap, smallest);
+    }
+}
+
+// Check if min heap is empty
+int isEmpty(struct MinHeap* minHeap) {
+    return minHeap->size == 0;
+}
+
+// Extract minimum node from heap
+struct MinHeapNode* extractMin(struct MinHeap* minHeap) {
+    if (isEmpty(minHeap)) return NULL;
+    
+    struct MinHeapNode* root = minHeap->array[0];
+    struct MinHeapNode* lastNode = minHeap->array[minHeap->size - 1];
+    minHeap->array[0] = lastNode;
+    
+    minHeap->pos[root->v] = minHeap->size - 1;
+    minHeap->pos[lastNode->v] = 0;
+    
+    --minHeap->size;
+    minHeapify(minHeap, 0);
+    
+    return root;
+}
+
+// Decrease dist value of a given vertex
+void decreaseKey(struct MinHeap* minHeap, int v, int dist) {
+    int i = minHeap->pos[v];
+    minHeap->array[i]->dist = dist;
+    
+    while (i && minHeap->array[i]->dist < minHeap->array[(i - 1) / 2]->dist) {
+        minHeap->pos[minHeap->array[i]->v] = (i - 1) / 2;
+        minHeap->pos[minHeap->array[(i - 1) / 2]->v] = i;
+        swapMinHeapNode(&minHeap->array[i], &minHeap->array[(i - 1) / 2]);
+        i = (i - 1) / 2;
+    }
+}
+
+// Dijkstra's algorithm using adjacency list and min heap
+void dijkstraList(struct Graph* graph, int src) {
+    int V = graph->V;
+    int dist[V];
+    
+    struct MinHeap* minHeap = createMinHeap(V);
+    
+    for (int v = 0; v < V; v++) {
+        dist[v] = INF;
+        minHeap->array[v] = newMinHeapNode(v, dist[v]);
+        minHeap->pos[v] = v;
+    }
+    
+    minHeap->array[src] = newMinHeapNode(src, dist[src]);
+    minHeap->pos[src] = src;
+    dist[src] = 0;
+    decreaseKey(minHeap, src, dist[src]);
+    
+    minHeap->size = V;
+    
+    while (!isEmpty(minHeap)) {
+        struct MinHeapNode* minHeapNode = extractMin(minHeap);
+        int u = minHeapNode->v;
+        
+        struct AdjListNode* pCrawl = graph->array[u].head;
+        while (pCrawl != NULL) {
+            int v = pCrawl->dest;
+            
+            if (dist[u] != INF && pCrawl->weight + dist[u] < dist[v]) {
+                dist[v] = dist[u] + pCrawl->weight;
+                decreaseKey(minHeap, v, dist[v]);
+            }
+            pCrawl = pCrawl->next;
+        }
+    }
+    
+    printSolution(dist);
+}
+
+// Example usage:
+/*
+int main() {
+    // Example with adjacency matrix
+    int graph[V][V] = {
+        {0, 4, 0, 0, 0, 0, 0, 8, 0},
+        {4, 0, 8, 0, 0, 0, 0, 11, 0},
+        {0, 8, 0, 7, 0, 4, 0, 0, 2},
+        {0, 0, 7, 0, 9, 14, 0, 0, 0},
+        {0, 0, 0, 9, 0, 10, 0, 0, 0},
+        {0, 0, 4, 14, 10, 0, 2, 0, 0},
+        {0, 0, 0, 0, 0, 2, 0, 1, 6},
+        {8, 11, 0, 0, 0, 0, 1, 0, 7},
+        {0, 0, 2, 0, 0, 0, 6, 7, 0}
+    };
+    
+    dijkstraMatrix(graph, 0);
+    
+    // Example with adjacency list
+    struct Graph* graphList = createGraph(V);
+    addEdge(graphList, 0, 1, 4);
+    addEdge(graphList, 0, 7, 8);
+    addEdge(graphList, 1, 2, 8);
+    addEdge(graphList, 1, 7, 11);
+    addEdge(graphList, 2, 3, 7);
+    addEdge(graphList, 2, 8, 2);
+    addEdge(graphList, 2, 5, 4);
+    addEdge(graphList, 3, 4, 9);
+    addEdge(graphList, 3, 5, 14);
+    addEdge(graphList, 4, 5, 10);
+    addEdge(graphList, 5, 6, 2);
+    addEdge(graphList, 6, 7, 1);
+    addEdge(graphList, 6, 8, 6);
+    addEdge(graphList, 7, 8, 7);
+    
+    dijkstraList(graphList, 0);
+    
+    return 0;
+}
+*/</code></pre>
+      </div>
+
+      <div class="language-code-block" id="cpp-code">
+        <pre><code class="language-cpp">// C++ Code Example
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;climits&gt;
+#include &lt;functional&gt;
+using namespace std;
+
+// Pair class for storing vertex and distance
+typedef pair<int, int> iPair;
+
+class Dijkstra {
+private:
+    int vertices;
+    vector<vector<iPair>> adj;
+    
+public:
+    Dijkstra(int V) : vertices(V), adj(V) {}
+    
+    void addEdge(int u, int v, int weight) {
+        adj[u].push_back({v, weight});
+        // For undirected graph, add reverse edge too
+        // adj[v].push_back({u, weight});
+    }
+    
+    // Dijkstra's algorithm using priority queue
+    vector<int> shortestPath(int src) {
+        // Priority queue (min-heap) storing (distance, vertex)
+        priority_queue<iPair, vector<iPair>, greater<iPair>> pq;
+        vector<int> dist(vertices, INT_MAX);
+        vector<int> parent(vertices, -1);
+        
+        pq.push({0, src});
+        dist[src] = 0;
+        
+        while (!pq.empty()) {
+            int u = pq.top().second;
+            pq.pop();
+            
+            for (auto& neighbor : adj[u]) {
+                int v = neighbor.first;
+                int weight = neighbor.second;
+                
+                // Relaxation step
+                if (dist[v] > dist[u] + weight) {
+                    dist[v] = dist[u] + weight;
+                    parent[v] = u;
+                    pq.push({dist[v], v});
+                }
+            }
+        }
+        
+        return dist;
+    }
+    
+    // Dijkstra with path reconstruction
+    vector<int> shortestPathWithPath(int src, int dest) {
+        priority_queue<iPair, vector<iPair>, greater<iPair>> pq;
+        vector<int> dist(vertices, INT_MAX);
+        vector<int> parent(vertices, -1);
+        
+        pq.push({0, src});
+        dist[src] = 0;
+        
+        while (!pq.empty()) {
+            int u = pq.top().second;
+            pq.pop();
+            
+            // Early termination if destination is reached
+            if (u == dest) break;
+            
+            for (auto& neighbor : adj[u]) {
+                int v = neighbor.first;
+                int weight = neighbor.second;
+                
+                if (dist[v] > dist[u] + weight) {
+                    dist[v] = dist[u] + weight;
+                    parent[v] = u;
+                    pq.push({dist[v], v});
+                }
+            }
+        }
+        
+        // Reconstruct path
+        vector<int> path;
+        if (dist[dest] == INT_MAX) {
+            return path; // No path exists
+        }
+        
+        for (int v = dest; v != -1; v = parent[v]) {
+            path.push_back(v);
+        }
+        reverse(path.begin(), path.end());
+        return path;
+    }
+    
+    // Print shortest paths from source
+    void printShortestPaths(int src) {
+        vector<int> dist = shortestPath(src);
+        
+        cout << "Shortest distances from vertex " << src << ":\n";
+        for (int i = 0; i < vertices; i++) {
+            if (dist[i] == INT_MAX) {
+                cout << "Vertex " << i << ": INF\n";
+            } else {
+                cout << "Vertex " << i << ": " << dist[i] << "\n";
+            }
+        }
+    }
+    
+    // Find shortest path between two vertices
+    void findShortestPath(int src, int dest) {
+        vector<int> path = shortestPathWithPath(src, dest);
+        vector<int> dist = shortestPath(src);
+        
+        if (path.empty()) {
+            cout << "No path exists from " << src << " to " << dest << "\n";
+        } else {
+            cout << "Shortest path from " << src << " to " << dest << ": ";
+            for (size_t i = 0; i < path.size(); i++) {
+                cout << path[i];
+                if (i != path.size() - 1) cout << " -> ";
+            }
+            cout << "\nDistance: " << dist[dest] << "\n";
+        }
+    }
+};
+
+// Alternative implementation using set
+class DijkstraSet {
+private:
+    int vertices;
+    vector<vector<iPair>> adj;
+    
+public:
+    DijkstraSet(int V) : vertices(V), adj(V) {}
+    
+    void addEdge(int u, int v, int weight) {
+        adj[u].push_back({v, weight});
+    }
+    
+    vector<int> shortestPath(int src) {
+        set<iPair> s; // (distance, vertex)
+        vector<int> dist(vertices, INT_MAX);
+        
+        s.insert({0, src});
+        dist[src] = 0;
+        
+        while (!s.empty()) {
+            iPair top = *s.begin();
+            s.erase(s.begin());
+            int u = top.second;
+            
+            for (auto& neighbor : adj[u]) {
+                int v = neighbor.first;
+                int weight = neighbor.second;
+                
+                if (dist[v] > dist[u] + weight) {
+                    // If distance is not INF, remove old value from set
+                    if (dist[v] != INT_MAX) {
+                        s.erase(s.find({dist[v], v}));
+                    }
+                    
+                    dist[v] = dist[u] + weight;
+                    s.insert({dist[v], v});
+                }
+            }
+        }
+        
+        return dist;
+    }
+};
+
+// Example usage:
+/*
+int main() {
+    Dijkstra g(9);
+    
+    g.addEdge(0, 1, 4);
+    g.addEdge(0, 7, 8);
+    g.addEdge(1, 2, 8);
+    g.addEdge(1, 7, 11);
+    g.addEdge(2, 3, 7);
+    g.addEdge(2, 8, 2);
+    g.addEdge(2, 5, 4);
+    g.addEdge(3, 4, 9);
+    g.addEdge(3, 5, 14);
+    g.addEdge(4, 5, 10);
+    g.addEdge(5, 6, 2);
+    g.addEdge(6, 7, 1);
+    g.addEdge(6, 8, 6);
+    g.addEdge(7, 8, 7);
+    
+    g.printShortestPaths(0);
+    g.findShortestPath(0, 4);
+    
+    return 0;
+}
+*/</code></pre>
+      </div>
+
+      <div class="language-code-block" id="csharp-code">
+        <pre><code class="language-csharp">// C# Code Example
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class Dijkstra {
+    private int vertices;
+    private List<Tuple<int, int>>[] adj;
+    
+    public Dijkstra(int V) {
+        vertices = V;
+        adj = new List<Tuple<int, int>>[V];
+        for (int i = 0; i < V; i++) {
+            adj[i] = new List<Tuple<int, int>>();
+        }
+    }
+    
+    public void AddEdge(int u, int v, int weight) {
+        adj[u].Add(Tuple.Create(v, weight));
+    }
+    
+    // Dijkstra's algorithm using SortedSet
+    public int[] ShortestPath(int src) {
+        int[] dist = new int[vertices];
+        int[] parent = new int[vertices];
+        
+        for (int i = 0; i < vertices; i++) {
+            dist[i] = int.MaxValue;
+            parent[i] = -1;
+        }
+        dist[src] = 0;
+        
+        // SortedSet as priority queue
+        var pq = new SortedSet<Tuple<int, int>>(Comparer<Tuple<int, int>>.Create((a, b) => {
+            int compare = a.Item1.CompareTo(b.Item1);
+            return compare != 0 ? compare : a.Item2.CompareTo(b.Item2);
+        }));
+        
+        pq.Add(Tuple.Create(0, src));
+        
+        while (pq.Count > 0) {
+            var min = pq.Min;
+            pq.Remove(min);
+            int u = min.Item2;
+            
+            foreach (var neighbor in adj[u]) {
+                int v = neighbor.Item1;
+                int weight = neighbor.Item2;
+                
+                if (dist[u] != int.MaxValue && dist[u] + weight < dist[v]) {
+                    // Remove old distance if it exists
+                    if (dist[v] != int.MaxValue) {
+                        pq.Remove(Tuple.Create(dist[v], v));
+                    }
+                    
+                    dist[v] = dist[u] + weight;
+                    parent[v] = u;
+                    pq.Add(Tuple.Create(dist[v], v));
+                }
+            }
+        }
+        
+        return dist;
+    }
+    
+    // Dijkstra with path reconstruction
+    public (int[] distances, int[] parents) ShortestPathWithParents(int src) {
+        int[] dist = new int[vertices];
+        int[] parent = new int[vertices];
+        
+        for (int i = 0; i < vertices; i++) {
+            dist[i] = int.MaxValue;
+            parent[i] = -1;
+        }
+        dist[src] = 0;
+        
+        var pq = new SortedSet<Tuple<int, int>>(Comparer<Tuple<int, int>>.Create((a, b) => {
+            int compare = a.Item1.CompareTo(b.Item1);
+            return compare != 0 ? compare : a.Item2.CompareTo(b.Item2);
+        }));
+        
+        pq.Add(Tuple.Create(0, src));
+        
+        while (pq.Count > 0) {
+            var min = pq.Min;
+            pq.Remove(min);
+            int u = min.Item2;
+            
+            foreach (var neighbor in adj[u]) {
+                int v = neighbor.Item1;
+                int weight = neighbor.Item2;
+                
+                if (dist[u] != int.MaxValue && dist[u] + weight < dist[v]) {
+                    if (dist[v] != int.MaxValue) {
+                        pq.Remove(Tuple.Create(dist[v], v));
+                    }
+                    
+                    dist[v] = dist[u] + weight;
+                    parent[v] = u;
+                    pq.Add(Tuple.Create(dist[v], v));
+                }
+            }
+        }
+        
+        return (dist, parent);
+    }
+    
+    // Reconstruct path from source to destination
+    public List<int> GetPath(int dest, int[] parents) {
+        List<int> path = new List<int>();
+        if (parents[dest] == -1) {
+            return path; // No path exists
+        }
+        
+        for (int v = dest; v != -1; v = parents[v]) {
+            path.Add(v);
+        }
+        path.Reverse();
+        return path;
+    }
+    
+    public void PrintShortestPaths(int src) {
+        var (distances, parents) = ShortestPathWithParents(src);
+        
+        Console.WriteLine($"Shortest distances from vertex {src}:");
+        for (int i = 0; i < vertices; i++) {
+            if (distances[i] == int.MaxValue) {
+                Console.WriteLine($"Vertex {i}: INF");
+            } else {
+                Console.WriteLine($"Vertex {i}: {distances[i]}");
+            }
+        }
+    }
+    
+    public void FindShortestPath(int src, int dest) {
+        var (distances, parents) = ShortestPathWithParents(src);
+        List<int> path = GetPath(dest, parents);
+        
+        if (path.Count == 0) {
+            Console.WriteLine($"No path exists from {src} to {dest}");
+        } else {
+            Console.WriteLine($"Shortest path from {src} to {dest}: {string.Join(" -> ", path)}");
+            Console.WriteLine($"Distance: {distances[dest]}");
+        }
+    }
+    
+    // Dijkstra for adjacency matrix
+    public static int[] DijkstraMatrix(int[,] graph, int src) {
+        int V = graph.GetLength(0);
+        int[] dist = new int[V];
+        bool[] sptSet = new bool[V];
+        
+        for (int i = 0; i < V; i++) {
+            dist[i] = int.MaxValue;
+            sptSet[i] = false;
+        }
+        
+        dist[src] = 0;
+        
+        for (int count = 0; count < V - 1; count++) {
+            int u = MinDistance(dist, sptSet, V);
+            sptSet[u] = true;
+            
+            for (int v = 0; v < V; v++) {
+                if (!sptSet[v] && graph[u, v] != 0 && dist[u] != int.MaxValue && 
+                    dist[u] + graph[u, v] < dist[v]) {
+                    dist[v] = dist[u] + graph[u, v];
+                }
+            }
+        }
+        
+        return dist;
+    }
+    
+    private static int MinDistance(int[] dist, bool[] sptSet, int V) {
+        int min = int.MaxValue;
+        int minIndex = -1;
+        
+        for (int v = 0; v < V; v++) {
+            if (!sptSet[v] && dist[v] <= min) {
+                min = dist[v];
+                minIndex = v;
+            }
+        }
+        
+        return minIndex;
+    }
+}
+
+// Example usage:
+/*
+class Program {
+    static void Main() {
+        Dijkstra g = new Dijkstra(9);
+        
+        g.AddEdge(0, 1, 4);
+        g.AddEdge(0, 7, 8);
+        g.AddEdge(1, 2, 8);
+        g.AddEdge(1, 7, 11);
+        g.AddEdge(2, 3, 7);
+        g.AddEdge(2, 8, 2);
+        g.AddEdge(2, 5, 4);
+        g.AddEdge(3, 4, 9);
+        g.AddEdge(3, 5, 14);
+        g.AddEdge(4, 5, 10);
+        g.AddEdge(5, 6, 2);
+        g.AddEdge(6, 7, 1);
+        g.AddEdge(6, 8, 6);
+        g.AddEdge(7, 8, 7);
+        
+        g.PrintShortestPaths(0);
+        g.FindShortestPath(0, 4);
+    }
+}
+*/</code></pre>
+      </div>
+
+      <div class="language-code-block" id="java-code">
+        <pre><code class="language-java">// Java Code Example
+import java.util.*;
+
+public class Dijkstra {
+    private int vertices;
+    private List<List<Node>> adj;
+    
+    static class Node implements Comparable<Node> {
+        int vertex;
+        int weight;
+        
+        Node(int vertex, int weight) {
+            this.vertex = vertex;
+            this.weight = weight;
+        }
+        
+        @Override
+        public int compareTo(Node other) {
+            return Integer.compare(this.weight, other.weight);
+        }
+    }
+    
+    public Dijkstra(int V) {
+        this.vertices = V;
+        adj = new ArrayList<>();
+        for (int i = 0; i < V; i++) {
+            adj.add(new ArrayList<>());
+        }
+    }
+    
+    public void addEdge(int u, int v, int weight) {
+        adj.get(u).add(new Node(v, weight));
+    }
+    
+    // Dijkstra's algorithm using PriorityQueue
+    public int[] shortestPath(int src) {
+        int[] dist = new int[vertices];
+        int[] parent = new int[vertices];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        Arrays.fill(parent, -1);
+        dist[src] = 0;
+        
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        pq.add(new Node(src, 0));
+        
+        while (!pq.isEmpty()) {
+            Node node = pq.poll();
+            int u = node.vertex;
+            
+            for (Node neighbor : adj.get(u)) {
+                int v = neighbor.vertex;
+                int weight = neighbor.weight;
+                
+                if (dist[u] != Integer.MAX_VALUE && dist[u] + weight < dist[v]) {
+                    dist[v] = dist[u] + weight;
+                    parent[v] = u;
+                    pq.add(new Node(v, dist[v]));
+                }
+            }
+        }
+        
+        return dist;
+    }
+    
+    // Dijkstra with path reconstruction
+    public List<Integer> shortestPathWithPath(int src, int dest) {
+        int[] dist = new int[vertices];
+        int[] parent = new int[vertices];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        Arrays.fill(parent, -1);
+        dist[src] = 0;
+        
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        pq.add(new Node(src, 0));
+        
+        while (!pq.isEmpty()) {
+            Node node = pq.poll();
+            int u = node.vertex;
+            
+            if (u == dest) break; // Early termination
+            
+            for (Node neighbor : adj.get(u)) {
+                int v = neighbor.vertex;
+                int weight = neighbor.weight;
+                
+                if (dist[u] != Integer.MAX_VALUE && dist[u] + weight < dist[v]) {
+                    dist[v] = dist[u] + weight;
+                    parent[v] = u;
+                    pq.add(new Node(v, dist[v]));
+                }
+            }
+        }
+        
+        return reconstructPath(dest, parent);
+    }
+    
+    private List<Integer> reconstructPath(int dest, int[] parent) {
+        List<Integer> path = new ArrayList<>();
+        if (parent[dest] == -1) {
+            return path; // No path exists
+        }
+        
+        for (int v = dest; v != -1; v = parent[v]) {
+            path.add(v);
+        }
+        Collections.reverse(path);
+        return path;
+    }
+    
+    public void printShortestPaths(int src) {
+        int[] dist = shortestPath(src);
+        
+        System.out.println("Shortest distances from vertex " + src + ":");
+        for (int i = 0; i < vertices; i++) {
+            if (dist[i] == Integer.MAX_VALUE) {
+                System.out.println("Vertex " + i + ": INF");
+            } else {
+                System.out.println("Vertex " + i + ": " + dist[i]);
+            }
+        }
+    }
+    
+    public void findShortestPath(int src, int dest) {
+        List<Integer> path = shortestPathWithPath(src, dest);
+        int[] dist = shortestPath(src);
+        
+        if (path.isEmpty()) {
+            System.out.println("No path exists from " + src + " to " + dest);
+        } else {
+            System.out.print("Shortest path from " + src + " to " + dest + ": ");
+            for (int i = 0; i < path.size(); i++) {
+                System.out.print(path.get(i));
+                if (i != path.size() - 1) System.out.print(" -> ");
+            }
+            System.out.println("\nDistance: " + dist[dest]);
+        }
+    }
+    
+    // Dijkstra for adjacency matrix
+    public static int[] dijkstraMatrix(int[][] graph, int src) {
+        int V = graph.length;
+        int[] dist = new int[V];
+        boolean[] sptSet = new boolean[V];
+        
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[src] = 0;
+        
+        for (int count = 0; count < V - 1; count++) {
+            int u = minDistance(dist, sptSet, V);
+            sptSet[u] = true;
+            
+            for (int v = 0; v < V; v++) {
+                if (!sptSet[v] && graph[u][v] != 0 && dist[u] != Integer.MAX_VALUE && 
+                    dist[u] + graph[u][v] < dist[v]) {
+                    dist[v] = dist[u] + graph[u][v];
+                }
+            }
+        }
+        
+        return dist;
+    }
+    
+    private static int minDistance(int[] dist, boolean[] sptSet, int V) {
+        int min = Integer.MAX_VALUE;
+        int minIndex = -1;
+        
+        for (int v = 0; v < V; v++) {
+            if (!sptSet[v] && dist[v] <= min) {
+                min = dist[v];
+                minIndex = v;
+            }
+        }
+        
+        return minIndex;
+    }
+    
+    // Example usage
+    public static void main(String[] args) {
+        Dijkstra g = new Dijkstra(9);
+        
+        g.addEdge(0, 1, 4);
+        g.addEdge(0, 7, 8);
+        g.addEdge(1, 2, 8);
+        g.addEdge(1, 7, 11);
+        g.addEdge(2, 3, 7);
+        g.addEdge(2, 8, 2);
+        g.addEdge(2, 5, 4);
+        g.addEdge(3, 4, 9);
+        g.addEdge(3, 5, 14);
+        g.addEdge(4, 5, 10);
+        g.addEdge(5, 6, 2);
+        g.addEdge(6, 7, 1);
+        g.addEdge(6, 8, 6);
+        g.addEdge(7, 8, 7);
+        
+        g.printShortestPaths(0);
+        g.findShortestPath(0, 4);
+    }
+}</code></pre>
+      </div>
+
+      <div class="language-code-block" id="python-code">
+        <pre><code class="language-python"># Python Code Example
+import heapq
+import sys
+from collections import defaultdict
+
+class Dijkstra:
+    def __init__(self, vertices):
+        self.vertices = vertices
+        self.graph = defaultdict(list)
+    
+    def add_edge(self, u, v, weight):
+        self.graph[u].append((v, weight))
+    
+    # Dijkstra's algorithm using heapq
+    def shortest_path(self, src):
+        dist = [sys.maxsize] * self.vertices
+        parent = [-1] * self.vertices
+        dist[src] = 0
+        
+        # Priority queue: (distance, vertex)
+        pq = []
+        heapq.heappush(pq, (0, src))
+        
+        while pq:
+            current_dist, u = heapq.heappop(pq)
+            
+            # Skip if we found a better distance already
+            if current_dist > dist[u]:
+                continue
+                
+            for neighbor, weight in self.graph[u]:
+                new_dist = dist[u] + weight
+                
+                if new_dist < dist[neighbor]:
+                    dist[neighbor] = new_dist
+                    parent[neighbor] = u
+                    heapq.heappush(pq, (new_dist, neighbor))
+        
+        return dist, parent
+    
+    # Reconstruct path from source to destination
+    def get_path(self, dest, parent):
+        path = []
+        if parent[dest] == -1:
+            return path  # No path exists
+        
+        current = dest
+        while current != -1:
+            path.append(current)
+            current = parent[current]
+        path.reverse()
+        return path
+    
+    def print_shortest_paths(self, src):
+        dist, parent = self.shortest_path(src)
+        
+        print(f"Shortest distances from vertex {src}:")
+        for i in range(self.vertices):
+            if dist[i] == sys.maxsize:
+                print(f"Vertex {i}: INF")
+            else:
+                print(f"Vertex {i}: {dist[i]}")
+    
+    def find_shortest_path(self, src, dest):
+        dist, parent = self.shortest_path(src)
+        path = self.get_path(dest, parent)
+        
+        if not path:
+            print(f"No path exists from {src} to {dest}")
+        else:
+            print(f"Shortest path from {src} to {dest}: {' -> '.join(map(str, path))}")
+            print(f"Distance: {dist[dest]}")
+
+# Alternative implementation using set
+class DijkstraSet:
+    def __init__(self, vertices):
+        self.vertices = vertices
+        self.graph = defaultdict(list)
+    
+    def add_edge(self, u, v, weight):
+        self.graph[u].append((v, weight))
+    
+    def shortest_path(self, src):
+        dist = [sys.maxsize] * self.vertices
+        dist[src] = 0
+        
+        # Set as priority queue: (distance, vertex)
+        pq = set()
+        pq.add((0, src))
+        
+        while pq:
+            # Find minimum element
+            current_dist, u = min(pq)
+            pq.remove((current_dist, u))
+            
+            for neighbor, weight in self.graph[u]:
+                new_dist = dist[u] + weight
+                
+                if new_dist < dist[neighbor]:
+                    # Remove old distance if it exists
+                    if dist[neighbor] != sys.maxsize:
+                        pq.discard((dist[neighbor], neighbor))
+                    
+                    dist[neighbor] = new_dist
+                    pq.add((new_dist, neighbor))
+        
+        return dist
+
+# Dijkstra for adjacency matrix
+def dijkstra_matrix(graph, src):
+    V = len(graph)
+    dist = [sys.maxsize] * V
+    visited = [False] * V
+    dist[src] = 0
+    
+    for _ in range(V - 1):
+        # Find vertex with minimum distance
+        u = min_distance_vertex(dist, visited, V)
+        visited[u] = True
+        
+        for v in range(V):
+            if (not visited[v] and graph[u][v] != 0 and 
+                dist[u] != sys.maxsize and dist[u] + graph[u][v] < dist[v]):
+                dist[v] = dist[u] + graph[u][v]
+    
+    return dist
+
+def min_distance_vertex(dist, visited, V):
+    min_val = sys.maxsize
+    min_index = -1
+    
+    for v in range(V):
+        if not visited[v] and dist[v] <= min_val:
+            min_val = dist[v]
+            min_index = v
+    
+    return min_index
+
+# Functional programming style
+def dijkstra_functional(edges, vertices, src):
+    graph = defaultdict(list)
+    for u, v, weight in edges:
+        graph[u].append((v, weight))
+    
+    dist = [sys.maxsize] * vertices
+    dist[src] = 0
+    pq = [(0, src)]
+    
+    while pq:
+        current_dist, u = heapq.heappop(pq)
+        if current_dist > dist[u]:
+            continue
+            
+        for neighbor, weight in graph[u]:
+            new_dist = dist[u] + weight
+            if new_dist < dist[neighbor]:
+                dist[neighbor] = new_dist
+                heapq.heappush(pq, (new_dist, neighbor))
+    
+    return dist
+
+# Example usage:
+def example_usage():
+    g = Dijkstra(9)
+    
+    g.add_edge(0, 1, 4)
+    g.add_edge(0, 7, 8)
+    g.add_edge(1, 2, 8)
+    g.add_edge(1, 7, 11)
+    g.add_edge(2, 3, 7)
+    g.add_edge(2, 8, 2)
+    g.add_edge(2, 5, 4)
+    g.add_edge(3, 4, 9)
+    g.add_edge(3, 5, 14)
+    g.add_edge(4, 5, 10)
+    g.add_edge(5, 6, 2)
+    g.add_edge(6, 7, 1)
+    g.add_edge(6, 8, 6)
+    g.add_edge(7, 8, 7)
+    
+    g.print_shortest_paths(0)
+    g.find_shortest_path(0, 4)
+
+# Uncomment to run example
+# example_usage()</code></pre>
+      </div>
+
+      <div class="language-code-block" id="javascript-code">
+        <pre><code class="language-javascript">// JavaScript Code Example
+class MinHeap {
+    constructor() {
+        this.heap = [];
+    }
+    
+    push(node) {
+        this.heap.push(node);
+        this.bubbleUp(this.heap.length - 1);
+    }
+    
+    pop() {
+        const min = this.heap[0];
+        const last = this.heap.pop();
+        
+        if (this.heap.length > 0) {
+            this.heap[0] = last;
+            this.sinkDown(0);
+        }
+        
+        return min;
+    }
+    
+    bubbleUp(index) {
+        const node = this.heap[index];
+        
+        while (index > 0) {
+            const parentIndex = Math.floor((index - 1) / 2);
+            const parent = this.heap[parentIndex];
+            
+            if (node.dist >= parent.dist) break;
+            
+            this.heap[parentIndex] = node;
+            this.heap[index] = parent;
+            index = parentIndex;
+        }
+    }
+    
+    sinkDown(index) {
+        const length = this.heap.length;
+        const node = this.heap[index];
+        
+        while (true) {
+            let leftChildIndex = 2 * index + 1;
+            let rightChildIndex = 2 * index + 2;
+            let swap = null;
+            let leftChild, rightChild;
+            
+            if (leftChildIndex < length) {
+                leftChild = this.heap[leftChildIndex];
+                if (leftChild.dist < node.dist) {
+                    swap = leftChildIndex;
+                }
+            }
+            
+            if (rightChildIndex < length) {
+                rightChild = this.heap[rightChildIndex];
+                if ((swap === null && rightChild.dist < node.dist) ||
+                    (swap !== null && rightChild.dist < leftChild.dist)) {
+                    swap = rightChildIndex;
+                }
+            }
+            
+            if (swap === null) break;
+            
+            this.heap[index] = this.heap[swap];
+            this.heap[swap] = node;
+            index = swap;
+        }
+    }
+    
+    isEmpty() {
+        return this.heap.length === 0;
+    }
+}
+
+class Dijkstra {
+    constructor(vertices) {
+        this.vertices = vertices;
+        this.adj = new Array(vertices);
+        for (let i = 0; i < vertices; i++) {
+            this.adj[i] = [];
+        }
+    }
+    
+    addEdge(u, v, weight) {
+        this.adj[u].push({ vertex: v, weight });
+    }
+    
+    // Dijkstra's algorithm using custom MinHeap
+    shortestPath(src) {
+        const dist = new Array(this.vertices).fill(Number.MAX_SAFE_INTEGER);
+        const parent = new Array(this.vertices).fill(-1);
+        dist[src] = 0;
+        
+        const heap = new MinHeap();
+        heap.push({ vertex: src, dist: 0 });
+        
+        while (!heap.isEmpty()) {
+            const { vertex: u } = heap.pop();
+            
+            for (const neighbor of this.adj[u]) {
+                const v = neighbor.vertex;
+                const weight = neighbor.weight;
+                const newDist = dist[u] + weight;
+                
+                if (newDist < dist[v]) {
+                    dist[v] = newDist;
+                    parent[v] = u;
+                    heap.push({ vertex: v, dist: newDist });
+                }
+            }
+        }
+        
+        return { dist, parent };
+    }
+    
+    // Dijkstra using built-in array as priority queue (less efficient)
+    shortestPathArray(src) {
+        const dist = new Array(this.vertices).fill(Number.MAX_SAFE_INTEGER);
+        const visited = new Array(this.vertices).fill(false);
+        dist[src] = 0;
+        
+        for (let count = 0; count < this.vertices - 1; count++) {
+            const u = this.minDistance(dist, visited);
+            visited[u] = true;
+            
+            for (const neighbor of this.adj[u]) {
+                const v = neighbor.vertex;
+                const weight = neighbor.weight;
+                
+                if (!visited[v] && dist[u] !== Number.MAX_SAFE_INTEGER && 
+                    dist[u] + weight < dist[v]) {
+                    dist[v] = dist[u] + weight;
+                }
+            }
+        }
+        
+        return dist;
+    }
+    
+    minDistance(dist, visited) {
+        let min = Number.MAX_SAFE_INTEGER;
+        let minIndex = -1;
+        
+        for (let v = 0; v < this.vertices; v++) {
+            if (!visited[v] && dist[v] <= min) {
+                min = dist[v];
+                minIndex = v;
+            }
+        }
+        
+        return minIndex;
+    }
+    
+    getPath(dest, parent) {
+        const path = [];
+        if (parent[dest] === -1) {
+            return path; // No path exists
+        }
+        
+        let current = dest;
+        while (current !== -1) {
+            path.push(current);
+            current = parent[current];
+        }
+        path.reverse();
+        return path;
+    }
+    
+    printShortestPaths(src) {
+        const { dist } = this.shortestPath(src);
+        
+        console.log(`Shortest distances from vertex ${src}:`);
+        for (let i = 0; i < this.vertices; i++) {
+            if (dist[i] === Number.MAX_SAFE_INTEGER) {
+                console.log(`Vertex ${i}: INF`);
+            } else {
+                console.log(`Vertex ${i}: ${dist[i]}`);
+            }
+        }
+    }
+    
+    findShortestPath(src, dest) {
+        const { dist, parent } = this.shortestPath(src);
+        const path = this.getPath(dest, parent);
+        
+        if (path.length === 0) {
+            console.log(`No path exists from ${src} to ${dest}`);
+        } else {
+            console.log(`Shortest path from ${src} to ${dest}: ${path.join(' -> ')}`);
+            console.log(`Distance: ${dist[dest]}`);
+        }
+    }
+}
+
+// Functional programming style
+function dijkstraFunctional(edges, vertices, src) {
+    const graph = new Array(vertices);
+    for (let i = 0; i < vertices; i++) {
+        graph[i] = [];
+    }
+    
+    for (const [u, v, weight] of edges) {
+        graph[u].push({ vertex: v, weight });
+    }
+    
+    const dist = new Array(vertices).fill(Number.MAX_SAFE_INTEGER);
+    dist[src] = 0;
+    
+    const pq = [{ vertex: src, dist: 0 }];
+    
+    while (pq.length > 0) {
+        // Find minimum (inefficient but simple)
+        let minIndex = 0;
+        for (let i = 1; i < pq.length; i++) {
+            if (pq[i].dist < pq[minIndex].dist) {
+                minIndex = i;
+            }
+        }
+        const { vertex: u } = pq.splice(minIndex, 1)[0];
+        
+        for (const neighbor of graph[u]) {
+            const v = neighbor.vertex;
+            const weight = neighbor.weight;
+            const newDist = dist[u] + weight;
+            
+            if (newDist < dist[v]) {
+                dist[v] = newDist;
+                pq.push({ vertex: v, dist: newDist });
+            }
+        }
+    }
+    
+    return dist;
+}
+
+// Example usage:
+function exampleUsage() {
+    const g = new Dijkstra(9);
+    
+    g.addEdge(0, 1, 4);
+    g.addEdge(0, 7, 8);
+    g.addEdge(1, 2, 8);
+    g.addEdge(1, 7, 11);
+    g.addEdge(2, 3, 7);
+    g.addEdge(2, 8, 2);
+    g.addEdge(2, 5, 4);
+    g.addEdge(3, 4, 9);
+    g.addEdge(3, 5, 14);
+    g.addEdge(4, 5, 10);
+    g.addEdge(5, 6, 2);
+    g.addEdge(6, 7, 1);
+    g.addEdge(6, 8, 6);
+    g.addEdge(7, 8, 7);
+    
+    g.printShortestPaths(0);
+    g.findShortestPath(0, 4);
+}
+
+// Uncomment to run example
+// exampleUsage();</code></pre>
+      </div>
+      
+      <p><strong>Practice Idea:</strong> Implement Dijkstra's algorithm using different priority queue implementations (binary heap, Fibonacci heap, array) and compare their performance. Then modify the algorithm to handle graphs with negative weights by detecting negative cycles. Finally, implement a bidirectional Dijkstra's algorithm that searches from both source and destination simultaneously.</p>
+      
+      <p><strong>Real-world Applications:</strong>
+        <ul>
+            <li><strong>GPS Navigation:</strong> Finding shortest driving routes between locations</li>
+            <li><strong>Network Routing:</strong> OSPF and IS-IS routing protocols use Dijkstra's algorithm</li>
+            <li><strong>Social Networks:</strong> Finding shortest connection paths between people</li>
+            <li><strong>Robotics:</strong> Path planning for robots in obstacle environments</li>
+            <li><strong>Telecommunications:</strong> Circuit routing in telephone networks</li>
+            <li><strong>Game Development:</strong> AI pathfinding for non-player characters</li>
+            <li><strong>Transportation:</strong> Flight route planning and logistics optimization</li>
+            <li><strong>Web Mapping:</strong> Services like Google Maps and MapQuest use Dijkstra variants</li>
+        </ul>
+      </p>
+      
+      <p><strong>Summary:</strong> Dijkstra's Algorithm is a fundamental greedy algorithm for finding shortest paths in graphs with non-negative edge weights. Its efficiency depends on the priority queue implementation, with binary heaps providing O((V+E) log V) time complexity. The algorithm's greedy nature ensures optimality by always expanding the closest vertex, and its versatility makes it indispensable in navigation systems, network routing, and many other real-world applications. While it cannot handle negative weights, its efficiency and reliability for non-negative graphs make it one of the most important algorithms in computer science.</p>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const languageButtons = document.querySelectorAll('.code-language-btn');
+        const codeBlocks = document.querySelectorAll('.language-code-block');
+        
+        languageButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const targetLanguage = this.getAttribute('data-language');
+                
+                // Update active button
+                languageButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show corresponding code block
+                codeBlocks.forEach(block => {
+                    if (block.id === `${targetLanguage}-code`) {
+                        block.classList.add('active');
+                    } else {
+                        block.classList.remove('active');
+                    }
+                });
+            });
+        });
+    });
+    </script>
+</body>
+</html>

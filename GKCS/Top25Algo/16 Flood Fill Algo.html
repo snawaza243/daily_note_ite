@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Binary Search</title>
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .itepost-section-title {
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.8em;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+            margin-top: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .itepost-section-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .itepost-section-content p {
+            margin-bottom: 16px;
+        }
+
+        pre {
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        strong {
+            color: #2E7D32;
+        }
+    </style>
+
+    <!-- Add this CSS -->
+    <style>
+        .code-language-buttons {
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .code-language-btn {
+            padding: 5px 12px;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .code-language-btn:hover {
+            background-color: #e9e9e9;
+        }
+
+        .code-language-btn.active {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .language-code-block {
+            display: none;
+        }
+
+        .language-code-block.active {
+            display: block;
+        }
+    </style>
+
+    <!-- Add this script after jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Process each implementation section
+            $('.itepost-section-content').each(function () {
+                const $section = $(this);
+                const $implementationTitle = $section.find('p:contains("Implementation in Multiple Languages:")');
+
+                if ($implementationTitle.length > 0) {
+                    const $codeBlocks = $implementationTitle.nextUntil('p').filter('pre');
+
+                    if ($codeBlocks.length > 0) {
+                        // Create language buttons container
+                        const $buttonsContainer = $('<div class="code-language-buttons"></div>');
+
+                        // Extract languages and create buttons
+                        const languages = [];
+                        $codeBlocks.each(function () {
+                            const $codeBlock = $(this);
+                            const languageClass = $codeBlock.find('code').attr('class');
+                            let languageName = 'Unknown';
+
+                            if (languageClass) {
+                                // Extract language name from class (e.g., "language-python" -> "python")
+                                const match = languageClass.match(/language-(\w+)/);
+                                if (match) {
+                                    languageName = match[1].toUpperCase();
+                                }
+                            }
+
+                            languages.push({
+                                name: languageName,
+                                element: $codeBlock
+                            });
+
+                            // Add class to code block for easier selection
+                            $codeBlock.addClass('language-code-block').addClass('lang-' + languageName.toLowerCase());
+                        });
+
+                        // Create buttons for each language
+                        languages.forEach((lang, index) => {
+                            const $button = $('<button class="code-language-btn">' + lang.name + '</button>');
+
+                            // Make first button active by default
+                            if (index === 0) {
+                                $button.addClass('active');
+                                lang.element.addClass('active');
+                            }
+
+                            $button.on('click', function () {
+                                // Remove active class from all buttons and code blocks
+                                $buttonsContainer.find('.code-language-btn').removeClass('active');
+                                $section.find('.language-code-block').removeClass('active');
+
+                                // Add active class to clicked button and corresponding code block
+                                $(this).addClass('active');
+                                lang.element.addClass('active');
+                            });
+
+                            $buttonsContainer.append($button);
+                        });
+
+                        // Insert buttons after the implementation title
+                        $implementationTitle.after($buttonsContainer);
+                    }
+                }
+            });
+        });
+
+    </script>
+</head>
+ 
+<body>
+    <div class="itepost-section-title">Flood Fill Algorithm</div>
+    <div class="itepost-section-content">
+      <p><strong>Category:</strong> Graphs (Blue)</p>
+      
+      <p><strong>Introduction:</strong> Flood Fill, also known as seed fill, is an algorithm that determines the area connected to a given node in a multi-dimensional array. It's similar to the "bucket fill" tool in paint programs - you click on a point, and it fills all connected pixels of the same color with a new color. The algorithm works by starting from a seed point and recursively/successively filling all connected points that match the target color. It's widely used in computer graphics, image processing, and games (like Minesweeper for revealing empty areas).</p>
+      
+      <p><strong>Working Principle:</strong> The algorithm can be implemented using different approaches:
+        <ol>
+            <li><strong>Depth-First Search (DFS):</strong> Recursively explores all connected pixels</li>
+            <li><strong>Breadth-First Search (BFS):</strong> Uses a queue to explore connected pixels level by level</li>
+            <li><strong>Iterative:</strong> Uses a stack to avoid recursion depth limits</li>
+        </ol>
+        The basic idea is to replace the target color with the replacement color in all connected positions.
+        <br><br>
+        <strong>Pseudocode (DFS Recursive):</strong><br>
+        <code>
+        floodFill(image, x, y, targetColor, replacementColor):<br>
+        &nbsp;&nbsp;// Base cases<br>
+        &nbsp;&nbsp;if x or y are outside image bounds: return<br>
+        &nbsp;&nbsp;if image[x][y] != targetColor: return<br>
+        &nbsp;&nbsp;if targetColor == replacementColor: return<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;// Replace the color<br>
+        &nbsp;&nbsp;image[x][y] = replacementColor<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;// Recursively fill neighboring pixels (4-direction or 8-direction)<br>
+        &nbsp;&nbsp;floodFill(image, x+1, y, targetColor, replacementColor)<br>
+        &nbsp;&nbsp;floodFill(image, x-1, y, targetColor, replacementColor)<br>
+        &nbsp;&nbsp;floodFill(image, x, y+1, targetColor, replacementColor)<br>
+        &nbsp;&nbsp;floodFill(image, x, y-1, targetColor, replacementColor)<br>
+        </code>
+        <br>
+        <strong>Pseudocode (BFS Iterative):</strong><br>
+        <code>
+        floodFillBFS(image, x, y, targetColor, replacementColor):<br>
+        &nbsp;&nbsp;if targetColor == replacementColor: return<br>
+        &nbsp;&nbsp;if image[x][y] != targetColor: return<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;queue = new Queue()<br>
+        &nbsp;&nbsp;queue.enqueue((x, y))<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;while queue is not empty:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;(cx, cy) = queue.dequeue()<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;image[cx][cy] = replacementColor<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;// Check and enqueue neighbors<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;for each neighbor (nx, ny) of (cx, cy):<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if nx, ny are within bounds and image[nx][ny] == targetColor:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;queue.enqueue((nx, ny))<br>
+        </code>
+      </p>
+      
+      <p><strong>Example & Dry Run:</strong><br>
+        Consider this 5x5 grid where 'X' represents boundaries and numbers represent colors:
+        <pre>
+        X X X X X
+        X 1 1 1 X
+        X 1 X 1 X
+        X 1 1 1 X
+        X X X X X
+        </pre>
+        <strong>Starting from position (2,2) with target color 1 and replacement color 2:</strong>
+        <ul>
+            <li><strong>Step 1:</strong> Fill (2,2) with color 2</li>
+            <li><strong>Step 2:</strong> Check neighbors: (1,2), (3,2), (2,1), (2,3)</li>
+            <li><strong>Step 3:</strong> Fill (1,2) and check its neighbors</li>
+            <li><strong>Step 4:</strong> Continue until all connected '1's are replaced with '2's</li>
+            <li><strong>Result:</strong> All connected area filled with new color, boundaries remain</li>
+        </ul>
+        Final grid:
+        <pre>
+        X X X X X
+        X 2 2 2 X
+        X 2 X 2 X
+        X 2 2 2 X
+        X X X X X
+        </pre>
+      </p>
+      
+      <p><strong>Time and Space Complexity:</strong>
+        <ul>
+            <li><strong>Time Complexity:</strong> O(M × N) where M×N is the grid size</li>
+            <li><strong>Space Complexity:</strong> 
+                <ul>
+                    <li>DFS Recursive: O(M × N) due to recursion stack</li>
+                    <li>BFS Iterative: O(M × N) for queue storage</li>
+                    <li>Iterative with stack: O(M × N)</li>
+                </ul>
+            </li>
+            <li><strong>Best Case:</strong> O(1) - When starting point doesn't match target color</li>
+            <li><strong>Worst Case:</strong> O(M × N) - When entire grid needs to be filled</li>
+        </ul>
+      </p>
+      
+      <p><strong>Implementation in Multiple Languages:</strong></p>
+      
+      <div class="code-language-buttons">
+        <button class="code-language-btn active" data-language="c">C</button>
+        <button class="code-language-btn" data-language="cpp">C++</button>
+        <button class="code-language-btn" data-language="csharp">C#</button>
+        <button class="code-language-btn" data-language="java">Java</button>
+        <button class="code-language-btn" data-language="python">Python</button>
+        <button class="code-language-btn" data-language="javascript">JavaScript</button>
+      </div>
+      
+      <div class="language-code-block active" id="c-code">
+        <pre><code class="language-c">// C Code Example
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdbool.h&gt;
+
+#define ROWS 5
+#define COLS 5
+
+// 4-direction movements: up, right, down, left
+const int dx4[] = {-1, 0, 1, 0};
+const int dy4[] = {0, 1, 0, -1};
+
+// 8-direction movements: including diagonals
+const int dx8[] = {-1, -1, -1, 0, 0, 1, 1, 1};
+const int dy8[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+
+// DFS Recursive Flood Fill (4-direction)
+void floodFillDFS4(int image[ROWS][COLS], int x, int y, int targetColor, int replacementColor) {
+    // Base cases
+    if (x < 0 || x >= ROWS || y < 0 || y >= COLS) return;
+    if (image[x][y] != targetColor) return;
+    if (targetColor == replacementColor) return;
+    
+    // Replace color
+    image[x][y] = replacementColor;
+    
+    // Recursively fill neighbors (4-direction)
+    for (int i = 0; i < 4; i++) {
+        floodFillDFS4(image, x + dx4[i], y + dy4[i], targetColor, replacementColor);
+    }
+}
+
+// DFS Recursive Flood Fill (8-direction)
+void floodFillDFS8(int image[ROWS][COLS], int x, int y, int targetColor, int replacementColor) {
+    // Base cases
+    if (x < 0 || x >= ROWS || y < 0 || y >= COLS) return;
+    if (image[x][y] != targetColor) return;
+    if (targetColor == replacementColor) return;
+    
+    // Replace color
+    image[x][y] = replacementColor;
+    
+    // Recursively fill neighbors (8-direction)
+    for (int i = 0; i < 8; i++) {
+        floodFillDFS8(image, x + dx8[i], y + dy8[i], targetColor, replacementColor);
+    }
+}
+
+// BFS Iterative Flood Fill
+void floodFillBFS(int image[ROWS][COLS], int startX, int startY, int targetColor, int replacementColor) {
+    if (targetColor == replacementColor) return;
+    if (image[startX][startY] != targetColor) return;
+    
+    // Simple queue implementation for coordinates
+    int queue[ROWS * COLS][2];
+    int front = 0, rear = 0;
+    
+    // Enqueue starting point
+    queue[rear][0] = startX;
+    queue[rear][1] = startY;
+    rear++;
+    
+    while (front < rear) {
+        // Dequeue current position
+        int x = queue[front][0];
+        int y = queue[front][1];
+        front++;
+        
+        // Replace color
+        image[x][y] = replacementColor;
+        
+        // Check and enqueue neighbors (4-direction)
+        for (int i = 0; i < 4; i++) {
+            int nx = x + dx4[i];
+            int ny = y + dy4[i];
+            
+            if (nx >= 0 && nx < ROWS && ny >= 0 && ny < COLS && 
+                image[nx][ny] == targetColor) {
+                queue[rear][0] = nx;
+                queue[rear][1] = ny;
+                rear++;
+            }
+        }
+    }
+}
+
+// Iterative DFS using stack
+void floodFillStack(int image[ROWS][COLS], int startX, int startY, int targetColor, int replacementColor) {
+    if (targetColor == replacementColor) return;
+    if (image[startX][startY] != targetColor) return;
+    
+    // Stack implementation
+    int stack[ROWS * COLS][2];
+    int top = -1;
+    
+    // Push starting point
+    top++;
+    stack[top][0] = startX;
+    stack[top][1] = startY;
+    
+    while (top >= 0) {
+        // Pop current position
+        int x = stack[top][0];
+        int y = stack[top][1];
+        top--;
+        
+        // Replace color if still target color (might be filled by another path)
+        if (image[x][y] == targetColor) {
+            image[x][y] = replacementColor;
+            
+            // Push neighbors (4-direction)
+            for (int i = 0; i < 4; i++) {
+                int nx = x + dx4[i];
+                int ny = y + dy4[i];
+                
+                if (nx >= 0 && nx < ROWS && ny >= 0 && ny < COLS && 
+                    image[nx][ny] == targetColor) {
+                    top++;
+                    stack[top][0] = nx;
+                    stack[top][1] = ny;
+                }
+            }
+        }
+    }
+}
+
+// Boundary fill algorithm (fills until boundary color is hit)
+void boundaryFill(int image[ROWS][COLS], int x, int y, int boundaryColor, int fillColor) {
+    if (x < 0 || x >= ROWS || y < 0 || y >= COLS) return;
+    if (image[x][y] == boundaryColor || image[x][y] == fillColor) return;
+    
+    image[x][y] = fillColor;
+    
+    for (int i = 0; i < 4; i++) {
+        boundaryFill(image, x + dx4[i], y + dy4[i], boundaryColor, fillColor);
+    }
+}
+
+// Print the image grid
+void printImage(int image[ROWS][COLS]) {
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            printf("%d ", image[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
+// Example usage:
+/*
+int main() {
+    int image[ROWS][COLS] = {
+        {0, 0, 0, 0, 0},
+        {0, 1, 1, 1, 0},
+        {0, 1, 0, 1, 0},
+        {0, 1, 1, 1, 0},
+        {0, 0, 0, 0, 0}
+    };
+    
+    printf("Original image:\n");
+    printImage(image);
+    
+    // Test DFS 4-direction
+    int image1[ROWS][COLS];
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            image1[i][j] = image[i][j];
+        }
+    }
+    floodFillDFS4(image1, 1, 1, 1, 2);
+    printf("After DFS 4-direction fill:\n");
+    printImage(image1);
+    
+    // Test BFS
+    int image2[ROWS][COLS];
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            image2[i][j] = image[i][j];
+        }
+    }
+    floodFillBFS(image2, 1, 1, 1, 3);
+    printf("After BFS fill:\n");
+    printImage(image2);
+    
+    return 0;
+}
+*/</code></pre>
+      </div>
+
+      <div class="language-code-block" id="cpp-code">
+        <pre><code class="language-cpp">// C++ Code Example
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;stack&gt;
+#include &lt;utility&gt;
+using namespace std;
+
+class FloodFill {
+private:
+    vector&lt;vector&lt;int&gt;&gt; image;
+    int rows, cols;
+    
+    // 4-direction movements
+    const vector&lt;int&gt; dx4 = {-1, 0, 1, 0};
+    const vector&lt;int&gt; dy4 = {0, 1, 0, -1};
+    
+    // 8-direction movements
+    const vector&lt;int&gt; dx8 = {-1, -1, -1, 0, 0, 1, 1, 1};
+    const vector&lt;int&gt; dy8 = {-1, 0, 1, -1, 1, -1, 0, 1};
+    
+public:
+    FloodFill(vector&lt;vector&lt;int&gt;&gt;& img) : image(img) {
+        rows = image.size();
+        cols = image[0].size();
+    }
+    
+    // DFS Recursive (4-direction)
+    void floodFillDFS4(int x, int y, int targetColor, int replacementColor) {
+        if (x &lt; 0 || x &gt;= rows || y &lt; 0 || y &gt;= cols) return;
+        if (image[x][y] != targetColor) return;
+        if (targetColor == replacementColor) return;
+        
+        image[x][y] = replacementColor;
+        
+        for (int i = 0; i &lt; 4; i++) {
+            floodFillDFS4(x + dx4[i], y + dy4[i], targetColor, replacementColor);
+        }
+    }
+    
+    // DFS Recursive (8-direction)
+    void floodFillDFS8(int x, int y, int targetColor, int replacementColor) {
+        if (x &lt; 0 || x &gt;= rows || y &lt; 0 || y &gt;= cols) return;
+        if (image[x][y] != targetColor) return;
+        if (targetColor == replacementColor) return;
+        
+        image[x][y] = replacementColor;
+        
+        for (int i = 0; i &lt; 8; i++) {
+            floodFillDFS8(x + dx8[i], y + dy8[i], targetColor, replacementColor);
+        }
+    }
+    
+    // BFS Iterative
+    void floodFillBFS(int startX, int startY, int targetColor, int replacementColor) {
+        if (targetColor == replacementColor) return;
+        if (image[startX][startY] != targetColor) return;
+        
+        queue&lt;pair&lt;int, int&gt;&gt; q;
+        q.push({startX, startY});
+        
+        while (!q.empty()) {
+            auto [x, y] = q.front();
+            q.pop();
+            
+            image[x][y] = replacementColor;
+            
+            for (int i = 0; i &lt; 4; i++) {
+                int nx = x + dx4[i];
+                int ny = y + dy4[i];
+                
+                if (nx &gt;= 0 && nx &lt; rows && ny &gt;= 0 && ny &lt; cols && 
+                    image[nx][ny] == targetColor) {
+                    q.push({nx, ny});
+                }
+            }
+        }
+    }
+    
+    // Iterative DFS using stack
+    void floodFillStack(int startX, int startY, int targetColor, int replacementColor) {
+        if (targetColor == replacementColor) return;
+        if (image[startX][startY] != targetColor) return;
+        
+        stack&lt;pair&lt;int, int&gt;&gt; st;
+        st.push({startX, startY});
+        
+        while (!st.empty()) {
+            auto [x, y] = st.top();
+            st.pop();
+            
+            if (image[x][y] == targetColor) {
+                image[x][y] = replacementColor;
+                
+                for (int i = 0; i &lt; 4; i++) {
+                    int nx = x + dx4[i];
+                    int ny = y + dy4[i];
+                    
+                    if (nx &gt;= 0 && nx &lt; rows && ny &gt;= 0 && ny &lt; cols && 
+                        image[nx][ny] == targetColor) {
+                        st.push({nx, ny});
+                    }
+                }
+            }
+        }
+    }
+    
+    // Boundary fill algorithm
+    void boundaryFill(int x, int y, int boundaryColor, int fillColor) {
+        if (x &lt; 0 || x &gt;= rows || y &lt; 0 || y &gt;= cols) return;
+        if (image[x][y] == boundaryColor || image[x][y] == fillColor) return;
+        
+        image[x][y] = fillColor;
+        
+        for (int i = 0; i &lt; 4; i++) {
+            boundaryFill(x + dx4[i], y + dy4[i], boundaryColor, fillColor);
+        }
+    }
+    
+    // Get the image
+    vector&lt;vector&lt;int&gt;&gt; getImage() {
+        return image;
+    }
+    
+    // Print the image
+    void printImage() {
+        for (const auto& row : image) {
+            for (int pixel : row) {
+                cout &lt;&lt; pixel &lt;&lt; " ";
+            }
+            cout &lt;&lt; endl;
+        }
+        cout &lt;&lt; endl;
+    }
+};
+
+// Static utility functions
+class FloodFillUtils {
+public:
+    // 4-direction flood fill static method
+    static void floodFill(vector&lt;vector&lt;int&gt;&gt;& image, int x, int y, int newColor) {
+        int oldColor = image[x][y];
+        if (oldColor == newColor) return;
+        
+        floodFillDFS(image, x, y, oldColor, newColor);
+    }
+    
+private:
+    static void floodFillDFS(vector&lt;vector&lt;int&gt;&gt;& image, int x, int y, int oldColor, int newColor) {
+        if (x &lt; 0 || x &gt;= image.size() || y &lt; 0 || y &gt;= image[0].size()) return;
+        if (image[x][y] != oldColor) return;
+        
+        image[x][y] = newColor;
+        
+        // 4-direction neighbors
+        floodFillDFS(image, x + 1, y, oldColor, newColor);
+        floodFillDFS(image, x - 1, y, oldColor, newColor);
+        floodFillDFS(image, x, y + 1, oldColor, newColor);
+        floodFillDFS(image, x, y - 1, oldColor, newColor);
+    }
+};
+
+// Example usage:
+/*
+int main() {
+    vector&lt;vector&lt;int&gt;&gt; image = {
+        {0, 0, 0, 0, 0},
+        {0, 1, 1, 1, 0},
+        {0, 1, 0, 1, 0},
+        {0, 1, 1, 1, 0},
+        {0, 0, 0, 0, 0}
+    };
+    
+    FloodFill ff(image);
+    cout &lt;&lt; "Original image:" &lt;&lt; endl;
+    ff.printImage();
+    
+    // Test different flood fill methods
+    FloodFill ff1(image);
+    ff1.floodFillDFS4(1, 1, 1, 2);
+    cout &lt;&lt; "After DFS 4-direction fill:" &lt;&lt; endl;
+    ff1.printImage();
+    
+    FloodFill ff2(image);
+    ff2.floodFillBFS(1, 1, 1, 3);
+    cout &lt;&lt; "After BFS fill:" &lt;&lt; endl;
+    ff2.printImage();
+    
+    return 0;
+}
+*/</code></pre>
+      </div>
+
+      <div class="language-code-block" id="csharp-code">
+        <pre><code class="language-csharp">// C# Code Example
+using System;
+using System.Collections.Generic;
+
+public class FloodFill {
+    private int[,] image;
+    private int rows, cols;
+    
+    // 4-direction movements
+    private readonly int[] dx4 = {-1, 0, 1, 0};
+    private readonly int[] dy4 = {0, 1, 0, -1};
+    
+    // 8-direction movements
+    private readonly int[] dx8 = {-1, -1, -1, 0, 0, 1, 1, 1};
+    private readonly int[] dy8 = {-1, 0, 1, -1, 1, -1, 0, 1};
+    
+    public FloodFill(int[,] img) {
+        image = img;
+        rows = image.GetLength(0);
+        cols = image.GetLength(1);
+    }
+    
+    // DFS Recursive (4-direction)
+    public void FloodFillDFS4(int x, int y, int targetColor, int replacementColor) {
+        if (x < 0 || x >= rows || y < 0 || y >= cols) return;
+        if (image[x, y] != targetColor) return;
+        if (targetColor == replacementColor) return;
+        
+        image[x, y] = replacementColor;
+        
+        for (int i = 0; i < 4; i++) {
+            FloodFillDFS4(x + dx4[i], y + dy4[i], targetColor, replacementColor);
+        }
+    }
+    
+    // DFS Recursive (8-direction)
+    public void FloodFillDFS8(int x, int y, int targetColor, int replacementColor) {
+        if (x < 0 || x >= rows || y < 0 || y >= cols) return;
+        if (image[x, y] != targetColor) return;
+        if (targetColor == replacementColor) return;
+        
+        image[x, y] = replacementColor;
+        
+        for (int i = 0; i < 8; i++) {
+            FloodFillDFS8(x + dx8[i], y + dy8[i], targetColor, replacementColor);
+        }
+    }
+    
+    // BFS Iterative
+    public void FloodFillBFS(int startX, int startY, int targetColor, int replacementColor) {
+        if (targetColor == replacementColor) return;
+        if (image[startX, startY] != targetColor) return;
+        
+        Queue<(int, int)> queue = new Queue<(int, int)>();
+        queue.Enqueue((startX, startY));
+        
+        while (queue.Count > 0) {
+            var (x, y) = queue.Dequeue();
+            image[x, y] = replacementColor;
+            
+            for (int i = 0; i < 4; i++) {
+                int nx = x + dx4[i];
+                int ny = y + dy4[i];
+                
+                if (nx >= 0 && nx < rows && ny >= 0 && ny < cols && 
+                    image[nx, ny] == targetColor) {
+                    queue.Enqueue((nx, ny));
+                }
+            }
+        }
+    }
+    
+    // Iterative DFS using stack
+    public void FloodFillStack(int startX, int startY, int targetColor, int replacementColor) {
+        if (targetColor == replacementColor) return;
+        if (image[startX, startY] != targetColor) return;
+        
+        Stack<(int, int)> stack = new Stack<(int, int)>();
+        stack.Push((startX, startY));
+        
+        while (stack.Count > 0) {
+            var (x, y) = stack.Pop();
+            
+            if (image[x, y] == targetColor) {
+                image[x, y] = replacementColor;
+                
+                for (int i = 0; i < 4; i++) {
+                    int nx = x + dx4[i];
+                    int ny = y + dy4[i];
+                    
+                    if (nx >= 0 && nx < rows && ny >= 0 && ny < cols && 
+                        image[nx, ny] == targetColor) {
+                        stack.Push((nx, ny));
+                    }
+                }
+            }
+        }
+    }
+    
+    // Boundary fill algorithm
+    public void BoundaryFill(int x, int y, int boundaryColor, int fillColor) {
+        if (x < 0 || x >= rows || y < 0 || y >= cols) return;
+        if (image[x, y] == boundaryColor || image[x, y] == fillColor) return;
+        
+        image[x, y] = fillColor;
+        
+        for (int i = 0; i < 4; i++) {
+            BoundaryFill(x + dx4[i], y + dy4[i], boundaryColor, fillColor);
+        }
+    }
+    
+    // Get the image
+    public int[,] GetImage() {
+        return image;
+    }
+    
+    // Print the image
+    public void PrintImage() {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                Console.Write(image[i, j] + " ");
+            }
+            Console.WriteLine();
+        }
+        Console.WriteLine();
+    }
+}
+
+// Static utility class
+public static class FloodFillUtility {
+    public static void FloodFill(int[,] image, int x, int y, int newColor) {
+        int oldColor = image[x, y];
+        if (oldColor == newColor) return;
+        
+        FloodFillDFS(image, x, y, oldColor, newColor);
+    }
+    
+    private static void FloodFillDFS(int[,] image, int x, int y, int oldColor, int newColor) {
+        int rows = image.GetLength(0);
+        int cols = image.GetLength(1);
+        
+        if (x < 0 || x >= rows || y < 0 || y >= cols) return;
+        if (image[x, y] != oldColor) return;
+        
+        image[x, y] = newColor;
+        
+        // 4-direction neighbors
+        FloodFillDFS(image, x + 1, y, oldColor, newColor);
+        FloodFillDFS(image, x - 1, y, oldColor, newColor);
+        FloodFillDFS(image, x, y + 1, oldColor, newColor);
+        FloodFillDFS(image, x, y - 1, oldColor, newColor);
+    }
+}
+
+// Example usage:
+/*
+class Program {
+    static void Main() {
+        int[,] image = {
+            {0, 0, 0, 0, 0},
+            {0, 1, 1, 1, 0},
+            {0, 1, 0, 1, 0},
+            {0, 1, 1, 1, 0},
+            {0, 0, 0, 0, 0}
+        };
+        
+        FloodFill ff = new FloodFill(image);
+        Console.WriteLine("Original image:");
+        ff.PrintImage();
+        
+        // Test DFS 4-direction
+        FloodFill ff1 = new FloodFill((int[,])image.Clone());
+        ff1.FloodFillDFS4(1, 1, 1, 2);
+        Console.WriteLine("After DFS 4-direction fill:");
+        ff1.PrintImage();
+        
+        // Test BFS
+        FloodFill ff2 = new FloodFill((int[,])image.Clone());
+        ff2.FloodFillBFS(1, 1, 1, 3);
+        Console.WriteLine("After BFS fill:");
+        ff2.PrintImage();
+    }
+}
+*/</code></pre>
+      </div>
+
+      <div class="language-code-block" id="java-code">
+        <pre><code class="language-java">// Java Code Example
+import java.util.*;
+
+public class FloodFill {
+    private int[][] image;
+    private int rows, cols;
+    
+    // 4-direction movements
+    private final int[] dx4 = {-1, 0, 1, 0};
+    private final int[] dy4 = {0, 1, 0, -1};
+    
+    // 8-direction movements
+    private final int[] dx8 = {-1, -1, -1, 0, 0, 1, 1, 1};
+    private final int[] dy8 = {-1, 0, 1, -1, 1, -1, 0, 1};
+    
+    public FloodFill(int[][] img) {
+        this.image = img;
+        this.rows = img.length;
+        this.cols = img[0].length;
+    }
+    
+    // DFS Recursive (4-direction)
+    public void floodFillDFS4(int x, int y, int targetColor, int replacementColor) {
+        if (x < 0 || x >= rows || y < 0 || y >= cols) return;
+        if (image[x][y] != targetColor) return;
+        if (targetColor == replacementColor) return;
+        
+        image[x][y] = replacementColor;
+        
+        for (int i = 0; i < 4; i++) {
+            floodFillDFS4(x + dx4[i], y + dy4[i], targetColor, replacementColor);
+        }
+    }
+    
+    // DFS Recursive (8-direction)
+    public void floodFillDFS8(int x, int y, int targetColor, int replacementColor) {
+        if (x < 0 || x >= rows || y < 0 || y >= cols) return;
+        if (image[x][y] != targetColor) return;
+        if (targetColor == replacementColor) return;
+        
+        image[x][y] = replacementColor;
+        
+        for (int i = 0; i < 8; i++) {
+            floodFillDFS8(x + dx8[i], y + dy8[i], targetColor, replacementColor);
+        }
+    }
+    
+    // BFS Iterative
+    public void floodFillBFS(int startX, int startY, int targetColor, int replacementColor) {
+        if (targetColor == replacementColor) return;
+        if (image[startX][startY] != targetColor) return;
+        
+        Queue<int[]> queue = new LinkedList<>();
+        queue.offer(new int[]{startX, startY});
+        
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll();
+            int x = current[0], y = current[1];
+            
+            image[x][y] = replacementColor;
+            
+            for (int i = 0; i < 4; i++) {
+                int nx = x + dx4[i];
+                int ny = y + dy4[i];
+                
+                if (nx >= 0 && nx < rows && ny >= 0 && ny < cols && 
+                    image[nx][ny] == targetColor) {
+                    queue.offer(new int[]{nx, ny});
+                }
+            }
+        }
+    }
+    
+    // Iterative DFS using stack
+    public void floodFillStack(int startX, int startY, int targetColor, int replacementColor) {
+        if (targetColor == replacementColor) return;
+        if (image[startX][startY] != targetColor) return;
+        
+        Stack<int[]> stack = new Stack<>();
+        stack.push(new int[]{startX, startY});
+        
+        while (!stack.isEmpty()) {
+            int[] current = stack.pop();
+            int x = current[0], y = current[1];
+            
+            if (image[x][y] == targetColor) {
+                image[x][y] = replacementColor;
+                
+                for (int i = 0; i < 4; i++) {
+                    int nx = x + dx4[i];
+                    int ny = y + dy4[i];
+                    
+                    if (nx >= 0 && nx < rows && ny >= 0 && ny < cols && 
+                        image[nx][ny] == targetColor) {
+                        stack.push(new int[]{nx, ny});
+                    }
+                }
+            }
+        }
+    }
+    
+    // Boundary fill algorithm
+    public void boundaryFill(int x, int y, int boundaryColor, int fillColor) {
+        if (x < 0 || x >= rows || y < 0 || y >= cols) return;
+        if (image[x][y] == boundaryColor || image[x][y] == fillColor) return;
+        
+        image[x][y] = fillColor;
+        
+        for (int i = 0; i < 4; i++) {
+            boundaryFill(x + dx4[i], y + dy4[i], boundaryColor, fillColor);
+        }
+    }
+    
+    // Get the image
+    public int[][] getImage() {
+        return image;
+    }
+    
+    // Print the image
+    public void printImage() {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                System.out.print(image[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+    
+    // Static utility method
+    public static void floodFill(int[][] image, int x, int y, int newColor) {
+        int oldColor = image[x][y];
+        if (oldColor == newColor) return;
+        
+        floodFillDFS(image, x, y, oldColor, newColor);
+    }
+    
+    private static void floodFillDFS(int[][] image, int x, int y, int oldColor, int newColor) {
+        if (x < 0 || x >= image.length || y < 0 || y >= image[0].length) return;
+        if (image[x][y] != oldColor) return;
+        
+        image[x][y] = newColor;
+        
+        // 4-direction neighbors
+        floodFillDFS(image, x + 1, y, oldColor, newColor);
+        floodFillDFS(image, x - 1, y, oldColor, newColor);
+        floodFillDFS(image, x, y + 1, oldColor, newColor);
+        floodFillDFS(image, x, y - 1, oldColor, newColor);
+    }
+    
+    // Example usage
+    public static void main(String[] args) {
+        int[][] image = {
+            {0, 0, 0, 0, 0},
+            {0, 1, 1, 1, 0},
+            {0, 1, 0, 1, 0},
+            {0, 1, 1, 1, 0},
+            {0, 0, 0, 0, 0}
+        };
+        
+        FloodFill ff = new FloodFill(image);
+        System.out.println("Original image:");
+        ff.printImage();
+        
+        // Test DFS 4-direction
+        FloodFill ff1 = new FloodFill(copyImage(image));
+        ff1.floodFillDFS4(1, 1, 1, 2);
+        System.out.println("After DFS 4-direction fill:");
+        ff1.printImage();
+        
+        // Test BFS
+        FloodFill ff2 = new FloodFill(copyImage(image));
+        ff2.floodFillBFS(1, 1, 1, 3);
+        System.out.println("After BFS fill:");
+        ff2.printImage();
+    }
+    
+    private static int[][] copyImage(int[][] original) {
+        int[][] copy = new int[original.length][];
+        for (int i = 0; i < original.length; i++) {
+            copy[i] = original[i].clone();
+        }
+        return copy;
+    }
+}</code></pre>
+      </div>
+
+      <div class="language-code-block" id="python-code">
+        <pre><code class="language-python"># Python Code Example
+from collections import deque
+from typing import List
+
+class FloodFill:
+    def __init__(self, image: List[List[int]]):
+        self.image = image
+        self.rows = len(image)
+        self.cols = len(image[0]) if image else 0
+        
+        # 4-direction movements
+        self.dx4 = [-1, 0, 1, 0]
+        self.dy4 = [0, 1, 0, -1]
+        
+        # 8-direction movements
+        self.dx8 = [-1, -1, -1, 0, 0, 1, 1, 1]
+        self.dy8 = [-1, 0, 1, -1, 1, -1, 0, 1]
+    
+    # DFS Recursive (4-direction)
+    def flood_fill_dfs4(self, x: int, y: int, target_color: int, replacement_color: int):
+        # Base cases
+        if x < 0 or x >= self.rows or y < 0 or y >= self.cols:
+            return
+        if self.image[x][y] != target_color:
+            return
+        if target_color == replacement_color:
+            return
+        
+        # Replace color
+        self.image[x][y] = replacement_color
+        
+        # Recursively fill neighbors
+        for i in range(4):
+            self.flood_fill_dfs4(x + self.dx4[i], y + self.dy4[i], target_color, replacement_color)
+    
+    # DFS Recursive (8-direction)
+    def flood_fill_dfs8(self, x: int, y: int, target_color: int, replacement_color: int):
+        if x < 0 or x >= self.rows or y < 0 or y >= self.cols:
+            return
+        if self.image[x][y] != target_color:
+            return
+        if target_color == replacement_color:
+            return
+        
+        self.image[x][y] = replacement_color
+        
+        for i in range(8):
+            self.flood_fill_dfs8(x + self.dx8[i], y + self.dy8[i], target_color, replacement_color)
+    
+    # BFS Iterative
+    def flood_fill_bfs(self, start_x: int, start_y: int, target_color: int, replacement_color: int):
+        if target_color == replacement_color:
+            return
+        if self.image[start_x][start_y] != target_color:
+            return
+        
+        queue = deque()
+        queue.append((start_x, start_y))
+        
+        while queue:
+            x, y = queue.popleft()
+            self.image[x][y] = replacement_color
+            
+            for i in range(4):
+                nx, ny = x + self.dx4[i], y + self.dy4[i]
+                if (0 <= nx < self.rows and 0 <= ny < self.cols and 
+                    self.image[nx][ny] == target_color):
+                    queue.append((nx, ny))
+    
+    # Iterative DFS using stack
+    def flood_fill_stack(self, start_x: int, start_y: int, target_color: int, replacement_color: int):
+        if target_color == replacement_color:
+            return
+        if self.image[start_x][start_y] != target_color:
+            return
+        
+        stack = [(start_x, start_y)]
+        
+        while stack:
+            x, y = stack.pop()
+            
+            if self.image[x][y] == target_color:
+                self.image[x][y] = replacement_color
+                
+                for i in range(4):
+                    nx, ny = x + self.dx4[i], y + self.dy4[i]
+                    if (0 <= nx < self.rows and 0 <= ny < self.cols and 
+                        self.image[nx][ny] == target_color):
+                        stack.append((nx, ny))
+    
+    # Boundary fill algorithm
+    def boundary_fill(self, x: int, y: int, boundary_color: int, fill_color: int):
+        if x < 0 or x >= self.rows or y < 0 or y >= self.cols:
+            return
+        if self.image[x][y] == boundary_color or self.image[x][y] == fill_color:
+            return
+        
+        self.image[x][y] = fill_color
+        
+        for i in range(4):
+            self.boundary_fill(x + self.dx4[i], y + self.dy4[i], boundary_color, fill_color)
+    
+    def print_image(self):
+        for row in self.image:
+            print(' '.join(map(str, row)))
+        print()
+
+# Functional programming style
+def flood_fill_functional(image: List[List[int]], x: int, y: int, new_color: int):
+    old_color = image[x][y]
+    if old_color == new_color:
+        return image
+    
+    def dfs(img, i, j, old_col, new_col):
+        if i < 0 or i >= len(img) or j < 0 or j >= len(img[0]):
+            return
+        if img[i][j] != old_col:
+            return
+        
+        img[i][j] = new_col
+        
+        # 4-direction neighbors
+        dfs(img, i + 1, j, old_col, new_col)
+        dfs(img, i - 1, j, old_col, new_col)
+        dfs(img, i, j + 1, old_col, new_col)
+        dfs(img, i, j - 1, old_col, new_col)
+    
+    # Create a copy to avoid modifying original
+    result = [row[:] for row in image]
+    dfs(result, x, y, old_color, new_color)
+    return result
+
+# BFS implementation using functional style
+def flood_fill_bfs_functional(image: List[List[int]], x: int, y: int, new_color: int):
+    old_color = image[x][y]
+    if old_color == new_color:
+        return image
+    
+    rows, cols = len(image), len(image[0])
+    result = [row[:] for row in image]
+    queue = deque([(x, y)])
+    
+    while queue:
+        i, j = queue.popleft()
+        result[i][j] = new_color
+        
+        # 4-direction neighbors
+        for di, dj in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+            ni, nj = i + di, j + dj
+            if (0 <= ni < rows and 0 <= nj < cols and 
+                result[ni][nj] == old_color):
+                queue.append((ni, nj))
+    
+    return result
+
+# Example usage:
+def example_usage():
+    image = [
+        [0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 0],
+        [0, 1, 0, 1, 0],
+        [0, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0]
+    ]
+    
+    print("Original image:")
+    for row in image:
+        print(' '.join(map(str, row)))
+    print()
+    
+    # Test DFS 4-direction
+    ff1 = FloodFill([row[:] for row in image])
+    ff1.flood_fill_dfs4(1, 1, 1, 2)
+    print("After DFS 4-direction fill:")
+    ff1.print_image()
+    
+    # Test BFS
+    ff2 = FloodFill([row[:] for row in image])
+    ff2.flood_fill_bfs(1, 1, 1, 3)
+    print("After BFS fill:")
+    ff2.print_image()
+    
+    # Test functional approach
+    result = flood_fill_functional(image, 1, 1, 4)
+    print("After functional DFS fill:")
+    for row in result:
+        print(' '.join(map(str, row)))
+
+# Uncomment to run example
+# example_usage()</code></pre>
+      </div>
+
+      <div class="language-code-block" id="javascript-code">
+        <pre><code class="language-javascript">// JavaScript Code Example
+class FloodFill {
+    constructor(image) {
+        this.image = image;
+        this.rows = image.length;
+        this.cols = image[0].length;
+        
+        // 4-direction movements
+        this.dx4 = [-1, 0, 1, 0];
+        this.dy4 = [0, 1, 0, -1];
+        
+        // 8-direction movements
+        this.dx8 = [-1, -1, -1, 0, 0, 1, 1, 1];
+        this.dy8 = [-1, 0, 1, -1, 1, -1, 0, 1];
+    }
+    
+    // DFS Recursive (4-direction)
+    floodFillDFS4(x, y, targetColor, replacementColor) {
+        // Base cases
+        if (x < 0 || x >= this.rows || y < 0 || y >= this.cols) return;
+        if (this.image[x][y] !== targetColor) return;
+        if (targetColor === replacementColor) return;
+        
+        // Replace color
+        this.image[x][y] = replacementColor;
+        
+        // Recursively fill neighbors
+        for (let i = 0; i < 4; i++) {
+            this.floodFillDFS4(x + this.dx4[i], y + this.dy4[i], targetColor, replacementColor);
+        }
+    }
+    
+    // DFS Recursive (8-direction)
+    floodFillDFS8(x, y, targetColor, replacementColor) {
+        if (x < 0 || x >= this.rows || y < 0 || y >= this.cols) return;
+        if (this.image[x][y] !== targetColor) return;
+        if (targetColor === replacementColor) return;
+        
+        this.image[x][y] = replacementColor;
+        
+        for (let i = 0; i < 8; i++) {
+            this.floodFillDFS8(x + this.dx8[i], y + this.dy8[i], targetColor, replacementColor);
+        }
+    }
+    
+    // BFS Iterative
+    floodFillBFS(startX, startY, targetColor, replacementColor) {
+        if (targetColor === replacementColor) return;
+        if (this.image[startX][startY] !== targetColor) return;
+        
+        const queue = [[startX, startY]];
+        
+        while (queue.length > 0) {
+            const [x, y] = queue.shift();
+            this.image[x][y] = replacementColor;
+            
+            for (let i = 0; i < 4; i++) {
+                const nx = x + this.dx4[i];
+                const ny = y + this.dy4[i];
+                
+                if (nx >= 0 && nx < this.rows && ny >= 0 && ny < this.cols && 
+                    this.image[nx][ny] === targetColor) {
+                    queue.push([nx, ny]);
+                }
+            }
+        }
+    }
+    
+    // Iterative DFS using stack
+    floodFillStack(startX, startY, targetColor, replacementColor) {
+        if (targetColor === replacementColor) return;
+        if (this.image[startX][startY] !== targetColor) return;
+        
+        const stack = [[startX, startY]];
+        
+        while (stack.length > 0) {
+            const [x, y] = stack.pop();
+            
+            if (this.image[x][y] === targetColor) {
+                this.image[x][y] = replacementColor;
+                
+                for (let i = 0; i < 4; i++) {
+                    const nx = x + this.dx4[i];
+                    const ny = y + this.dy4[i];
+                    
+                    if (nx >= 0 && nx < this.rows && ny >= 0 && ny < this.cols && 
+                        this.image[nx][ny] === targetColor) {
+                        stack.push([nx, ny]);
+                    }
+                }
+            }
+        }
+    }
+    
+    // Boundary fill algorithm
+    boundaryFill(x, y, boundaryColor, fillColor) {
+        if (x < 0 || x >= this.rows || y < 0 || y >= this.cols) return;
+        if (this.image[x][y] === boundaryColor || this.image[x][y] === fillColor) return;
+        
+        this.image[x][y] = fillColor;
+        
+        for (let i = 0; i < 4; i++) {
+            this.boundaryFill(x + this.dx4[i], y + this.dy4[i], boundaryColor, fillColor);
+        }
+    }
+    
+    // Print the image
+    printImage() {
+        for (let i = 0; i < this.rows; i++) {
+            console.log(this.image[i].join(' '));
+        }
+        console.log();
+    }
+}
+
+// Functional programming style
+function floodFillFunctional(image, x, y, newColor) {
+    const oldColor = image[x][y];
+    if (oldColor === newColor) return image;
+    
+    const rows = image.length;
+    const cols = image[0].length;
+    
+    // Create a deep copy
+    const result = image.map(row => [...row]);
+    
+    function dfs(i, j) {
+        if (i < 0 || i >= rows || j < 0 || j >= cols) return;
+        if (result[i][j] !== oldColor) return;
+        
+        result[i][j] = newColor;
+        
+        // 4-direction neighbors
+        dfs(i + 1, j);
+        dfs(i - 1, j);
+        dfs(i, j + 1);
+        dfs(i, j - 1);
+    }
+    
+    dfs(x, y);
+    return result;
+}
+
+// BFS functional style
+function floodFillBFSFunctional(image, x, y, newColor) {
+    const oldColor = image[x][y];
+    if (oldColor === newColor) return image;
+    
+    const rows = image.length;
+    const cols = image[0].length;
+    const result = image.map(row => [...row]);
+    const queue = [[x, y]];
+    
+    while (queue.length > 0) {
+        const [i, j] = queue.shift();
+        result[i][j] = newColor;
+        
+        // 4-direction neighbors
+        const directions = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+        for (const [di, dj] of directions) {
+            const ni = i + di;
+            const nj = j + dj;
+            if (ni >= 0 && ni < rows && nj >= 0 && nj < cols && 
+                result[ni][nj] === oldColor) {
+                queue.push([ni, nj]);
+            }
+        }
+    }
+    
+    return result;
+}
+
+// Example usage:
+function exampleUsage() {
+    const image = [
+        [0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 0],
+        [0, 1, 0, 1, 0],
+        [0, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0]
+    ];
+    
+    console.log("Original image:");
+    image.forEach(row => console.log(row.join(' ')));
+    console.log();
+    
+    // Test DFS 4-direction
+    const ff1 = new FloodFill(image.map(row => [...row]));
+    ff1.floodFillDFS4(1, 1, 1, 2);
+    console.log("After DFS 4-direction fill:");
+    ff1.printImage();
+    
+    // Test BFS
+    const ff2 = new FloodFill(image.map(row => [...row]));
+    ff2.floodFillBFS(1, 1, 1, 3);
+    console.log("After BFS fill:");
+    ff2.printImage();
+    
+    // Test functional approach
+    const result = floodFillFunctional(image, 1, 1, 4);
+    console.log("After functional DFS fill:");
+    result.forEach(row => console.log(row.join(' ')));
+}
+
+// Uncomment to run example
+// exampleUsage();</code></pre>
+      </div>
+      
+      <p><strong>Practice Idea:</strong> Implement different flood fill variations (4-direction, 8-direction, boundary fill) and test them on various grid patterns. Create a simple paint program that allows users to click on a grid to perform flood fill operations. Then implement a more efficient version that uses scanline fill algorithm for better performance on large areas.</p>
+      
+      <p><strong>Real-world Applications:</strong>
+        <ul>
+            <li><strong>Image Editing:</strong> Bucket fill tool in Photoshop, GIMP, and other graphics software</li>
+            <li><strong>Game Development:</strong> Minesweeper for revealing empty areas, puzzle games for matching connected components</li>
+            <li><strong>Computer Vision:</strong> Connected component labeling and image segmentation</li>
+            <li><strong>Geographic Information Systems:</strong> Flood simulation and terrain analysis</li>
+            <li><strong>Medical Imaging:</strong> Region growing for tumor detection and organ segmentation</li>
+            <li><strong>Robotics:</strong> Map exploration and obstacle detection</li>
+            <li><strong>Web Development:</strong> Interactive drawing applications and canvas-based games</li>
+            <li><strong>Printing Industry:</strong> Color separation and raster image processing</li>
+        </ul>
+      </p>
+      
+      <p><strong>Summary:</strong> Flood Fill is a fundamental algorithm in computer graphics and image processing that efficiently fills connected areas with a new color. Its various implementations (DFS recursive, BFS iterative, stack-based) provide flexibility for different use cases and performance requirements. While simple to implement, the algorithm demonstrates important concepts in graph traversal and has wide-ranging applications from image editing software to game development and computer vision systems.</p>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const languageButtons = document.querySelectorAll('.code-language-btn');
+        const codeBlocks = document.querySelectorAll('.language-code-block');
+        
+        languageButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const targetLanguage = this.getAttribute('data-language');
+                
+                // Update active button
+                languageButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show corresponding code block
+                codeBlocks.forEach(block => {
+                    if (block.id === `${targetLanguage}-code`) {
+                        block.classList.add('active');
+                    } else {
+                        block.classList.remove('active');
+                    }
+                });
+            });
+        });
+    });
+    </script>
+</body>
+</html>

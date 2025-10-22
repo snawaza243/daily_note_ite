@@ -1,0 +1,100 @@
+I have a categorized list of the Top 25 Computer Science Algorithms, grouped by their domain.
+
+Categories and Algorithms:
+
+Searching (Green)
+
+Linear Search
+
+Binary Search
+
+Depth Search (DFS)
+
+Breadth First Search (BFS)
+
+Sorting (Green)
+
+Insertion Sort
+
+Selection Sort
+
+Quick Sort
+
+Heap Sort
+
+Merge Sort
+
+Counting Sort
+
+Graphs (Blue)
+
+Kruskal’s Algorithm
+
+Bellman-Ford Algorithm
+
+Topological Sort Algorithm
+
+Dijkstra’s Algorithm
+
+Floyd–Warshall Algorithm
+
+Flood Fill Algorithm
+
+Arrays (Purple)
+
+Quick Select Algorithm
+
+Floyd’s Cycle Detection Algorithm
+
+Boyer–Moore Majority Vote Algorithm
+
+Kadane’s Algorithm
+
+KMP (Knuth–Morris–Pratt) Algorithm
+
+Basics (Red)
+
+Huffman Coding Compression Algorithm
+
+Euclid’s Algorithm (GCD)
+
+Union–Find (Disjoint Set) Algorithm
+
+Now, for each algorithm, generate a complete HTML blog post with the following structure and rules:
+
+🧩 Structure & Formatting Requirements
+
+Each blog post should be self-contained and follow this structure:
+
+<div class="itepost-section-title">Algorithm Name</div>
+<div class="itepost-section-content">
+  <p><strong>Category:</strong> Category Name (with color mentioned)</p>
+  
+  <p><strong>Introduction:</strong> Write a clear and beginner-friendly explanation of the algorithm — what it does, where it is used, and why it matters.</p>
+  
+  <p><strong>Working Principle:</strong> Explain step-by-step how the algorithm works, using plain English and (optionally) flow or pseudocode representation.</p>
+  
+  <p><strong>Example & Dry Run:</strong> Include a small, easy-to-understand example showing how the algorithm processes input to produce output.</p>
+  
+  <p><strong>Time and Space Complexity:</strong> Provide Big-O notation for best, average, and worst cases, along with memory usage explanation.</p>
+  
+  <p><strong>Implementation in Multiple Languages:</strong></p>
+  
+  <pre><code class="language-c">C Code Example</code></pre>
+  <pre><code class="language-cpp">C++ Code Example</code></pre>
+  <pre><code class="language-csharp">C# Code Example</code></pre>
+  <pre><code class="language-java">Java Code Example</code></pre>
+  <pre><code class="language-python">Python Code Example</code></pre>
+  <pre><code class="language-javascript">JavaScript Code Example</code></pre>
+  
+  <p><strong>Practice Idea:</strong> Suggest a simple practice exercise or variation that helps learners test their understanding.</p>
+  
+  <p><strong>Real-world Applications:</strong> Mention some practical use cases of the algorithm in software development, AI, data structures, or optimization problems.</p>
+  
+  <p><strong>Summary:</strong> End with a short summary emphasizing the importance of mastering this algorithm.</p>
+</div>
+
+🎯 Goal:
+
+To help learners master each algorithm step-by-step through well-explained, easy-to-practice, and language-diverse examples.
+Each post should be standalone and focused on one algorithm only. The writing tone should be simple, educational, and beginner-friendly, but technically accurate.

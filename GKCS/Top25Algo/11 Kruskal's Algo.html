@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Binary Search</title>
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .itepost-section-title {
+            background: linear-gradient(135deg, #4CAF50, #66BB6A);
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.8em;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+            margin-top: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .itepost-section-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .itepost-section-content p {
+            margin-bottom: 16px;
+        }
+
+        pre {
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        strong {
+            color: #2E7D32;
+        }
+    </style>
+
+    <!-- Add this CSS -->
+    <style>
+        .code-language-buttons {
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .code-language-btn {
+            padding: 5px 12px;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .code-language-btn:hover {
+            background-color: #e9e9e9;
+        }
+
+        .code-language-btn.active {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .language-code-block {
+            display: none;
+        }
+
+        .language-code-block.active {
+            display: block;
+        }
+    </style>
+
+    <!-- Add this script after jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Process each implementation section
+            $('.itepost-section-content').each(function () {
+                const $section = $(this);
+                const $implementationTitle = $section.find('p:contains("Implementation in Multiple Languages:")');
+
+                if ($implementationTitle.length > 0) {
+                    const $codeBlocks = $implementationTitle.nextUntil('p').filter('pre');
+
+                    if ($codeBlocks.length > 0) {
+                        // Create language buttons container
+                        const $buttonsContainer = $('<div class="code-language-buttons"></div>');
+
+                        // Extract languages and create buttons
+                        const languages = [];
+                        $codeBlocks.each(function () {
+                            const $codeBlock = $(this);
+                            const languageClass = $codeBlock.find('code').attr('class');
+                            let languageName = 'Unknown';
+
+                            if (languageClass) {
+                                // Extract language name from class (e.g., "language-python" -> "python")
+                                const match = languageClass.match(/language-(\w+)/);
+                                if (match) {
+                                    languageName = match[1].toUpperCase();
+                                }
+                            }
+
+                            languages.push({
+                                name: languageName,
+                                element: $codeBlock
+                            });
+
+                            // Add class to code block for easier selection
+                            $codeBlock.addClass('language-code-block').addClass('lang-' + languageName.toLowerCase());
+                        });
+
+                        // Create buttons for each language
+                        languages.forEach((lang, index) => {
+                            const $button = $('<button class="code-language-btn">' + lang.name + '</button>');
+
+                            // Make first button active by default
+                            if (index === 0) {
+                                $button.addClass('active');
+                                lang.element.addClass('active');
+                            }
+
+                            $button.on('click', function () {
+                                // Remove active class from all buttons and code blocks
+                                $buttonsContainer.find('.code-language-btn').removeClass('active');
+                                $section.find('.language-code-block').removeClass('active');
+
+                                // Add active class to clicked button and corresponding code block
+                                $(this).addClass('active');
+                                lang.element.addClass('active');
+                            });
+
+                            $buttonsContainer.append($button);
+                        });
+
+                        // Insert buttons after the implementation title
+                        $implementationTitle.after($buttonsContainer);
+                    }
+                }
+            });
+        });
+
+    </script>
+</head>
+ 
+<body>
+    <div class="itepost-section-title">Kruskal's Algorithm</div>
+    <div class="itepost-section-content">
+      <p><strong>Category:</strong> Graphs (Blue)</p>
+      
+      <p><strong>Introduction:</strong> Kruskal's Algorithm is a greedy algorithm used to find the Minimum Spanning Tree (MST) of a connected, undirected graph. A Minimum Spanning Tree is a subset of edges that connects all vertices together without any cycles and with the minimum possible total edge weight. Think of it like building the most cost-effective road network connecting all cities without creating unnecessary routes. Kruskal's works by sorting all edges by weight and adding them to the MST in ascending order, ensuring no cycles are formed using a Union-Find (Disjoint Set) data structure.</p>
+      
+      <p><strong>Working Principle:</strong> The algorithm follows these key steps:
+        <ol>
+            <li><strong>Sort Edges:</strong> Sort all edges in non-decreasing order of their weight</li>
+            <li><strong>Initialize MST:</strong> Start with an empty set for the MST</li>
+            <li><strong>Process Edges:</strong> For each edge in sorted order:
+                <ul>
+                    <li>Check if adding the edge creates a cycle using Union-Find</li>
+                    <li>If no cycle is formed, add the edge to MST and union the sets</li>
+                    <li>If a cycle is formed, skip the edge</li>
+                </ul>
+            </li>
+            <li><strong>Terminate:</strong> Stop when MST contains (V-1) edges (where V is number of vertices)</li>
+        </ol>
+        <strong>Pseudocode:</strong><br>
+        <code>
+        KRUSKAL(G):<br>
+        &nbsp;&nbsp;A = ∅  // A will store the MST edges<br>
+        &nbsp;&nbsp;for each vertex v in G.V:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;MAKE-SET(v)<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;sort the edges of G.E by weight in non-decreasing order<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;for each edge (u, v) in G.E (in sorted order):<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;if FIND-SET(u) ≠ FIND-SET(v):<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A = A ∪ {(u, v)}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UNION(u, v)<br>
+        &nbsp;&nbsp;<br>
+        &nbsp;&nbsp;return A<br>
+        </code>
+      </p>
+      
+      <p><strong>Example & Dry Run:</strong><br>
+        Consider this weighted graph with vertices A,B,C,D and edges:
+        <ul>
+            <li>A-B: 1</li>
+            <li>A-C: 4</li>
+            <li>A-D: 3</li>
+            <li>B-C: 2</li>
+            <li>C-D: 5</li>
+        </ul>
+        <strong>Step-by-step execution:</strong>
+        <ul>
+            <li><strong>Step 1:</strong> Sort edges: A-B(1), B-C(2), A-D(3), A-C(4), C-D(5)</li>
+            <li><strong>Step 2:</strong> Add A-B(1) - No cycle</li>
+            <li><strong>Step 3:</strong> Add B-C(2) - No cycle</li>
+            <li><strong>Step 4:</strong> Add A-D(3) - No cycle</li>
+            <li><strong>Step 5:</strong> Skip A-C(4) - Would create cycle A-B-C-A</li>
+            <li><strong>Step 6:</strong> Skip C-D(5) - Would create cycle</li>
+            <li><strong>Result:</strong> MST contains A-B(1), B-C(2), A-D(3) with total weight 6</li>
+        </ul>
+      </p>
+      
+      <p><strong>Time and Space Complexity:</strong>
+        <ul>
+            <li><strong>Time Complexity:</strong> O(E log E) or O(E log V) - Dominated by edge sorting</li>
+            <li><strong>Space Complexity:</strong> O(V + E) - For storing graph and Union-Find data structure</li>
+            <li><strong>Union-Find Operations:</strong> O(α(V)) per operation (almost constant time)</li>
+            <li><strong>Best Case:</strong> O(E log V) - When edges are already sorted</li>
+            <li><strong>Worst Case:</strong> O(E log E) - Full sorting required</li>
+        </ul>
+      </p>
+      
+      <p><strong>Implementation in Multiple Languages:</strong></p>
+      
+      <div class="code-language-buttons">
+        <button class="code-language-btn active" data-language="c">C</button>
+        <button class="code-language-btn" data-language="cpp">C++</button>
+        <button class="code-language-btn" data-language="csharp">C#</button>
+        <button class="code-language-btn" data-language="java">Java</button>
+        <button class="code-language-btn" data-language="python">Python</button>
+        <button class="code-language-btn" data-language="javascript">JavaScript</button>
+      </div>
+      
+      <div class="language-code-block active" id="c-code">
+        <pre><code class="language-c">// C Code Example
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;limits.h&gt;
+
+// Structure to represent an edge
+struct Edge {
+    int src, dest, weight;
+};
+
+// Structure to represent a graph
+struct Graph {
+    int V, E;
+    struct Edge* edges;
+};
+
+// Structure for Union-Find
+struct Subset {
+    int parent;
+    int rank;
+};
+
+// Create a graph with V vertices and E edges
+struct Graph* createGraph(int V, int E) {
+    struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
+    graph->V = V;
+    graph->E = E;
+    graph->edges = (struct Edge*)malloc(E * sizeof(struct Edge));
+    return graph;
+}
+
+// Find set of an element i (path compression)
+int find(struct Subset subsets[], int i) {
+    if (subsets[i].parent != i)
+        subsets[i].parent = find(subsets, subsets[i].parent);
+    return subsets[i].parent;
+}
+
+// Union of two sets (union by rank)
+void Union(struct Subset subsets[], int x, int y) {
+    int xroot = find(subsets, x);
+    int yroot = find(subsets, y);
+
+    if (subsets[xroot].rank < subsets[yroot].rank)
+        subsets[xroot].parent = yroot;
+    else if (subsets[xroot].rank > subsets[yroot].rank)
+        subsets[yroot].parent = xroot;
+    else {
+        subsets[yroot].parent = xroot;
+        subsets[xroot].rank++;
+    }
+}
+
+// Compare function for qsort
+int compareEdges(const void* a, const void* b) {
+    struct Edge* a1 = (struct Edge*)a;
+    struct Edge* b1 = (struct Edge*)b;
+    return a1->weight > b1->weight;
+}
+
+// Kruskal's algorithm
+void KruskalMST(struct Graph* graph) {
+    int V = graph->V;
+    struct Edge result[V]; // Store resultant MST
+    int e = 0; // Index for result[]
+    int i = 0; // Index for sorted edges
+
+    // Step 1: Sort all edges
+    qsort(graph->edges, graph->E, sizeof(graph->edges[0]), compareEdges);
+
+    // Allocate memory for subsets
+    struct Subset* subsets = (struct Subset*)malloc(V * sizeof(struct Subset));
+
+    // Create V subsets with single elements
+    for (int v = 0; v < V; v++) {
+        subsets[v].parent = v;
+        subsets[v].rank = 0;
+    }
+
+    // Process all edges
+    while (e < V - 1 && i < graph->E) {
+        // Pick the smallest edge
+        struct Edge next_edge = graph->edges[i++];
+
+        int x = find(subsets, next_edge.src);
+        int y = find(subsets, next_edge.dest);
+
+        // If including this edge doesn't cause cycle
+        if (x != y) {
+            result[e++] = next_edge;
+            Union(subsets, x, y);
+        }
+    }
+
+    // Print the MST
+    printf("Edges in MST:\n");
+    int minimumCost = 0;
+    for (i = 0; i < e; i++) {
+        printf("%d -- %d == %d\n", result[i].src, result[i].dest, result[i].weight);
+        minimumCost += result[i].weight;
+    }
+    printf("Minimum Cost: %d\n", minimumCost);
+
+    free(subsets);
+}
+
+// Example usage:
+/*
+int main() {
+    int V = 4; // Number of vertices
+    int E = 5; // Number of edges
+    struct Graph* graph = createGraph(V, E);
+
+    // Add edges
+    graph->edges[0].src = 0; graph->edges[0].dest = 1; graph->edges[0].weight = 1;
+    graph->edges[1].src = 0; graph->edges[1].dest = 2; graph->edges[1].weight = 4;
+    graph->edges[2].src = 0; graph->edges[2].dest = 3; graph->edges[2].weight = 3;
+    graph->edges[3].src = 1; graph->edges[3].dest = 2; graph->edges[3].weight = 2;
+    graph->edges[4].src = 2; graph->edges[4].dest = 3; graph->edges[4].weight = 5;
+
+    KruskalMST(graph);
+
+    free(graph->edges);
+    free(graph);
+    return 0;
+}
+*/</code></pre>
+      </div>
+
+      <div class="language-code-block" id="cpp-code">
+        <pre><code class="language-cpp">// C++ Code Example
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+// Structure to represent an edge
+struct Edge {
+    int src, dest, weight;
+    
+    // Operator for sorting
+    bool operator<(const Edge& other) const {
+        return weight < other.weight;
+    }
+};
+
+// Union-Find (Disjoint Set) class
+class UnionFind {
+private:
+    vector<int> parent, rank;
+    
+public:
+    UnionFind(int n) {
+        parent.resize(n);
+        rank.resize(n, 0);
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+        }
+    }
+    
+    // Find with path compression
+    int find(int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent[x]);
+        }
+        return parent[x];
+    }
+    
+    // Union by rank
+    void unite(int x, int y) {
+        int rootX = find(x);
+        int rootY = find(y);
+        
+        if (rootX != rootY) {
+            if (rank[rootX] < rank[rootY]) {
+                parent[rootX] = rootY;
+            } else if (rank[rootX] > rank[rootY]) {
+                parent[rootY] = rootX;
+            } else {
+                parent[rootY] = rootX;
+                rank[rootX]++;
+            }
+        }
+    }
+};
+
+class KruskalMST {
+private:
+    int V; // Number of vertices
+    vector<Edge> edges;
+    
+public:
+    KruskalMST(int vertices) : V(vertices) {}
+    
+    // Add an edge to the graph
+    void addEdge(int src, int dest, int weight) {
+        edges.push_back({src, dest, weight});
+    }
+    
+    // Find MST using Kruskal's algorithm
+    vector<Edge> findMST() {
+        vector<Edge> mst;
+        UnionFind uf(V);
+        
+        // Sort edges by weight
+        sort(edges.begin(), edges.end());
+        
+        // Process edges in sorted order
+        for (const Edge& edge : edges) {
+            int rootSrc = uf.find(edge.src);
+            int rootDest = uf.find(edge.dest);
+            
+            // If including this edge doesn't cause cycle
+            if (rootSrc != rootDest) {
+                mst.push_back(edge);
+                uf.unite(rootSrc, rootDest);
+                
+                // Stop when we have V-1 edges
+                if (mst.size() == V - 1) {
+                    break;
+                }
+            }
+        }
+        
+        return mst;
+    }
+    
+    // Find MST and return total weight
+    int findMSTWeight() {
+        vector<Edge> mst = findMST();
+        int totalWeight = 0;
+        for (const Edge& edge : mst) {
+            totalWeight += edge.weight;
+        }
+        return totalWeight;
+    }
+    
+    // Print MST
+    void printMST() {
+        vector<Edge> mst = findMST();
+        cout << "Edges in MST:" << endl;
+        int totalWeight = 0;
+        for (const Edge& edge : mst) {
+            cout << edge.src << " -- " << edge.dest << " == " << edge.weight << endl;
+            totalWeight += edge.weight;
+        }
+        cout << "Total weight: " << totalWeight << endl;
+    }
+};
+
+// Example usage:
+/*
+int main() {
+    KruskalMST graph(4);
+    
+    graph.addEdge(0, 1, 1);
+    graph.addEdge(0, 2, 4);
+    graph.addEdge(0, 3, 3);
+    graph.addEdge(1, 2, 2);
+    graph.addEdge(2, 3, 5);
+    
+    graph.printMST();
+    return 0;
+}
+*/</code></pre>
+      </div>
+
+      <div class="language-code-block" id="csharp-code">
+        <pre><code class="language-csharp">// C# Code Example
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class Edge : IComparable<Edge> {
+    public int Source { get; set; }
+    public int Destination { get; set; }
+    public int Weight { get; set; }
+    
+    public Edge(int source, int destination, int weight) {
+        Source = source;
+        Destination = destination;
+        Weight = weight;
+    }
+    
+    public int CompareTo(Edge other) {
+        return Weight.CompareTo(other.Weight);
+    }
+}
+
+public class UnionFind {
+    private int[] parent;
+    private int[] rank;
+    
+    public UnionFind(int size) {
+        parent = new int[size];
+        rank = new int[size];
+        for (int i = 0; i < size; i++) {
+            parent[i] = i;
+            rank[i] = 0;
+        }
+    }
+    
+    public int Find(int x) {
+        if (parent[x] != x) {
+            parent[x] = Find(parent[x]); // Path compression
+        }
+        return parent[x];
+    }
+    
+    public void Union(int x, int y) {
+        int rootX = Find(x);
+        int rootY = Find(y);
+        
+        if (rootX != rootY) {
+            // Union by rank
+            if (rank[rootX] < rank[rootY]) {
+                parent[rootX] = rootY;
+            } else if (rank[rootX] > rank[rootY]) {
+                parent[rootY] = rootX;
+            } else {
+                parent[rootY] = rootX;
+                rank[rootX]++;
+            }
+        }
+    }
+}
+
+public class KruskalMST {
+    private int vertices;
+    private List<Edge> edges;
+    
+    public KruskalMST(int vertices) {
+        this.vertices = vertices;
+        edges = new List<Edge>();
+    }
+    
+    public void AddEdge(int source, int destination, int weight) {
+        edges.Add(new Edge(source, destination, weight));
+    }
+    
+    public List<Edge> FindMST() {
+        // Sort edges by weight
+        edges.Sort();
+        
+        UnionFind uf = new UnionFind(vertices);
+        List<Edge> mst = new List<Edge>();
+        
+        foreach (var edge in edges) {
+            int rootSource = uf.Find(edge.Source);
+            int rootDest = uf.Find(edge.Destination);
+            
+            if (rootSource != rootDest) {
+                mst.Add(edge);
+                uf.Union(rootSource, rootDest);
+                
+                // Stop when we have V-1 edges
+                if (mst.Count == vertices - 1) {
+                    break;
+                }
+            }
+        }
+        
+        return mst;
+    }
+    
+    public int FindMSTWeight() {
+        var mst = FindMST();
+        return mst.Sum(edge => edge.Weight);
+    }
+    
+    public void PrintMST() {
+        var mst = FindMST();
+        Console.WriteLine("Edges in MST:");
+        int totalWeight = 0;
+        
+        foreach (var edge in mst) {
+            Console.WriteLine($"{edge.Source} -- {edge.Destination} == {edge.Weight}");
+            totalWeight += edge.Weight;
+        }
+        
+        Console.WriteLine($"Total weight: {totalWeight}");
+    }
+}
+
+// Example usage:
+/*
+class Program {
+    static void Main() {
+        KruskalMST graph = new KruskalMST(4);
+        
+        graph.AddEdge(0, 1, 1);
+        graph.AddEdge(0, 2, 4);
+        graph.AddEdge(0, 3, 3);
+        graph.AddEdge(1, 2, 2);
+        graph.AddEdge(2, 3, 5);
+        
+        graph.PrintMST();
+    }
+}
+*/</code></pre>
+      </div>
+
+      <div class="language-code-block" id="java-code">
+        <pre><code class="language-java">// Java Code Example
+import java.util.*;
+
+class Edge implements Comparable<Edge> {
+    int source, destination, weight;
+    
+    public Edge(int source, int destination, int weight) {
+        this.source = source;
+        this.destination = destination;
+        this.weight = weight;
+    }
+    
+    @Override
+    public int compareTo(Edge other) {
+        return this.weight - other.weight;
+    }
+    
+    @Override
+    public String toString() {
+        return source + " -- " + destination + " == " + weight;
+    }
+}
+
+class UnionFind {
+    private int[] parent;
+    private int[] rank;
+    
+    public UnionFind(int size) {
+        parent = new int[size];
+        rank = new int[size];
+        for (int i = 0; i < size; i++) {
+            parent[i] = i;
+            rank[i] = 0;
+        }
+    }
+    
+    public int find(int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent[x]); // Path compression
+        }
+        return parent[x];
+    }
+    
+    public void union(int x, int y) {
+        int rootX = find(x);
+        int rootY = find(y);
+        
+        if (rootX != rootY) {
+            // Union by rank
+            if (rank[rootX] < rank[rootY]) {
+                parent[rootX] = rootY;
+            } else if (rank[rootX] > rank[rootY]) {
+                parent[rootY] = rootX;
+            } else {
+                parent[rootY] = rootX;
+                rank[rootX]++;
+            }
+        }
+    }
+}
+
+public class KruskalMST {
+    private int vertices;
+    private List<Edge> edges;
+    
+    public KruskalMST(int vertices) {
+        this.vertices = vertices;
+        this.edges = new ArrayList<>();
+    }
+    
+    public void addEdge(int source, int destination, int weight) {
+        edges.add(new Edge(source, destination, weight));
+    }
+    
+    public List<Edge> findMST() {
+        // Sort edges by weight
+        Collections.sort(edges);
+        
+        UnionFind uf = new UnionFind(vertices);
+        List<Edge> mst = new ArrayList<>();
+        
+        for (Edge edge : edges) {
+            int rootSource = uf.find(edge.source);
+            int rootDest = uf.find(edge.destination);
+            
+            if (rootSource != rootDest) {
+                mst.add(edge);
+                uf.union(rootSource, rootDest);
+                
+                // Stop when we have V-1 edges
+                if (mst.size() == vertices - 1) {
+                    break;
+                }
+            }
+        }
+        
+        return mst;
+    }
+    
+    public int findMSTWeight() {
+        List<Edge> mst = findMST();
+        return mst.stream().mapToInt(edge -> edge.weight).sum();
+    }
+    
+    public void printMST() {
+        List<Edge> mst = findMST();
+        System.out.println("Edges in MST:");
+        int totalWeight = 0;
+        
+        for (Edge edge : mst) {
+            System.out.println(edge);
+            totalWeight += edge.weight;
+        }
+        
+        System.out.println("Total weight: " + totalWeight);
+    }
+    
+    // Example usage
+    public static void main(String[] args) {
+        KruskalMST graph = new KruskalMST(4);
+        
+        graph.addEdge(0, 1, 1);
+        graph.addEdge(0, 2, 4);
+        graph.addEdge(0, 3, 3);
+        graph.addEdge(1, 2, 2);
+        graph.addEdge(2, 3, 5);
+        
+        graph.printMST();
+    }
+}</code></pre>
+      </div>
+
+      <div class="language-code-block" id="python-code">
+        <pre><code class="language-python"># Python Code Example
+class UnionFind:
+    def __init__(self, size):
+        self.parent = list(range(size))
+        self.rank = [0] * size
+    
+    def find(self, x):
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])  # Path compression
+        return self.parent[x]
+    
+    def union(self, x, y):
+        root_x = self.find(x)
+        root_y = self.find(y)
+        
+        if root_x != root_y:
+            # Union by rank
+            if self.rank[root_x] < self.rank[root_y]:
+                self.parent[root_x] = root_y
+            elif self.rank[root_x] > self.rank[root_y]:
+                self.parent[root_y] = root_x
+            else:
+                self.parent[root_y] = root_x
+                self.rank[root_x] += 1
+            return True
+        return False
+
+class KruskalMST:
+    def __init__(self, vertices):
+        self.vertices = vertices
+        self.edges = []
+    
+    def add_edge(self, source, destination, weight):
+        self.edges.append((source, destination, weight))
+    
+    def find_mst(self):
+        # Sort edges by weight
+        self.edges.sort(key=lambda x: x[2])
+        
+        uf = UnionFind(self.vertices)
+        mst = []
+        
+        for source, dest, weight in self.edges:
+            if uf.union(source, dest):
+                mst.append((source, dest, weight))
+                
+                # Stop when we have V-1 edges
+                if len(mst) == self.vertices - 1:
+                    break
+        
+        return mst
+    
+    def find_mst_weight(self):
+        mst = self.find_mst()
+        return sum(weight for _, _, weight in mst)
+    
+    def print_mst(self):
+        mst = self.find_mst()
+        print("Edges in MST:")
+        total_weight = 0
+        
+        for source, dest, weight in mst:
+            print(f"{source} -- {dest} == {weight}")
+            total_weight += weight
+        
+        print(f"Total weight: {total_weight}")
+
+# Alternative implementation using class for edges
+class Edge:
+    def __init__(self, source, destination, weight):
+        self.source = source
+        self.destination = destination
+        self.weight = weight
+    
+    def __lt__(self, other):
+        return self.weight < other.weight
+    
+    def __repr__(self):
+        return f"{self.source} -- {self.destination} == {self.weight}"
+
+class KruskalMSTClass:
+    def __init__(self, vertices):
+        self.vertices = vertices
+        self.edges = []
+    
+    def add_edge(self, source, destination, weight):
+        self.edges.append(Edge(source, destination, weight))
+    
+    def find_mst(self):
+        self.edges.sort()
+        uf = UnionFind(self.vertices)
+        mst = []
+        
+        for edge in self.edges:
+            if uf.union(edge.source, edge.destination):
+                mst.append(edge)
+                if len(mst) == self.vertices - 1:
+                    break
+        
+        return mst
+
+# Example usage:
+def example_usage():
+    graph = KruskalMST(4)
+    
+    graph.add_edge(0, 1, 1)
+    graph.add_edge(0, 2, 4)
+    graph.add_edge(0, 3, 3)
+    graph.add_edge(1, 2, 2)
+    graph.add_edge(2, 3, 5)
+    
+    graph.print_mst()
+
+# Uncomment to run example
+# example_usage()</code></pre>
+      </div>
+
+      <div class="language-code-block" id="javascript-code">
+        <pre><code class="language-javascript">// JavaScript Code Example
+class UnionFind {
+    constructor(size) {
+        this.parent = new Array(size);
+        this.rank = new Array(size).fill(0);
+        for (let i = 0; i < size; i++) {
+            this.parent[i] = i;
+        }
+    }
+    
+    find(x) {
+        if (this.parent[x] !== x) {
+            this.parent[x] = this.find(this.parent[x]); // Path compression
+        }
+        return this.parent[x];
+    }
+    
+    union(x, y) {
+        const rootX = this.find(x);
+        const rootY = this.find(y);
+        
+        if (rootX !== rootY) {
+            // Union by rank
+            if (this.rank[rootX] < this.rank[rootY]) {
+                this.parent[rootX] = rootY;
+            } else if (this.rank[rootX] > this.rank[rootY]) {
+                this.parent[rootY] = rootX;
+            } else {
+                this.parent[rootY] = rootX;
+                this.rank[rootX]++;
+            }
+            return true;
+        }
+        return false;
+    }
+}
+
+class KruskalMST {
+    constructor(vertices) {
+        this.vertices = vertices;
+        this.edges = [];
+    }
+    
+    addEdge(source, destination, weight) {
+        this.edges.push({ source, destination, weight });
+    }
+    
+    findMST() {
+        // Sort edges by weight
+        this.edges.sort((a, b) => a.weight - b.weight);
+        
+        const uf = new UnionFind(this.vertices);
+        const mst = [];
+        
+        for (const edge of this.edges) {
+            if (uf.union(edge.source, edge.destination)) {
+                mst.push(edge);
+                
+                // Stop when we have V-1 edges
+                if (mst.length === this.vertices - 1) {
+                    break;
+                }
+            }
+        }
+        
+        return mst;
+    }
+    
+    findMSTWeight() {
+        const mst = this.findMST();
+        return mst.reduce((sum, edge) => sum + edge.weight, 0);
+    }
+    
+    printMST() {
+        const mst = this.findMST();
+        console.log("Edges in MST:");
+        let totalWeight = 0;
+        
+        for (const edge of mst) {
+            console.log(`${edge.source} -- ${edge.destination} == ${edge.weight}`);
+            totalWeight += edge.weight;
+        }
+        
+        console.log(`Total weight: ${totalWeight}`);
+    }
+}
+
+// Functional programming style
+function kruskalMSTFunctional(vertices, edges) {
+    // Sort edges by weight
+    const sortedEdges = [...edges].sort((a, b) => a.weight - b.weight);
+    
+    const uf = new UnionFind(vertices);
+    const mst = [];
+    
+    for (const edge of sortedEdges) {
+        if (uf.union(edge.source, edge.destination)) {
+            mst.push(edge);
+            if (mst.length === vertices - 1) {
+                break;
+            }
+        }
+    }
+    
+    return mst;
+}
+
+// Example usage:
+function exampleUsage() {
+    const graph = new KruskalMST(4);
+    
+    graph.addEdge(0, 1, 1);
+    graph.addEdge(0, 2, 4);
+    graph.addEdge(0, 3, 3);
+    graph.addEdge(1, 2, 2);
+    graph.addEdge(2, 3, 5);
+    
+    graph.printMST();
+}
+
+// Uncomment to run example
+// exampleUsage();</code></pre>
+      </div>
+      
+      <p><strong>Practice Idea:</strong> Implement Kruskal's algorithm to find the MST for a graph with at least 8 vertices and 12 edges. Then modify the algorithm to handle disconnected graphs by finding Minimum Spanning Forest (MSF). Finally, implement a version that can handle dynamic edge weight updates and efficiently maintain the MST.</p>
+      
+      <p><strong>Real-world Applications:</strong>
+        <ul>
+            <li><strong>Network Design:</strong> Designing cost-effective computer networks, telephone networks, and cable TV networks</li>
+            <li><strong>Transportation Planning:</strong> Planning road networks, railway systems, and airline routes with minimum construction cost</li>
+            <li><strong>Circuit Design:</strong> Connecting electronic components with minimum wire length</li>
+            <li><strong>Cluster Analysis:</strong> Finding clusters in data by creating minimum spanning trees</li>
+            <li><strong>Image Segmentation:</strong> Used in computer vision for segmenting images into regions</li>
+            <li><strong>Approximation Algorithms:</strong> Basis for approximation algorithms for NP-hard problems like Traveling Salesman</li>
+            <li><strong>Water Supply Networks:</strong> Designing pipe networks to connect all houses with minimum pipe length</li>
+            <li><strong>Power Grid Design:</strong> Connecting power stations to consumers with minimum cable cost</li>
+        </ul>
+      </p>
+      
+      <p><strong>Summary:</strong> Kruskal's Algorithm is a fundamental greedy algorithm for finding Minimum Spanning Trees in graphs. Its elegant combination of edge sorting and Union-Find data structure makes it efficient with O(E log E) time complexity. The algorithm's greedy nature ensures it always picks the smallest available edge that doesn't form a cycle, guaranteeing an optimal solution. Kruskal's is particularly useful for sparse graphs and forms the basis for many network design and optimization problems in real-world applications.</p>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const languageButtons = document.querySelectorAll('.code-language-btn');
+        const codeBlocks = document.querySelectorAll('.language-code-block');
+        
+        languageButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const targetLanguage = this.getAttribute('data-language');
+                
+                // Update active button
+                languageButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show corresponding code block
+                codeBlocks.forEach(block => {
+                    if (block.id === `${targetLanguage}-code`) {
+                        block.classList.add('active');
+                    } else {
+                        block.classList.remove('active');
+                    }
+                });
+            });
+        });
+    });
+    </script>
+</body>
+</html>
