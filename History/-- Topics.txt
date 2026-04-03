@@ -1,0 +1,79 @@
+1. Title: Evolution of Computers: From First Generation to Modern AI Machines
+
+Category: History
+
+2. Title: History of Programming Languages: From Assembly to Python
+
+Category: History
+
+3. Title: History of Artificial Intelligence: How Machines Learned to Think
+
+Category: History
+
+4. Title: History of Cyber Security: From Basic Passwords to Advanced Encryption
+
+Category: History
+
+5. Title: History of Mobile Phones: From Keypad to Smartphones
+
+Category: History
+
+6. Title: History of Operating Systems: From DOS to Windows and Linux
+
+Category: History
+
+7. Title: History of Social Media: From Orkut to Modern Platforms
+
+Category: History
+
+8. Title: History of Cloud Computing: From Physical Servers to Virtual Storage
+
+Category: History
+
+9. Title: History of Web Development: From Static HTML to Modern Web Apps
+
+Category: History
+
+10. Title: History of E-Commerce: From Traditional Shops to Online Marketplaces
+
+Category: History
+
+11. Title: History of Databases: From Flat Files to Big Data Systems
+
+Category: History
+
+12. Title: History of Software Development: From Waterfall to Agile
+
+Category: History
+
+13. Title: History of Blockchain Technology: Beyond Cryptocurrency
+
+Category: History
+
+14. Title: History of Computer Networks: From LAN to 5G Connectivity
+
+Category: History
+
+15. Title: History of Search Engines: From Yahoo to AI-Powered Search
+
+Category: History
+
+16. Title: History of Video Games: From Arcade Machines to Virtual Reality
+
+Category: History
+
+17. Title: History of Robotics: From Industrial Arms to Smart Robots
+
+Category: History
+
+18. Title: History of Data Science: From Statistics to Machine Learning
+
+Category: History
+
+19. Title: History of Digital Payments: From Cash to UPI and Contactless Transactions
+
+Category: History
+
+20. Title: History of the World Wide Web: How Websites Changed the World
+
+Category: History

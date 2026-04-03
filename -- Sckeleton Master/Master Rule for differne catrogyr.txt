@@ -1,0 +1,190 @@
+🧩 MASTER RULE (Sab Category ke liye Same Base)
+
+Har post me ye 5 cheeze MUST:
+
+✅ Introduction
+✅ Structured headings
+✅ Useful content
+✅ FAQ
+✅ Conclusion
+
+✅ 1️⃣ TECH / HOW-TO / GUIDE BLOG SKELETON
+
+(Software, Online Service, Blogging, Windows Fix)
+
+Title: How to [Solve / Do Something] – Complete Guide
+
+1. Introduction
+2. What is [Topic]
+3. Why it is Used
+4. Requirements
+5. Step-by-Step Guide
+6. Screenshots Explanation
+7. Common Errors & Fix
+8. Pro Tips
+9. FAQ
+10. Conclusion
+
+✅ Best for:
+
+Tech
+
+Online earning
+
+Software
+
+Government services
+
+✅ 2️⃣ IT PROJECT / PROGRAMMING POST SKELETON
+
+(Perfect for your C#, MVC, SQL posts 👨‍💻)
+
+Title: [Project Name] – Complete Source Code & Explanation
+
+1. Introduction
+2. Project Overview
+3. Technologies Used
+4. System Requirements
+5. Database Design
+6. Project Architecture
+7. Module Explanation
+8. Code Explanation
+9. Output Screenshots
+10. Future Enhancements
+11. Download / Git Link
+12. FAQ
+13. Conclusion
+
+🔥 AdSense loves educational tech content.
+
+✅ 3️⃣ EDUCATION / INFORMATION ARTICLE SKELETON
+Title: Everything About [Topic]
+
+1. Introduction
+2. Overview of Topic
+3. Key Features
+4. Types / Categories
+5. Importance
+6. Advantages & Disadvantages
+7. Real Life Examples
+8. Career / Usage Scope
+9. FAQ
+10. Conclusion
+
+✅ Example:
+
+Artificial Intelligence
+
+Cloud Computing
+
+Digital India
+
+✅ 4️⃣ HISTORY BLOG SKELETON
+Title: History of [Person/Event/Place]
+
+1. Introduction
+2. Background
+3. Early History
+4. Major Events Timeline
+5. Important Contributions
+6. Impact on Society
+7. Interesting Facts
+8. Modern Relevance
+9. FAQ
+10. Conclusion
+
+✅ Example:
+
+History of Internet
+
+Mughal Empire
+
+Indian Freedom Movement
+
+✅ 5️⃣ LYRICS POST SKELETON (VERY IMPORTANT ⚠)
+
+Lyrics alone = AdSense rejection ❌
+So use THIS format:
+
+Title: [Song Name] Lyrics Meaning & Details
+
+1. Introduction about Song
+2. Singer & Movie Details
+3. Song Story / Meaning
+4. Full Lyrics
+5. English/Hindi Meaning
+6. Popular Lines Explanation
+7. Why Song is Popular
+8. Artist Information
+9. FAQ
+10. Conclusion
+
+👉 Lyrics only mat daalna.
+
+✅ 6️⃣ STORY / POEM / ENTERTAINMENT SKELETON
+Title: [Story Name]
+
+1. Introduction
+2. Characters Introduction
+3. Story Beginning
+4. Main Plot
+5. Turning Point
+6. Moral / Message
+7. Reader Learning
+8. FAQ
+9. Conclusion
+✅ 7️⃣ NEWS / UPDATE TYPE POST SKELETON
+Title: Latest Update on [Topic]
+
+1. Introduction
+2. What Happened
+3. Key Announcement
+4. Important Dates
+5. Who is Affected
+6. Benefits / Impact
+7. Official Source Info
+8. FAQ
+9. Conclusion
+✅ 8️⃣ BLOGGING / ONLINE EARNING SKELETON
+Title: How to Earn from [Method]
+
+1. Introduction
+2. What is Method
+3. How it Works
+4. Requirements
+5. Step-by-Step Start Guide
+6. Earnings Potential
+7. Mistakes to Avoid
+8. Pro Tips
+9. FAQ
+10. Conclusion
+🚀 ULTRA IMPORTANT (MULTI NICHE BLOG SECRET)
+
+Google approve tab karta hai jab:
+
+✅ Categories balanced ho
+✅ Har category me 4–5 posts ho
+✅ Random mixed content na lage
+
+Example structure:
+
+Tech → 10 posts
+
+Education → 6 posts
+
+Information → 6 posts
+
+History → 4 posts
+
+Lyrics → 3–4 explained posts
+
+⭐ PRO AI PROMPT (Use for ANY Category)
+
+AI me paste karo:
+
+Write a 1200-word SEO optimized blog post using the following structure:
+
+[Paste Category Skeleton]
+
+Make content human-friendly, original, AdSense approval safe,
+with headings, FAQs, and detailed explanation.

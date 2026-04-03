@@ -1,0 +1,14 @@
+Text content 
+
+
+Create a video style explanation from this content.
+Requirements:
+- The narration audio must be completely in Hindi language.
+- The explanation should sound natural, educational, and beginner friendly.
+- Divide the explanation into clear scenes.
+- For every scene, generate visual slide instructions.
+- The text written inside visuals or images must be in English only.
+- Keep image titles short and professional.
+- Maintain documentary or educational YouTube style.
+- Avoid mixing Hindi text inside visuals.
+- Hindi only for narration, English only for on-screen text.

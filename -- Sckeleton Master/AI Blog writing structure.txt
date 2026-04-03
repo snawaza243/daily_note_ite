@@ -1,0 +1,40 @@
+Write a 1200-word SEO optimized blog post in simple  English language give only html without CSS.
+
+Write like an experienced blogger sharing knowledge with readers.
+Add relatable sentences like real-life guidance.
+Avoid textbook style explanation.
+
+
+The article should sound natural, conversational, and human-written.
+Avoid robotic tone, repeated phrases, and overly formal AI language.
+
+Use a friendly blogging tone as if explaining to beginners.
+Add realistic explanations, practical examples, and small human opinions wherever suitable.
+
+Follow the structure below strictly:
+
+Title: [Add SEO Friendly Title]
+
+1. Introduction (Problem + Solution explanation)
+2. Overview / What is [Topic]
+3. Key Features / Importance
+4. Detailed Explanation / Main Content
+5. Step-by-Step Guide / Deep Information (if applicable)
+6. Real-life Example or Practical Use
+7. Important Tips / Mistakes to Avoid
+8. Benefits or Impact
+9. Frequently Asked Questions (Minimum 5 real user-based FAQs)
+10. Conclusion
+
+Additional Instructions:
+- Use proper H2 and H3 headings
+- Keep paragraphs readable
+- Add bullet points where needed
+- Make content AdSense approval safe
+- Ensure originality and helpfulness
+- Write minimum 1200 words
+- Maintain smooth flow between sections
+- Do NOT sound AI generated
+
+Topic: Employee Management System Project in ASP.NET MVC
+Category: IT Project
